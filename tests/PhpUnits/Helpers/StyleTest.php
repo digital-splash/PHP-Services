@@ -19,31 +19,31 @@
 		public function testAddFileSuccess() {
 			$this->assertEmpty(Style::GetFiles());
 
-			Style::AddFile("test", "");
+			Style::AddFile("");
 			$this->assertCount(1, Style::GetFiles());
 		}
 
 		public function testRemoveFileSuccess() {
 			$this->assertEmpty(Style::GetFiles());
 
-			Style::AddFile("test", "");
+			Style::AddFile("");
 			$this->assertCount(1, Style::GetFiles());
 
-			Style::RemoveFile("test");
+			Style::RemoveFile(0);
 			$this->assertEmpty(Style::GetFiles());
 		}
 
 		public function testAddStyleSuccess() {
 			$this->assertEmpty(Style::GetStyles());
 
-			Style::AddStyle("test", "");
+			Style::AddStyle("");
 			$this->assertCount(1, Style::GetStyles());
 		}
 
 		public function testRemoveStyleSuccess() {
 			$this->assertEmpty(Style::GetStyles());
 
-			Style::AddStyle("test", "");
+			Style::AddStyle("", "test");
 			$this->assertCount(1, Style::GetStyles());
 
 			Style::RemoveStyle("test");
@@ -51,16 +51,16 @@
 		}
 
 		public function testGetFilesIncludesSuccess() {
-			Style::AddFile("file_1", "file_1.css");
-			Style::AddFile("file_2", "file_2.css");
-			Style::AddFile("file_3", "file_3.css");
+			Style::AddFile("file_1.css", "file_1");
+			Style::AddFile("file_2.css", "file_2");
+			Style::AddFile("file_3.css", "file_3");
 
-			Style::AddStyle("style_1", "<link rel=\"stylesheet\" href=\"style_1.css\">");
-			Style::AddStyle("style_2", "<link rel=\"stylesheet\" href=\"style_2.css\">");
-			Style::AddStyle("style_3", "<link rel=\"stylesheet\" href=\"style_3.css\">");
+			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_1.css\">", "style_1");
+			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_2.css\">", "style_2");
+			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_3.css\">", "style_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Style/styles.html");
-			$actual = Style::GetFilesIncludes();
+			$actual = Style::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
 		}

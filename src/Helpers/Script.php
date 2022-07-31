@@ -5,11 +5,20 @@
 		protected static $filesArray = [];
 		protected static $scriptsArray = [];
 
-		public static function AddFile(string $key, string $file): void {
-			self::$filesArray[$key] = $file;
+		public static function AddFile(
+			string $file,
+			$key=""
+		): void {
+			if (!Helper::StringNullOrEmpty($key)) {
+				self::$filesArray[$key] = $file;
+				return;
+			}
+			self::$filesArray[] = $file;
 		}
 
-		public static function RemoveFile(string $key): void {
+		public static function RemoveFile(
+			$key
+		): void {
 			if (isset(self::$filesArray[$key])) {
 				unset(self::$filesArray[$key]);
 			}
@@ -23,11 +32,20 @@
 			self::$filesArray = [];
 		}
 
-		public static function AddScript(string $key, string $script): void {
-			self::$scriptsArray[$key] = $script;
+		public static function AddScript(
+			string $script,
+			$key=""
+		): void {
+			if (!Helper::StringNullOrEmpty($key)) {
+				self::$scriptsArray[$key] = $script;
+				return;
+			}
+			self::$scriptsArray[] = $script;
 		}
 
-		public static function RemoveScript(string $key): void {
+		public static function RemoveScript(
+			$key
+		): void {
 			if (isset(self::$scriptsArray[$key])) {
 				unset(self::$scriptsArray[$key]);
 			}
