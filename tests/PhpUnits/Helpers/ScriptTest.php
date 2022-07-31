@@ -19,31 +19,31 @@
 		public function testAddFileSuccess() {
 			$this->assertEmpty(Script::GetFiles());
 
-			Script::AddFile("test", "");
+			Script::AddFile("");
 			$this->assertCount(1, Script::GetFiles());
 		}
 
 		public function testRemoveFileSuccess() {
 			$this->assertEmpty(Script::GetFiles());
 
-			Script::AddFile("test", "");
+			Script::AddFile("");
 			$this->assertCount(1, Script::GetFiles());
 
-			Script::RemoveFile("test");
+			Script::RemoveFile(0);
 			$this->assertEmpty(Script::GetFiles());
 		}
 
 		public function testAddScriptSuccess() {
 			$this->assertEmpty(Script::GetScripts());
 
-			Script::AddScript("test", "");
+			Script::AddScript("");
 			$this->assertCount(1, Script::GetScripts());
 		}
 
 		public function testRemoveScriptSuccess() {
 			$this->assertEmpty(Script::GetScripts());
 
-			Script::AddScript("test", "");
+			Script::AddScript("", "test");
 			$this->assertCount(1, Script::GetScripts());
 
 			Script::RemoveScript("test");
@@ -51,16 +51,16 @@
 		}
 
 		public function testGetFilesIncludesSuccess() {
-			Script::AddFile("file_1", "file_1.js");
-			Script::AddFile("file_2", "file_2.js");
-			Script::AddFile("file_3", "file_3.js");
+			Script::AddFile("file_1.js", "file_1");
+			Script::AddFile("file_2.js", "file_2");
+			Script::AddFile("file_3.js", "file_3");
 
-			Script::AddScript("script_1", "<script src=\"script_1.js\"></script>");
-			Script::AddScript("script_2", "<script src=\"script_2.js\"></script>");
-			Script::AddScript("script_3", "<script src=\"script_3.js\"></script>");
+			Script::AddScript("<script src=\"script_1.js\"></script>", "script_1");
+			Script::AddScript("<script src=\"script_2.js\"></script>", "script_2");
+			Script::AddScript("<script src=\"script_3.js\"></script>", "script_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Script/scripts.html");
-			$actual = Script::GetFilesIncludes();
+			$actual = Script::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
 		}

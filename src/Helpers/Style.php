@@ -5,11 +5,20 @@
 		protected static $filesArray = [];
 		protected static $stylesArray = [];
 
-		public static function AddFile(string $key, string $file): void {
-			self::$filesArray[$key] = $file;
+		public static function AddFile(
+			string $file,
+			$key=""
+		): void {
+			if (!Helper::StringNullOrEmpty($key)) {
+				self::$filesArray[$key] = $file;
+				return;
+			}
+			self::$filesArray[] = $file;
 		}
 
-		public static function RemoveFile(string $key): void {
+		public static function RemoveFile(
+			$key
+		): void {
 			if (isset(self::$filesArray[$key])) {
 				unset(self::$filesArray[$key]);
 			}
@@ -23,11 +32,20 @@
 			self::$filesArray = [];
 		}
 
-		public static function AddStyle(string $key, string $style): void {
-			self::$stylesArray[$key] = $style;
+		public static function AddStyle(
+			string $style,
+			$key=""
+		): void {
+			if (!Helper::StringNullOrEmpty($key)) {
+				self::$stylesArray[$key] = $style;
+				return;
+			}
+			self::$stylesArray[] = $style;
 		}
 
-		public static function RemoveStyle(string $key): void {
+		public static function RemoveStyle(
+			$key
+		): void {
 			if (isset(self::$stylesArray[$key])) {
 				unset(self::$stylesArray[$key]);
 			}
