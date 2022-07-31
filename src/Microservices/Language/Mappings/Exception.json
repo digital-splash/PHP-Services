@@ -30,6 +30,11 @@
 			"fr": "Une exception s'est produite pour une raison inconnue ",
 			"ar": "حدث استثناء لسبب غير معروف"
 		},
+		"Upload": {
+			"en": "An exception occurred while Uploading the file",
+			"fr": "Une exception s'est produite lors du téléchargement du fichier",
+			"ar": "حدث استثناء أثناء تحميل الملف"
+		},
 		"InvalidUsernameLength": {
 			"en": "The username must be between 6 and 20 characters",
 			"fr": "Le nom d'utilisateur doit être compris entre 6 et 20 caractères",

@@ -72,76 +72,7 @@
 		}
 
 
-		private function handleUploadFileError() {
-			switch ($this->_error) {
-				case UPLOAD_ERR_INI_SIZE:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "The uploaded file exceeds the upload_max_filesize directive in php.ini",
-						"fileName"	=> $this->_name
-					];
-				break;
 
-				case UPLOAD_ERR_FORM_SIZE:
-					$maxSize	= $_POST["MAX_FILE_SIZE"];
-					$maxSizeKb	= round($maxSize / 1024);
-
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "The uploaded file is larger than the maximum allowed of $maxSizeKb Kb.",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				case UPLOAD_ERR_PARTIAL:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "The uploaded file was only partially uploaded",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				case UPLOAD_ERR_NO_FILE:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "Please select a file to upload!",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				case UPLOAD_ERR_NO_TMP_DIR:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "Missing a temporary folder",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				case UPLOAD_ERR_CANT_WRITE:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "Failed to write file to disk",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				case UPLOAD_ERR_EXTENSION:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "File upload stopped by extension",
-						"fileName"	=> $this->_name
-					];
-				break;
-
-				default:
-					$this->retArr[] = [
-						"status"	=> self::Error,
-						"message"	=> "Unknown upload error",
-						"fileName"	=> $this->_name
-					];
-				break;
-			}
-		}
 
 
 		private function fixRetArr() {
@@ -161,48 +92,10 @@
 		}
 
 
-		private static function safeName($str="") {
-			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
-		}
-
-
-		public static function createFolders($uploadPath, $folders) {
-			$foldersArr = explode("/", $folders);
-
-			foreach ($foldersArr AS $folder) {
-				if ($folder != "") {
-					$uploadPath .= $folder . "/";
-
-					MediaHelper::CreateFileOrFolder($uploadPath);
-				}
-			}
-		}
-
-
 		public static function deleteFile($path="") {
 			if ($path != "" && file_exists($path)) {
 				chmod ($path, 0755);
 				unlink($path);
-			}
-		}
-
-
-		private static function uploadToServer($tmpName="", $uploadPath="", $fileName="") {
-			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
-
-			if (move_uploaded_file($tmpName, $uploadPath)) {
-				return [
-					"status"	=> self::Success,
-					"message"	=> "File successfully uploaded!",
-					"fileName"	=> $uploadedFileName
-				];
-			}
-			else {
-				return [
-					"status"	=> self::Error,
-					"message"	=> "Error while uploading file!",
-					"fileName"	=> $uploadedFileName
-				];
 			}
 		}
 
