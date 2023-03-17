@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
-	use RawadyMario\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\Database;
 
 	class VariableCategory extends Database {
 

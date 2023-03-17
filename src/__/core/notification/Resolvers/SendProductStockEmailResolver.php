@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Resolver;
+	namespace DigitalSplash\Classes\Core\Notification\Resolver;
 
-	use RawadyMario\Classes\Database\Product;
-	use RawadyMario\Classes\Database\ProductOption;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Database\Product;
+	use DigitalSplash\Classes\Database\ProductOption;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class SendProductStockEmailResolver {
 		

@@ -1,12 +1,12 @@
 <?php
-	namespace RawadyMario\Classes\Cronjob;
+	namespace DigitalSplash\Classes\Cronjob;
 
-	use RawadyMario\Classes\Helpers\DateHelper;
-	use RawadyMario\Classes\Database\Logs\CronjobLog;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Helpers\DateHelper;
+	use DigitalSplash\Classes\Database\Logs\CronjobLog;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class CronJobManager {
-		public const ClassesPath = "\\RawadyMario\\Classes\\Cronjob\\";
+		public const ClassesPath = "\\DigitalSplash\\Classes\\Cronjob\\";
 
 		const SUCCESS	= SUCCESS;
 		const ERROR		= ERROR;

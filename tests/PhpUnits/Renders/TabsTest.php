@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Tests\Renders;
+	namespace DigitalSplash\Tests\Renders;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Renders\TabsTest.php
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Renders\Tabs;
+	use DigitalSplash\Renders\Tabs;
 
 	class TabsTest extends TestCase {
 

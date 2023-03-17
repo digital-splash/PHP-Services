@@ -1,11 +1,11 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\ScriptTest.php
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Helpers\Script;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Helpers\Script;
 
 	class ScriptTest extends TestCase {
 

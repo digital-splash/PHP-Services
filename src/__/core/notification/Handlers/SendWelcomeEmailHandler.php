@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Handler;
+	namespace DigitalSplash\Classes\Core\Notification\Handler;
 
 	class SendWelcomeEmailHandler {
 		

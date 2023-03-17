@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Common\Renderer\Form;
+	namespace DigitalSplash\Classes\Common\Renderer\Form;
 
-	use RawadyMario\Classes\Common\Renderer\Form;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Common\Renderer\Form;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class FormElements {
 		public $html;

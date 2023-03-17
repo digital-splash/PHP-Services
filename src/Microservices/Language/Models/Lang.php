@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Language\Models;
+	namespace DigitalSplash\Language\Models;
 
 
 	class Lang {

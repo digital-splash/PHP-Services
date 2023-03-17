@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Common;
+	namespace DigitalSplash\Classes\Common;
 
-    use RawadyMario\Classes\Core\Cookie;
-    use RawadyMario\Classes\Database\Logs\UserLoginLog;
-    use RawadyMario\Classes\Database\UserTokens;
+    use DigitalSplash\Classes\Core\Cookie;
+    use DigitalSplash\Classes\Database\Logs\UserLoginLog;
+    use DigitalSplash\Classes\Database\UserTokens;
 
     class AuthLogged {
 

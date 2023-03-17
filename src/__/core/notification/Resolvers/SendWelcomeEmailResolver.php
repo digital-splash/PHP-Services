@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Resolver;
+	namespace DigitalSplash\Classes\Core\Notification\Resolver;
 
-	use RawadyMario\Classes\Database\User;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Database\User;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class SendWelcomeEmailResolver {
 		

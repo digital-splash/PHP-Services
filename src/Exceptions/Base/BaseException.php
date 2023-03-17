@@ -1,21 +1,23 @@
 <?php
-	namespace RawadyMario\Exceptions\Base;
 
-	use Exception;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Translate;
+namespace DigitalSplash\Exceptions\Base;
 
-	class BaseException extends Exception {
+use Exception;
+use DigitalSplash\Helpers\Helper;
+use DigitalSplash\Language\Helpers\Translate;
 
-		public function __construct(
-			string $message = "",
-			array $replace = []
-		) {
-			if (!Helper::StringNullOrEmpty($message)) {
-				$this->message = $message;
-			}
+class BaseException extends Exception
+{
 
-			$this->message = Translate::TranslateString($this->message, null, $replace);
-			parent::__construct();
+	public function __construct(
+		string $message = "",
+		array $replace = []
+	) {
+		if (!Helper::StringNullOrEmpty($message)) {
+			$this->message = $message;
 		}
+
+		$this->message = Translate::TranslateString($this->message, null, $replace);
+		parent::__construct();
 	}
+}

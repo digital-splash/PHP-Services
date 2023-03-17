@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Manager\Email;
+	namespace DigitalSplash\Classes\Core\Notification\Manager\Email;
 
-	use RawadyMario\Classes\Database\User;
-	use RawadyMario\Classes\Helpers\MediaHelper;
-	use RawadyMario\Classes\Helpers\ViewHelper;
+	use DigitalSplash\Classes\Database\User;
+	use DigitalSplash\Classes\Helpers\MediaHelper;
+	use DigitalSplash\Classes\Helpers\ViewHelper;
 
 	class MailerManager {
 		private const TENANT_NAME = CLIENT_NAME;

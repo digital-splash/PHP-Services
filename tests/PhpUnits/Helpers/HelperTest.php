@@ -1,17 +1,17 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\HelperTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\InvalidParamException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Models\Code;
-	use RawadyMario\Models\HttpCode;
-	use RawadyMario\Language\Models\Lang;
-	use RawadyMario\Models\Status;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Models\Code;
+	use DigitalSplash\Models\HttpCode;
+	use DigitalSplash\Language\Models\Lang;
+	use DigitalSplash\Models\Status;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Helpers\Translate;
 
 	final class HelperTest extends TestCase {
 		private const UPLOAD_DIR = __DIR__ . "/../../_CommonFiles/Upload/";
@@ -855,8 +855,8 @@
 			);
 
 			$this->assertEquals(
-				str_replace("&", "[amp;]", base64_encode("https://rawadymario.com/projects?page=2&category=2")),
-				Helper::EncryptLink("https://rawadymario.com/projects?page=2&category=2")
+				str_replace("&", "[amp;]", base64_encode("https://DigitalSplash.com/projects?page=2&category=2")),
+				Helper::EncryptLink("https://DigitalSplash.com/projects?page=2&category=2")
 			);
 		}
 
@@ -872,8 +872,8 @@
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/projects?page=2&category=2",
-				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://rawadymario.com/projects?page=2&category=2")))
+				"https://DigitalSplash.com/projects?page=2&category=2",
+				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://DigitalSplash.com/projects?page=2&category=2")))
 			);
 		}
 
@@ -1063,23 +1063,23 @@
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://rawadymario.com/")
+				"https://DigitalSplash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com/")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://rawadymario.com")
+				"https://DigitalSplash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://rawadymario.com////")
+				"https://DigitalSplash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com////")
 			);
 
 			$this->assertEquals(
-				"www.rawadymario.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.rawadymario.com////")
+				"www.DigitalSplash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.DigitalSplash.com////")
 			);
 		}
 
@@ -1090,13 +1090,13 @@
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/assets/css/styles.css",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://rawadymario.com")
+				"https://DigitalSplash.com/assets/css/styles.css",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://DigitalSplash.com")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com/assets/css/styles.css?v=1.0",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://rawadymario.com", "1.0")
+				"https://DigitalSplash.com/assets/css/styles.css?v=1.0",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://DigitalSplash.com", "1.0")
 			);
 		}
 
@@ -1163,28 +1163,28 @@
 			);
 
 			$this->assertEquals(
-				"rawadymario.com",
-				Helper::AddSchemeIfMissing("rawadymario.com", "")
+				"DigitalSplash.com",
+				Helper::AddSchemeIfMissing("DigitalSplash.com", "")
 			);
 
 			$this->assertEquals(
-				"http://rawadymario.com",
-				Helper::AddSchemeIfMissing("http://rawadymario.com", "https://")
+				"http://DigitalSplash.com",
+				Helper::AddSchemeIfMissing("http://DigitalSplash.com", "https://")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::AddSchemeIfMissing("https://rawadymario.com", "http://")
+				"https://DigitalSplash.com",
+				Helper::AddSchemeIfMissing("https://DigitalSplash.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::AddSchemeIfMissing("rawadymario.com", "https")
+				"https://DigitalSplash.com",
+				Helper::AddSchemeIfMissing("DigitalSplash.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::AddSchemeIfMissing("rawadymario.com", "https://")
+				"https://DigitalSplash.com",
+				Helper::AddSchemeIfMissing("DigitalSplash.com", "https://")
 			);
 		}
 
@@ -1195,28 +1195,28 @@
 			);
 
 			$this->assertEquals(
-				"rawadymario.com",
-				Helper::ReplaceScheme("rawadymario.com", "")
+				"DigitalSplash.com",
+				Helper::ReplaceScheme("DigitalSplash.com", "")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::ReplaceScheme("http://rawadymario.com", "https://")
+				"https://DigitalSplash.com",
+				Helper::ReplaceScheme("http://DigitalSplash.com", "https://")
 			);
 
 			$this->assertEquals(
-				"http://rawadymario.com",
-				Helper::ReplaceScheme("https://rawadymario.com", "http://")
+				"http://DigitalSplash.com",
+				Helper::ReplaceScheme("https://DigitalSplash.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::ReplaceScheme("rawadymario.com", "https")
+				"https://DigitalSplash.com",
+				Helper::ReplaceScheme("DigitalSplash.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://rawadymario.com",
-				Helper::ReplaceScheme("rawadymario.com", "https://")
+				"https://DigitalSplash.com",
+				Helper::ReplaceScheme("DigitalSplash.com", "https://")
 			);
 		}
 
@@ -1226,35 +1226,35 @@
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("Mario Rawady: https://rawadymario.com")
+				Helper::IsValidUrl("Mario Rawady: https://DigitalSplash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http//rawadymario.com")
+				Helper::IsValidUrl("http//DigitalSplash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:/rawadymario.com")
+				Helper::IsValidUrl("http:/DigitalSplash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:rawadymario.com")
+				Helper::IsValidUrl("http:DigitalSplash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("https:/rawadymario.com")
+				Helper::IsValidUrl("https:/DigitalSplash.com")
 			);
 
 			$this->assertTrue( //To be fixed!
-				Helper::IsValidUrl("http://rawadymario.com Mario Rawady")
+				Helper::IsValidUrl("http://DigitalSplash.com Mario Rawady")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("http://rawadymario.com")
+				Helper::IsValidUrl("http://DigitalSplash.com")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("https://rawadymario.com")
+				Helper::IsValidUrl("https://DigitalSplash.com")
 			);
 		}
 

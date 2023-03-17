@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\Models;
+	namespace DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models;
 
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class QuoteContentsModel {
 		public int $index; //Start from 1 per array entry

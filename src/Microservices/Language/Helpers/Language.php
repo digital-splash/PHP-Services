@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Language\Helpers;
+	namespace DigitalSplash\Language\Helpers;
 
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Models\Lang;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Models\Lang;
 
 	class Language {
 		private static string $default = Lang::EN;

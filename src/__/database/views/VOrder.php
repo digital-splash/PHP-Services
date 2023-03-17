@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Database\Order;
+	use DigitalSplash\Classes\Database\Order;
 
 	class VOrder extends Order {
 

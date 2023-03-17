@@ -1,5 +1,5 @@
 <?php
-	// namespace RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy;
+	// namespace DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy;
 	
 	// /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 

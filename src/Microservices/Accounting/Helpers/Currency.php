@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Accounting\Helpers;
+	namespace DigitalSplash\Accounting\Helpers;
 
-	use RawadyMario\Accounting\Models\CurrencyPosition;
-	use RawadyMario\Exceptions\NotNumericParamException;
-	use RawadyMario\Helpers\Helper;
+	use DigitalSplash\Accounting\Models\CurrencyPosition;
+	use DigitalSplash\Exceptions\NotNumericParamException;
+	use DigitalSplash\Helpers\Helper;
 
 	class Currency {
 

@@ -1,12 +1,12 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Manager\Email;
+	namespace DigitalSplash\Classes\Core\Notification\Manager\Email;
 
 	use PHPMailer\PHPMailer\PHPMailer;
 	use PHPMailer\PHPMailer\Exception;
-	use RawadyMario\Classes\Core\MachineInfo;
-	use RawadyMario\Classes\Helpers\DateHelper;
-	use RawadyMario\Classes\Helpers\Helper;
-	use RawadyMario\Classes\Database\Logs\EmailLog;
+	use DigitalSplash\Classes\Core\MachineInfo;
+	use DigitalSplash\Classes\Helpers\DateHelper;
+	use DigitalSplash\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Database\Logs\EmailLog;
 
 	class PhpMailerManager extends MailerManager {
 		

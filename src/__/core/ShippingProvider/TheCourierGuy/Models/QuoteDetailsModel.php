@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\Models;
+	namespace DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models;
 
 	class QuoteDetailsModel {
 		public string $instruction;

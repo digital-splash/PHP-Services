@@ -1,11 +1,11 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\StyleTest.php
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Helpers\Style;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Helpers\Style;
 
 	class StyleTest extends TestCase {
 

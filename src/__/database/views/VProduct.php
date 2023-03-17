@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Database\Product;
-	use RawadyMario\Classes\Helpers\Helper;
-	use RawadyMario\Classes\Helpers\QueryHelper;
+	use DigitalSplash\Classes\Database\Product;
+	use DigitalSplash\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Helpers\QueryHelper;
 
 	class VProduct extends Product {
 

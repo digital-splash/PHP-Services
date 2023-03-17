@@ -1,14 +1,14 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
-	use RawadyMario\Classes\Core\Cookie;
-	use RawadyMario\Classes\Core\Database;
-use RawadyMario\Classes\Core\ShippingProvider\ShippingProviderInterface;
-use RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteContentsModel;
-	use RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\TheCourierGuy;
-	use RawadyMario\Classes\Database\Views\VProduct;
-	use RawadyMario\Classes\Database\Views\VProductOption;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\Cookie;
+	use DigitalSplash\Classes\Core\Database;
+use DigitalSplash\Classes\Core\ShippingProvider\ShippingProviderInterface;
+use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteContentsModel;
+	use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\TheCourierGuy;
+	use DigitalSplash\Classes\Database\Views\VProduct;
+	use DigitalSplash\Classes\Database\Views\VProductOption;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class Cart extends Database {
 		const ProductTypeCookie = 'cookie';

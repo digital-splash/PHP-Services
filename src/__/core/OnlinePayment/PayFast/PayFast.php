@@ -1,13 +1,13 @@
 <?php
-	namespace RawadyMario\Classes\Core\OnlinePayment\PayFast;
+	namespace DigitalSplash\Classes\Core\OnlinePayment\PayFast;
 
 	use Curl\Curl;
-	use RawadyMario\Classes\Core\OnlinePayment\OnlinePaymentInterface;
-	use RawadyMario\Classes\Database\Logs\OnlinePaymentPayFast AS OnlinePaymentPayFastLog;
-	use RawadyMario\Classes\Database\Order;
-	use RawadyMario\Classes\Database\Queue;
-	use RawadyMario\Classes\Database\User;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\OnlinePayment\OnlinePaymentInterface;
+	use DigitalSplash\Classes\Database\Logs\OnlinePaymentPayFast AS OnlinePaymentPayFastLog;
+	use DigitalSplash\Classes\Database\Order;
+	use DigitalSplash\Classes\Database\Queue;
+	use DigitalSplash\Classes\Database\User;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class PayFast implements OnlinePaymentInterface {
 		public const STATUS_SUCCESS = STATUS_CODE_SUCCESS;

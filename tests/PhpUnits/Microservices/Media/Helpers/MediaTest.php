@@ -1,13 +1,13 @@
 <?php
-	namespace RawadyMario\Tests\Media\Helpers;
+	namespace DigitalSplash\Tests\Media\Helpers;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Media\Helpers\MediaTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Language\Helpers\Translate;
-	use RawadyMario\Media\Helpers\Media;
-	use RawadyMario\Media\Models\Image;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Media\Helpers\Media;
+	use DigitalSplash\Media\Models\Image;
 
 	final class MediaTest extends TestCase {
 		private const MEDIA_ROOT = "https://media.domain.com";

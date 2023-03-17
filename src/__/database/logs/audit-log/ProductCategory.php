@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Logs\AuditLog;
+	namespace DigitalSplash\Classes\Database\Logs\AuditLog;
 
-	use RawadyMario\Classes\Database\Logs\AuditLog;
+	use DigitalSplash\Classes\Database\Logs\AuditLog;
 
 	class ProductCategory_AuditLog implements ProductCategory_AuditLogInterface {
 		const Type = AuditLog::TypeProductCategory;

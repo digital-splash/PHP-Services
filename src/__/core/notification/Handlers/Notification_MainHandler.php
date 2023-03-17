@@ -1,14 +1,14 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Handler;
+	namespace DigitalSplash\Classes\Core\Notification\Handler;
 
 use ErrorException;
-use RawadyMario\Classes\Database\User;
-	use RawadyMario\Classes\Core\NotificationManager;
-	use RawadyMario\Classes\Database\Queue;
+use DigitalSplash\Classes\Database\User;
+	use DigitalSplash\Classes\Core\NotificationManager;
+	use DigitalSplash\Classes\Database\Queue;
 
 	class Notification_MainHandler {
-		public const ResolverPath = "\\RawadyMario\\Classes\\Core\\Notification\\Resolver\\";
-		public const HandlerPath = "\\RawadyMario\\Classes\\Core\\Notification\\Handler\\";
+		public const ResolverPath = "\\DigitalSplash\\Classes\\Core\\Notification\\Resolver\\";
+		public const HandlerPath = "\\DigitalSplash\\Classes\\Core\\Notification\\Handler\\";
 
 		public $notificationManager;
 

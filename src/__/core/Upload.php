@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Core;
+	namespace DigitalSplash\Classes\Core;
 
-	use RawadyMario\Classes\Helpers\Helper;
-	use RawadyMario\Classes\Helpers\MediaHelper;
+	use DigitalSplash\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Helpers\MediaHelper;
 	use WebPConvert\Convert\Converters\Gd;
 
 	class Upload {

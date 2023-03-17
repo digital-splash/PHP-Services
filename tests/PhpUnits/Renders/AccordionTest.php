@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Tests\Renders;
+	namespace DigitalSplash\Tests\Renders;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Renders\AccordionTest.php
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Renders\Accordion;
+	use DigitalSplash\Renders\Accordion;
 
 	class AccordionTest extends TestCase {
 

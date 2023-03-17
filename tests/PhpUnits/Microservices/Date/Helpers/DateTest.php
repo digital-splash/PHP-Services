@@ -1,16 +1,16 @@
 <?php
-	namespace RawadyMario\Tests\Date\Helpers;
+	namespace DigitalSplash\Tests\Date\Helpers;
 
 	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Date\Helpers\DateTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\InvalidParamException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Date\Models\DateFormat;
-	use RawadyMario\Language\Models\Lang;
-	use RawadyMario\Date\Helpers\Date;
-	use RawadyMario\Language\Helpers\Translate;
-	use RawadyMario\Date\Models\DateFormatType;
-	use RawadyMario\Date\Models\DateType;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Date\Models\DateFormat;
+	use DigitalSplash\Language\Models\Lang;
+	use DigitalSplash\Date\Helpers\Date;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Date\Models\DateFormatType;
+	use DigitalSplash\Date\Models\DateType;
 
 	final class DateTest extends TestCase {
 

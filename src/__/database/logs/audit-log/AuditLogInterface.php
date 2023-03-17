@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Database\Logs\AuditLog;
+	namespace DigitalSplash\Classes\Database\Logs\AuditLog;
 
 	interface AuditLogInterface {		
 		public static function Create(int $recordId, array $payload=[]) : void;

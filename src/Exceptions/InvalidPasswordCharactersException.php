@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Exceptions;
+	namespace DigitalSplash\Exceptions;
 
-	use RawadyMario\Exceptions\Base\BaseException;
+	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class InvalidPasswordCharactersException extends BaseException {
 		protected $message = "exception.InvalidPasswordCharacters";
