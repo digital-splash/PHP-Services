@@ -9,7 +9,7 @@ First, on your project root:
 Now open `settings.json` and paste the below lines in the main JSON:
 
 ```
-"editor.formatOnPaste": true
+"editor.formatOnPaste": false
 "editor.formatOnSave": true
 ```
 
