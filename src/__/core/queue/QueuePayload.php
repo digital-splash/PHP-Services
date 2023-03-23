@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Core\Queue;
+	namespace DigitalSplash\Classes\Core\Queue;
 
-	use RawadyMario\Classes\Database\Queue;
+	use DigitalSplash\Classes\Database\Queue;
 
 	class QueuePayload {
 		
@@ -10,7 +10,7 @@
 			$name = $queue->row["name"];
 			$payload = !empty($queue->row["payload"]) ? json_decode($queue->row["payload"], true) : [];
 		
-			$className = "\\RawadyMario\\Classes\\Core\\Queue\\Payload\\" . ucfirst($type) . "_" . $name . "Payload";
+			$className = "\\DigitalSplash\\Classes\\Core\\Queue\\Payload\\" . ucfirst($type) . "_" . $name . "Payload";
 			$function = "GetData";
 
 			if (method_exists($className, $function)) {

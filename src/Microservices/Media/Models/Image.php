@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Media\Models;
+	namespace DigitalSplash\Media\Models;
 
 
 	class Image {

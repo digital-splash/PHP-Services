@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
-	use RawadyMario\Exceptions\InvalidCookieException;
+	use DigitalSplash\Exceptions\InvalidCookieException;
 
 	class Cookie {
 		private static string $prefix = "rm_";

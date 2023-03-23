@@ -1,15 +1,15 @@
 <?php
-	namespace RawadyMario\Date\Helpers;
+	namespace DigitalSplash\Date\Helpers;
 
-	use RawadyMario\Exceptions\InvalidParamException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Date\Models\DateFormat;
-	use RawadyMario\Date\Models\DateFormatType;
-	use RawadyMario\Date\Models\DateType;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Language;
-	use RawadyMario\Language\Helpers\Translate;
-	use RawadyMario\Language\Models\Lang;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Date\Models\DateFormat;
+	use DigitalSplash\Date\Models\DateFormatType;
+	use DigitalSplash\Date\Models\DateType;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Helpers\Language;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Language\Models\Lang;
 
 	class Date {
 

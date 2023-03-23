@@ -1,10 +1,9 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\CookieTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\InvalidCookieException;
-	use RawadyMario\Helpers\Cookie;
+	use DigitalSplash\Exceptions\InvalidCookieException;
+	use DigitalSplash\Helpers\Cookie;
 
 	final class CookieTest extends TestCase {
 

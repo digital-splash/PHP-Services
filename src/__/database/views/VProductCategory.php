@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Core\Database;
-    use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\Database;
+    use DigitalSplash\Classes\Helpers\Helper;
 
     class VProductCategory extends Database {
 

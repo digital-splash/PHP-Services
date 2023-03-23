@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Common\Renderer\Form;
+	namespace DigitalSplash\Classes\Common\Renderer\Form;
 
-	use RawadyMario\Classes\Core\Upload;
-	use RawadyMario\Classes\Helpers\MediaHelper;
+	use DigitalSplash\Classes\Core\Upload;
+	use DigitalSplash\Classes\Helpers\MediaHelper;
 
 	class Form_File extends FormElements{
 

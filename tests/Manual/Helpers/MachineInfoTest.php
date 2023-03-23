@@ -1,5 +1,5 @@
 <?php
-	use RawadyMario\Helpers\MachineInfo;
+	use DigitalSplash\Helpers\MachineInfo;
 
 	include_once "../../../vendor/autoload.php";
 

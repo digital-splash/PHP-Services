@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Logs;
+	namespace DigitalSplash\Classes\Database\Logs;
 
-	use RawadyMario\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\Database;
 
 	class AuditLog extends Database {
 		const TypeUser = "User";

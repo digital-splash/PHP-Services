@@ -1,5 +1,5 @@
 <?php
-	use RawadyMario\Renders\Tabs;
+	use DigitalSplash\Renders\Tabs;
 
 	include_once "../../../vendor/autoload.php";
 

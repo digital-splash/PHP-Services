@@ -1,12 +1,12 @@
 <?php
-	namespace RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy;
+	namespace DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy;
 
 	use Curl\Curl;
-	use RawadyMario\Classes\Core\ShippingProvider\ShippingProviderInterface;
-	use RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteContentsModel;
-	use RawadyMario\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteDetailsModel;
-	use RawadyMario\Classes\Database\Logs\ShippingTheCourierGuy AS ShippingTheCourierGuyLog;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\ShippingProvider\ShippingProviderInterface;
+	use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteContentsModel;
+	use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteDetailsModel;
+	use DigitalSplash\Classes\Database\Logs\ShippingTheCourierGuy AS ShippingTheCourierGuyLog;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class TheCourierGuy implements ShippingProviderInterface {
 		public string $serviceURL;

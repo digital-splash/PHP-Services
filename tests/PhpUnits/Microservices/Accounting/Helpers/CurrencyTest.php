@@ -1,12 +1,11 @@
 <?php
-	namespace RawadyMario\Tests\Accounting\Helpers;
+	namespace DigitalSplash\Tests\Accounting\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Accounting\Helpers\CurrencyTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\NotNumericParamException;
-	use RawadyMario\Accounting\Helpers\Currency;
-	use RawadyMario\Accounting\Models\CurrencyPosition;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Exceptions\NotNumericParamException;
+	use DigitalSplash\Accounting\Helpers\Currency;
+	use DigitalSplash\Accounting\Models\CurrencyPosition;
+	use DigitalSplash\Language\Helpers\Translate;
 
 	final class CurrencyTest extends TestCase {
 

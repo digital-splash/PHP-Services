@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Renders;
+	namespace DigitalSplash\Renders;
 
-	use RawadyMario\Helpers\Helper;
+	use DigitalSplash\Helpers\Helper;
 
 	class Accordion {
 		protected const CONTENT_DIR = __DIR__ . "/ContentGenerator/Accordion/";

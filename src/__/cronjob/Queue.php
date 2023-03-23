@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Cronjob;
+	namespace DigitalSplash\Classes\Cronjob;
 
-	use RawadyMario\Classes\Database\Queue as CoreQueue;
+	use DigitalSplash\Classes\Database\Queue as CoreQueue;
 
 	class Queue {
 

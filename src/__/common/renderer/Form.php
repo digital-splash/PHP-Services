@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Common\Renderer;
+	namespace DigitalSplash\Classes\Common\Renderer;
 
 	class Form {
 		public static $labelClass;

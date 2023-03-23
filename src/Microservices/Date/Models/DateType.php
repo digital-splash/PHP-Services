@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Date\Models;
+	namespace DigitalSplash\Date\Models;
 
 
 	class DateType {

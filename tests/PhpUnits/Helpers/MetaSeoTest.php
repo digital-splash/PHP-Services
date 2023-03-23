@@ -1,14 +1,13 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\MetaSeoTest.php
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\InvalidArgumentException;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Helpers\MetaSeo;
-	use RawadyMario\Helpers\Script;
-	use RawadyMario\Helpers\Style;
+	use DigitalSplash\Exceptions\InvalidArgumentException;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Helpers\MetaSeo;
+	use DigitalSplash\Helpers\Script;
+	use DigitalSplash\Helpers\Style;
 
 	class MetaSeoTest extends TestCase {
 
@@ -58,15 +57,15 @@
 				"PHP",
 			]);
 			MetaSeo::SetDescription("Mario Rawady is a Software Engineer");
-			MetaSeo::SetPhoto("https://rawadymario.com/assets/img/logo-big.png");
-			MetaSeo::SetUrl("https://rawadymario.com");
+			MetaSeo::SetPhoto("https://DigitalSplash.com/assets/img/logo-big.png");
+			MetaSeo::SetUrl("https://DigitalSplash.com");
 			MetaSeo::SetRobots(true);
 			MetaSeo::SetGoolgeSiteVerification("");
 			MetaSeo::SetCopyright("2022. Mario Rawady");
 			MetaSeo::SetFacebookAppId("123456789");
 			MetaSeo::SetFacebookAdmins("");
 			MetaSeo::SetTwitterCard("testtt"); //Should default to: summary_large_image
-			MetaSeo::SetFavicon("https://rawadymario.com/assets/img/favicon.png");
+			MetaSeo::SetFavicon("https://DigitalSplash.com/assets/img/favicon.png");
 
 			MetaSeo::AddToMetaArray("test", [
 				"type" => "meta",

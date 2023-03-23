@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
 	class Store {
 

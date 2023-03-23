@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
 	class Script {
 		protected static $filesArray = [];

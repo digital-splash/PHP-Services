@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Common\Renderer\FormCustom;
+	namespace DigitalSplash\Classes\Common\Renderer\FormCustom;
 
-    use RawadyMario\Classes\Common\Renderer\Form\Form_Select;
-    use RawadyMario\Classes\Common\Renderer\Form\FormElements;
-	use RawadyMario\Classes\Database\Countries;
+    use DigitalSplash\Classes\Common\Renderer\Form\Form_Select;
+    use DigitalSplash\Classes\Common\Renderer\Form\FormElements;
+	use DigitalSplash\Classes\Database\Countries;
 
 	class Form_Custom_Phone extends FormElements {
 

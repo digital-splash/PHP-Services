@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Core;
+	namespace DigitalSplash\Classes\Core;
 
-	use RawadyMario\Classes\Helpers\DateHelper;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Helpers\DateHelper;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class Database {
 		public static $conn;

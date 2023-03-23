@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Models;
+	namespace DigitalSplash\Models;
 
 
 	class Status {

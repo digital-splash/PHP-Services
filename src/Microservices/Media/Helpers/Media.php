@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Media\Helpers;
+	namespace DigitalSplash\Media\Helpers;
 
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Media\Models\Image;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Models\Image;
 
 	class Media {
 		private static $MEDIA_FOLDER = "mediafiles/";

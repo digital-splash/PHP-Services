@@ -1,13 +1,13 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
-	use RawadyMario\Exceptions\InvalidEmailException;
-	use RawadyMario\Exceptions\InvalidNumberException;
-	use RawadyMario\Exceptions\InvalidPasswordCharactersException;
-	use RawadyMario\Exceptions\InvalidPasswordLengthException;
-	use RawadyMario\Exceptions\InvalidPhoneNumberException;
-	use RawadyMario\Exceptions\InvalidUsernameCharactersException;
-	use RawadyMario\Exceptions\InvalidUsernameLengthException;
+	use DigitalSplash\Exceptions\InvalidEmailException;
+	use DigitalSplash\Exceptions\InvalidNumberException;
+	use DigitalSplash\Exceptions\InvalidPasswordCharactersException;
+	use DigitalSplash\Exceptions\InvalidPasswordLengthException;
+	use DigitalSplash\Exceptions\InvalidPhoneNumberException;
+	use DigitalSplash\Exceptions\InvalidUsernameCharactersException;
+	use DigitalSplash\Exceptions\InvalidUsernameLengthException;
 
 	class Validator {
 

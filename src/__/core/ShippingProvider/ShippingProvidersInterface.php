@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Core\ShippingProvider;
+	namespace DigitalSplash\Classes\Core\ShippingProvider;
 
 	interface ShippingProviderInterface {
 		const MINIMUM_SHIPPING_AMOUNT = 75;

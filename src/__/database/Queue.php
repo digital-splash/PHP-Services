@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
-	use RawadyMario\Classes\Core\Database;
-	use RawadyMario\Classes\Core\Notification\Handler\Notification_MainHandler;
-	use RawadyMario\Classes\Core\Queue\QueuePayload;
+	use DigitalSplash\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\Notification\Handler\Notification_MainHandler;
+	use DigitalSplash\Classes\Core\Queue\QueuePayload;
 
 	class Queue extends Database {
 		const TypeEmail = "email";

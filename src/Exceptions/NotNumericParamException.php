@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Exceptions;
+	namespace DigitalSplash\Exceptions;
 
-	use RawadyMario\Exceptions\Base\BaseParameterException;
+	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class NotNumericParamException extends BaseParameterException {
 		protected $message = "exception.NotNumericParam";

@@ -1,18 +1,17 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\ValidatorTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\InvalidEmailException;
-	use RawadyMario\Exceptions\InvalidNumberException;
-	use RawadyMario\Exceptions\InvalidPasswordCharactersException;
-	use RawadyMario\Exceptions\InvalidPasswordLengthException;
-	use RawadyMario\Exceptions\InvalidPhoneNumberException;
-	use RawadyMario\Exceptions\InvalidUsernameCharactersException;
-	use RawadyMario\Exceptions\InvalidUsernameLengthException;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Translate;
-	use RawadyMario\Helpers\Validator;
+	use DigitalSplash\Exceptions\InvalidEmailException;
+	use DigitalSplash\Exceptions\InvalidNumberException;
+	use DigitalSplash\Exceptions\InvalidPasswordCharactersException;
+	use DigitalSplash\Exceptions\InvalidPasswordLengthException;
+	use DigitalSplash\Exceptions\InvalidPhoneNumberException;
+	use DigitalSplash\Exceptions\InvalidUsernameCharactersException;
+	use DigitalSplash\Exceptions\InvalidUsernameLengthException;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Helpers\Validator;
 
 	final class ValidatorTest extends TestCase {
 
@@ -215,7 +214,7 @@
 
 		public function testValidateUsernameSuccess(): void {
 			$this->assertTrue(
-				Validator::ValidateUsername("rawadymario")
+				Validator::ValidateUsername("DigitalSplash")
 			);
 			$this->assertTrue(
 				Validator::ValidateUsername("rawady_mario")

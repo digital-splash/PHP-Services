@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Resolver;
+	namespace DigitalSplash\Classes\Core\Notification\Resolver;
 
-	use RawadyMario\Classes\Database\Order;
-	use RawadyMario\Classes\Database\User;
-	use RawadyMario\Classes\Database\Variable;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Database\Order;
+	use DigitalSplash\Classes\Database\User;
+	use DigitalSplash\Classes\Database\Variable;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class SendOrderStatusUpdatedEmailToUserResolver {
 		

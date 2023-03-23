@@ -1,14 +1,13 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Helpers\ServerCache;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Helpers\ServerCache;
+	use DigitalSplash\Language\Helpers\Translate;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\ServerCacheTest.php
 
 	class ServerCacheTest extends TestCase {
 		private const CACHE_FOLDER = __DIR__ . "/../../_CommonFiles/Cache/";

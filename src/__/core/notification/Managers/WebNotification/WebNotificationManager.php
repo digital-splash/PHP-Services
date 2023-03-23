@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Core\Notification\Manager\WebNotification;
+	namespace DigitalSplash\Classes\Core\Notification\Manager\WebNotification;
 
-	use RawadyMario\Classes\Database\Store;
-	use RawadyMario\Classes\Database\User;
+	use DigitalSplash\Classes\Database\Store;
+	use DigitalSplash\Classes\Database\User;
 
 	class WebNotificationManager {
 		// private static $TemplatePrefix = "notification.web_notification.";
