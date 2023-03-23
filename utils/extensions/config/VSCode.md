@@ -37,6 +37,18 @@ This configuration is set to `always` to Always show the PHP Unit results even w
 "phpunit.showAfterExecution": "always"
 ```
 
+## PHP Debugger
+
+Open the Extensions tab, and search for: `rxdebug.php-debug`, and Install it.
+
+Now open the file `.vscode/setings.json`, and paste the below line.
+
+```
+"php.debug.executablePath": "{path_to_php_executable}"
+```
+
+**Still Under Construction!**
+
 ## Code Formatter
 
 ### Prettier
