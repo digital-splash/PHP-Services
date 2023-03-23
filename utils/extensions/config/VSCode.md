@@ -21,7 +21,21 @@ To install it, open the Extensions tab, and install `bmewburn.vscode-intelephens
 
 ## PHP Unit
 
-Pending to find a Plugin to run PHP Units
+Open the Extensions tab, and search for: `recca0120.vscode-phpunit`, and Install it.
+
+Now open the file `.vscode/setings.json`, and paste the below lines.
+
+```
+"phpunit.php": "php",
+"phpunit.phpunit": "vendor/bin/phpunit"
+```
+
+The below configuration is optional, but it can only be set on the user `settings.json` file. It is not supported per Workspace.
+This configuration is set to `always` to Always show the PHP Unit results even when there is no Failures.
+
+```
+"phpunit.showAfterExecution": "always"
+```
 
 ## Code Formatter
 
@@ -38,6 +52,10 @@ To make `Prettier` your default `Code Formatter`, paste the below line in `.vsco
 ```
 
 Then copy the file `.prettierrc` to the root of your project
+
+### PHP
+
+Open the Extensions tab, and search for: ``, and Install it.
 
 ### Others
 
