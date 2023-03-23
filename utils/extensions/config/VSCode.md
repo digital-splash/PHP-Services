@@ -67,7 +67,31 @@ Then copy the file `.prettierrc` to the root of your project
 
 ### PHP
 
-Open the Extensions tab, and search for: ``, and Install it.
+Open the Extensions tab, and search for: `kokororin.vscode-phpfmt`, and Install it.
+
+Now open the file `.vscode/setings.json`, and paste the below lines.
+
+```
+  // Enable per-language
+  "[php]": {
+    "editor.defaultFormatter": "kokororin.vscode-phpfmt",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4
+  },
+  "phpfmt.passes": [
+    "SpaceAroundControlStructures",
+    "MergeElseIf",
+    "IndentTernaryConditions",
+    "SortUseNameSpace",
+    "SpaceBetweenMethods",
+    "PSR2LnAfterNamespace"
+  ],
+  "phpfmt.indent_with_space": 4,
+  "phpfmt.detect_indent": false,
+  "phpfmt.psr1": true,
+  "editor.detectIndentation": false
+
+```
 
 ### Others
 
