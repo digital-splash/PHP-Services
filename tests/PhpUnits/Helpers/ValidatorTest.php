@@ -214,7 +214,7 @@
 
 		public function testValidateUsernameSuccess(): void {
 			$this->assertTrue(
-				Validator::ValidateUsername("DigitalSplash")
+				Validator::ValidateUsername("rawadymario")
 			);
 			$this->assertTrue(
 				Validator::ValidateUsername("rawady_mario")

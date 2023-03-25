@@ -57,15 +57,15 @@
 				"PHP",
 			]);
 			MetaSeo::SetDescription("Mario Rawady is a Software Engineer");
-			MetaSeo::SetPhoto("https://DigitalSplash.com/assets/img/logo-big.png");
-			MetaSeo::SetUrl("https://DigitalSplash.com");
+			MetaSeo::SetPhoto("https://dg-splash.com/assets/img/logo-big.png");
+			MetaSeo::SetUrl("https://dg-splash.com");
 			MetaSeo::SetRobots(true);
 			MetaSeo::SetGoolgeSiteVerification("");
 			MetaSeo::SetCopyright("2022. Mario Rawady");
 			MetaSeo::SetFacebookAppId("123456789");
 			MetaSeo::SetFacebookAdmins("");
 			MetaSeo::SetTwitterCard("testtt"); //Should default to: summary_large_image
-			MetaSeo::SetFavicon("https://DigitalSplash.com/assets/img/favicon.png");
+			MetaSeo::SetFavicon("https://dg-splash.com/assets/img/favicon.png");
 
 			MetaSeo::AddToMetaArray("test", [
 				"type" => "meta",

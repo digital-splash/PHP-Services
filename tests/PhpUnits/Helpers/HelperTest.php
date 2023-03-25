@@ -854,8 +854,8 @@
 			);
 
 			$this->assertEquals(
-				str_replace("&", "[amp;]", base64_encode("https://DigitalSplash.com/projects?page=2&category=2")),
-				Helper::EncryptLink("https://DigitalSplash.com/projects?page=2&category=2")
+				str_replace("&", "[amp;]", base64_encode("https://dg-splash.com/projects?page=2&category=2")),
+				Helper::EncryptLink("https://dg-splash.com/projects?page=2&category=2")
 			);
 		}
 
@@ -871,8 +871,8 @@
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/projects?page=2&category=2",
-				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://DigitalSplash.com/projects?page=2&category=2")))
+				"https://dg-splash.com/projects?page=2&category=2",
+				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://dg-splash.com/projects?page=2&category=2")))
 			);
 		}
 
@@ -1062,23 +1062,23 @@
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com/")
+				"https://dg-splash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com/")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com")
+				"https://dg-splash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://DigitalSplash.com////")
+				"https://dg-splash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com////")
 			);
 
 			$this->assertEquals(
-				"www.DigitalSplash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.DigitalSplash.com////")
+				"www.dg-splash.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.dg-splash.com////")
 			);
 		}
 
@@ -1089,13 +1089,13 @@
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/assets/css/styles.css",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://DigitalSplash.com")
+				"https://dg-splash.com/assets/css/styles.css",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://dg-splash.com")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com/assets/css/styles.css?v=1.0",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://DigitalSplash.com", "1.0")
+				"https://dg-splash.com/assets/css/styles.css?v=1.0",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://dg-splash.com", "1.0")
 			);
 		}
 
@@ -1162,28 +1162,28 @@
 			);
 
 			$this->assertEquals(
-				"DigitalSplash.com",
-				Helper::AddSchemeIfMissing("DigitalSplash.com", "")
+				"dg-splash.com",
+				Helper::AddSchemeIfMissing("dg-splash.com", "")
 			);
 
 			$this->assertEquals(
-				"http://DigitalSplash.com",
-				Helper::AddSchemeIfMissing("http://DigitalSplash.com", "https://")
+				"http://dg-splash.com",
+				Helper::AddSchemeIfMissing("http://dg-splash.com", "https://")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::AddSchemeIfMissing("https://DigitalSplash.com", "http://")
+				"https://dg-splash.com",
+				Helper::AddSchemeIfMissing("https://dg-splash.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::AddSchemeIfMissing("DigitalSplash.com", "https")
+				"https://dg-splash.com",
+				Helper::AddSchemeIfMissing("dg-splash.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::AddSchemeIfMissing("DigitalSplash.com", "https://")
+				"https://dg-splash.com",
+				Helper::AddSchemeIfMissing("dg-splash.com", "https://")
 			);
 		}
 
@@ -1194,28 +1194,28 @@
 			);
 
 			$this->assertEquals(
-				"DigitalSplash.com",
-				Helper::ReplaceScheme("DigitalSplash.com", "")
+				"dg-splash.com",
+				Helper::ReplaceScheme("dg-splash.com", "")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::ReplaceScheme("http://DigitalSplash.com", "https://")
+				"https://dg-splash.com",
+				Helper::ReplaceScheme("http://dg-splash.com", "https://")
 			);
 
 			$this->assertEquals(
-				"http://DigitalSplash.com",
-				Helper::ReplaceScheme("https://DigitalSplash.com", "http://")
+				"http://dg-splash.com",
+				Helper::ReplaceScheme("https://dg-splash.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::ReplaceScheme("DigitalSplash.com", "https")
+				"https://dg-splash.com",
+				Helper::ReplaceScheme("dg-splash.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://DigitalSplash.com",
-				Helper::ReplaceScheme("DigitalSplash.com", "https://")
+				"https://dg-splash.com",
+				Helper::ReplaceScheme("dg-splash.com", "https://")
 			);
 		}
 
@@ -1225,35 +1225,35 @@
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("Mario Rawady: https://DigitalSplash.com")
+				Helper::IsValidUrl("Mario Rawady: https://dg-splash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http//DigitalSplash.com")
+				Helper::IsValidUrl("http//dg-splash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:/DigitalSplash.com")
+				Helper::IsValidUrl("http:/dg-splash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:DigitalSplash.com")
+				Helper::IsValidUrl("http:dg-splash.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("https:/DigitalSplash.com")
+				Helper::IsValidUrl("https:/dg-splash.com")
 			);
 
 			$this->assertTrue( //To be fixed!
-				Helper::IsValidUrl("http://DigitalSplash.com Mario Rawady")
+				Helper::IsValidUrl("http://dg-splash.com Mario Rawady")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("http://DigitalSplash.com")
+				Helper::IsValidUrl("http://dg-splash.com")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("https://DigitalSplash.com")
+				Helper::IsValidUrl("https://dg-splash.com")
 			);
 		}
 
