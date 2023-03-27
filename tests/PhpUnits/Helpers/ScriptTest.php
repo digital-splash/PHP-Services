@@ -59,6 +59,7 @@
 			Script::AddScript("<script src=\"script_3.js\"></script>", "script_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Script/scripts.html");
+            $expected = str_replace("\r\n", "\n", $expected);
 			$actual = Script::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
