@@ -79,17 +79,18 @@
 			MetaSeo::AddToPostHeadArray("post_1", "<!-- Here Goes Post Head Scripts 01 -->");
 			MetaSeo::AddToPostHeadArray("post_2", "<!-- Here Goes Post Head Scripts 02 -->");
 
-			Style::AddFile("file_1", "file_1.css");
-			Style::AddFile("file_2", "file_2.css");
-			Style::AddStyle("style_1", "<link rel=\"stylesheet\" href=\"style_1.css\">");
-			Style::AddStyle("style_2", "<link rel=\"stylesheet\" href=\"style_2.css\">");
+			Style::AddFile("file_1.css", "file_1");
+			Style::AddFile("file_2.css", "file_2");
+			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_1.css\">", "style_1");
+			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_2.css\">", "style_2");
 
-			Script::AddFile("file_1", "file_1.js");
-			Script::AddFile("file_2", "file_2.js");
-			Script::AddScript("script_1", "<script src=\"script_1.js\"></script>");
-			Script::AddScript("script_2", "<script src=\"script_2.js\"></script>");
+			Script::AddFile("file_1.js", "file_1");
+			Script::AddFile("file_2.js", "file_2");
+			Script::AddScript("<script src=\"script_1.js\"></script>", "script_1");
+			Script::AddScript("<script src=\"script_2.js\"></script>", "script_2");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/MetaSeo/header.html");
+            $expected = str_replace("\r\n", "\n", $expected);
 			$actual = MetaSeo::RenderFull();
 
 			$this->assertEquals($expected, $actual);
