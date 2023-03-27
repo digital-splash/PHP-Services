@@ -59,6 +59,7 @@
 			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_3.css\">", "style_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Style/styles.html");
+            $expected = str_replace("\r\n", "\n", $expected);
 			$actual = Style::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
