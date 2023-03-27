@@ -61,7 +61,7 @@
 			MetaSeo::SetUrl("https://dg-splash.com");
 			MetaSeo::SetRobots(true);
 			MetaSeo::SetGoolgeSiteVerification("");
-			MetaSeo::SetCopyright("2022. Mario Rawady");
+			MetaSeo::SetCopyright("2022. Digital Splash");
 			MetaSeo::SetFacebookAppId("123456789");
 			MetaSeo::SetFacebookAdmins("");
 			MetaSeo::SetTwitterCard("testtt"); //Should default to: summary_large_image

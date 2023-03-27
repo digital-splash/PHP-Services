@@ -1225,7 +1225,7 @@
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("Mario Rawady: https://dg-splash.com")
+				Helper::IsValidUrl("Digital Splash: https://dg-splash.com")
 			);
 
 			$this->assertFalse(
@@ -1245,7 +1245,7 @@
 			);
 
 			$this->assertTrue( //To be fixed!
-				Helper::IsValidUrl("http://dg-splash.com Mario Rawady")
+				Helper::IsValidUrl("http://dg-splash.com Digital Splash")
 			);
 
 			$this->assertTrue(
