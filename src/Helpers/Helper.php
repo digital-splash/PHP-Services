@@ -81,7 +81,7 @@
 		public static function ConvertToInt(
 			$val
 		): int {
-			if ((isset($val)) && (trim($val) !== "")) {
+			if ((isset($val)) && (trim($val) !== "") && is_numeric($val)) {
 				if ($val < 0) {
 					return intval($val);
 				}
