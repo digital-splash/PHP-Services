@@ -1,5 +1,5 @@
 <?php
-	use RawadyMario\Renders\Accordion;
+	use DigitalSplash\Renders\Accordion;
 
 	include_once "../../../vendor/autoload.php";
 

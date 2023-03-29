@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\Database;
 
 	class VProductOption extends Database {
 

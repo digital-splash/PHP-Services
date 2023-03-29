@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Common\Renderer\Form;
+	namespace DigitalSplash\Classes\Common\Renderer\Form;
 
 	class Form_Select extends FormElements{
 

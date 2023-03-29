@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Database\OrderProduct;
+	use DigitalSplash\Classes\Database\OrderProduct;
 
 	class VOrderProduct extends OrderProduct {
 

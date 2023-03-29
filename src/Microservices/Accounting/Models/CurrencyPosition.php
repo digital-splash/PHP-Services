@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Accounting\Models;
+	namespace DigitalSplash\Accounting\Models;
 
 
 	class CurrencyPosition {

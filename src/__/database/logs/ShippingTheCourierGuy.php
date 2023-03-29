@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Classes\Database\Logs;
+	namespace DigitalSplash\Classes\Database\Logs;
 
-	use RawadyMario\Classes\Core\Database;
-	use RawadyMario\Classes\Core\MachineInfo;
-	use RawadyMario\Classes\Helpers\DateHelper;
+	use DigitalSplash\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\MachineInfo;
+	use DigitalSplash\Classes\Helpers\DateHelper;
 
 	class ShippingTheCourierGuy extends Database {
 		public const ERROR = ERROR;

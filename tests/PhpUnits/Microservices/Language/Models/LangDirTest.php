@@ -1,10 +1,9 @@
 <?php
-	namespace RawadyMario\Tests\Language\Models;
+	namespace DigitalSplash\Tests\Language\Models;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Language\Models\LangDirTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Language\Models\Lang;
-	use RawadyMario\Language\Models\LangDir;
+	use DigitalSplash\Language\Models\Lang;
+	use DigitalSplash\Language\Models\LangDir;
 
 	final class LangDirTest extends TestCase {
 

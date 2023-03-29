@@ -1,12 +1,12 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
-	use RawadyMario\Classes\Core\Database;
-	use RawadyMario\Classes\Core\ServerCacheGetter;
-	use RawadyMario\Classes\Database\Views\VProduct;
-	use RawadyMario\Classes\Database\Views\VProductOption;
-	use RawadyMario\Classes\Helpers\Helper;
-	use RawadyMario\Classes\Website\WebsiteLinks;
+	use DigitalSplash\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\ServerCacheGetter;
+	use DigitalSplash\Classes\Database\Views\VProduct;
+	use DigitalSplash\Classes\Database\Views\VProductOption;
+	use DigitalSplash\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Website\WebsiteLinks;
 
 	class Product extends Database {
 

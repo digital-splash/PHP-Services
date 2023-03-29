@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Database\OrderStatusHistory;
+	use DigitalSplash\Classes\Database\OrderStatusHistory;
 
 
 	class VOrderStatusHistory extends OrderStatusHistory {

@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Exceptions;
+	namespace DigitalSplash\Exceptions;
 
 	use Exception;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Helpers\Translate;
 
 	final class InvalidArgumentException extends Exception {
 		protected $message = "exception.InvalidArgument";

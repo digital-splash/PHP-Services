@@ -1,10 +1,9 @@
 <?php
-	namespace RawadyMario\Tests\Language\Helpers;
+	namespace DigitalSplash\Tests\Language\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Language\Helpers\LanguageTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Language\Helpers\Language;
-	use RawadyMario\Language\Models\Lang;
+	use DigitalSplash\Language\Helpers\Language;
+	use DigitalSplash\Language\Models\Lang;
 
 	final class LanguageTest extends TestCase {
 

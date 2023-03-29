@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Common;
+	namespace DigitalSplash\Classes\Common;
 
     class Auth {
 

@@ -1,13 +1,13 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\InvalidParamException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Models\Code;
-	use RawadyMario\Models\HttpCode;
-	use RawadyMario\Language\Models\Lang;
-	use RawadyMario\Models\Status;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Models\Code;
+	use DigitalSplash\Models\HttpCode;
+	use DigitalSplash\Language\Models\Lang;
+	use DigitalSplash\Models\Status;
 
 	class Helper {
 
@@ -81,7 +81,7 @@
 		public static function ConvertToInt(
 			$val
 		): int {
-			if ((isset($val)) && (trim($val) !== "")) {
+			if ((isset($val)) && (trim($val) !== "") && is_numeric($val)) {
 				if ($val < 0) {
 					return intval($val);
 				}

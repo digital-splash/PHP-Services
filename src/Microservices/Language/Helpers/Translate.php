@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Language\Helpers;
+	namespace DigitalSplash\Language\Helpers;
 
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Helpers\Helper;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\Helper;
 
 	class Translate {
 		private static $VALS_WITHOUT_TYPE = [];

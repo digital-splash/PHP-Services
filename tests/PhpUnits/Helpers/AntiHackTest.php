@@ -1,10 +1,9 @@
 <?php
-	namespace RawadyMario\Tests\Helpers;
+	namespace DigitalSplash\Tests\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Helpers\AntiHackTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Helpers\AntiHack;
-use RawadyMario\Helpers\Helper;
+	use DigitalSplash\Helpers\AntiHack;
+use DigitalSplash\Helpers\Helper;
 
 	final class AntiHackTest extends TestCase {
 

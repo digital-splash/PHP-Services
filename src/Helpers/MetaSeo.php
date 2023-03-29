@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
-	use RawadyMario\Exceptions\InvalidArgumentException;
-	use RawadyMario\Language\Helpers\Language;
+	use DigitalSplash\Exceptions\InvalidArgumentException;
+	use DigitalSplash\Language\Helpers\Language;
 
 	class MetaSeo {
 		protected static $metaArray = [];

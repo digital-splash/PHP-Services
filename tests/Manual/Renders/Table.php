@@ -1,6 +1,6 @@
 <?php
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Renders\Table;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Renders\Table;
 
 	include_once "../../../vendor/autoload.php";
 	echo "<link

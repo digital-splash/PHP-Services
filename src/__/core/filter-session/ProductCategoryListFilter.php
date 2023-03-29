@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Core\FilterSession;
+	namespace DigitalSplash\Classes\Core\FilterSession;
 
-	use RawadyMario\Classes\Core\FilterSession;
+	use DigitalSplash\Classes\Core\FilterSession;
 
 	class ProductCategoryListFilter {
 

@@ -1,9 +1,9 @@
 <?php
-	namespace RawadyMario\Exceptions\Base;
+	namespace DigitalSplash\Exceptions\Base;
 
 	use Exception;
-	use RawadyMario\Helpers\Helper;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Language\Helpers\Translate;
 
 	class BaseException extends Exception {
 

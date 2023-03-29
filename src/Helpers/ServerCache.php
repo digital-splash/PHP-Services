@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Helpers;
+	namespace DigitalSplash\Helpers;
 
-	use RawadyMario\Exceptions\FileNotFoundException;
-	use RawadyMario\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
 
 	class ServerCache {
 		protected static ?string $version = null;

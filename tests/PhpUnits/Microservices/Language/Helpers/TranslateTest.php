@@ -1,11 +1,10 @@
 <?php
-	namespace RawadyMario\Tests\Language\Helpers;
+	namespace DigitalSplash\Tests\Language\Helpers;
 
-	//To Run: .\vendor/bin/phpunit .\tests\PhpUnits\Microservices\Language\Helpers\TranslateTest.php
 	use PHPUnit\Framework\TestCase;
-	use RawadyMario\Exceptions\NotEmptyParamException;
-	use RawadyMario\Language\Helpers\Translate;
-	use RawadyMario\Language\Models\Lang;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Language\Models\Lang;
 
 	final class TranslateTest extends TestCase {
 

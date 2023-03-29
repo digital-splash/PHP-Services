@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Exceptions\Base;
+	namespace DigitalSplash\Exceptions\Base;
 
 	use Exception;
-	use RawadyMario\Language\Helpers\Translate;
+	use DigitalSplash\Language\Helpers\Translate;
 
 	class BaseParameterException extends Exception {
 

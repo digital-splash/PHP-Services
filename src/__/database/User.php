@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 
-	use RawadyMario\Classes\Core\Database;
-	use RawadyMario\Classes\Core\MachineInfo;
-	use RawadyMario\Classes\Helpers\DateHelper;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\Database;
+	use DigitalSplash\Classes\Core\MachineInfo;
+	use DigitalSplash\Classes\Helpers\DateHelper;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class User extends Database {
 		public $tokenKey;

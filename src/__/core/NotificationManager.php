@@ -1,10 +1,10 @@
 <?php
-	namespace RawadyMario\Classes\Core;
+	namespace DigitalSplash\Classes\Core;
 
-    use RawadyMario\Classes\Database\User;
-    use RawadyMario\Classes\Database\Store;
-    use RawadyMario\Classes\Core\Notification\Manager\Email\PhpMailerManager;
-    use RawadyMario\Classes\Core\Notification\Manager\WebNotification\WebNotificationManager;
+    use DigitalSplash\Classes\Database\User;
+    use DigitalSplash\Classes\Database\Store;
+    use DigitalSplash\Classes\Core\Notification\Manager\Email\PhpMailerManager;
+    use DigitalSplash\Classes\Core\Notification\Manager\WebNotification\WebNotificationManager;
 
     class NotificationManager {
         //Common Params

@@ -1,8 +1,8 @@
 <?php
-	namespace RawadyMario\Classes\Database;
+	namespace DigitalSplash\Classes\Database;
 	
-	use RawadyMario\Classes\Core\Database;
-	use RawadyMario\Classes\Helpers\Helper;
+	use DigitalSplash\Classes\Core\Database;
+	use DigitalSplash\Classes\Helpers\Helper;
 
 	class Regions extends Database {
 

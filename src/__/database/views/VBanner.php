@@ -1,7 +1,7 @@
 <?php
-	namespace RawadyMario\Classes\Database\Views;
+	namespace DigitalSplash\Classes\Database\Views;
 
-	use RawadyMario\Classes\Database\Banner;
+	use DigitalSplash\Classes\Database\Banner;
 
 	class VBanner extends Banner {
 

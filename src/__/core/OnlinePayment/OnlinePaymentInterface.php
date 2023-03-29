@@ -1,5 +1,5 @@
 <?php
-	namespace RawadyMario\Classes\Core\OnlinePayment;
+	namespace DigitalSplash\Classes\Core\OnlinePayment;
 
 	interface OnlinePaymentInterface {
 
