@@ -3,65 +3,70 @@
 
     class DatabaseCredentials {
 
-        public string $host     = "";
-        public string $username = "";
-        public string $password = "";
-        public string $database = "";
-        public string $port     = "";
-        public string $charset  = "";
+        private string $host     = "";
+        private string $username = "";
+        private string $password = "";
+        private string $database = "";
+        private string $port     = "";
+        private string $charset  = "";
 
-        public function __construct(
-            string $host,
-            string $username,
-            string $password,
-            string $database,
-            string $port,
-            string $charset
-        ) {
-            $this->host     = $host;
-            $this->username = $username;
-            $this->password = $password;
-            $this->database = $database;
-            $this->port     = $port;
-            $this->charset  = $charset;
+        public function setHost(
+            string $host
+        ): void {
+            $this->host = $host;
         }
 
-
-        public function GetDsn(): string {
-            return 
-                "mysql:host=" . $this->host . 
-                ";dbname=" . $this->database . 
-                ";port=" . $this->port . 
-                ";charset=" . $this->charset;
-        }
-        
-        
-        public function GetUsername(): string {
-            return $this->username;
-        }
-
-
-        public function GetPassword(): string {
-            return $this->password;
-        }
-
-
-        public function GetDatabase(): string {
-            return $this->database;
-        }
-
-
-        public function GetHost(): string {
+        public function getHost(): string {
             return $this->host;
         }
 
+        public function setUsername(
+            string $username
+        ): void {
+            $this->username = $username;
+        }
 
-        public function GetPort(): string {
+        public function getUsername(): string {
+            return $this->username;
+        }
+
+        public function setPassword(
+            string $password
+        ): void {
+            $this->password = $password;
+        }
+
+        public function getPassword(): string {
+            return $this->password;
+        }
+
+        public function setDatabase(
+            string $database
+        ): void {
+            $this->database = $database;
+        }
+
+        public function getDatabase(): string {
+            return $this->database;
+        }
+
+        public function setPort(
+            string $port
+        ): void {
+            $this->port = $port;
+        }
+
+        public function getPort(): string {
             return $this->port;
         }
 
+        public function setCharset(
+            string $charset
+        ): void {
+            $this->charset = $charset;
+        }
 
-        public function GetCharset(): string {
+        public function getCharset(): string {
             return $this->charset;
         }
 
