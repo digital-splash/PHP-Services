@@ -17,10 +17,6 @@
             $placeholders = implode(', ', array_fill(0, count($data), '?'));
             $columns = implode(", ", $columns);
             $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-            // Data binding
-            $conn = new mysqli($db->host, $db->username, $db->password, $db->database);
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param(str_repeat('s', count($data)), ...$values);
             return $sql;
         }
 
@@ -35,12 +31,115 @@
             $placeholders = implode(', ', array_fill(0, count($data), '?'));
             $columns = implode(", ", $columns);
             $sql = "UPDATE $table SET ($columns) VALUES ($placeholders) WHERE $where";
-            // Data binding
-            $conn = new mysqli($db->host, $db->username, $db->password, $db->database);
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param(str_repeat('s', count($data)), ...$values);
             return $sql;
         }
-        
-        
+
+        public static function delete(
+            string $table,
+            array $where,
+            DatabaseCredentials $db
+        ): string {
+            $sql = "DELETE FROM $table WHERE $where";
+            return $sql;
+        }
+
+        public static function select(
+            string $table,
+            array $columns,
+            array $where,
+            DatabaseCredentials $db
+        ): string {
+            $columns = implode(", ", $columns);
+            $sql = "SELECT $columns FROM $table WHERE $where";
+            return $sql;
+        }
+
+
+
+        public static function selectAll(
+            string $table,
+            DatabaseCredentials $db
+        ): string {
+            $sql = "SELECT * FROM $table";
+            return $sql;
+        }
+
+        public static function selectAllWhere(
+            string $table,
+            array $where,
+            DatabaseCredentials $db
+        ): string {
+            $sql = "SELECT * FROM $table WHERE $where";
+            return $sql;
+        }
+
+        public static function selectAllOrderBy(
+            string $table,
+            DatabaseCredentials $db,
+            string $orderBy
+        ): string {
+            $sql = "SELECT * FROM $table ORDER BY $orderBy";
+            return $sql;
+        }
+
+        public static function selectAllWhereOrderBy(
+            string $table,
+            array $where,
+            DatabaseCredentials $db,
+            string $orderBy
+        ): string {
+            $sql = "SELECT * FROM $table WHERE $where ORDER BY $orderBy";
+            return $sql;
+        }
+
+
+        public static function selectAllJoin(
+            string $table,
+            array $columns,
+            array $join,
+            DatabaseCredentials $db
+        ): string {
+            $columns = implode(", ", $columns);
+            $sql = "SELECT $columns FROM $table";
+            foreach($join as $j){
+                $sql .= " JOIN $j";
+            }
+            return $sql;
+        }
+
+        public static function selectAllJoinWhere(
+            string $table,
+            array $columns,
+            array $join,
+            array $where,
+            DatabaseCredentials $db
+        ): string {
+            $columns = implode(", ", $columns);
+            $sql = "SELECT $columns FROM $table";
+            foreach($join as $j){
+                $sql .= " JOIN $j";
+            }
+            $sql .= " WHERE $where";
+            return $sql;
+        }
+
+
+        public static function selectAllJoinWhereOrderBy(
+            string $table,
+            array $columns,
+            array $join,
+            array $where,
+            array $orderBy,
+            DatabaseCredentials $db
+        ): string {
+            $columns = implode(", ", $columns);
+            $sql = "SELECT $columns FROM $table";
+            foreach($join as $j){
+                $sql .= " JOIN $j";
+            }
+            $sql .= " WHERE $where";
+            $sql .= " ORDER BY $orderBy";
+            return $sql;
+        }
+
     }
