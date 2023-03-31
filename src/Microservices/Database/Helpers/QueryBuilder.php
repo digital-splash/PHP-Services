@@ -69,7 +69,7 @@
             array $where,
             DatabaseCredentials $db
         ): string {
-            $sql = "SELECT * FROM $table WHERE $where";
+            $sql = "SELECT * FROM $table WHERE " . implode(" AND ", $where);
             return $sql;
         }
 
