@@ -245,10 +245,10 @@
 			);
 		}
 
-		public function testEncryptPasswordSuccess() {
+		public function testEncryptStringSuccess() {
 			$this->assertEquals(
 				"db791c2671a6b3ff88259e6012ff78975cee69aaf3bf669f6fad35edb32a09489d35d880496eac67270203e15bd9a746ee720c8cba6f14c3631839e5d2e46e78",
-				Helper::EncryptPassword("Mario")
+				Helper::EncryptString("Mario")
 			);
 		}
 

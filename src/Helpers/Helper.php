@@ -71,7 +71,7 @@
 					break;
 			}
 
-			return false;
+			return false; //TODO: Maybe use boolval()
 		}
 
 
@@ -151,12 +151,12 @@
 
 
 		/**
-		 * Encrypt a Password
+		 * Encrypt a String
 		 */
-		public static function EncryptPassword(
-			string $password
+		public static function EncryptString(
+			string $string
 		): string {
-			return hash("sha512", trim($password));
+			return hash("sha512", trim($string));
 		}
 
 
