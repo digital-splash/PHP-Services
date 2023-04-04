@@ -16,11 +16,11 @@
 		protected static bool $deadlock_reported = false;
 		protected array $cached_vars = [];
 
-		protected static ?self $_instance_main = null;
-		protected static ?self $_temp_instance_main = null;
+		protected static ?self $instanceMain = null;
+		protected static ?self $tempInstanceMain = null;
 
-		protected static ?self $_instance_logs = null;
-		protected static ?self $_temp_instance_logs = null;
+		protected static ?self $instanceLogs = null;
+		protected static ?self $tempInstanceLogs = null;
 
 		protected static array $query_log = [];
 		protected static array $query_times = [];

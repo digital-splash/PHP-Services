@@ -2,9 +2,11 @@
 	namespace DigitalSplash\Database\MySQL\Helpers;
 
 	use Closure;
+	use DateTime;
 	use DigitalSplash\Database\Helpers\DBCommon;
 	use DigitalSplash\Database\Models\DBSettings;
 	use DigitalSplash\Database\Models\DBCredentials;
+	use DigitalSplash\Date\Models\DateFormat;
 	use DigitalSplash\Exceptions\Database\DatabaseInvalidConnectorException;
 	use DigitalSplash\Helpers\Helper;
 	use PDO;
@@ -14,11 +16,11 @@
 	class PDODataDB extends DBCommon {
 		private PDO $pdo;
 
-		protected static ?self $_instance_main = null;
-		protected static ?self $_temp_instance_main = null;
+		protected static ?self $instanceMain = null;
+		protected static ?self $tempInstanceMain = null;
 
-		protected static ?self $_instance_logs = null;
-		protected static ?self $_temp_instance_logs = null;
+		protected static ?self $instanceLogs = null;
+		protected static ?self $tempInstanceLogs = null;
 
 		protected function __construct(
 			string $host,
@@ -82,8 +84,8 @@
 			$password = DBCredentials::getPassword();
 			$database = DBCredentials::getDatabase();
 
-			if (self::$_instance_main === null) {
-				self::$_instance_main = new self(
+			if (self::$instanceMain === null) {
+				self::$instanceMain = new self(
 					$host,
 					$port,
 					$username,
@@ -92,7 +94,7 @@
 				);
 			}
 
-			if (self::$_instance_main->pdo === null) {
+			if (self::$instanceMain->pdo === null) {
 				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr([
 					$host,
 					$port,
@@ -102,7 +104,7 @@
 				], ';'));
 			}
 
-			return self::$_instance_main;
+			return self::$instanceMain;
 		}
 
 		private static function getLogsInstance(): self {
@@ -115,8 +117,8 @@
 			$password = DBCredentials::getPassword();
 			$database = DBCredentials::getDatabase();
 
-			if (self::$_instance_logs === null) {
-				self::$_instance_logs = new self(
+			if (self::$instanceLogs === null) {
+				self::$instanceLogs = new self(
 					$host,
 					$port,
 					$username,
@@ -125,7 +127,7 @@
 				);
 			}
 
-			if (self::$_instance_logs->pdo === null) {
+			if (self::$instanceLogs->pdo === null) {
 				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr([
 					$host,
 					$port,
@@ -135,7 +137,7 @@
 				], ';'));
 			}
 
-			return self::$_instance_logs;
+			return self::$instanceLogs;
 		}
 
 		/**
@@ -168,18 +170,14 @@
 		 * @param $sql_statement
 		 * @return PDOStatementWrapper
 		 */
-		public function query(string $sql_statement): PDOStatementWrapper {
+		public function query(
+			string $sql_statement
+		): PDOStatementWrapper {
 			$timer = microtime(true);
 			$statement = call_user_func_array([
 				$this->pdo,
 				"query"
 			], func_get_args());
-
-			//TODO: Add Log
-			// if (defined('DEBUG') && DEBUG) {
-			// 	$time = (microtime(true) - $timer) * 1000;
-			// 	self::log_query($sql_statement, $time, debug_backtrace());
-			// }
 
 			return PDOStatementWrapper::create($statement, $sql_statement);
 		}
@@ -188,7 +186,10 @@
 		 * PDO wrapper for prepare
 		 * http://php.net/manual/en/pdo.quote.php
 		 */
-		public function quote(string $string, int $parameter_type = PDO::PARAM_STR): string {
+		public function quote(
+			string $string,
+			int $parameter_type = PDO::PARAM_STR
+		): string {
 			return call_user_func_array([
 				$this->pdo,
 				"quote"
@@ -199,7 +200,10 @@
 		 * PDO wrapper for prepare
 		 * http://php.net/manual/en/pdo.prepare.php
 		 */
-		public function prepare(string $query, array $driver_options = []): bool|PDOStatementWrapper {
+		public function prepare(
+			string $query,
+			array $driver_options = []
+		): bool|PDOStatementWrapper {
 			$statement = call_user_func_array([
 				$this->pdo,
 				"prepare"
@@ -212,7 +216,10 @@
 		 * PDO wrapper for setAttribute
 		 * http://php.net/manual/en/pdo.setattribute.php
 		 */
-		public function setAttribute(int $attr, mixed $value): bool {
+		public function setAttribute(
+			int $attr,
+			mixed $value
+		): bool {
 			return call_user_func_array([
 				$this->pdo,
 				"setAttribute"
@@ -223,7 +230,9 @@
 		 * PDO wrapper for lastInsertId
 		 * http://php.net/manual/en/pdo.lastinsertid.php
 		 */
-		public function lastInsertId(?string $name = null): string {
+		public function lastInsertId(
+			?string $name = null
+		): string {
 			return call_user_func_array([
 				$this->pdo,
 				"lastInsertId"
@@ -294,7 +303,10 @@
 		/**
 		 * Sets a session variable for the current PDO session
 		 */
-		public function setSessionVariable($variable, $value) {
+		public function setSessionVariable(
+			string $variable,
+			mixed $value
+		) {
 			if ($this->cached_vars[$variable] == $value) {
 				return;
 			}
@@ -321,121 +333,112 @@
 			return self::$query_times;
 		}
 
-		// /**
-		//  * Performs a crude version of PDO's injection to get a debuggable
-		//  * copy-pasteable SQL query.
-		//  *
-		//  * @param $sql_string
-		//  * @param array|null $params
-		//  * @return mixed
-		//  */
-		// public static function get_debug_query_string($sql_string, array $params = null) {
-		// 	if (!empty($params)) {
-		// 		$indexed = $params == array_values($params);
-		// 		$params = array_reverse($params);
-		// 		foreach ($params as $key => $value) {
-		// 			if (is_object($value)) {
-		// 				if ($value instanceof DateTime) {
-		// 					$value = $value->format('Y-m-d H:i:s');
-		// 				} else {
-		// 					continue;
-		// 				}
-		// 			} elseif (is_string($value)) {
-		// 				$value = DataDB::escape($value);
-		// 				$value = "'{$value}'";
-		// 			} elseif ($value === null) {
-		// 				$value = 'NULL';
-		// 			} elseif (is_array($value)) {
-		// 				$value = implode(',', $value);
-		// 			}
+		/**
+		 * Performs a crude version of PDO's injection to get a debuggable
+		 * copy-pasteable SQL query.
+		 */
+		public static function getDebugQueryString(
+			string $sql_string,
+			array $params = []
+		): string {
+			if (!empty($params)) {
+				$indexed = $params == array_values($params);
+				$params = array_reverse($params);
+				foreach ($params AS $key => $value) {
+					if (is_object($value)) {
+						if ($value instanceof DateTime) {
+							$value = $value->format(DateFormat::DATETIME_SAVE);
+						} else {
+							continue;
+						}
+					} else if (is_string($value)) {
+						$value = Helper::CleanString($value);
+						$value = "'{$value}'";
+					} else if ($value === null) {
+						$value = 'NULL';
+					} else if (is_array($value)) {
+						$value = implode(',', $value);
+					}
 
-		// 			if ($indexed) {
-		// 				$sql_string = preg_replace('/\?/', $value, $sql_string, 1);
-		// 			} else {
-		// 				// Add leading colon if it was left out
-		// 				if ($key[0] != ':') {
-		// 					$key = ':' . $key;
-		// 				}
-		// 				$sql_string = str_replace($key, $value, $sql_string);
-		// 			}
-		// 		}
-		// 	}
+					if ($indexed) {
+						$sql_string = preg_replace('/\?/', $value, $sql_string, 1);
+					} else {
+						if (!Helper::StringBeginsWith($key, ':')) {
+							$key = ':' . $key;
+						}
+						$sql_string = str_replace($key, $value, $sql_string);
+					}
+				}
+			}
 
-		// 	return $sql_string;
-		// }
+			return $sql_string;
+		}
 
-		// /**
-		//  * Gets the current value for a given attribute
-		//  *
-		//  * @param int $attribute The attribute the get the value for
-		//  *
-		//  * @return int
-		//  */
-		// public function getAttribute(int $attribute): int {
-		// 	return $this->pdo->getAttribute($attribute);
-		// }
+		/**
+		 * Gets the current value for a given attribute
+		 */
+		public function getAttribute(
+			int $attribute
+		): int {
+			return $this->pdo->getAttribute($attribute);
+		}
 
-		// public static function disconnectConnections() {
-		// 	if (self::$_instance !== null) {
-		// 		self::$_instance->disconnect();
-		// 		self::$_instance = null;
-		// 	}
+		public static function disconnectConnections() {
+			if (self::$instanceMain !== null) {
+				self::$instanceMain->disconnect();
+				self::$instanceMain = null;
+			}
 
-		// 	if (self::$_twitter_instance !== null) {
-		// 		self::$_twitter_instance->disconnect();
-		// 		self::$_twitter_instance = null;
-		// 	}
+			if (self::$instanceLogs !== null) {
+				self::$instanceLogs->disconnect();
+				self::$instanceLogs = null;
+			}
+		}
 
-		// 	if (self::$_data_warehouse_instance !== null) {
-		// 		self::$_data_warehouse_instance->disconnect();
-		// 		self::$_data_warehouse_instance = null;
-		// 	}
-		// }
+		/**
+		 * Returns true if pdo property is null
+		 */
+		public function isPDONull(): bool {
+			return $this->pdo === null;
+		}
 
-		// /**
-		//  * Returns true if pdo property is null
-		//  *
-		//  * @return bool
-		//  */
-		// public function is_pdo_null(): bool {
-		// 	return $this->pdo === null;
-		// }
+		/**
+		 * Return true if $instanceMain is null
+		 */
+		public function isMainInstanceNull(): bool {
+			return self::$instanceMain === null;
+		}
 
-		// /**
-		//  * Return true if $_instance is null
-		//  *
-		//  * @return bool
-		//  */
-		// public function is_instance_null(): bool {
-		// 	return self::$_instance === null;
-		// }
+		/**
+		 * Return true if $instanceLogs is null
+		 */
+		public function isLogsInstanceNull(): bool {
+			return self::$instanceLogs === null;
+		}
 
-		// private function disconnect() {
-		// 	if ($this->pdo !== null) {
-		// 		$this->pdo = null;
-		// 		$this->hash = null;
-		// 	}
-		// }
+		private function disconnect() {
+			if ($this->pdo !== null) {
+				$this->pdo = null;
+				$this->hash = null;
+			}
+		}
 
-		// public function is_redshift_connection(): bool {
-		// 	return $this->is_redshift_connection;
-		// }
+		/**
+		 * enables PDO::MYSQL_ATTR_USE_BUFFERED_QUERY on the connection
+		 */
+		public function enableBufferedQueries(): void {
+			$this->pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+		}
 
-		// /**
-		//  * enables PDO::MYSQL_ATTR_USE_BUFFERED_QUERY on the connection
-		//  */
-		// public function enable_buffered_queries(): void {
-		// 	$this->pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-		// }
-
-		// /**
-		//  * disables PDO::MYSQL_ATTR_USE_BUFFERED_QUERY on the connection
-		//  */
-		// public function disable_buffered_queries(): void {
-		// 	$this->pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
-		// }
+		/**
+		 * disables PDO::MYSQL_ATTR_USE_BUFFERED_QUERY on the connection
+		 */
+		public function disableBufferedQueries(): void {
+			$this->pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+		}
 
 		protected function getPDO(): PDO {
 			return $this->pdo;
 		}
+
 	}
