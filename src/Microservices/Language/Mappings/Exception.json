@@ -2,7 +2,7 @@
 	"exception": {
 		"FileNotFound": {
 			"en": "File (::params::) not found",
-			"fr": "Fichier (::params::) introuvable ",
+			"fr": "Fichier (::params::) introuvable",
 			"ar": "ملف (::params::) غير موجود"
 		},
 		"InvalidParam": {
@@ -84,6 +84,13 @@
 			"en": "Invalid argument \"::argument::\" having the value \"::value::\".",
 			"fr": "Argument non valide \"::argument::\" ayant la valeur \"::value::\".",
 			"ar": "وسيطة غير صالحة \"::الوسيطة::\" لها القيمة \"::value::\"."
+		},
+		"database": {
+			"InvalidConnector": {
+				"en": "\"DB Conector\" object is null for Credentials \"::param::\".",
+				"fr": "L'objet \"DB Conector\" est nul pour les informations d'identification \"::param::\".",
+				"ar": "الكائن \"DB Conector\" فارغ لأوراق الاعتماد \"::param::\"."
+			}
 		}
 	}
 }
