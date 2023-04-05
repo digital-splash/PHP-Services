@@ -100,6 +100,32 @@ use DigitalSplash\Helpers\Helper;
             ];
         }
 
+        public function delete(
+            array $where = []
+        ): array {
+            $sql = "DELETE FROM {$this->database}.{$this->table}";
+
+            if (!Helper::ArrayNullOrEmpty($where)) {
+                $whereStr = '';
+                foreach ($where AS $column => $value) {
+                    $whereStr .= "`{$column}` = :{$column} AND ";
+                    $bind_key = ':' . $column;
+
+                    $binds[$bind_key] = [
+                        'value' => $value,
+                        'type' => self::GetPDOTypeFromValue($value)
+                    ];
+                }
+                $whereStr = rtrim($whereStr, ' AND ');
+                $sql .= " WHERE $whereStr";
+            }
+
+            return [
+                self::SQL => $sql,
+                self::BINDS => $binds
+            ];
+        }
+
 		// public function update(
 		// 	string $table,
 		// 	array $data,
