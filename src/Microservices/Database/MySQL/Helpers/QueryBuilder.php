@@ -52,6 +52,54 @@ use DigitalSplash\Helpers\Helper;
 			];
 		}
 
+        public function update(
+            array $data = [],
+            array $where = []
+        ): array {
+            if (Helper::ArrayNullOrEmpty($data)) {
+                throw new NotEmptyParamException('data');
+            }
+
+            $columns = [];
+            $binds = [];
+
+            foreach ($data AS $column => $value) {
+                if (!in_array($column, $columns)) {
+                    $columns[] = "`{$column}`";
+                }
+                $bind_key = ':' . $column;
+
+                $binds[$bind_key] = [
+                    'value' => $value,
+                    'type' => self::GetPDOTypeFromValue($value)
+                ];
+            }
+            $columnsStr = Helper::ImplodeArrToStr($columns, ',');
+            $bindValues = Helper::ImplodeArrToStr(array_keys($binds), ',');
+
+            $sql = "UPDATE {$this->database}.{$this->table} SET ($columnsStr) VALUES ($bindValues)";
+
+            if (!Helper::ArrayNullOrEmpty($where)) {
+                $whereStr = '';
+                foreach ($where AS $column => $value) {
+                    $whereStr .= "`{$column}` = :{$column} AND ";
+                    $bind_key = ':' . $column;
+
+                    $binds[$bind_key] = [
+                        'value' => $value,
+                        'type' => self::GetPDOTypeFromValue($value)
+                    ];
+                }
+                $whereStr = rtrim($whereStr, ' AND ');
+                $sql .= " WHERE $whereStr";
+            }
+
+            return [
+                self::SQL => $sql,
+                self::BINDS => $binds
+            ];
+        }
+
 		// public function update(
 		// 	string $table,
 		// 	array $data,
