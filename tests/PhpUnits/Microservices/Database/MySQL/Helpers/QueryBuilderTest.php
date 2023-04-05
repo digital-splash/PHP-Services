@@ -1,112 +1,98 @@
 <?php
 	namespace DigitalSplash\Tests\Database\MySQL\Helpers;
 
-	use DigitalSplash\Database\Models\DatabaseCredentials;
-	use DigitalSplash\Database\Helpers\QueryBuilder;
-	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder as HelpersQueryBuilder;
+	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Translate;
 	use PHPUnit\Framework\TestCase;
 
 	class QueryBuilderTest extends TestCase {
 
-		public function testInsertNoDataToInsertThrows() {
+		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
 				"::params::" => "data"
 			]));
 
-			$queryBuilder = new HelpersQueryBuilder('db', 'table');
+			$queryBuilder = new QueryBuilder('db', 'table');
 			$queryBuilder->insert([]);
 		}
 
-		// public function testInsertSingleRecordSuccess() {
-		// 	$queryBuilder = new HelpersQueryBuilder('db', 'table');
-		// 	[
-		// 		'sql' => $sql,
-		// 		'binds' => $binds
-		// 	] = $queryBuilder->insert([
-		// 		'a' => 'b'
-		// 	]);
+		public function testInsertSingleRecordSuccess(): void {
+			$db = 'db';
+			$table = 'table';
+			$vals = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
 
-		// 	$expectedSql = 'INSERT INTO db.table (`a`) VALUES (:a)';
-		// 	$expectedBinds = [];
+			$queryBuilder = new QueryBuilder($db, $table);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->insert($vals);
 
-		// 	$this->assertEquals($expectedSql, $sql);
-		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		// }
+			$expectedSql = "INSERT INTO {$db}.{$table} (`name`, `email`, `age`) VALUES (:name, :email, :age)";
+			$expectedBinds = [];
+			foreach ($vals as $col => $val) {
+				$bind_key = ':' . $col;
+				$expectedBinds[$bind_key] = [
+					'value' => $val,
+					'type' => QueryBuilder::GetPDOTypeFromValue($val)
+				];
+			}
 
-        
+			$this->assertEquals($expectedSql, $sql);
+			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		}
 
-        public function testInsertSingleRecordSuccess() {
-            $queryBuilder = new HelpersQueryBuilder('db', 'table');
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->insert([
-                'name' => 'Hadi Darwish',
-                'age' => 22,
-                'email' => 'hadi@example.com'
-            ]);
-        
-            $expectedSql = 'INSERT INTO db.table (`name`,`age`,`email`) VALUES (:name,:age,:email)';
-            $expectedBinds = [
-                ':name' => ['value' => 'Hadi Darwish', 'type' => 2],
-                ':age' => ['value' => 22, 'type' => 1],
-                ':email' => ['value' => 'hadi@example.com', 'type' => 2],
-            ];
-        
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-        }
+		public function testUpdateNoDataToInsertThrows(): void {
+			$this->expectException(NotEmptyParamException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+				"::params::" => "data"
+			]));
 
-        public function testUpdateNoDataToInsertThrows(){
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->update([]);
+		}
+
+		public function testUpdateSingleRecordSuccess(): void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->update([
+				'name' => 'Hadi Darwish',
+				'age' => 22,
+				'email' => 'hadi@example.com'
+			]
+			, ['id' => 1]);
+
+			$expectedSql = 'UPDATE db.table SET `name` = :name, `age` = :age, `email` = :email WHERE `id` = :id';
+			$expectedBinds = [
+				':name' => ['value' => 'Hadi Darwish', 'type' => 2],
+				':age' => ['value' => 22, 'type' => 1],
+				':email' => ['value' => 'hadi@example.com', 'type' => 2],
+				':id' => ['value' => 1, 'type' => 1],
+			];
+
+			$this->assertEquals($expectedSql, $sql);
+			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		}
+
+        public function testDeleteNoDataToInsertThrows(): void {
             $this->expectException(NotEmptyParamException::class);
             $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
                 "::params::" => "data"
             ]));
-        
-            $queryBuilder = new HelpersQueryBuilder('db', 'table');
-            $queryBuilder->update([]);
-        }
 
-        public function testUpdateSingleRecordSuccess() {
-            $queryBuilder = new HelpersQueryBuilder('db', 'table');
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->update([
-                'name' => 'Hadi Darwish',
-                'age' => 22,
-                'email' => 'hadi@example.com'
-            ]
-            , ['id' => 1]);
-
-            $expectedSql = 'UPDATE db.table SET `name` = :name, `age` = :age, `email` = :email WHERE `id` = :id';
-            $expectedBinds = [
-                ':name' => ['value' => 'Hadi Darwish', 'type' => 2],
-                ':age' => ['value' => 22, 'type' => 1],
-                ':email' => ['value' => 'hadi@example.com', 'type' => 2],
-                ':id' => ['value' => 1, 'type' => 1],
-            ];
-
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-        }
-
-        public function testDeleteNoDataToInsertThrows(){
-            $this->expectException(NotEmptyParamException::class);
-            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-                "::params::" => "data"
-            ]));
-        
-            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            $queryBuilder = new QueryBuilder('db', 'table');
             $queryBuilder->delete([]);
         }
 
-        public function testDeleteSingleRecordSuccess() {
-            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+        public function testDeleteSingleRecordSuccess(): void {
+            $queryBuilder = new QueryBuilder('db', 'table');
             [
                 'sql' => $sql,
                 'binds' => $binds
@@ -120,11 +106,6 @@
             $this->assertEquals($expectedSql, $sql);
             $this->assertEqualsCanonicalizing($expectedBinds, $binds);
         }
-
-        
-
-        
-
 
 		// public function testInsert() {
 		//     $table = 'users';
