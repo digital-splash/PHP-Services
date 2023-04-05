@@ -95,6 +95,34 @@
             $this->assertEqualsCanonicalizing($expectedBinds, $binds);
         }
 
+        public function testDeleteNoDataToInsertThrows(){
+            $this->expectException(NotEmptyParamException::class);
+            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+                "::params::" => "data"
+            ]));
+        
+            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            $queryBuilder->delete([]);
+        }
+
+        public function testDeleteSingleRecordSuccess() {
+            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->delete(['id' => 1]);
+
+            $expectedSql = 'DELETE FROM db.table WHERE `id` = :id';
+            $expectedBinds = [
+                ':id' => ['value' => 1, 'type' => 1],
+            ];
+
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+        }
+
+        
+
         
 
 
