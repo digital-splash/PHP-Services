@@ -61,6 +61,42 @@
             $this->assertEqualsCanonicalizing($expectedBinds, $binds);
         }
 
+        public function testUpdateNoDataToInsertThrows(){
+            $this->expectException(NotEmptyParamException::class);
+            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+                "::params::" => "data"
+            ]));
+        
+            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            $queryBuilder->update([]);
+        }
+
+        public function testUpdateSingleRecordSuccess() {
+            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->update([
+                'name' => 'Hadi Darwish',
+                'age' => 22,
+                'email' => 'hadi@example.com'
+            ]
+            , ['id' => 1]);
+
+            $expectedSql = 'UPDATE db.table SET `name` = :name, `age` = :age, `email` = :email WHERE `id` = :id';
+            $expectedBinds = [
+                ':name' => ['value' => 'Hadi Darwish', 'type' => 2],
+                ':age' => ['value' => 22, 'type' => 1],
+                ':email' => ['value' => 'hadi@example.com', 'type' => 2],
+                ':id' => ['value' => 1, 'type' => 1],
+            ];
+
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+        }
+
+        
+
 
 		// public function testInsert() {
 		//     $table = 'users';
