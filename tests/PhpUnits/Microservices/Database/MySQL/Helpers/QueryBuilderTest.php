@@ -21,21 +21,46 @@
 			$queryBuilder->insert([]);
 		}
 
-		public function testInsertSingleRecordSuccess() {
-			$queryBuilder = new HelpersQueryBuilder('db', 'table');
-			[
-				'sql' => $sql,
-				'binds' => $binds
-			] = $queryBuilder->insert([
-				'a' => 'b'
-			]);
+		// public function testInsertSingleRecordSuccess() {
+		// 	$queryBuilder = new HelpersQueryBuilder('db', 'table');
+		// 	[
+		// 		'sql' => $sql,
+		// 		'binds' => $binds
+		// 	] = $queryBuilder->insert([
+		// 		'a' => 'b'
+		// 	]);
 
-			$expectedSql = 'INSERT INTO db.table (`a`) VALUES (:a)';
-			$expectedBinds = [];
+		// 	$expectedSql = 'INSERT INTO db.table (`a`) VALUES (:a)';
+		// 	$expectedBinds = [];
 
-			$this->assertEquals($expectedSql, $sql);
-			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		}
+		// 	$this->assertEquals($expectedSql, $sql);
+		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		// }
+
+        
+
+        public function testInsertSingleRecordSuccess() {
+            $queryBuilder = new HelpersQueryBuilder('db', 'table');
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->insert([
+                'name' => 'Hadi Darwish',
+                'age' => 22,
+                'email' => 'hadi@example.com'
+            ]);
+        
+            $expectedSql = 'INSERT INTO db.table (`name`,`age`,`email`) VALUES (:name,:age,:email)';
+            $expectedBinds = [
+                ':name' => ['value' => 'Hadi Darwish', 'type' => 2],
+                ':age' => ['value' => 22, 'type' => 1],
+                ':email' => ['value' => 'hadi@example.com', 'type' => 2],
+            ];
+        
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+        }
+
 
 		// public function testInsert() {
 		//     $table = 'users';
