@@ -11,6 +11,14 @@
 
 		protected string $table;
 		protected string $database;
+        protected string $group;
+		protected string $having;
+		protected string $order;
+		protected string $limit;
+		protected string $suffix;
+        protected string $where;
+        protected string $join;
+        protected array $data;
 
 		public function __construct(
 			string $database,
@@ -28,17 +36,15 @@
 			return $this->table;
 		}
 
-		public function insert(
-			array $data = [],
-		): array {
-			if (Helper::ArrayNullOrEmpty($data)) {
+		public function insert(): array {
+			if (Helper::ArrayNullOrEmpty($this->data)) {
 				throw new NotEmptyParamException('data');
 			}
 
 			$columns = [];
 			$binds = [];
 
-			foreach ($data AS $column => $value) {
+			foreach ($this->data AS $column => $value) {
 				if (!in_array($column, $columns)) {
 					$columns[] = "`{$column}`";
 				}
@@ -60,18 +66,15 @@
 			];
 		}
 
-		public function update(
-			array $data = [],
-			array $where = []
-		): array {
-			if (Helper::ArrayNullOrEmpty($data)) {
+		public function update(): array {
+			if (Helper::ArrayNullOrEmpty($this->data)) {
 				throw new NotEmptyParamException('data');
 			}
 
 			$columns = [];
 			$binds = [];
-
-			foreach ($data AS $column => $value) {
+            $columnsStr = '';
+			foreach ($this->data AS $column => $value) {
 				if (!in_array($column, $columns)) {
 					$columns[] = "`{$column}`";
 				}
@@ -80,27 +83,14 @@
 				$binds[$bind_key] = [
 					'value' => $value,
 					'type' => self::GetPDOTypeFromValue($value)
-				];
+				]; 
+               
+                $columnsStr .= "`{$column}` = :{$column}, ";
 			}
-			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
-			$bindValues = Helper::ImplodeArrToStr(array_keys($binds), ', ');
+            
+            $columnsStr = rtrim($columnsStr, ', ');
 
-			$sql = "UPDATE {$this->database}.{$this->table} SET ($columnsStr) VALUES ($bindValues)";
-
-			if (!Helper::ArrayNullOrEmpty($where)) {
-				$whereStr = '';
-				foreach ($where AS $column => $value) {
-					$whereStr .= "`{$column}` = :{$column} AND ";
-					$bind_key = ':' . $column;
-
-					$binds[$bind_key] = [
-						'value' => $value,
-						'type' => self::GetPDOTypeFromValue($value)
-					];
-				}
-				$whereStr = rtrim($whereStr, ' AND ');
-				$sql .= " WHERE $whereStr";
-			}
+            $sql = "UPDATE {$this->database}.{$this->table} SET $columnsStr" . $this->where;
 
 			return [
 				self::SQL => $sql,
@@ -108,85 +98,29 @@
 			];
 		}
 
-		public function delete(
-			array $where = []
-		): array {
-			$binds = [];
-			$sql = "DELETE FROM {$this->database}.{$this->table}";
-
-			if (!Helper::ArrayNullOrEmpty($where)) {
-				$whereStr = '';
-				foreach ($where AS $column => $value) {
-					$whereStr .= "`{$column}` = :{$column} AND ";
-					$bind_key = ':' . $column;
-
-					$binds[$bind_key] = [
-						'value' => $value,
-						'type' => self::GetPDOTypeFromValue($value)
-					];
-				}
-				$whereStr = rtrim($whereStr, ' AND ');
-				$sql .= " WHERE $whereStr";
-			}
+		public function delete(): array {
+			$sql = "DELETE FROM {$this->database}.{$this->table}" . $this->where;
 
 			return [
 				self::SQL => $sql,
-				self::BINDS => $binds
 			];
 		}
 
-		public function select(
-			array $columns = [],
-			array $where = [],
-			array $join,
-			string $orderBy,
-			string $orderType,
-			int $limit,
-			int $offset
-		): array {
+		public function select(): array {
 			$columnsStr = '*';
-			if (!Helper::ArrayNullOrEmpty($columns)) {
-				$columnsStr = Helper::ImplodeArrToStr($columns, ',');
+			if (!Helper::ArrayNullOrEmpty($this->data)) {
+				$columnsStr = Helper::ImplodeArrToStr($this->data, ',');
 			}
 
-			$sql = "SELECT $columnsStr FROM {$this->database}.{$this->table}";
-
-			if (!Helper::ArrayNullOrEmpty($join)) {
-				foreach ($join AS $joinTable => $joinData) {
-					$sql .= " {$joinData['type']} JOIN {$joinTable} ON {$joinData['on']}";
-				}
-			}
-
-			if (!Helper::ArrayNullOrEmpty($where)) {
-				$whereStr = '';
-				foreach ($where AS $column => $value) {
-					$whereStr .= "`{$column}` = :{$column} AND ";
-					$bind_key = ':' . $column;
-
-					$binds[$bind_key] = [
-						'value' => $value,
-						'type' => self::GetPDOTypeFromValue($value)
-					];
-				}
-				$whereStr = rtrim($whereStr, ' AND ');
-				$sql .= " WHERE $whereStr";
-			}
-
-			if (!empty($orderBy)) {
-				$sql .= " ORDER BY $orderBy $orderType";
-			}
-
-			if (!empty($limit)) {
-				$sql .= " LIMIT $limit";
-			}
-
-			if (!empty($offset)) {
-				$sql .= " OFFSET $offset";
-			}
+            $sql = "SELECT $columnsStr
+                    FROM {$this->database}.{$this->table}"
+                    . $this->join . $this->where
+                    . $this->group . $this->having
+                    . $this->order . $this->limit
+                    . $this->suffix;
 
 			return [
 				self::SQL => $sql,
-				self::BINDS => $binds
 			];
 		}
 
@@ -206,7 +140,7 @@
 			return $type;
 		}
 
-        public static function getWhereStatement(
+        protected function getWhereStatement(
             array $values
         ): string {
             if (!Helper::ArrayNullOrEmpty($values)) {
@@ -221,9 +155,88 @@
 					];
 				}
 				$whereStr = rtrim($whereStr, ' AND ');
-				return " WHERE $whereStr";
-			}
-            return '';
+                $this->where = " WHERE $whereStr";
+			} else {
+                $this->where = '';
+            }
+            
+            return $this->where;
+
         }
 
+        public function getJoinStatement(
+            array $values
+        ): string {
+            if (!Helper::ArrayNullOrEmpty($values)) {
+                $joinStr = '';
+                foreach ($values AS $joinTable => $joinData) {
+                    $joinStr .= " {$joinData['type']} JOIN {$joinTable} ON {$joinData['on']}";
+                }
+                $this->join = $joinStr;
+            } else {
+                $this->join = '';
+            }
+
+            return $this->join;
+        }
+
+        public function getOrderByStatement(
+            string $orderBy,
+        ): string {
+            if (!empty($orderBy)) {
+                $this->order = " ORDER BY $orderBy";
+            } else {
+                $this->order = '';
+            }
+            
+            return $this->order;
+        }
+
+        public function getLimitStatement(
+            int $limit,
+        ): string {
+            if (!empty($limit)) {
+                $this->limit = " LIMIT $limit";
+            } else {
+                $this->limit = '';
+            }
+            
+            return $this->limit;
+        }
+
+        public function getHavingStatement(
+            string $having,
+        ): string {
+            if (!empty($having)) {
+                $this->having = " HAVING $having";
+            } else {
+                $this->having = '';
+            }
+            
+            return $this->having;
+        }
+
+        public function getSuffixStatement(
+            string $suffix,
+        ): string {
+            if (!empty($suffix)) {
+                $this->suffix = " $suffix";
+            } else {
+                $this->suffix = '';
+            }
+            
+            return $this->suffix;
+        }
+
+        public function getGroupByStatement(
+            string $groupBy,
+        ): string {
+            if (!empty($groupBy)) {
+                $this->group = " GROUP BY $groupBy";
+            } else {
+                $this->group = '';
+            }
+            
+            return $this->group;
+        }
 	}
