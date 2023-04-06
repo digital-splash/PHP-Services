@@ -17,6 +17,7 @@
 		protected string $limit;
 		protected string $suffix;
         protected string $where;
+        protected array $whereData;
         protected string $join;
         protected array $data;
 
@@ -35,6 +36,23 @@
 		public function getTable(): string {
 			return $this->table;
 		}
+
+        public function getData() : array {
+            return $this->data;
+        }
+
+        public function setData(array $data) : void {
+            $this->data = $data;
+        }
+        public function getWhere() : array {
+            return $this->whereData;
+        }
+
+        public function setWhere(array $where) : void {
+            $this->whereData = $where;
+        }
+
+        
 
 		public function insert(): array {
 			if (Helper::ArrayNullOrEmpty($this->data)) {
@@ -140,12 +158,10 @@
 			return $type;
 		}
 
-        protected function getWhereStatement(
-            array $values
-        ): string {
-            if (!Helper::ArrayNullOrEmpty($values)) {
+        protected function getWhereStatement(): string {
+            if (!Helper::ArrayNullOrEmpty($this->whereData)) {
 				$whereStr = '';
-				foreach ($values AS $column => $value) {
+				foreach ($this->whereData AS $column => $value) {
 					$whereStr .= "`{$column}` = :{$column} AND ";
 					$bind_key = ':' . $column;
 
