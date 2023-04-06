@@ -19,33 +19,34 @@
 		}
 
 		public function testInsertSingleRecordSuccess(): void {
-			$db = 'db';
-			$table = 'table';
-			$vals = [
-				'name' => 'Hadi Darwish',
-				'email' => 'hadi@example.com',
-				'age' => 22,
-			];
-
-			$queryBuilder = new QueryBuilder($db, $table);
-			[
-				'sql' => $sql,
-				'binds' => $binds
-			] = $queryBuilder->insert($vals);
-
-			$expectedSql = "INSERT INTO {$db}.{$table} (`name`, `email`, `age`) VALUES (:name, :email, :age)";
-			$expectedBinds = [];
-			foreach ($vals as $col => $val) {
-				$bind_key = ':' . $col;
-				$expectedBinds[$bind_key] = [
-					'value' => $val,
-					'type' => QueryBuilder::GetPDOTypeFromValue($val)
-				];
-			}
-
-			$this->assertEquals($expectedSql, $sql);
-			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		}
+            $db = 'db';
+            $table = 'table';
+            $values = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+        
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($values);
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->insert();
+        
+            $expectedSql = "INSERT INTO {$db}.{$table} (`name`, `email`, `age`) VALUES (:name, :email, :age)";
+            $expectedBinds = [];
+            foreach ($values as $column => $value) {
+                $bind_key = ':' . $column;
+                $expectedBinds[$bind_key] = [
+                    'value' => $value,
+                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
+                ];
+            }
+        
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+        }
 
 		public function testUpdateNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
@@ -58,28 +59,76 @@
 		}
 
 		public function testUpdateSingleRecordSuccess(): void {
-			$queryBuilder = new QueryBuilder('db', 'table');
-			[
-				'sql' => $sql,
-				'binds' => $binds
-			] = $queryBuilder->update([
-				'name' => 'Hadi Darwish',
-				'age' => 22,
-				'email' => 'hadi@example.com'
-			]
-			, ['id' => 1]);
+            $db = 'db';
+            $table = 'table';
+            $values = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
 
-			$expectedSql = 'UPDATE db.table SET `name` = :name, `age` = :age, `email` = :email WHERE `id` = :id';
-			$expectedBinds = [
-				':name' => ['value' => 'Hadi Darwish', 'type' => 2],
-				':age' => ['value' => 22, 'type' => 1],
-				':email' => ['value' => 'hadi@example.com', 'type' => 2],
-				':id' => ['value' => 1, 'type' => 1],
-			];
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($values);
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->update();
 
-			$this->assertEquals($expectedSql, $sql);
-			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+            $expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age";
+            $expectedBinds = [];
+            foreach ($values as $column => $value) {
+                $bind_key = ':' . $column;
+                $expectedBinds[$bind_key] = [
+                    'value' => $value,
+                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
+                ];
+            }
+
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		}
+
+        public function testUpdateSingleRecordWithWhereSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $values = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+            $where = [
+                'id' => 1,
+            ];
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($values);
+            $queryBuilder->setWhere($where);
+            [
+                'sql' => $sql,
+                'binds' => $binds
+            ] = $queryBuilder->update();
+
+            $expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age WHERE `id` = :id";
+            $expectedBinds = [];
+            foreach ($values as $column => $value) {
+                $bind_key = ':' . $column;
+                $expectedBinds[$bind_key] = [
+                    'value' => $value,
+                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
+                ];
+                
+            }
+            foreach ($where as $column => $value) {
+                $bind_key = ':' . $column;
+                $expectedBinds[$bind_key] = [
+                    'value' => $value,
+                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
+                ];
+            }
+
+            $this->assertEquals($expectedSql, $sql);
+            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+        }
 
         public function testDeleteNoDataToInsertThrows(): void {
             $this->expectException(NotEmptyParamException::class);
