@@ -15,7 +15,7 @@
 			]));
 
 			$queryBuilder = new QueryBuilder('db', 'table');
-			$queryBuilder->insert([]);
+			$queryBuilder->insert();
 		}
 
 		public function testInsertSingleRecordSuccess(): void {
@@ -55,7 +55,7 @@
 			]));
 
 			$queryBuilder = new QueryBuilder('db', 'table');
-			$queryBuilder->update([]);
+			$queryBuilder->update();
 		}
 
 		public function testUpdateSingleRecordSuccess(): void {
@@ -137,7 +137,7 @@
             ]));
 
             $queryBuilder = new QueryBuilder('db', 'table');
-            $queryBuilder->delete([]);
+            $queryBuilder->delete();
         }
 
         public function testDeleteSingleRecordSuccess(): void {
@@ -163,111 +163,58 @@
             $this->assertEqualsCanonicalizing($expectedBinds, $binds);
         }
 
-		// public function testInsert() {
-		//     $table = 'users';
-		//     $data = [
-		//         'name' => 'John Doe',
-		//         'email' => 'john@example.com',
-		//         'password' => '123456'
-		//     ];
-		//     $db = new DatabaseCredentials('localhost', 'root', '', 'test');
-		//     $sql = QueryBuilder::insert($table, $data, $db);
-		//     $expectedSql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-		//     $this->assertEquals($expectedSql, $sql);
-		// }
+        public function testSelectNoDataToSelectThrows(): void {
+            $this->expectException(NotEmptyParamException::class);
+            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+                "::params::" => "data"
+            ]));
 
-		// public function testUpdate() {
-		//     $table = 'users';
-		//     $data = [
-		//         'name' => 'John',
-		//         'age' => 25
-		//     ];
-		//     $where = 'id = 1';
-		//     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test');
-		//     $expectedSql = "UPDATE users SET (name, age) VALUES (?, ?) WHERE id = 1";
-		//     $actualSql = QueryBuilder::update($table, $data, $where, $db);
-		//     $this->assertEquals($expectedSql, $actualSql);
-		// }
+            $queryBuilder = new QueryBuilder('db', 'table');
+            $queryBuilder->select();
+        }
 
-		// public function testDelete() {
-		//     $table = 'users';
-		//     $where = 'id=1';
-		//     $db = new DatabaseCredentials('localhost', 'username', 'password', 'database');
-		//     $expected = "DELETE FROM $table WHERE $where";
-		//     $actual = QueryBuilder::delete($table, $where, $db);
-		//     $this->assertEquals($expected, $actual);
-		// }
+        public function testSelectSingleRecordSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
 
-		// // public function testSelect() {
-		// //     $table = 'users';
-		// //     $columns = ['name', 'email'];
-		// //     $where = 'id = 1';
-		// //     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test_db');
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
 
-		// //     $expectedSql = "SELECT name, email FROM users WHERE id = 1";
-		// //     $actualSql = QueryBuilder::select($table, $columns, $where, $db);
+            $expectedSql = 'SELECT name, email, age FROM db.table';
 
-		// //     $this->assertEquals($expectedSql, $actualSql);
-		// // }
+            $this->assertEquals($expectedSql, $sql);
+        }
 
-		// // public function testSelectAll() {
-		// //     $table = 'users';
-		// //     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test_db');
-		// //     $expected = "SELECT * FROM $table";
-		// //     $actual = QueryBuilder::selectAll($table, $db);
-		// //     $this->assertEquals($expected, $actual);
-		// // }
+        public function testSelectSingleRecordWithWhereSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
 
-		// // public function testSelectAllWhere() {
-		// //     $table = 'users';
-		// //     $where = ['name' => 'John', 'age' => 25];
-		// //     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test_db');
-		// //     $expectedSql = "SELECT * FROM users WHERE name='John' AND age=25";
-		// //     $actualSql = QueryBuilder::selectAllWhere($table, $where, $db);
-		// //     $this->assertEquals($expectedSql, $actualSql);
-		// // }
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
 
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id';
 
-		// // public function testSelectAllOrderBy() {
-		// //     $table = 'users';
-		// //     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test_db');
-		// //     $orderBy = 'name';
-		// //     $expectedSql = "SELECT * FROM $table ORDER BY $orderBy";
-		// //     $actualSql = QueryBuilder::selectAllOrderBy($table, $db, $orderBy);
-		// //     $this->assertEquals($expectedSql, $actualSql);
-		// // }
-
-
-		// // public function testSelectAllWhereOrderBy() {
-		// //     $table = 'users';
-		// //     $where = ['name' => 'John', 'age' => 25];
-		// //     $db = new DatabaseCredentials('localhost', 'root', 'password', 'test_db');
-		// //     $orderBy = 'name';
-		// //     $expectedSql = "SELECT * FROM users WHERE name='John' AND age=25 ORDER BY name";
-		// //     $actualSql = QueryBuilder::selectAllWhereOrderBy($table, $where, $db, $orderBy);
-		// //     $this->assertEquals($expectedSql, $actualSql);
-		// // }
-
-
-
-		// public function testSelectWithEmptyColumnsAndNoWhereAndNoJoinAndNoOrderBy()
-		// {
-		//     $sql = $this->db->select('users');
-		//     $this->assertEquals('SELECT * FROM users', $sql);
-		// }
-
-		// public function testSelectWithColumnsAndNoWhereAndNoJoinAndNoOrderBy()
-		// {
-		//     $sql = $this->db->select('users', ['id', 'name']);
-		//     $this->assertEquals('SELECT id, name FROM users', $sql);
-		// }
-
-		// public function testSelectWithColumnsAndWhereAndNoJoinAndNoOrderBy()
-		// {
-		//     $sql = $this->db->select('users', ['id', 'name'], ['age > 18', 'country = "USA"']);
-		//     $this->assertEquals('SELECT id, name FROM users WHERE age > 18 AND country = "USA"', $sql);
-		// }
-
-
+            $this->assertEquals($expectedSql, $sql);
+        }
 
 	}
