@@ -17,6 +17,7 @@
 		protected string $limit;
 		protected string $suffix;
         protected string $where;
+        protected array $_binds;
         protected array $whereData;
         protected string $join;
         protected array $data;
@@ -101,13 +102,16 @@
 				$binds[$bind_key] = [
 					'value' => $value,
 					'type' => self::GetPDOTypeFromValue($value)
-				]; 
-               
+				];
+
                 $columnsStr .= "`{$column}` = :{$column}, ";
+
 			}
             
-            $columnsStr = rtrim($columnsStr, ', ');
+            $this->getWhereStatement();
+            $binds = array_merge($binds, $this->_binds);
 
+            $columnsStr = rtrim($columnsStr, ', ');
             $sql = "UPDATE {$this->database}.{$this->table} SET $columnsStr" . $this->where;
 
 			return [
@@ -117,10 +121,13 @@
 		}
 
 		public function delete(): array {
-			$sql = "DELETE FROM {$this->database}.{$this->table}" . $this->where;
-
+            $this->getWhereStatement();
+			
+            $sql = "DELETE FROM {$this->database}.{$this->table}" . $this->where;
+            
 			return [
 				self::SQL => $sql,
+                self::BINDS => $this->_binds
 			];
 		}
 
@@ -132,9 +139,9 @@
 
             $sql = "SELECT $columnsStr
                     FROM {$this->database}.{$this->table}"
-                    . $this->join . $this->where
-                    . $this->group . $this->having
-                    . $this->order . $this->limit
+                    . $this->join   . $this->where
+                    . $this->group  . $this->having
+                    . $this->order  . $this->limit
                     . $this->suffix;
 
 			return [
@@ -158,9 +165,10 @@
 			return $type;
 		}
 
-        protected function getWhereStatement(): string {
+        protected function getWhereStatement(): void {
             if (!Helper::ArrayNullOrEmpty($this->whereData)) {
 				$whereStr = '';
+                $binds = [];
 				foreach ($this->whereData AS $column => $value) {
 					$whereStr .= "`{$column}` = :{$column} AND ";
 					$bind_key = ':' . $column;
@@ -172,11 +180,14 @@
 				}
 				$whereStr = rtrim($whereStr, ' AND ');
                 $this->where = " WHERE $whereStr";
+                $this->_binds = $binds;
+
 			} else {
                 $this->where = '';
+                $this->_binds = [];
             }
             
-            return $this->where;
+            // return [self::BINDS => $this->_binds];
 
         }
 
