@@ -18,9 +18,9 @@
 		protected string $suffix;
         protected string $where;
         protected array $_binds;
-        protected array $whereData;
+        protected array $whereData = [];
         protected string $join;
-        protected array $data;
+        protected array $data = [];
 
 		public function __construct(
 			string $database,
@@ -121,6 +121,11 @@
 		}
 
 		public function delete(): array {
+
+            if (Helper::ArrayNullOrEmpty($this->whereData)) {
+				throw new NotEmptyParamException('whereData');
+			}
+
             $this->getWhereStatement();
 			
             $sql = "DELETE FROM {$this->database}.{$this->table}" . $this->where;

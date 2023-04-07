@@ -48,7 +48,7 @@
             $this->assertEqualsCanonicalizing($expectedBinds, $binds);
         }
 
-		public function testUpdateNoDataToInsertThrows(): void {
+		public function testUpdateNoDataToUpdateThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
 				"::params::" => "data"
@@ -133,7 +133,7 @@
         public function testDeleteNoDataToInsertThrows(): void {
             $this->expectException(NotEmptyParamException::class);
             $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-                "::params::" => "data"
+                "::params::" => "whereData"
             ]));
 
             $queryBuilder = new QueryBuilder('db', 'table');
@@ -141,7 +141,14 @@
         }
 
         public function testDeleteSingleRecordSuccess(): void {
-            $queryBuilder = new QueryBuilder('db', 'table');
+            $db = 'db';
+            $table = 'table';
+            $where = [
+                'id' => 1,
+            ];
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setWhere($where);
             [
                 'sql' => $sql,
                 'binds' => $binds
