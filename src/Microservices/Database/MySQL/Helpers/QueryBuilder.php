@@ -11,15 +11,17 @@
 
 		protected string $table;
 		protected string $database;
-        protected string $group;
-		protected string $having;
-		protected string $order;
-		protected string $limit;
-		protected string $suffix;
-        protected string $where;
+        protected string $group = '';
+		protected string $having = '';
+		protected string $order = '';
+		protected string $limit = '';
+		protected string $suffix = '';
+        protected string $where = '';
         protected array $_binds;
         protected array $whereData = [];
-        protected string $join;
+        protected array $joinValues = [];
+        protected array $havingValues = [];
+        protected string $join = '';
         protected array $data = [];
 
 		public function __construct(
@@ -52,6 +54,55 @@
         public function setWhere(array $where) : void {
             $this->whereData = $where;
         }
+
+        public function getJoin() : array {
+            return $this->joinValues;
+        }
+
+        public function setJoin(array $join) : void {
+            $this->joinValues = $join;
+        }
+
+        public function getGroup() : string {
+            return $this->group;
+        }
+
+        public function setGroup(string $group) : void {
+            $this->group = $group;
+        }
+
+        public function getHaving() : array {
+            return $this->havingValues;
+        }
+
+        public function setHaving(array $having) : void {
+            $this->havingValues = $having;
+        }
+
+        public function getOrder() : string {
+            return $this->order;
+        }
+
+        public function setOrder(string $order) : void {
+            $this->order = $order;
+        }
+
+        public function getLimit() : string {
+            return $this->limit;
+        }
+
+        public function setLimit(string $limit) : void {
+            $this->limit = $limit;
+        }
+
+        public function getSuffix() : string {
+            return $this->suffix;
+        }
+
+        public function setSuffix(string $suffix) : void {
+            $this->suffix = $suffix;
+        }
+        
 
         
 
@@ -137,13 +188,34 @@
 		}
 
 		public function select(): array {
-			$columnsStr = '*';
-			if (!Helper::ArrayNullOrEmpty($this->data)) {
-				$columnsStr = Helper::ImplodeArrToStr($this->data, ',');
+
+            if (Helper::ArrayNullOrEmpty($this->data)) {
+				throw new NotEmptyParamException('data');
 			}
 
-            $sql = "SELECT $columnsStr
-                    FROM {$this->database}.{$this->table}"
+			$columnsStr = '*';
+
+			if (!Helper::ArrayNullOrEmpty($this->data)) {
+				$columnsStr = Helper::ImplodeArrToStr($this->data, ', ');
+			}
+
+            $this->getWhereStatement();
+
+            $this->getJoinStatement();
+
+            $this->getLimitStatement();
+
+            $this->getOrderByStatement();
+
+            $this->getGroupByStatement();
+
+            $this->getHavingStatement();
+
+            $this->getSuffixStatement();
+            
+
+
+            $sql = "SELECT $columnsStr FROM {$this->database}.{$this->table}"
                     . $this->join   . $this->where
                     . $this->group  . $this->having
                     . $this->order  . $this->limit
@@ -151,6 +223,7 @@
 
 			return [
 				self::SQL => $sql,
+                self::BINDS => $this->_binds
 			];
 		}
 
@@ -196,27 +269,21 @@
 
         }
 
-        public function getJoinStatement(
-            array $values
-        ): string {
-            if (!Helper::ArrayNullOrEmpty($values)) {
+        public function getJoinStatement(): void {
+            if (!Helper::ArrayNullOrEmpty($this->joinValues)) {
                 $joinStr = '';
-                foreach ($values AS $joinTable => $joinData) {
-                    $joinStr .= " {$joinData['type']} JOIN {$joinTable} ON {$joinData['on']}";
+                foreach ($this->joinValues as $joinData) {
+                    $joinStr .= " {$joinData['type']} JOIN {$joinData['table']} ON {$joinData['on']}";
                 }
                 $this->join = $joinStr;
             } else {
                 $this->join = '';
             }
-
-            return $this->join;
         }
 
-        public function getOrderByStatement(
-            string $orderBy,
-        ): string {
-            if (!empty($orderBy)) {
-                $this->order = " ORDER BY $orderBy";
+        public function getOrderByStatement(): string {
+            if (!empty($this->order)) {
+                $this->order = " ORDER BY $this->order";
             } else {
                 $this->order = '';
             }
@@ -224,35 +291,42 @@
             return $this->order;
         }
 
-        public function getLimitStatement(
-            int $limit,
-        ): string {
-            if (!empty($limit)) {
-                $this->limit = " LIMIT $limit";
+        public function getLimitStatement(): void {
+            if (!empty($this->limit)) {
+                $this->limit = " LIMIT $this->limit";
             } else {
                 $this->limit = '';
             }
             
-            return $this->limit;
         }
 
-        public function getHavingStatement(
-            string $having,
-        ): string {
-            if (!empty($having)) {
-                $this->having = " HAVING $having";
+        public function getHavingStatement(): void {
+
+            if (!Helper::ArrayNullOrEmpty($this->havingValues)) {
+                $havingStr = '';
+                $binds = [];
+                foreach ($this->havingValues AS $column => $value) {
+                    $havingStr .= "`{$column}` = :{$column} AND ";
+                    $bind_key = ':' . $column;
+
+                    $binds[$bind_key] = [
+                        'value' => $value,
+                        'type' => self::GetPDOTypeFromValue($value)
+                    ];
+                }
+                $havingStr = rtrim($havingStr, ' AND ');
+                $this->having = " HAVING $havingStr";
+                $this->_binds = array_merge($this->_binds, $binds);
+
             } else {
                 $this->having = '';
             }
-            
-            return $this->having;
+           
         }
 
-        public function getSuffixStatement(
-            string $suffix,
-        ): string {
-            if (!empty($suffix)) {
-                $this->suffix = " $suffix";
+        public function getSuffixStatement(): string {
+            if (!empty($this->suffix)) {
+                $this->suffix = " $this->suffix";
             } else {
                 $this->suffix = '';
             }
@@ -260,11 +334,9 @@
             return $this->suffix;
         }
 
-        public function getGroupByStatement(
-            string $groupBy,
-        ): string {
-            if (!empty($groupBy)) {
-                $this->group = " GROUP BY $groupBy";
+        public function getGroupByStatement(): string {
+            if (!empty($this->group)) {
+                $this->group = " GROUP BY $this->group";
             } else {
                 $this->group = '';
             }
