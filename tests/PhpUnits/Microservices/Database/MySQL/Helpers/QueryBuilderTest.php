@@ -217,4 +217,194 @@
             $this->assertEquals($expectedSql, $sql);
         }
 
+        public function testSelectSingleRecordWithWhereAndLimitSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1';
+
+            $this->assertEquals($expectedSql, $sql);
+        }
+
+        public function testSelectSingleRecordWithWhereAndLimitAndOffsetSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+            $offset = 1;
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1 OFFSET 1';
+
+            $this->assertEquals($expectedSql, $sql);
+        }
+
+        public function testSelectSingleRecordWithWhereAndLimitAndOrderBySuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+            $orderBy = 'name ASC';
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            $queryBuilder->setOrder($orderBy);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id ORDER BY name ASC LIMIT 1';
+
+            $this->assertEquals($expectedSql, $sql);
+        }
+
+        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupBySuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+            $orderBy = 'name ASC';
+            $groupBy = 'name';
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            $queryBuilder->setOrder($orderBy);
+            $queryBuilder->setGroup($groupBy);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name ORDER BY name ASC LIMIT 1';
+
+            $this->assertEquals($expectedSql, $sql);
+        }
+
+        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+            $orderBy = 'name ASC';
+            $groupBy = 'name';
+            $having = [
+                'name' => 'test',
+                'age' => 2
+            ];
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            $queryBuilder->setOrder($orderBy);
+            $queryBuilder->setGroup($groupBy);
+            $queryBuilder->setHaving($having);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
+            $this->assertEquals($expectedSql, $sql);
+
+        }
+
+
+        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingAndJoinSuccess(): void {
+            $db = 'db';
+            $table = 'table';
+            $columns = [
+                'name',
+                'email',
+                'age',
+            ];
+            $where = [
+                'id' => 1,
+            ];
+            $limit = 1;
+            $orderBy = 'name ASC';
+            $groupBy = 'name';
+            $having = [
+                'name' => 'test',
+                'age' => 2
+            ];
+            $join = [
+                'table' => 'table2',
+                'on' => 'table.id = table2.id',
+                'type' => 'LEFT'
+            ];
+
+            $queryBuilder = new QueryBuilder($db, $table);
+            $queryBuilder->setData($columns);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->setLimit($limit);
+            $queryBuilder->setOrder($orderBy);
+            $queryBuilder->setGroup($groupBy);
+            $queryBuilder->setHaving($having);
+            $queryBuilder->setJoin($join);
+            [
+                'sql' => $sql
+            ] = $queryBuilder->select();
+
+            $expectedSql = 'SELECT name, email, age FROM db.table LEFT JOIN db.table2 ON table.id = table2.id WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
+            $this->assertEquals($expectedSql, $sql);
+
+        }
+
+
+
 	}
