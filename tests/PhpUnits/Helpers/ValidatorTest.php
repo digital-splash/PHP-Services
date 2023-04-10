@@ -214,19 +214,19 @@
 
 		public function testValidateUsernameSuccess(): void {
 			$this->assertTrue(
-				Validator::ValidateUsername("rawadymario")
+				Validator::ValidateUsername("johndoe")
 			);
 			$this->assertTrue(
-				Validator::ValidateUsername("rawady_mario")
+				Validator::ValidateUsername("john_doe")
 			);
 			$this->assertTrue(
-				Validator::ValidateUsername("Rawady_Mario")
+				Validator::ValidateUsername("John_Doe")
 			);
 			$this->assertTrue(
-				Validator::ValidateUsername("mario_007")
+				Validator::ValidateUsername("john_007")
 			);
 			$this->assertTrue(
-				Validator::ValidateUsername("Rawady_Mario_007")
+				Validator::ValidateUsername("John_Doe_007")
 			);
 		}
 
@@ -244,7 +244,7 @@
 
 		public function testValidatePasswordSuccess(): void {
 			$this->assertTrue(
-				Validator::ValidatePassword("MarioRawady123$%^")
+				Validator::ValidatePassword("JohnDoe123$%^")
 			);
 		}
 

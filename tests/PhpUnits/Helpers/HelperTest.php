@@ -17,37 +17,37 @@
 
 		public function testCleanStringSuccess(): void {
 			$this->assertEquals(
-				"Mario",
-				Helper::CleanString(" Mario ")
+				"John",
+				Helper::CleanString(" John ")
 			);
 
 			$this->assertEquals(
-				"Mario",
-				Helper::CleanString(" Mario\\ ")
+				"John",
+				Helper::CleanString(" John\\ ")
 			);
 
 			$this->assertEquals(
-				"Mario\\",
-				Helper::CleanString(" Mario\\\\ ")
+				"John\\",
+				Helper::CleanString(" John\\\\ ")
 			);
 		}
 
 		public function testCleanHtmlTextSuccess() {
 			$this->assertEquals(
-				"Mario",
-				Helper::CleanHtmlText(" Mario ")
+				"John",
+				Helper::CleanHtmlText(" John ")
 			);
 
 			$this->assertEquals(
-				"Mario&lt;br /&gt;",
-				Helper::CleanHtmlText(" Mario<br /> ")
+				"John&lt;br /&gt;",
+				Helper::CleanHtmlText(" John<br /> ")
 			);
 		}
 
 		public function testConvertToBoolSuccess() {
 			//Type: String
 			$this->assertTrue(
-				Helper::ConvertToBool("Mario")
+				Helper::ConvertToBool("John")
 			);
 
 			$this->assertFalse(
@@ -89,7 +89,7 @@
 		public function testConvertToIntSuccess() {
 			$this->assertEquals(
 				0,
-				Helper::ConvertToInt("Mario")
+				Helper::ConvertToInt("John")
 			);
 
 			$this->assertEquals(
@@ -121,7 +121,7 @@
 		public function testConvertToDecSuccess() {
 			$this->assertEquals(
 				0,
-				Helper::ConvertToDec("Mario")
+				Helper::ConvertToDec("John")
 			);
 
 			$this->assertEquals(
@@ -153,12 +153,12 @@
 		public function testConvertToDecAsStringSuccess() {
 			$this->assertEquals(
 				"0",
-				Helper::ConvertToDecAsString("Mario")
+				Helper::ConvertToDecAsString("John")
 			);
 
 			$this->assertEquals(
 				"0.0",
-				Helper::ConvertToDecAsString("Mario", 1)
+				Helper::ConvertToDecAsString("John", 1)
 			);
 
 			$this->assertEquals(
@@ -201,7 +201,7 @@
 			);
 
 			$this->assertFalse(
-				Helper::StringNullOrEmpty("Mario")
+				Helper::StringNullOrEmpty("John")
 			);
 		}
 
@@ -220,13 +220,13 @@
 
 			$this->assertFalse(
 				Helper::ArrayNullOrEmpty([
-					"Mario"
+					"John"
 				])
 			);
 
 			$this->assertFalse(
 				Helper::ArrayNullOrEmpty(json_decode(json_encode([
-					"Mario"
+					"John"
 				])))
 			);
 		}
@@ -247,8 +247,8 @@
 
 		public function testEncryptStringSuccess() {
 			$this->assertEquals(
-				"db791c2671a6b3ff88259e6012ff78975cee69aaf3bf669f6fad35edb32a09489d35d880496eac67270203e15bd9a746ee720c8cba6f14c3631839e5d2e46e78",
-				Helper::EncryptString("Mario")
+				"41b6d0cd5ddab15074f88bf1c356e89c3f330771b1c7a0b034bcdaafee74eb2ca2eca502f8c0b04fe5fd2f1ec5ae0197e0c6088f1cef6c07378b7f78bb64d9e4",
+				Helper::EncryptString("John")
 			);
 		}
 
@@ -282,92 +282,92 @@
 
 		public function testRemoveSlashesSuccess() {
 			$this->assertEquals(
-				"Mario",
-				Helper::RemoveSlashes("\\Mario\\\\")
+				"John",
+				Helper::RemoveSlashes("\\John\\\\")
 			);
 
 			$this->assertEquals(
-				"Mario",
-				Helper::RemoveSlashes("\Mario\\")
+				"John",
+				Helper::RemoveSlashes("\John\\")
 			);
 		}
 
 		public function testRemoveSpacesSuccess() {
 			$this->assertEquals(
-				"MarioRawady",
-				Helper::RemoveSpaces("  M a r i o R a w a d y ")
+				"JohnDoe",
+				Helper::RemoveSpaces("  J o h n  D o e ")
 			);
 		}
 
 		public function testTruncateStrSuccess() {
 			$this->assertEquals(
-				"Mario Rawady",
-				Helper::TruncateStr("Mario Rawady", 20)
+				"John Doe",
+				Helper::TruncateStr("John Doe", 20)
 			);
 
 			$this->assertEquals(
-				"Mario...",
-				Helper::TruncateStr("Mario Rawady", 5)
+				"John...",
+				Helper::TruncateStr("John Doe", 4)
 			);
 		}
 
 		public function testStringBeginsWithSuccess() {
 			$this->assertTrue(
-				Helper::StringBeginsWith("Mario Rawady", "Mario")
+				Helper::StringBeginsWith("John Doe", "John")
 			);
 
 			$this->assertFalse(
-				Helper::StringBeginsWith("Mario Rawady", "Rawady")
+				Helper::StringBeginsWith("John Doe", "Doe")
 			);
 
 			$this->assertTrue(
-				Helper::StringBeginsWith("Mario Rawady", ["Mario"])
+				Helper::StringBeginsWith("John Doe", ["John"])
 			);
 
 			$this->assertTrue(
-				Helper::StringBeginsWith("Mario Rawady", ["Mario", "Rawady"])
+				Helper::StringBeginsWith("John Doe", ["John", "Doe"])
 			);
 
 			$this->assertTrue(
-				Helper::StringBeginsWith("Mario Rawady", ["Maria", "Mario"])
+				Helper::StringBeginsWith("John Doe", ["Joohn", "John"])
 			);
 
 			$this->assertFalse(
-				Helper::StringBeginsWith("Mario Rawady", ["Maria", "Rawady"])
+				Helper::StringBeginsWith("John Doe", ["Joohn", "Doe"])
 			);
 
 			$this->assertFalse(
-				Helper::StringBeginsWith("Mario Rawady", ["Maria"])
+				Helper::StringBeginsWith("John Doe", ["Joohn"])
 			);
 		}
 
 		public function testStringEndsWithSuccess() {
 			$this->assertTrue(
-				Helper::StringEndsWith("Mario Rawady", "Rawady")
+				Helper::StringEndsWith("John Doe", "Doe")
 			);
 
 			$this->assertFalse(
-				Helper::StringEndsWith("Mario Rawady", "Mario")
+				Helper::StringEndsWith("John Doe", "John")
 			);
 
 			$this->assertTrue(
-				Helper::StringEndsWith("Mario Rawady", ["Rawady"])
+				Helper::StringEndsWith("John Doe", ["Doe"])
 			);
 
 			$this->assertTrue(
-				Helper::StringEndsWith("Mario Rawady", ["Mario", "Rawady"])
+				Helper::StringEndsWith("John Doe", ["John", "Doe"])
 			);
 
 			$this->assertTrue(
-				Helper::StringEndsWith("Mario Rawady", ["Rawody", "Rawady"])
+				Helper::StringEndsWith("John Doe", ["Dooe", "Doe"])
 			);
 
 			$this->assertFalse(
-				Helper::StringEndsWith("Mario Rawady", ["Mario", "Rawody"])
+				Helper::StringEndsWith("John Doe", ["John", "Dooe"])
 			);
 
 			$this->assertFalse(
-				Helper::StringEndsWith("Mario Rawady", ["Rawody"])
+				Helper::StringEndsWith("John Doe", ["Dooe"])
 			);
 		}
 
@@ -376,82 +376,82 @@
 			$this->expectExceptionMessage(Translate::TranslateString("exception.InvalidParam", null, [
 				"::params::" => "search"
 			]));
-			Helper::StringHasChar("Mario Rawady", 1);
+			Helper::StringHasChar("John Doe", 1);
 		}
 
 		public function testStringHasCharStringSuccess() {
 			$this->assertTrue(
-				Helper::StringHasChar("Mario Rawady", "Mario")
+				Helper::StringHasChar("John Doe", "John")
 			);
 
 			$this->assertTrue(
-				Helper::StringHasChar("Mario Rawady", "Rawady")
+				Helper::StringHasChar("John Doe", "Doe")
 			);
 
 			$this->assertFalse(
-				Helper::StringHasChar("Mario Rawady", "Marioss")
+				Helper::StringHasChar("John Doe", "Doeee")
 			);
 		}
 
 		public function testStringHasCharArraySuccess() {
 			$this->assertTrue(
-				Helper::StringHasChar("Mario Rawady", ["Mario"])
+				Helper::StringHasChar("John Doe", ["John"])
 			);
 
 			$this->assertTrue(
-				Helper::StringHasChar("Mario Rawady", ["Maa", "Rawady"])
+				Helper::StringHasChar("John Doe", ["Joh", "Doe"])
 			);
 
 			$this->assertFalse(
-				Helper::StringHasChar("Mario Rawady", ["Marioss", " Mario", "Rawady "])
+				Helper::StringHasChar("John Doe", ["Johh", " Joh", "Doe "])
 			);
 		}
 
 		public function testIsInStringSuccess() {
 			$this->assertTrue(
-				Helper::IsInString("Mario", "Mario Rawady")
+				Helper::IsInString("John", "John Doe")
 			);
 
 			$this->assertTrue(
-				Helper::IsInString("Rawady", "Mario Rawady")
+				Helper::IsInString("Doe", "John Doe")
 			);
 
 			$this->assertFalse(
-				Helper::IsInString("Marios", "Mario Rawady")
+				Helper::IsInString("Johnn", "John Doe")
 			);
 		}
 
 		public function testStripHtmlSuccess() {
 			$this->assertEquals(
-				"Mario",
-				Helper::StripHtml("<h1>Mario</h1><br />")
+				"John",
+				Helper::StripHtml("<h1>John</h1><br />")
 			);
 
 			$this->assertEquals(
-				"<h1>Mario</h1>",
-				Helper::StripHtml("<h1>Mario</h1><br />", "<h1>")
+				"<h1>John</h1>",
+				Helper::StripHtml("<h1>John</h1><br />", "<h1>")
 			);
 
 			$this->assertEquals(
-				"<h1>Mario</h1><br />",
-				Helper::StripHtml("<h1>Mario</h1><br />", ["<h1>", "<br>"])
+				"<h1>John</h1><br />",
+				Helper::StripHtml("<h1>John</h1><br />", ["<h1>", "<br>"])
 			);
 		}
 
 		public function testTextReplaceSuccess() {
 			$this->assertEquals(
-				"Mario Rawady",
+				"John Doe",
 				Helper::TextReplace("::FirstName:: ::LastName::", [
-					"::FirstName::" => "Mario",
-					"::LastName::" => "Rawady",
+					"::FirstName::" => "John",
+					"::LastName::" => "Doe",
 				])
 			);
 		}
 
 		public function testSplitCamelcaseStringSuccess() {
 			$this->assertEquals(
-				"Mario Abdallah Rawady",
-				Helper::SplitCamelcaseString("MarioAbdallahRawady")
+				"John Matt Doe",
+				Helper::SplitCamelcaseString("JohnMattDoe")
 			);
 		}
 
@@ -472,53 +472,53 @@
 			);
 
 			$this->assertEquals(
-				"Mario",
-				Helper::GetStringSafe("Mario")
+				"John",
+				Helper::GetStringSafe("John")
 			);
 		}
 
 		public function testGenerateClassNameFromStringSuccess() {
 			$this->assertEquals(
-				"MarioAbdallahRawady",
-				Helper::GenerateClassNameFromString("mario-abdallah-rawady")
+				"JohnMattDoe",
+				Helper::GenerateClassNameFromString("john-matt-doe")
 			);
 
 			$this->assertEquals(
-				"MarioAbdallahRawady",
-				Helper::GenerateClassNameFromString("Mario Abdallah Rawady")
+				"JohnMattDoe",
+				Helper::GenerateClassNameFromString("John Matt Doe")
 			);
 		}
 
 		public function testSafeNameSuccess() {
 			$this->assertEquals(
-				"marioabdallahrawady",
-				Helper::SafeName("MarioAbdallahRawady")
+				"johnmattdoe",
+				Helper::SafeName("JohnMattDoe")
 			);
 
 			$this->assertEquals(
-				"mario-abdallah-rawady",
-				Helper::SafeName("Mario Abdallah Rawady")
+				"john-matt-doe",
+				Helper::SafeName("John Matt Doe")
 			);
 
 			$this->assertEquals(
-				"mario-abdallah-rawady",
-				Helper::SafeName("Mario---Abdallah---Rawady")
+				"john-matt-doe",
+				Helper::SafeName("John---Matt---Doe")
 			);
 
 			$this->assertEquals(
-				"mario-abdallah-rawady",
-				Helper::SafeName("Mario@Abdallah!$%Rawady)({}")
+				"john-matt-doe",
+				Helper::SafeName("John@Matt!$%Doe)({}")
 			);
 
 			$this->assertEquals(
-				"ماريو-عبدالله-الروادي",
-				Helper::SafeName("ماريو عبدالله الروادي!@#$%^&*()")
+				"جون-مات-دوه",
+				Helper::SafeName("جون مات دوه!@#$%^&*()")
 			);
 		}
 
 		public function testHasArabicCharSuccess() {
 			$this->assertFalse(
-				Helper::HasArabicChar("Mario Abdallah Rawady")
+				Helper::HasArabicChar("John Matt Doe")
 			);
 
 			$this->assertFalse(
@@ -530,11 +530,11 @@
 			);
 
 			$this->assertTrue(
-				Helper::HasArabicChar("ماريو عبدالله الروادي")
+				Helper::HasArabicChar("جون مات دوه")
 			);
 
 			$this->assertTrue(
-				Helper::HasArabicChar("Mario Abdallah Rawady ماريو عبدالله الروادي")
+				Helper::HasArabicChar("John Matt Doe جون مات دوه")
 			);
 		}
 
@@ -551,47 +551,40 @@
 
 			$this->assertEquals(
 				[
-					"Mario Abdallah Rawady",
+					"John Matt Doe",
 				],
-				Helper::ExplodeStrToArr("Mario Abdallah Rawady")
+				Helper::ExplodeStrToArr("John Matt Doe")
 			);
 
 			$this->assertEquals(
 				[
-					"Ma",
-					"ri",
-					"o ",
-					"Ab",
-					"da",
-					"ll",
-					"ah",
-					" R",
-					"aw",
-					"ad",
-					"y",
+					"Jo",
+					"hn",
+					" M",
+					"at",
+					"t ",
+					"Do",
+					"e"
 				],
-				Helper::ExplodeStrToArr("Mario Abdallah Rawady", "", 2)
+				Helper::ExplodeStrToArr("John Matt Doe", "", 2)
 			);
 
 			$this->assertEquals(
 				[
-					"Mario",
-					"Abdallah",
-					"Rawady",
+					"John",
+					"Matt",
+					"Doe",
 				],
-				Helper::ExplodeStrToArr("Mario Abdallah Rawady", " ")
+				Helper::ExplodeStrToArr("John Matt Doe", " ")
 			);
 
 			$this->assertEquals(
 				[
-					"M",
-					"rio Abd",
-					"ll",
-					"h R",
-					"w",
-					"dy",
+					"J",
+					"hn Matt D",
+					"e"
 				],
-				Helper::ExplodeStrToArr("Mario Abdallah Rawady", "a")
+				Helper::ExplodeStrToArr("John Matt Doe", "o")
 			);
 		}
 
@@ -607,22 +600,22 @@
 			);
 
 			$this->assertEquals(
-				"Mario Abdallah Rawady",
+				"John Matt Doe",
 				Helper::ImplodeArrToStr([
-					"Mario",
-					"Abdallah",
-					"Rawady"
+					"John",
+					"Matt",
+					"Doe"
 				])
 			);
 
 			$this->assertEquals(
-				"Mario Abdallah Rawady",
+				"John Matt Doe",
 				Helper::ImplodeArrToStr([
-					"Mario",
+					"John",
 					"",
-					"Abdallah",
+					"Matt",
 					"",
-					"Rawady"
+					"Doe"
 				])
 			);
 		}
@@ -667,29 +660,29 @@
 
 			$this->assertEquals(
 				[
-					"Mario",
-					"Abdallah",
-					"Rawady"
+					"John",
+					"Matt",
+					"Doe"
 				],
 				Helper::UnsetArrayEmptyValues([
-					"Mario",
-					"Abdallah",
-					"Rawady"
+					"John",
+					"Matt",
+					"Doe"
 				])
 			);
 
 			$this->assertEquals(
 				[
-					"Mario",
-					"Abdallah",
-					"Rawady"
+					"John",
+					"Matt",
+					"Doe"
 				],
 				Helper::UnsetArrayEmptyValues([
-					"Mario",
+					"John",
 					"",
-					"Abdallah",
+					"Matt",
 					null,
-					"Rawady"
+					"Doe"
 				])
 			);
 		}
@@ -854,8 +847,8 @@
 			);
 
 			$this->assertEquals(
-				str_replace("&", "[amp;]", base64_encode("https://dg-splash.com/projects?page=2&category=2")),
-				Helper::EncryptLink("https://dg-splash.com/projects?page=2&category=2")
+				str_replace("&", "[amp;]", base64_encode("https://john-doe.com/projects?page=2&category=2")),
+				Helper::EncryptLink("https://john-doe.com/projects?page=2&category=2")
 			);
 		}
 
@@ -871,8 +864,8 @@
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/projects?page=2&category=2",
-				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://dg-splash.com/projects?page=2&category=2")))
+				"https://john-doe.com/projects?page=2&category=2",
+				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://john-doe.com/projects?page=2&category=2")))
 			);
 		}
 
@@ -947,7 +940,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",
@@ -983,9 +976,9 @@
 			$this->assertEquals(
 				[
 					"fullName" => [
-						"firstName" => "Mario",
-						"middleName" => "Abdallah",
-						"lastName" => "Rawady",
+						"firstName" => "John",
+						"middleName" => "Matt",
+						"lastName" => "Doe",
 					],
 					"position" => "Senior Software Engineer",
 					"languages" => [
@@ -1062,23 +1055,23 @@
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com/")
+				"https://john-doe.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://john-doe.com/")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com")
+				"https://john-doe.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://john-doe.com")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://dg-splash.com////")
+				"https://john-doe.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "https://john-doe.com////")
 			);
 
 			$this->assertEquals(
-				"www.dg-splash.com/home/en",
-				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.dg-splash.com////")
+				"www.john-doe.com/home/en",
+				Helper::GenerateFullUrl("home", Lang::EN, [], [], "www.john-doe.com////")
 			);
 		}
 
@@ -1089,13 +1082,13 @@
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/assets/css/styles.css",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://dg-splash.com")
+				"https://john-doe.com/assets/css/styles.css",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://john-doe.com")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com/assets/css/styles.css?v=1.0",
-				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://dg-splash.com", "1.0")
+				"https://john-doe.com/assets/css/styles.css?v=1.0",
+				Helper::AddVersionParameterToPath("assets/css/styles.css", "https://john-doe.com", "1.0")
 			);
 		}
 
@@ -1125,9 +1118,9 @@
 
 		public function testConvertMultidimentionArrayToSingleDimentionSuccess() {
 			$this->assertEquals([
-				"name.first" => "Mario",
-				"name.middle" => "Abdallah",
-				"name.last" => "Rawady",
+				"name.first" => "John",
+				"name.middle" => "Matt",
+				"name.last" => "Doe",
 				"address.building" => "Bldg",
 				"address.street" => "Street",
 				"address.region" => "Region",
@@ -1136,9 +1129,9 @@
 				"contact.info.email" => "email@test.com",
 			], Helper::ConvertMultidimentionArrayToSingleDimention([
 				"name" => [
-					"first" => "Mario",
-					"middle" => "Abdallah",
-					"last" => "Rawady",
+					"first" => "John",
+					"middle" => "Matt",
+					"last" => "Doe",
 				],
 				"address" => [
 					"building" => "Bldg",
@@ -1162,28 +1155,28 @@
 			);
 
 			$this->assertEquals(
-				"dg-splash.com",
-				Helper::AddSchemeIfMissing("dg-splash.com", "")
+				"john-doe.com",
+				Helper::AddSchemeIfMissing("john-doe.com", "")
 			);
 
 			$this->assertEquals(
-				"http://dg-splash.com",
-				Helper::AddSchemeIfMissing("http://dg-splash.com", "https://")
+				"http://john-doe.com",
+				Helper::AddSchemeIfMissing("http://john-doe.com", "https://")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::AddSchemeIfMissing("https://dg-splash.com", "http://")
+				"https://john-doe.com",
+				Helper::AddSchemeIfMissing("https://john-doe.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::AddSchemeIfMissing("dg-splash.com", "https")
+				"https://john-doe.com",
+				Helper::AddSchemeIfMissing("john-doe.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::AddSchemeIfMissing("dg-splash.com", "https://")
+				"https://john-doe.com",
+				Helper::AddSchemeIfMissing("john-doe.com", "https://")
 			);
 		}
 
@@ -1194,66 +1187,66 @@
 			);
 
 			$this->assertEquals(
-				"dg-splash.com",
-				Helper::ReplaceScheme("dg-splash.com", "")
+				"john-doe.com",
+				Helper::ReplaceScheme("john-doe.com", "")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::ReplaceScheme("http://dg-splash.com", "https://")
+				"https://john-doe.com",
+				Helper::ReplaceScheme("http://john-doe.com", "https://")
 			);
 
 			$this->assertEquals(
-				"http://dg-splash.com",
-				Helper::ReplaceScheme("https://dg-splash.com", "http://")
+				"http://john-doe.com",
+				Helper::ReplaceScheme("https://john-doe.com", "http://")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::ReplaceScheme("dg-splash.com", "https")
+				"https://john-doe.com",
+				Helper::ReplaceScheme("john-doe.com", "https")
 			);
 
 			$this->assertEquals(
-				"https://dg-splash.com",
-				Helper::ReplaceScheme("dg-splash.com", "https://")
+				"https://john-doe.com",
+				Helper::ReplaceScheme("john-doe.com", "https://")
 			);
 		}
 
 		public function testIsValidUrl() {
 			$this->assertFalse(
-				Helper::IsValidUrl("Mario Rawady")
+				Helper::IsValidUrl("John Doe")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("Digital Splash: https://dg-splash.com")
+				Helper::IsValidUrl("John Doe: https://john-doe.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http//dg-splash.com")
+				Helper::IsValidUrl("http//john-doe.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:/dg-splash.com")
+				Helper::IsValidUrl("http:/john-doe.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("http:dg-splash.com")
+				Helper::IsValidUrl("http:john-doe.com")
 			);
 
 			$this->assertFalse(
-				Helper::IsValidUrl("https:/dg-splash.com")
+				Helper::IsValidUrl("https:/john-doe.com")
 			);
 
 			$this->assertTrue( //To be fixed!
-				Helper::IsValidUrl("http://dg-splash.com Digital Splash")
+				Helper::IsValidUrl("http://john-doe.com John Doe")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("http://dg-splash.com")
+				Helper::IsValidUrl("http://john-doe.com")
 			);
 
 			$this->assertTrue(
-				Helper::IsValidUrl("https://dg-splash.com")
+				Helper::IsValidUrl("https://john-doe.com")
 			);
 		}
 

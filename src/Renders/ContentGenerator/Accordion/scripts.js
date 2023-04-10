@@ -1,25 +1,25 @@
 let disableClick = false;
-var RawadyMarioAccordions = new function() {
-	this.showTabContent = function(el) {
+var DgSplashAccordions = new function () {
+	this.showTabContent = function (el) {
 		if (window.jQuery) {
-			RawadyMarioAccordions.showTabContentJquery(el);
+			DgSplashAccordions.showTabContentJquery(el);
 		}
 		else {
-			RawadyMarioAccordions.showTabContentJs(el);
+			DgSplashAccordions.showTabContentJs(el);
 		}
 	};
 
-	this.showTabContentJs = function(el) {
+	this.showTabContentJs = function (el) {
 		const key = el.dataset.key;
 		const parentEl = el.parentElement;
 		const isActive = el.classList.contains("active");
 
 		const activeTabs = parentEl.querySelectorAll(".accordion-element.active");
 		const activeTops = parentEl.querySelectorAll(".accordion-element.active .top.active");
-		[].forEach.call(activeTops, function(activeTop) {
+		[].forEach.call(activeTops, function (activeTop) {
 			activeTop.classList.remove("active");
 		});
-		[].forEach.call(activeTabs, function(activeTab) {
+		[].forEach.call(activeTabs, function (activeTab) {
 			activeTab.classList.remove("active");
 		});
 		if (!isActive) {
@@ -28,10 +28,10 @@ var RawadyMarioAccordions = new function() {
 		}
 	};
 
-	this.showTabContentJquery = function(el) {
+	this.showTabContentJquery = function (el) {
 		if (!disableClick) {
 			disableClick = true;
-			const $parentEl = $(el).parents(".rawaymario-accordion").first();
+			const $parentEl = $(el).parents(".dgsplash-accordion").first();
 			const isActive = $(el).hasClass("active");
 
 			$parentEl.find(".accordion-element.active .top.active").removeClass("active")

@@ -1,4 +1,4 @@
-var RawadyMarioTabs = new function() {
+var DgSplashTabs = new function() {
 
 	this.showTabContent = function(el) {
 		const key = el.dataset.key;

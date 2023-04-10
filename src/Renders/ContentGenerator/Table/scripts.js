@@ -1,4 +1,4 @@
-var RawadyMarioTable = new function() {
+var DgSplashTable = new function() {
 
 
 

@@ -53,7 +53,7 @@
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotNumericParam", null, [
 				"::params::" => "amount"
 			]));
-			Currency::GetLbpAmount("Mario");
+			Currency::GetLbpAmount("John");
 		}
 
 		public function GetLbpAmountSuccessProvider() {
