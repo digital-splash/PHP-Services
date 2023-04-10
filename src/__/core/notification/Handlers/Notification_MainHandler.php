@@ -1,8 +1,8 @@
 <?php
 	namespace DigitalSplash\Classes\Core\Notification\Handler;
 
-use ErrorException;
-use DigitalSplash\Classes\Database\User;
+	use ErrorException;
+	use DigitalSplash\Classes\Database\User;
 	use DigitalSplash\Classes\Core\NotificationManager;
 	use DigitalSplash\Classes\Database\Queue;
 
@@ -27,47 +27,47 @@ use DigitalSplash\Classes\Database\User;
 				$this->notificationManager->SetUser($user);
 				unset($payload["user_id"]);
 			}
-			
+
 			if (isset($payload["attachments"])) {
 				$this->notificationManager->AddEmailAttachments($payload["attachments"]);
 				unset($payload["attachments"]);
 			}
-			
+
 			if (isset($payload["attachment"])) {
 				$this->notificationManager->AddEmailAttachment($payload["attachment"]["name"], $payload["attachment"]["path"]);
 				unset($payload["attachment"]);
 			}
-			
+
 			if (isset($payload["recepients"])) {
 				$this->notificationManager->addEmailRecepients($payload["recepients"]);
 				unset($payload["recepients"]);
 			}
-			
+
 			if (isset($payload["recepient"])) {
 				$this->notificationManager->addEmailRecepient($payload["recepient"]["email"], (isset($payload["recepient"]["name"]) ? $payload["recepient"]["name"] : ""));
 				unset($payload["recepient"]);
 			}
-			
+
 			if (isset($payload["ccs"])) {
 				$this->notificationManager->addEmailCcs($payload["ccs"]);
 				unset($payload["ccs"]);
 			}
-			
+
 			if (isset($payload["cc"])) {
 				$this->notificationManager->addEmailCc($payload["cc"]["email"], (isset($payload["cc"]["name"]) ? $payload["cc"]["name"] : ""));
 				unset($payload["cc"]);
 			}
-			
+
 			if (isset($payload["bccs"])) {
 				$this->notificationManager->addEmailBccs($payload["bccs"]);
 				unset($payload["bccs"]);
 			}
-			
+
 			if (isset($payload["bcc"])) {
 				$this->notificationManager->addEmailBcc($payload["bcc"]["email"], (isset($payload["bcc"]["name"]) ? $payload["bcc"]["name"] : ""));
 				unset($payload["bcc"]);
 			}
-			
+
 			if (isset($payload["data"])) {
 				$this->notificationManager->SetTemplateData($payload["data"]);
 				unset($payload["data"]);
@@ -105,7 +105,7 @@ use DigitalSplash\Classes\Database\User;
 				throw new ErrorException("Method " . $resolver . ":GetData() not found!");
 			}
 			$payload = call_user_func([$resolver, "GetData"], $payload);
-			
+
 			$handler = self::HandlerPath . $name . "Handler";
 			if (!method_exists($handler, "Send")) {
 				throw new ErrorException("Method " . $handler . ":Send() not found!");

@@ -54,6 +54,10 @@
 			$this->expectExceptionMessage(Translate::TranslateString("exception.FileNotFound", null, [
 				"::params::" => "cacheFileName"
 			]));
+			ServerCache::SetVersion("1.0.0");
+			ServerCache::SetCacheFolder(self::CACHE_FOLDER);
+			ServerCache::Set("not_this_test", "This is a test Cache!");
+
 			ServerCache::Get("test");
 		}
 
@@ -88,7 +92,7 @@
 			$actual = ServerCache::Get("test", true);
 			$this->assertEqualsCanonicalizing($cacheContent, $actual);
 		}
-		
+
 		private static function DeleteAllGeneratedFiles(): void {
 			$filesToDelete = Helper::GetAllFiles(self::CACHE_FOLDER, true);
 			foreach ($filesToDelete AS $file) {

@@ -57,15 +57,15 @@
 				"PHP",
 			]);
 			MetaSeo::SetDescription("John Doe is a Software Engineer");
-			MetaSeo::SetPhoto("https://dg-splash.com/assets/img/logo-big.png");
-			MetaSeo::SetUrl("https://dg-splash.com");
+			MetaSeo::SetPhoto("https://john-doe.com/assets/img/logo-big.png");
+			MetaSeo::SetUrl("https://john-doe.com");
 			MetaSeo::SetRobots(true);
 			MetaSeo::SetGoolgeSiteVerification("");
-			MetaSeo::SetCopyright("2022. Digital Splash");
+			MetaSeo::SetCopyright("2022. John Doe");
 			MetaSeo::SetFacebookAppId("123456789");
 			MetaSeo::SetFacebookAdmins("");
 			MetaSeo::SetTwitterCard("testtt"); //Should default to: summary_large_image
-			MetaSeo::SetFavicon("https://dg-splash.com/assets/img/favicon.png");
+			MetaSeo::SetFavicon("https://john-doe.com/assets/img/favicon.png");
 
 			MetaSeo::AddToMetaArray("test", [
 				"type" => "meta",

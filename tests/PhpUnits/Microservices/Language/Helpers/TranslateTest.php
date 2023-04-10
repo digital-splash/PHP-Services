@@ -84,9 +84,9 @@
 			);
 
 			$this->assertEquals(
-				"Mario",
+				"John",
 				Translate::Translate("date.year", Lang::EN, false, [
-					"year" => "Mario"
+					"year" => "John"
 				])
 			);
 

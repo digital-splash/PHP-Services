@@ -15,13 +15,13 @@
 
 		public function testUppercaseSuccess(): void {
 			$this->assertEquals(
-				"MARIO RAWADY",
-				Language::Uppercase("Mario Rawady")
+				"JOHN DOE",
+				Language::Uppercase("John Doe")
 			);
 
 			$this->assertEquals(
-				"MÀRIO RÂWÄDY",
-				Language::Uppercase("Màrio Râwädy")
+				"DIGITÀL SPLÂÄSH",
+				Language::Uppercase("Digitàl Splâäsh")
 			);
 		}
 
