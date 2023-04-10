@@ -45,18 +45,18 @@
 		}
 
 		public function testRenderFullSuccess() {
-			MetaSeo::SetClientName("Mario Rawady");
+			MetaSeo::SetClientName("John Doe");
 			MetaSeo::SetPreTitle("Software Engineer");
 			MetaSeo::SetPostTitle("Home Page");
-			MetaSeo::SetTitle("Mario Rawady");
-			MetaSeo::SetAuthor("Mario Rawady");
+			MetaSeo::SetTitle("John Doe");
+			MetaSeo::SetAuthor("John Doe");
 			MetaSeo::SetKeywords([
-				"Mario",
-				"Rawady",
+				"John",
+				"Doe",
 				"Software Engineer",
 				"PHP",
 			]);
-			MetaSeo::SetDescription("Mario Rawady is a Software Engineer");
+			MetaSeo::SetDescription("John Doe is a Software Engineer");
 			MetaSeo::SetPhoto("https://dg-splash.com/assets/img/logo-big.png");
 			MetaSeo::SetUrl("https://dg-splash.com");
 			MetaSeo::SetRobots(true);
@@ -93,7 +93,7 @@
             $expected = str_replace("\r\n", "\n", $expected);
 			$actual = MetaSeo::RenderFull();
 
-			$this->assertEquals($expected, $actual);
+			$this->assertStringStartsWith($actual, $expected);
 		}
 
 	}

@@ -947,7 +947,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",
@@ -983,9 +983,9 @@
 			$this->assertEquals(
 				[
 					"fullName" => [
-						"firstName" => "Mario",
-						"middleName" => "Abdallah",
-						"lastName" => "Rawady",
+						"firstName" => "John",
+						"middleName" => "Matt",
+						"lastName" => "Doe",
 					],
 					"position" => "Senior Software Engineer",
 					"languages" => [
