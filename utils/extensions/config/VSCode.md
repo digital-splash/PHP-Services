@@ -2,13 +2,13 @@
 
 First, on your project root:
 
--   Create a folder `.vscode`, if it does not exist.
--   Navigate into the folder `.vscode`.
--   Create a file `settings.json`, if it does not exist.
+- Create a folder `.vscode`, if it does not exist.
+- Navigate into the folder `.vscode`.
+- Create a file `settings.json`, if it does not exist.
 
 Now open `settings.json` and paste the below lines in the main JSON:
 
-```
+```text
 "editor.formatOnPaste": false
 "editor.formatOnSave": true
 ```
@@ -25,7 +25,7 @@ Open the Extensions tab, and search for: `recca0120.vscode-phpunit`, and Install
 
 Now open the file `.vscode/setings.json`, and paste the below lines.
 
-```
+```text
 "phpunit.php": "php",
 "phpunit.phpunit": "vendor/bin/phpunit"
 ```
@@ -33,7 +33,7 @@ Now open the file `.vscode/setings.json`, and paste the below lines.
 The below configuration is optional, but it can only be set on the user `settings.json` file. It is not supported per Workspace.
 This configuration is set to `always` to Always show the PHP Unit results even when there is no Failures.
 
-```
+```text
 "phpunit.showAfterExecution": "always"
 ```
 
@@ -43,7 +43,7 @@ Open the Extensions tab, and search for: `rxdebug.php-debug`, and Install it.
 
 Now open the file `.vscode/setings.json`, and paste the below line.
 
-```
+```text
 "php.debug.executablePath": "{path_to_php_executable}"
 ```
 
@@ -59,7 +59,7 @@ Open the Extensions tab, and search for: `esbenp.prettier-vscode`, and Install i
 
 To make `Prettier` your default `Code Formatter`, paste the below line in `.vscode/setings.json`.
 
-```
+```text
 "editor.defaultFormatter": "esbenp.prettier-vscode"
 ```
 
@@ -71,7 +71,7 @@ Open the Extensions tab, and search for: `kokororin.vscode-phpfmt`, and Install 
 
 Now open the file `.vscode/setings.json`, and paste the below lines.
 
-```
+```json
   // Enable per-language
   "[php]": {
     "editor.defaultFormatter": "kokororin.vscode-phpfmt",

@@ -1,8 +1,8 @@
 # Common Services Used in all Projects
 
-To install Via Composer: `composer require rawadymario/php-services`
+To install Via Composer: `composer require dgsplash/php-services`
 
-Packagist Link: [https://packagist.org/packages/rawadymario/php-services](https://packagist.org/packages/rawadymario/php-services)
+Packagist Link: [https://packagist.org/packages/dgsplash/php-services](https://packagist.org/packages/dgsplash/php-services)
 
 ---
 

@@ -1,11 +1,11 @@
 let disableClick = false;
-var RawadyMarioAccordions = new function() {
+var DgSplashAccordions = new function() {
 	this.showTabContent = function(el) {
 		if (window.jQuery) {
-			RawadyMarioAccordions.showTabContentJquery(el);
+			DgSplashAccordions.showTabContentJquery(el);
 		}
 		else {
-			RawadyMarioAccordions.showTabContentJs(el);
+			DgSplashAccordions.showTabContentJs(el);
 		}
 	};
 
