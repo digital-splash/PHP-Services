@@ -202,6 +202,23 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearBinds();
             $this->assertEquals([], $queryBuilder->getBinds());
         }
+
+        public function testAppendToBind(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $binds = [
+                ':name' => 'Hadi Darwish',
+                ':email' => 'hadi@example.com',
+                ':age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setBinds($binds);
+            $queryBuilder->appendToBind(':address', 'Beirut');
+            $binds[':address'] = 'Beirut';
+            $this->assertEquals($binds, $queryBuilder->getBinds());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
