@@ -387,6 +387,14 @@ use PHPUnit\Framework\TestCase;
             ];
             $this->assertEquals($join, $queryBuilder->getJoin());
         }
+
+        public function testGetGroup(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getGroup());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
