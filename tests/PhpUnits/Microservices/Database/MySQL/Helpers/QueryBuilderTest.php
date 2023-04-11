@@ -428,6 +428,14 @@ use PHPUnit\Framework\TestCase;
             $group[] = 'age';
             $this->assertEquals($group, $queryBuilder->getGroup());
         }
+
+        public function testGetHaving(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getHaving());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
