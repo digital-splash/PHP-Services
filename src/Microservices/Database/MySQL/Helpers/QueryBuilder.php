@@ -29,7 +29,7 @@
 		protected array $group = [];
 		protected array $having = [];
 		protected array $order = [];
-        protected array $limit = [];
+        protected int $limit = 0;
         protected array $offset = [];
 
 		public function __construct(
@@ -196,20 +196,16 @@
 			$this->order[$key] = $value;
 		}
 
-		public function getLimit() : array {
+		public function getLimit() : int {
 			return $this->limit;
 		}
 
-		public function setLimit(array $limit) : void {
+		public function setLimit(int $limit) : void {
 			$this->limit = $limit;
 		}
 
         public function clearLimit() : void {
-            $this->setLimit([]);
-        }
-
-        public function appendToLimit(string $key, $value) : void {
-            $this->limit[$key] = $value;
+            $this->setLimit(0);
         }
 
 		public function getOffset() : array {

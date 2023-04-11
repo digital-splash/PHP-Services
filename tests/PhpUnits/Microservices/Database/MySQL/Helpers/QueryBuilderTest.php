@@ -533,6 +533,15 @@ use PHPUnit\Framework\TestCase;
             $order['age'] = 'DESC';
             $this->assertEquals($order, $queryBuilder->getOrder());
         }
+
+        public function testGetLimit(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals(0, $queryBuilder->getLimit());
+        }
+        
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
