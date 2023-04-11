@@ -570,6 +570,16 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder = new QueryBuilder($database, $table);
             $this->assertEquals(0, $queryBuilder->getOffset());
         }
+
+        public function testSetOffset(): void {
+            $database = 'db';
+            $table = 'table';
+            $offset = 10;
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setOffset($offset);
+            $this->assertEquals($offset, $queryBuilder->getOffset());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
