@@ -316,6 +316,23 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearWhere();
             $this->assertEquals([], $queryBuilder->getWhere());
         }
+
+        public function testAppendToWhere(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $where = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->appendToWhere('address', 'Beirut');
+            $where['address'] = 'Beirut';
+            $this->assertEquals($where, $queryBuilder->getWhere());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
