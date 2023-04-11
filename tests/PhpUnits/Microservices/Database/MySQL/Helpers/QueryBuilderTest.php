@@ -8,6 +8,62 @@
 
 	class QueryBuilderTest extends TestCase {
 
+
+        //testing the constructor using data provider
+
+        public function TestConstructorProvider(): array {
+            return [
+                'empty database' => [
+                     '',
+                    'table'
+                ],
+                'empty table' => [
+                    'db',
+                    ''
+                ],
+                'empty database and table' => [
+                    '',
+                    ''
+                ]
+            ];
+        }
+
+        /**
+         * @dataProvider TestConstructorProvider
+         */
+
+        // public function testConstructor(
+        //     string $database,
+        //     string $table
+        // ): void {
+        //     if (empty($database) || empty($table)) {
+        //         $this->expectException(NotEmptyParamException::class);
+        //         $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+        //             "::params::" => empty($database) ? 'database' : 'table'
+        //         ]));
+        //     }
+
+        //     $queryBuilder = new QueryBuilder($database, $table);
+        //     $this->assertEquals($database, $queryBuilder->getDatabase());
+        //     $this->assertEquals($table, $queryBuilder->getTable());
+        // }
+
+
+        public function testConstructorThrows(
+            string $database,
+            string $table
+        ): void {
+            $this->expectException(NotEmptyParamException::class);
+            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+                "::params::" => empty($database) ? 'database' : 'table'
+            ]));
+
+            $queryBuilder = new QueryBuilder($database, $table);
+        }
+
+       
+    
+
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
