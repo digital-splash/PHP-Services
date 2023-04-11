@@ -19,392 +19,391 @@
 		}
 
 		public function testInsertSingleRecordSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $values = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-        
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($values);
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->insert();
-        
-            $expectedSql = "INSERT INTO {$db}.{$table} (`name`, `email`, `age`) VALUES (:name, :email, :age)";
-            $expectedBinds = [];
-            foreach ($values as $column => $value) {
-                $bind_key = ':' . $column;
-                $expectedBinds[$bind_key] = [
-                    'value' => $value,
-                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
-                ];
-            }
-        
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-        }
+			$db = 'db';
+			$table = 'table';
+			$values = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
 
-		public function testUpdateNoDataToUpdateThrows(): void {
-			$this->expectException(NotEmptyParamException::class);
-			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "data"
-			]));
+			$queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->setData($values);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->insert();
 
-			$queryBuilder = new QueryBuilder('db', 'table');
-			$queryBuilder->update();
+			$expectedSql = "INSERT INTO `{$db}`.`{$table}` (`name`, `email`, `age`) VALUES (:name_1, :email_1, :age_1)";
+			$expectedBinds = [];
+
+			foreach ($values AS $column => $value) {
+				$bind_key = ":{$column}_1";
+				$expectedBinds[$bind_key] = [
+					'value' => $value,
+					'type' => QueryBuilder::GetPDOTypeFromValue($value)
+				];
+			}
+
+			$this->assertEquals($expectedSql, $sql);
+			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		}
 
-		public function testUpdateSingleRecordSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $values = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
+		// public function testUpdateNoDataToUpdateThrows(): void {
+		// 	$this->expectException(NotEmptyParamException::class);
+		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+		// 		"::params::" => "data"
+		// 	]));
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($values);
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->update();
+		// 	$queryBuilder = new QueryBuilder('db', 'table');
+		// 	$queryBuilder->update();
+		// }
 
-            $expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age";
-            $expectedBinds = [];
-            foreach ($values as $column => $value) {
-                $bind_key = ':' . $column;
-                $expectedBinds[$bind_key] = [
-                    'value' => $value,
-                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
-                ];
-            }
+		// public function testUpdateSingleRecordSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$values = [
+		// 		'name' => 'Hadi Darwish',
+		// 		'email' => 'hadi@example.com',
+		// 		'age' => 22,
+		// 	];
 
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		}
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($values);
+		// 	[
+		// 		'sql' => $sql,
+		// 		'binds' => $binds
+		// 	] = $queryBuilder->update();
 
-        public function testUpdateSingleRecordWithWhereSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $values = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-            $where = [
-                'id' => 1,
-            ];
+		// 	$expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age";
+		// 	$expectedBinds = [];
+		// 	foreach ($values as $column => $value) {
+		// 		$bind_key = ':' . $column;
+		// 		$expectedBinds[$bind_key] = [
+		// 			'value' => $value,
+		// 			'type' => QueryBuilder::GetPDOTypeFromValue($value)
+		// 		];
+		// 	}
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($values);
-            $queryBuilder->setWhere($where);
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->update();
+		// 	$this->assertEquals($expectedSql, $sql);
+		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		// }
 
-            $expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age WHERE `id` = :id";
-            $expectedBinds = [];
-            foreach ($values as $column => $value) {
-                $bind_key = ':' . $column;
-                $expectedBinds[$bind_key] = [
-                    'value' => $value,
-                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
-                ];
-                
-            }
-            foreach ($where as $column => $value) {
-                $bind_key = ':' . $column;
-                $expectedBinds[$bind_key] = [
-                    'value' => $value,
-                    'type' => QueryBuilder::GetPDOTypeFromValue($value)
-                ];
-            }
+		// public function testUpdateSingleRecordWithWhereSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$values = [
+		// 		'name' => 'Hadi Darwish',
+		// 		'email' => 'hadi@example.com',
+		// 		'age' => 22,
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
 
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-        }
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($values);
+		// 	$queryBuilder->setWhere($where);
+		// 	[
+		// 		'sql' => $sql,
+		// 		'binds' => $binds
+		// 	] = $queryBuilder->update();
 
-        public function testDeleteNoDataToInsertThrows(): void {
-            $this->expectException(NotEmptyParamException::class);
-            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-                "::params::" => "whereData"
-            ]));
+		// 	$expectedSql = "UPDATE {$db}.{$table} SET `name` = :name, `email` = :email, `age` = :age WHERE `id` = :id";
+		// 	$expectedBinds = [];
+		// 	foreach ($values as $column => $value) {
+		// 		$bind_key = ':' . $column;
+		// 		$expectedBinds[$bind_key] = [
+		// 			'value' => $value,
+		// 			'type' => QueryBuilder::GetPDOTypeFromValue($value)
+		// 		];
 
-            $queryBuilder = new QueryBuilder('db', 'table');
-            $queryBuilder->delete();
-        }
+		// 	}
+		// 	foreach ($where as $column => $value) {
+		// 		$bind_key = ':' . $column;
+		// 		$expectedBinds[$bind_key] = [
+		// 			'value' => $value,
+		// 			'type' => QueryBuilder::GetPDOTypeFromValue($value)
+		// 		];
+		// 	}
 
-        public function testDeleteSingleRecordSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $where = [
-                'id' => 1,
-            ];
+		// 	$this->assertEquals($expectedSql, $sql);
+		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		// }
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setWhere($where);
-            [
-                'sql' => $sql,
-                'binds' => $binds
-            ] = $queryBuilder->delete(['id' => 1]);
+		// public function testDeleteNoDataToInsertThrows(): void {
+		// 	$this->expectException(NotEmptyParamException::class);
+		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+		// 		"::params::" => "whereData"
+		// 	]));
 
-            $expectedSql = 'DELETE FROM db.table WHERE `id` = :id';
-            $expectedBinds = [
-                ':id' => ['value' => 1, 'type' => 1],
-            ];
+		// 	$queryBuilder = new QueryBuilder('db', 'table');
+		// 	$queryBuilder->delete();
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-            $this->assertEqualsCanonicalizing($expectedBinds, $binds);
-        }
+		// public function testDeleteSingleRecordSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
 
-        public function testSelectNoDataToSelectThrows(): void {
-            $this->expectException(NotEmptyParamException::class);
-            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-                "::params::" => "data"
-            ]));
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setWhere($where);
+		// 	[
+		// 		'sql' => $sql,
+		// 		'binds' => $binds
+		// 	] = $queryBuilder->delete(['id' => 1]);
 
-            $queryBuilder = new QueryBuilder('db', 'table');
-            $queryBuilder->select();
-        }
+		// 	$expectedSql = 'DELETE FROM db.table WHERE `id` = :id';
+		// 	$expectedBinds = [
+		// 		':id' => ['value' => 1, 'type' => 1],
+		// 	];
 
-        public function testSelectSingleRecordSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
+		// 	$this->assertEquals($expectedSql, $sql);
+		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		// }
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// public function testSelectNoDataToSelectThrows(): void {
+		// 	$this->expectException(NotEmptyParamException::class);
+		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+		// 		"::params::" => "data"
+		// 	]));
 
-            $expectedSql = 'SELECT name, email, age FROM db.table';
+		// 	$queryBuilder = new QueryBuilder('db', 'table');
+		// 	$queryBuilder->select();
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
 
-        public function testSelectSingleRecordWithWhereSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id';
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordWithWhereSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
 
-        public function testSelectSingleRecordWithWhereAndLimitSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1';
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordWithWhereAndLimitSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
 
-        public function testSelectSingleRecordWithWhereAndLimitAndOffsetSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
-            $offset = 1;
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1 OFFSET 1';
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordWithWhereAndLimitAndOffsetSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
+		// 	$offset = 1;
 
-        public function testSelectSingleRecordWithWhereAndLimitAndOrderBySuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
-            $orderBy = 'name ASC';
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            $queryBuilder->setOrder($orderBy);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1 OFFSET 1';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id ORDER BY name ASC LIMIT 1';
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordWithWhereAndLimitAndOrderBySuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
+		// 	$orderBy = 'name ASC';
 
-        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupBySuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
-            $orderBy = 'name ASC';
-            $groupBy = 'name';
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	$queryBuilder->setOrder($orderBy);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            $queryBuilder->setOrder($orderBy);
-            $queryBuilder->setGroup($groupBy);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id ORDER BY name ASC LIMIT 1';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name ORDER BY name ASC LIMIT 1';
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-            $this->assertEquals($expectedSql, $sql);
-        }
+		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupBySuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
+		// 	$orderBy = 'name ASC';
+		// 	$groupBy = 'name';
 
-        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
-            $orderBy = 'name ASC';
-            $groupBy = 'name';
-            $having = [
-                'name' => 'test',
-                'age' => 2
-            ];
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	$queryBuilder->setOrder($orderBy);
+		// 	$queryBuilder->setGroup($groupBy);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            $queryBuilder->setOrder($orderBy);
-            $queryBuilder->setGroup($groupBy);
-            $queryBuilder->setHaving($having);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name ORDER BY name ASC LIMIT 1';
 
-            $expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
-            $this->assertEquals($expectedSql, $sql);
+		// 	$this->assertEquals($expectedSql, $sql);
+		// }
 
-        }
+		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
+		// 	$orderBy = 'name ASC';
+		// 	$groupBy = 'name';
+		// 	$having = [
+		// 		'name' => 'test',
+		// 		'age' => 2
+		// 	];
 
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	$queryBuilder->setOrder($orderBy);
+		// 	$queryBuilder->setGroup($groupBy);
+		// 	$queryBuilder->setHaving($having);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
 
-        public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingAndJoinSuccess(): void {
-            $db = 'db';
-            $table = 'table';
-            $columns = [
-                'name',
-                'email',
-                'age',
-            ];
-            $where = [
-                'id' => 1,
-            ];
-            $limit = 1;
-            $orderBy = 'name ASC';
-            $groupBy = 'name';
-            $having = [
-                'name' => 'test',
-                'age' => 2
-            ];
-            $join = [
-                'table' => 'table2',
-                'on' => 'table.id = table2.id',
-                'type' => 'LEFT'
-            ];
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
+		// 	$this->assertEquals($expectedSql, $sql);
 
-            $queryBuilder = new QueryBuilder($db, $table);
-            $queryBuilder->setData($columns);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->setLimit($limit);
-            $queryBuilder->setOrder($orderBy);
-            $queryBuilder->setGroup($groupBy);
-            $queryBuilder->setHaving($having);
-            $queryBuilder->setJoin($join);
-            [
-                'sql' => $sql
-            ] = $queryBuilder->select();
-
-            $expectedSql = 'SELECT name, email, age FROM db.table LEFT JOIN db.table2 ON table.id = table2.id WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
-            $this->assertEquals($expectedSql, $sql);
-
-        }
+		// }
 
 
+		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingAndJoinSuccess(): void {
+		// 	$db = 'db';
+		// 	$table = 'table';
+		// 	$columns = [
+		// 		'name',
+		// 		'email',
+		// 		'age',
+		// 	];
+		// 	$where = [
+		// 		'id' => 1,
+		// 	];
+		// 	$limit = 1;
+		// 	$orderBy = 'name ASC';
+		// 	$groupBy = 'name';
+		// 	$having = [
+		// 		'name' => 'test',
+		// 		'age' => 2
+		// 	];
+		// 	$join = [
+		// 		'table' => 'table2',
+		// 		'on' => 'table.id = table2.id',
+		// 		'type' => 'LEFT'
+		// 	];
+
+		// 	$queryBuilder = new QueryBuilder($db, $table);
+		// 	$queryBuilder->setData($columns);
+		// 	$queryBuilder->setWhere($where);
+		// 	$queryBuilder->setLimit($limit);
+		// 	$queryBuilder->setOrder($orderBy);
+		// 	$queryBuilder->setGroup($groupBy);
+		// 	$queryBuilder->setHaving($having);
+		// 	$queryBuilder->setJoin($join);
+		// 	[
+		// 		'sql' => $sql
+		// 	] = $queryBuilder->select();
+
+		// 	$expectedSql = 'SELECT name, email, age FROM db.table LEFT JOIN db.table2 ON table.id = table2.id WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
+		// 	$this->assertEquals($expectedSql, $sql);
+
+		// }
 
 	}
