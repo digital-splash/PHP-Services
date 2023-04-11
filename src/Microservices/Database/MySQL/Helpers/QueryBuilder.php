@@ -84,7 +84,7 @@
 			$this->setBinds([]);
 		}
 
-		public function addBind(string $key, $value) : void {
+		public function appendToBind(string $key, $value) : void {
 			$this->binds[$key] = $value;
 		}
 
@@ -192,7 +192,7 @@
 					'value' => $value,
 					'type' => self::GetPDOTypeFromValue($value)
 				];
-				$this->addBind($bind_key, $bind_arr);
+				$this->appendToBind($bind_key, $bind_arr);
 			}
 
 			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
