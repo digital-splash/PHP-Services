@@ -113,8 +113,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($expected, $queryBuilder->getPDOTypeFromValue($value));
         }
 
-        public function testGetDatabase(
-        ): void {
+        public function testGetDatabase(): void {
             $database = 'db';
             $table = 'table';
 
@@ -122,8 +121,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($database, $queryBuilder->getDatabase());
         }
 
-        public function testGetTable(
-        ): void {
+        public function testGetTable(): void {
             $database = 'db';
             $table = 'table';
 
@@ -131,8 +129,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($table, $queryBuilder->getTable());
         }
 
-        public function testGetSql(
-        ): void {
+        public function testGetSql(): void {
             $database = 'db';
             $table = 'table';
 
@@ -140,8 +137,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals('', $queryBuilder->getSql());
         }
 
-        public function testSetSql(
-        ): void {
+        public function testSetSql(): void {
             $database = 'db';
             $table = 'table';
             $sql = 'SELECT * FROM `db`.`table`';
@@ -151,8 +147,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($sql, $queryBuilder->getSql());
         }
 
-        public function testClearSql(
-        ): void {
+        public function testClearSql(): void {
             $database = 'db';
             $table = 'table';
             $sql = 'SELECT * FROM `db`.`table`';
@@ -163,8 +158,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals('', $queryBuilder->getSql());
         }
 
-        public function testGetBinds(
-        ): void {
+        public function testGetBinds(): void {
             $database = 'db';
             $table = 'table';
 
@@ -172,8 +166,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getBinds());
         }
 
-        public function testSetBinds(
-        ): void {
+        public function testSetBinds(): void {
             $database = 'db';
             $table = 'table';
             $binds = [
@@ -187,8 +180,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($binds, $queryBuilder->getBinds());
         }
 
-        public function testClearBinds(
-        ): void {
+        public function testClearBinds(): void {
             $database = 'db';
             $table = 'table';
             $binds = [
@@ -203,8 +195,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getBinds());
         }
 
-        public function testAppendToBind(
-        ): void {
+        public function testAppendToBind(): void {
             $database = 'db';
             $table = 'table';
             $binds = [
@@ -220,8 +211,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($binds, $queryBuilder->getBinds());
         }
 
-        public function testGetData(
-        ): void {
+        public function testGetData(): void {
             $database = 'db';
             $table = 'table';
 
@@ -229,8 +219,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getData());
         }
 
-        public function testSetData(
-        ): void {
+        public function testSetData(): void {
             $database = 'db';
             $table = 'table';
             $data = [
@@ -244,8 +233,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($data, $queryBuilder->getData());
         }
 
-        public function testClearData(
-        ): void {
+        public function testClearData(): void {
             $database = 'db';
             $table = 'table';
             $data = [
@@ -260,8 +248,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getData());
         }
 
-        public function testAppendToData(
-        ): void {
+        public function testAppendToData(): void {
             $database = 'db';
             $table = 'table';
             $data = [
@@ -277,8 +264,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($data, $queryBuilder->getData());
         }
 
-        public function testGetWhere(
-        ): void {
+        public function testGetWhere(): void {
             $database = 'db';
             $table = 'table';
 
@@ -286,8 +272,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getWhere());
         }
 
-        public function testSetWhere(
-        ): void {
+        public function testSetWhere(): void {
             $database = 'db';
             $table = 'table';
             $where = [
@@ -301,8 +286,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($where, $queryBuilder->getWhere());
         }
 
-        public function testClearWhere(
-        ): void {
+        public function testClearWhere(): void {
             $database = 'db';
             $table = 'table';
             $where = [
@@ -317,8 +301,7 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals([], $queryBuilder->getWhere());
         }
 
-        public function testAppendToWhere(
-        ): void {
+        public function testAppendToWhere(): void {
             $database = 'db';
             $table = 'table';
             $where = [
@@ -332,6 +315,14 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->appendToWhere('address', 'Beirut');
             $where['address'] = 'Beirut';
             $this->assertEquals($where, $queryBuilder->getWhere());
+        }
+
+        public function testGetJoin(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getJoin());
         }
         
 		public function testInsertNoDataToInsertThrows(): void {
