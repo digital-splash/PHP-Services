@@ -464,7 +464,23 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->setHaving($having);
             $queryBuilder->clearHaving();
             $this->assertEquals([], $queryBuilder->getHaving());
-        } 
+        }
+
+        public function testAppendToHaving(): void {
+            $database = 'db';
+            $table = 'table';
+            $having = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setHaving($having);
+            $queryBuilder->appendToHaving('age', 23);
+            $having['age'] = 23;
+            $this->assertEquals($having, $queryBuilder->getHaving());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
