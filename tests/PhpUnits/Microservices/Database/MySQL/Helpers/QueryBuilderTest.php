@@ -551,6 +551,17 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->setLimit($limit);
             $this->assertEquals($limit, $queryBuilder->getLimit());
         }
+
+        public function testClearLimit(): void {
+            $database = 'db';
+            $table = 'table';
+            $limit = 10;
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setLimit($limit);
+            $queryBuilder->clearLimit();
+            $this->assertEquals(0, $queryBuilder->getLimit());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
