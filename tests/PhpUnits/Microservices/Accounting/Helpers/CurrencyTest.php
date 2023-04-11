@@ -9,7 +9,7 @@
 
 	final class CurrencyTest extends TestCase {
 
-		public function AddCurrencySuccessProvider() {
+		public function AddCurrencySuccessProvider(): array {
 			return [
 				"UsdPreWithSpace" => [
 					"$ 10",
@@ -56,7 +56,7 @@
 			Currency::GetLbpAmount("John");
 		}
 
-		public function GetLbpAmountSuccessProvider() {
+		public function GetLbpAmountSuccessProvider(): array {
 			return [
 				[10000, 10000],
 				[10250, 10050.04],

@@ -15,7 +15,7 @@
 
 	final class ValidatorTest extends TestCase {
 
-		public function ValidateEmailThrowErrorProvider() {
+		public function ValidateEmailThrowErrorProvider(): array {
 			return [
 				[
 					InvalidEmailException::class,
@@ -53,7 +53,7 @@
 			Validator::ValidateEmail($argument);
 		}
 
-		public function ValidateEmailSuccessProvider() {
+		public function ValidateEmailSuccessProvider(): array {
 			return [
 				["test_email@hotmail.co"],
 				["test_email@hotmail.com"],
@@ -73,7 +73,7 @@
 			);
 		}
 
-		public function ValidatePhoneNumberThrowErrorProvider() {
+		public function ValidatePhoneNumberThrowErrorProvider(): array {
 			return [
 				[
 					InvalidPhoneNumberException::class,
@@ -101,7 +101,7 @@
 			Validator::ValidatePhoneNumber($argument);
 		}
 
-		public function ValidatePhoneNumberSuccessProvider() {
+		public function ValidatePhoneNumberSuccessProvider(): array {
 			return [
 				["03/333333"],
 				["03-333333"],
@@ -120,7 +120,7 @@
 			);
 		}
 
-		public function ValidateNumberThrowErrorProvider() {
+		public function ValidateNumberThrowErrorProvider(): array {
 			return [
 				[
 					InvalidNumberException::class,

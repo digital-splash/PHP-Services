@@ -869,7 +869,7 @@
 			);
 		}
 
-		public function GetStatusClassFromCodeProvider() {
+		public function GetStatusClassFromCodeProvider(): array {
 			return [
 				[Code::SUCCESS, Status::SUCCESS],
 				[HttpCode::OK, Status::SUCCESS],
