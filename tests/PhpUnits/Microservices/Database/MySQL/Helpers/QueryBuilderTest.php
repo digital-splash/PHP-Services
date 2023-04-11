@@ -4,7 +4,8 @@
 	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
-	use PHPUnit\Framework\TestCase;
+use PDO;
+use PHPUnit\Framework\TestCase;
 
 	class QueryBuilderTest extends TestCase {
 
@@ -25,6 +26,11 @@
                     '',
                     ''
                 ]
+                // ,
+                // 'valid database and table' => [
+                //     'db',
+                //     'table'
+                // ]
             ];
         }
 
@@ -68,6 +74,43 @@
             $queryBuilder = new QueryBuilder($database, $table);
             $this->assertEquals($database, $queryBuilder->getDatabase());
             $this->assertEquals($table, $queryBuilder->getTable());
+        }
+
+        public function GetPDOTypeFromValueProvider(): array {
+            return [
+                'null' => [
+                    null,
+                    PDO::PARAM_STR
+                ],
+                'int' => [
+                    1,
+                    PDO::PARAM_INT
+                ],
+                'string' => [
+                    'string',
+                    PDO::PARAM_STR
+                ],
+                'bool' => [
+                    true,
+                    PDO::PARAM_STR
+                ],
+                'double' => [
+                    1.1,
+                    PDO::PARAM_INT
+                ]
+            ];
+        }
+
+        /**
+         * @dataProvider GetPDOTypeFromValueProvider
+         */
+
+        public function testGetPDOTypeFromValue(
+            $value,
+            int $expected
+        ): void {
+            $queryBuilder = new QueryBuilder('db', 'table');
+            $this->assertEquals($expected, $queryBuilder->getPDOTypeFromValue($value));
         }
 
 		public function testInsertNoDataToInsertThrows(): void {
