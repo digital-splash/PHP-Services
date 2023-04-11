@@ -518,6 +518,21 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearOrder();
             $this->assertEquals([], $queryBuilder->getOrder());
         }
+
+        public function testAppendToOrder(): void {
+            $database = 'db';
+            $table = 'table';
+            $order = [
+                'name' => 'ASC',
+                'email' => 'DESC',
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setOrder($order);
+            $queryBuilder->appendToOrder('age', 'DESC');
+            $order['age'] = 'DESC';
+            $this->assertEquals($order, $queryBuilder->getOrder());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
