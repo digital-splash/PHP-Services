@@ -228,6 +228,21 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder = new QueryBuilder($database, $table);
             $this->assertEquals([], $queryBuilder->getData());
         }
+
+        public function testSetData(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $data = [
+                'name' => 'Hadi Darwish',
+                ':email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setData($data);
+            $this->assertEquals($data, $queryBuilder->getData());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
