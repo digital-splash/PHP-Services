@@ -34,6 +34,16 @@
 			string $database,
 			string $table
 		) {
+
+            //throw error if empty
+            if (Helper::StringNullOrEmpty($database)) {
+                throw new NotEmptyParamException('database');
+            }
+
+            if (Helper::StringNullOrEmpty($table)) {
+                throw new NotEmptyParamException('table');
+            }
+            
 			$this->database = $database;
 			$this->table = $table;
 		}
