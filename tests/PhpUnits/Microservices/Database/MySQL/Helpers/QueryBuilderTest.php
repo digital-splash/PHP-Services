@@ -633,6 +633,39 @@ use PHPUnit\Framework\TestCase;
 			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		}
 
+        public function testInsertInBulk(): void {
+            $db = 'db';
+			$table = 'table';
+            $data = [
+                ['name' => 'John', 'age' => 25],
+                ['name' => 'Jane', 'age' => 30],
+                ['name' => 'Bob', 'age' => 40],
+            ];
+            $queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->setData($data);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->insertInBulk();
+        
+            // Execute function and get result
+        
+            // Check that SQL statement is correctly constructed
+            $expectedSql = "INSERT INTO `db`.`table` (`name`, `age`) VALUES (:name_0, :age_0), (:name_1, :age_1), (:name_2, :age_2)";
+            $this->assertEquals($expectedSql,$sql);
+        
+            // Check that binds are correctly constructed
+            $expectedBinds = [
+                ':name_0' => ['value' => 'John', 'type' => PDO::PARAM_STR],
+                ':age_0' => ['value' => 25, 'type' => PDO::PARAM_INT],
+                ':name_1' => ['value' => 'Jane', 'type' => PDO::PARAM_STR],
+                ':age_1' => ['value' => 30, 'type' => PDO::PARAM_INT],
+                ':name_2' => ['value' => 'Bob', 'type' => PDO::PARAM_STR],
+                ':age_2' => ['value' => 40, 'type' => PDO::PARAM_INT],
+            ];
+            $this->assertEquals($expectedBinds, $binds);
+        }
+
 		// public function testUpdateNoDataToUpdateThrows(): void {
 		// 	$this->expectException(NotEmptyParamException::class);
 		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
