@@ -122,6 +122,15 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals($database, $queryBuilder->getDatabase());
         }
 
+        public function testGetTable(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals($table, $queryBuilder->getTable());
+        }
+
 
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
