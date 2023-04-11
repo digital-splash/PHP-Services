@@ -196,23 +196,37 @@
 			$this->order[$key] = $value;
 		}
 
-		public function getLimit() : string {
+		public function getLimit() : array {
 			return $this->limit;
 		}
 
-		public function setLimit(string $limit) : void {
+		public function setLimit(array $limit) : void {
 			$this->limit = $limit;
 		}
 
-        
+        public function clearLimit() : void {
+            $this->setLimit([]);
+        }
 
-		public function getOffset() : string {
+        public function appendToLimit(string $key, $value) : void {
+            $this->limit[$key] = $value;
+        }
+
+		public function getOffset() : array {
 			return $this->offset;
 		}
 
-		public function setOffset(string $offset) : void {
+		public function setOffset(array $offset) : void {
 			$this->offset = $offset;
 		}
+
+        public function clearOffset() : void {
+            $this->setOffset([]);
+        }
+
+        public function appendToOffset(string $key, $value) : void {
+            $this->offset[$key] = $value;
+        }
 		//END: Getters and Setters
 
 
