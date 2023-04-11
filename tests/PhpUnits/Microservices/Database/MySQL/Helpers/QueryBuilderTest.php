@@ -562,6 +562,14 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearLimit();
             $this->assertEquals(0, $queryBuilder->getLimit());
         }
+
+        public function testGetOffset(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals(0, $queryBuilder->getOffset());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);

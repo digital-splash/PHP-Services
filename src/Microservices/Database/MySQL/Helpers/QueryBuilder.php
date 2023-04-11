@@ -30,7 +30,7 @@
 		protected array $having = [];
 		protected array $order = [];
         protected int $limit = 0;
-        protected array $offset = [];
+        protected int $offset = 0;
 
 		public function __construct(
 			string $database,
@@ -208,20 +208,16 @@
             $this->setLimit(0);
         }
 
-		public function getOffset() : array {
+		public function getOffset() : int {
 			return $this->offset;
 		}
 
-		public function setOffset(array $offset) : void {
+		public function setOffset(int $offset) : void {
 			$this->offset = $offset;
 		}
 
         public function clearOffset() : void {
-            $this->setOffset([]);
-        }
-
-        public function appendToOffset(string $key, $value) : void {
-            $this->offset[$key] = $value;
+            $this->setOffset(0);
         }
 		//END: Getters and Setters
 
