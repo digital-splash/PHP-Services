@@ -163,6 +163,15 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals('', $queryBuilder->getSql());
         }
 
+        public function testGetBinds(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getBinds());
+        }
+
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
