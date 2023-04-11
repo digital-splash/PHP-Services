@@ -235,7 +235,7 @@ use PHPUnit\Framework\TestCase;
             $table = 'table';
             $data = [
                 'name' => 'Hadi Darwish',
-                ':email' => 'hadi@example.com',
+                'email' => 'hadi@example.com',
                 'age' => 22,
             ];
 
@@ -250,7 +250,7 @@ use PHPUnit\Framework\TestCase;
             $table = 'table';
             $data = [
                 'name' => 'Hadi Darwish',
-                ':email' => 'hadi@example.com',
+                'email' => 'hadi@example.com',
                 'age' => 22,
             ];
 
@@ -258,6 +258,23 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->setData($data);
             $queryBuilder->clearData();
             $this->assertEquals([], $queryBuilder->getData());
+        }
+
+        public function testAppendToData(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $data = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setData($data);
+            $queryBuilder->appendToData('address', 'Beirut');
+            $data['address'] = 'Beirut';
+            $this->assertEquals($data, $queryBuilder->getData());
         }
         
 		public function testInsertNoDataToInsertThrows(): void {
