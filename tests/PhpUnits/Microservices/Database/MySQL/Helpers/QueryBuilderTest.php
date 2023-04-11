@@ -61,8 +61,14 @@
             $queryBuilder = new QueryBuilder($database, $table);
         }
 
-       
-    
+        public function testConstructorSuccess(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals($database, $queryBuilder->getDatabase());
+            $this->assertEquals($table, $queryBuilder->getTable());
+        }
 
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
