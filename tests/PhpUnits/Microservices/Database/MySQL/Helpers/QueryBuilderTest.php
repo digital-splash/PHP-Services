@@ -464,7 +464,7 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->setHaving($having);
             $queryBuilder->clearHaving();
             $this->assertEquals([], $queryBuilder->getHaving());
-        }
+        } 
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
