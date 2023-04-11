@@ -219,6 +219,15 @@ use PHPUnit\Framework\TestCase;
             $binds[':address'] = 'Beirut';
             $this->assertEquals($binds, $queryBuilder->getBinds());
         }
+
+        public function testGetData(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getData());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
