@@ -140,6 +140,17 @@ use PHPUnit\Framework\TestCase;
             $this->assertEquals('', $queryBuilder->getSql());
         }
 
+        public function testSetSql(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $sql = 'SELECT * FROM `db`.`table`';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setSql($sql);
+            $this->assertEquals($sql, $queryBuilder->getSql());
+        }
+
 
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);

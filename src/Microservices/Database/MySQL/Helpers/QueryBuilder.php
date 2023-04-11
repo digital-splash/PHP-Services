@@ -76,7 +76,7 @@
 			return $this->sql;
 		}
 
-		protected function setSql(string $sql) : void {
+		public function setSql(string $sql) : void {
 			$this->sql = $sql;
 		}
 
