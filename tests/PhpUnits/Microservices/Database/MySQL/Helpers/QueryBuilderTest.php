@@ -285,6 +285,21 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder = new QueryBuilder($database, $table);
             $this->assertEquals([], $queryBuilder->getWhere());
         }
+
+        public function testSetWhere(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $where = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setWhere($where);
+            $this->assertEquals($where, $queryBuilder->getWhere());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
