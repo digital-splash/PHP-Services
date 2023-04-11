@@ -160,8 +160,8 @@
             $this->setGroup([]);
         }
 
-		public function appendToGroup(string $key, $value) : void {
-			$this->group[$key] = $value;
+		public function appendToGroup($value) : void {
+			$this->group[] = $value;
 		}
 
 		public function getHaving() : array {

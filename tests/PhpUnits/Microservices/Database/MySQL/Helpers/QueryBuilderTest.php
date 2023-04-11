@@ -416,6 +416,18 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearGroup();
             $this->assertEquals([], $queryBuilder->getGroup());
         }
+
+        public function testAppendToGroup(): void {
+            $database = 'db';
+            $table = 'table';
+            $group = ['name', 'email'];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setGroup($group);
+            $queryBuilder->appendToGroup('age');
+            $group[] = 'age';
+            $this->assertEquals($group, $queryBuilder->getGroup());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
