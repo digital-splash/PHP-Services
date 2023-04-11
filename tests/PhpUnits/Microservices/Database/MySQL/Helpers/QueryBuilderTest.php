@@ -481,6 +481,14 @@ use PHPUnit\Framework\TestCase;
             $having['age'] = 23;
             $this->assertEquals($having, $queryBuilder->getHaving());
         }
+
+        public function testGetOrder(): void {
+            $database = 'db';
+            $table = 'table';
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $this->assertEquals([], $queryBuilder->getOrder());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
