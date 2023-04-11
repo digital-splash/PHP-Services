@@ -255,6 +255,48 @@
 			];
 		}
 
+        //make insert in bulk
+
+        public function insertInBulk(): array {
+            if (empty($this->data)) {
+                throw new NotEmptyParamException('data');
+            }
+        
+            $columns = [];
+            $this->clearBinds();
+            $rows= [];
+            $i = 0;
+            foreach ($this->data as $row) {
+                $rowColumns = [];
+                foreach ($row as $column => $value) {
+                    if (!in_array("`{$column}`", $columns)) {
+                        $columns[] = "`{$column}`";
+                    }
+                    $bind_key = ":{$column}_{$i}";
+                    $bind_arr = [
+                        'value' => $value,
+                        'type' => self::GetPDOTypeFromValue($value)
+                    ];
+                    $this->appendToBind($bind_key, $bind_arr);
+                    $rowColumns[] = $bind_key;
+                }
+                $rows[] = '(' . implode(', ', $rowColumns) . ')';
+                $i++;
+            }
+        
+            $columnsStr = Helper::ImplodeArrToStr($columns, ', ');
+            $rowsStr = implode(', ', $rows);
+        
+            $sql = "INSERT INTO `{$this->database}`.`{$this->table}` ($columnsStr) VALUES $rowsStr";
+            $this->setSql($sql);
+        
+            return [
+                self::SQL => $this->getSql(),
+                self::BINDS => $this->getBinds()
+            ];
+        }
+
+
 		// public function update(): array {
 		// 	if (Helper::ArrayNullOrEmpty($this->data)) {
 		// 		throw new NotEmptyParamException('data');
