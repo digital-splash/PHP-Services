@@ -21,14 +21,16 @@
 		protected string $group_str = '';
 		protected string $having_str = '';
 		protected string $order_str = '';
-		protected string $limit = '';
-		protected string $offset = '';
+		protected string $limit_str = '';
+		protected string $offset_str = '';
 
 		protected array $where = [];
 		protected array $join = [];
 		protected array $group = [];
 		protected array $having = [];
 		protected array $order = [];
+        protected array $limit = [];
+        protected array $offset = [];
 
 		public function __construct(
 			string $database,
@@ -106,6 +108,14 @@
 			$this->data = $data;
 		}
 
+        public function clearData() : void {
+            $this->setData([]);
+        }
+
+        public function appendToData(string $key, $value) : void {
+            $this->data[$key] = $value;
+        }
+
 		public function getWhere() : array {
 			return $this->where;
 		}
@@ -114,6 +124,10 @@
 			$this->where = $where;
 		}
 
+        public function clearWhere() : void {
+            $this->setWhere([]);
+        }
+        
 		public function appendToWhere(string $key, $value) : void {
 			$this->where[$key] = $value;
 		}
@@ -126,6 +140,10 @@
 			$this->join = $join;
 		}
 
+        public function clearJoin() : void {
+            $this->setJoin([]);
+        }
+        
 		public function appendToJoin(string $key, $value) : void {
 			$this->where[$key] = $value;
 		}
@@ -137,6 +155,10 @@
 		public function setGroup(array $group) : void {
 			$this->group = $group;
 		}
+
+        public function clearGroup() : void {
+            $this->setGroup([]);
+        }
 
 		public function appendToGroup(string $key, $value) : void {
 			$this->group[$key] = $value;
@@ -150,6 +172,10 @@
 			$this->having = $having;
 		}
 
+        public function clearHaving() : void {
+            $this->setHaving([]);
+        }
+
 		public function appendToHaving(string $key, $value) : void {
 			$this->having[$key] = $value;
 		}
@@ -162,6 +188,10 @@
 			$this->order = $order;
 		}
 
+        public function clearOrder() : void {
+            $this->setOrder([]);
+        }
+
 		public function appendToOrder(string $key, $value) : void {
 			$this->order[$key] = $value;
 		}
@@ -173,6 +203,8 @@
 		public function setLimit(string $limit) : void {
 			$this->limit = $limit;
 		}
+
+        
 
 		public function getOffset() : string {
 			return $this->offset;
