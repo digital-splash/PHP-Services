@@ -145,7 +145,7 @@
         }
         
 		public function appendToJoin(string $key, $value) : void {
-			$this->where[$key] = $value;
+			$this->join[$key] = $value;
 		}
 
 		public function getGroup() : array {

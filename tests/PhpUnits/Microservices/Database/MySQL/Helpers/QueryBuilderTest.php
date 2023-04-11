@@ -363,6 +363,30 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->clearJoin();
             $this->assertEquals([], $queryBuilder->getJoin());
         }
+
+        public function testAppendToJoin(): void {
+            $database = 'db';
+            $table = 'table';
+            $join = [
+                'table1' => [
+                    'type' => 'LEFT',
+                    'on' => ['table1.id' => 'table.id']
+                ],
+                'table2' => [
+                    'type' => 'RIGHT',
+                    'on' => ['table2.id' => 'table.id']
+                ]
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setJoin($join);
+            $queryBuilder->appendToJoin('table3',  ['type' =>'INNER','on' => ['table3.id' => 'table.id']]);
+            $join['table3'] = [
+                'type' => 'INNER',
+                'on' => ['table3.id' => 'table.id']
+            ];
+            $this->assertEquals($join, $queryBuilder->getJoin());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
