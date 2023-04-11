@@ -300,6 +300,22 @@ use PHPUnit\Framework\TestCase;
             $queryBuilder->setWhere($where);
             $this->assertEquals($where, $queryBuilder->getWhere());
         }
+
+        public function testClearWhere(
+        ): void {
+            $database = 'db';
+            $table = 'table';
+            $where = [
+                'name' => 'Hadi Darwish',
+                'email' => 'hadi@example.com',
+                'age' => 22,
+            ];
+
+            $queryBuilder = new QueryBuilder($database, $table);
+            $queryBuilder->setWhere($where);
+            $queryBuilder->clearWhere();
+            $this->assertEquals([], $queryBuilder->getWhere());
+        }
         
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
