@@ -1201,6 +1201,32 @@
 			
 		}
 
+		public function getLimitStatementProvider() : array {
+			return [
+				'empty limit' => [
+					'limit' => 0,
+					'expectedSql' => '',
+				],
+				'limit with' => [
+					'limit' => 1,
+					'expectedSql' => ' LIMIT 1',
+				],
+			];
+						
+		}
+
+		/**
+		 * @dataProvider getLimitStatementProvider
+		 */
+		public function testGetLimitStatementSuccess(int $limit, string $expectedSql) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setLimit($limit);
+			$queryBuilder->getLimitStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getLimitStr());
+			
+		}
+
 
 		
 	}
