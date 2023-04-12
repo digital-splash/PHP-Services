@@ -1343,5 +1343,35 @@
 			
 		}
 
+		public function getGroupByStatementProvider() : array {
+			return [
+				'empty group by' => [
+					'groupBy' => [],
+					'expectedSql' => '',
+				],
+				'group by with one column' => [
+					'groupBy' => ['name'],
+					'expectedSql' => ' GROUP BY name',
+				],
+				'group by with many columns' => [
+					'groupBy' => ['name', 'age'],
+					'expectedSql' => ' GROUP BY name, age',
+				],
+			];
+								
+		}
+
+		/**
+		 * @dataProvider getGroupByStatementProvider
+		 */
+		public function testGetGroupByStatementSuccess(array $groupBy, string $expectedSql) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setGroup($groupBy);
+			$queryBuilder->getGroupByStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getGroupStr());
+			
+		}
+
 		
 	}
