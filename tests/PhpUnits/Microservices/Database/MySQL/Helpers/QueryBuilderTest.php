@@ -630,6 +630,35 @@
 			$queryBuilder->clearOrderStr();
 			$this->assertEquals('', $queryBuilder->getOrderStr());
 		}
+
+		public function testGetLimitStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getLimitStr());
+		}
+
+		public function testSetLimitStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$limitStr = ' LIMIT 10';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setLimitStr($limitStr);
+			$this->assertEquals($limitStr, $queryBuilder->getLimitStr());
+		}
+
+		public function testClearLimitStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$limitStr = ' LIMIT 10';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setLimitStr($limitStr);
+			$queryBuilder->clearLimitStr();
+			$this->assertEquals('', $queryBuilder->getLimitStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
