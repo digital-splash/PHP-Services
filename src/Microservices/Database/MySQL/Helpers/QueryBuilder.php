@@ -243,6 +243,18 @@
 		public function clearJoinStr() : void {
 			$this->setJoinStr('');
 		}
+
+		public function getOrderStr() : string {
+			return $this->order_str;
+		}
+
+		public function setOrderStr(string $order_str) : void {
+			$this->order_str = $order_str;
+		}
+
+		public function clearOrderStr() : void {
+			$this->setOrderStr('');
+		}
 		//END: Getters and Setters
 
 		public function insert(): array {
