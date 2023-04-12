@@ -355,31 +355,34 @@
 
 
 
-		// protected function getWhereStatement(): void {
-		// 	if (!Helper::ArrayNullOrEmpty($this->whereData)) {
-		// 		$whereStr = '';
-		// 		$binds = [];
-		// 		foreach ($this->whereData AS $column => $value) {
-		// 			$whereStr .= "`{$column}` = :{$column} AND ";
-		// 			$bind_key = ':' . $column;
+		public function getWhereStatement(): void {
+			if (!Helper::ArrayNullOrEmpty($this->where)) {
+				$whereStr = '';
+				foreach ($this->where AS $column => $value) {
+					$whereStr .= "`{$column}` = :{$column} AND ";
+					$bind_key = ':' . $column;
 
-		// 			$binds[$bind_key] = [
-		// 				'value' => $value,
-		// 				'type' => self::GetPDOTypeFromValue($value)
-		// 			];
-		// 		}
-		// 		$whereStr = rtrim($whereStr, ' AND ');
-		// 		$this->where = " WHERE $whereStr";
-		// 		$this->_binds = $binds;
+                    $this->appendToBind(
+                            $bind_key,
+                            [
+                                'value' => $value,
+                                'type' => self::GetPDOTypeFromValue($value)
+                            ]
+                        );
 
-		// 	} else {
-		// 		$this->where = '';
-		// 		$this->_binds = [];
-		// 	}
+					$binds[$bind_key] = [
+						'value' => $value,
+						'type' => self::GetPDOTypeFromValue($value)
+					];
+				}
+				$whereStr = rtrim($whereStr, ' AND ');
+				$this->where_str = " WHERE $whereStr";
 
-		// 	// return [self::BINDS => $this->_binds];
+			} else {
+				$this->where_str = '';
+			}
 
-		// }
+		}
 
 		// public function getJoinStatement(): void {
 		// 	if (!Helper::ArrayNullOrEmpty($this->joinValues)) {
