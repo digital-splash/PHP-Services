@@ -572,6 +572,35 @@
 			$queryBuilder->clearWhereStr();
 			$this->assertEquals('', $queryBuilder->getWhereStr());
 		}
+
+		public function testGetJoinStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getJoinStr());
+		}
+
+		public function testSetJoinStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$joinStr = ' JOIN table2 ON table.id = table2.id';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setJoinStr($joinStr);
+			$this->assertEquals($joinStr, $queryBuilder->getJoinStr());
+		}
+
+		public function testClearJoinStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$joinStr = ' JOIN table2 ON table.id = table2.id';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setJoinStr($joinStr);
+			$queryBuilder->clearJoinStr();
+			$this->assertEquals('', $queryBuilder->getJoinStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
