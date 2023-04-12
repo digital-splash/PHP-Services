@@ -224,7 +224,7 @@
             return $this->where_str;
         }
 
-        protected function setWhereStr(string $where_str) : void {
+        public function setWhereStr(string $where_str) : void {
             $this->where_str = $where_str;
         }
 

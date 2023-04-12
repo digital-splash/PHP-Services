@@ -543,6 +543,35 @@
 			$queryBuilder->clearOffset();
 			$this->assertEquals(0, $queryBuilder->getOffset());
 		}
+
+		public function testGetWhereStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getWhereStr());
+		}
+
+		public function testSetWhereStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$whereStr = ' WHERE name = Hadi Darwish';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setWhereStr($whereStr);
+			$this->assertEquals($whereStr, $queryBuilder->getWhereStr());
+		}
+
+		public function testClearWhereStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$whereStr = ' WHERE name = Hadi Darwish';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setWhereStr($whereStr);
+			$queryBuilder->clearWhereStr();
+			$this->assertEquals('', $queryBuilder->getWhereStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
