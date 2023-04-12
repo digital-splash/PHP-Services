@@ -458,29 +458,15 @@
 			}
 		}
 
-		// public function getHavingStatement(): void {
+		public function getHavingStatement(): void {
+			if (!Helper::ArrayNullOrEmpty($this->having)) {
+				$havingStr = Helper::ImplodeArrToStr($this->having, ', ');
+				$this->having_str = " HAVING $havingStr";
+			} else {
+				$this->having_str = '';
+			}
 
-		// 	if (!Helper::ArrayNullOrEmpty($this->havingValues)) {
-		// 		$havingStr = '';
-		// 		$binds = [];
-		// 		foreach ($this->havingValues AS $column => $value) {
-		// 			$havingStr .= "`{$column}` = :{$column} AND ";
-		// 			$bind_key = ':' . $column;
-
-		// 			$binds[$bind_key] = [
-		// 				'value' => $value,
-		// 				'type' => self::GetPDOTypeFromValue($value)
-		// 			];
-		// 		}
-		// 		$havingStr = rtrim($havingStr, ' AND ');
-		// 		$this->having = " HAVING $havingStr";
-		// 		$this->_binds = array_merge($this->_binds, $binds);
-
-		// 	} else {
-		// 		$this->having = '';
-		// 	}
-
-		// }
+		}
 
 		// public function getSuffixStatement(): string {
 		// 	if (!empty($this->suffix)) {
