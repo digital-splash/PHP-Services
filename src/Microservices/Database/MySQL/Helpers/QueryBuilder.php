@@ -472,8 +472,27 @@
 
 		public function getHavingStatement(): void {
 			if (!Helper::ArrayNullOrEmpty($this->having)) {
-				$havingStr = Helper::ImplodeArrToStr($this->having, ', ');
-				$this->having_str = " HAVING $havingStr";
+				$havingStr = '';
+				foreach ($this->having AS $column => $value) {
+					$havingStr .= "`{$column}` = :{$column} AND ";
+					$bind_key = ':' . $column;
+
+					$this->appendToBind(
+							$bind_key,
+							[
+								'value' => $value,
+								'type' => self::GetPDOTypeFromValue($value)
+							]
+						);
+
+					$binds[$bind_key] = [
+						'value' => $value,
+						'type' => self::GetPDOTypeFromValue($value)
+					];
+				}
+				$whereStr = rtrim($havingStr, ' AND ');
+				$this->where_str = " HAVING $havingStr";
+
 			} else {
 				$this->having_str = '';
 			}
