@@ -438,14 +438,13 @@
 			}
 		}
 
-		// public function getLimitStatement(): void {
-		// 	if (!empty($this->limit)) {
-		// 		$this->limit = " LIMIT $this->limit";
-		// 	} else {
-		// 		$this->limit = '';
-		// 	}
-
-		// }
+		public function getLimitStatement(): void {
+			if ($this->limit) {
+				$this->limit_str = " LIMIT $this->limit";
+			} else {
+				$this->limit_str = '';
+			}
+		}
 
 		// public function getHavingStatement(): void {
 
