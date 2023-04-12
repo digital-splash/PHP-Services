@@ -688,6 +688,35 @@
 			$queryBuilder->clearHavingStr();
 			$this->assertEquals('', $queryBuilder->getHavingStr());
 		}
+
+		public function testGetGroupByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getGroupStr());
+		}
+
+		public function testSetGroupByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$groupStr = ' GROUP BY name';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setGroupStr($groupStr);
+			$this->assertEquals($groupStr, $queryBuilder->getGroupStr());
+		}
+
+		public function testClearGroupByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$groupStr = ' GROUP BY name';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setGroupStr($groupStr);
+			$queryBuilder->clearGroupStr();
+			$this->assertEquals('', $queryBuilder->getGroupStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
