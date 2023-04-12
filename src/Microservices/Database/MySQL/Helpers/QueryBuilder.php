@@ -498,25 +498,13 @@
 			}
 
 		}
-
-		// public function getSuffixStatement(): string {
-		// 	if (!empty($this->suffix)) {
-		// 		$this->suffix = " $this->suffix";
-		// 	} else {
-		// 		$this->suffix = '';
-		// 	}
-
-		// 	return $this->suffix;
-		// }
-
-		// public function getGroupByStatement(): string {
-		// 	if (!empty($this->group)) {
-		// 		$this->group = " GROUP BY $this->group";
-		// 	} else {
-		// 		$this->group = '';
-		// 	}
-
-		// 	return $this->group;
-		// }
+		public function getGroupByStatement(): void {
+			if (!Helper::ArrayNullOrEmpty($this->group)) {
+				$groupStr = Helper::ImplodeArrToStr($this->group, ', ');
+				$this->group_str = " GROUP BY $groupStr";
+			} else {
+				$this->group_str = '';
+			}
+		}
 
 	}
