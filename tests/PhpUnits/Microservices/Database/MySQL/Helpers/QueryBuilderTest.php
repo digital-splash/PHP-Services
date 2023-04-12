@@ -1256,6 +1256,63 @@
 			
 		}
 
+		public function getHavingStatementProvider() : array {
+			return [
+				'empty having' => [
+					'having' => [],
+					'expectedSql' => '',
+					'expectedBinds' => []
+				],
+				'having with one column' => [
+					'having' => [
+						'id' => 1
+					],
+					'expectedSql' => ' HAVING `id` = :id',
+					'expectedBinds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						]
+					]
+				],
+				'having with many columns' => [
+					'having' => [
+						'id' => 1,
+						'name' => 'test',
+						'age' => 2
+					],
+					'expectedSql' => ' HAVING `id` = :id AND `name` = :name AND `age` = :age',
+					'expectedBinds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'test',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 2,
+							'type' => 1
+						]
+					]
+				],
+			];
+								
+		}
+
+		/**
+		 * @dataProvider getHavingStatementProvider
+		 */
+		public function testGetHavingStatementSuccess(array $having, string $expectedSql, array $expectedBinds) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setHaving($having);
+			$queryBuilder->getHavingStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getHavingStr());
+			$this->assertEquals($expectedBinds, $queryBuilder->getBinds());
+			
+		}
 
 		
 	}

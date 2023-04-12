@@ -490,8 +490,8 @@
 						'type' => self::GetPDOTypeFromValue($value)
 					];
 				}
-				$whereStr = rtrim($havingStr, ' AND ');
-				$this->where_str = " HAVING $havingStr";
+				$havingStr = rtrim($havingStr, ' AND ');
+				$this->having_str = " HAVING $havingStr";
 
 			} else {
 				$this->having_str = '';
