@@ -279,6 +279,18 @@
 		public function clearHavingStr() : void {
 			$this->setHavingStr('');
 		}
+
+		public function getGroupStr() : string {
+			return $this->group_str;
+		}
+
+		public function setGroupStr(string $group_str) : void {
+			$this->group_str = $group_str;
+		}
+
+		public function clearGroupStr() : void {
+			$this->setGroupStr('');
+		}
 		//END: Getters and Setters
 
 		public function insert(): array {
