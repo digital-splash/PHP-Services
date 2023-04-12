@@ -601,6 +601,35 @@
 			$queryBuilder->clearJoinStr();
 			$this->assertEquals('', $queryBuilder->getJoinStr());
 		}
+
+		public function testGetOrderByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getOrderStr());
+		}
+
+		public function testSetOrderByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$orderStr = ' ORDER BY name ASC';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOrderStr($orderStr);
+			$this->assertEquals($orderStr, $queryBuilder->getOrderStr());
+		}
+
+		public function testClearOrderByStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$orderStr = ' ORDER BY name ASC';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOrderStr($orderStr);
+			$queryBuilder->clearOrderStr();
+			$this->assertEquals('', $queryBuilder->getOrderStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
