@@ -29,23 +29,23 @@
 		protected array $group = [];
 		protected array $having = [];
 		protected array $order = [];
-        protected int $limit = 0;
-        protected int $offset = 0;
+		protected int $limit = 0;
+		protected int $offset = 0;
 
 		public function __construct(
 			string $database,
 			string $table
 		) {
 
-            //throw error if empty
-            if (Helper::StringNullOrEmpty($database)) {
-                throw new NotEmptyParamException('database');
-            }
+			//throw error if empty
+			if (Helper::StringNullOrEmpty($database)) {
+				throw new NotEmptyParamException('database');
+			}
 
-            if (Helper::StringNullOrEmpty($table)) {
-                throw new NotEmptyParamException('table');
-            }
-            
+			if (Helper::StringNullOrEmpty($table)) {
+				throw new NotEmptyParamException('table');
+			}
+			
 			$this->database = $database;
 			$this->table = $table;
 		}
@@ -108,13 +108,13 @@
 			$this->data = $data;
 		}
 
-        public function clearData() : void {
-            $this->setData([]);
-        }
+		public function clearData() : void {
+			$this->setData([]);
+		}
 
-        public function appendToData(string $key, $value) : void {
-            $this->data[$key] = $value;
-        }
+		public function appendToData(string $key, $value) : void {
+			$this->data[$key] = $value;
+		}
 
 		public function getWhere() : array {
 			return $this->where;
@@ -124,10 +124,10 @@
 			$this->where = $where;
 		}
 
-        public function clearWhere() : void {
-            $this->setWhere([]);
-        }
-        
+		public function clearWhere() : void {
+			$this->setWhere([]);
+		}
+		
 		public function appendToWhere(string $key, $value) : void {
 			$this->where[$key] = $value;
 		}
@@ -140,10 +140,10 @@
 			$this->join = $join;
 		}
 
-        public function clearJoin() : void {
-            $this->setJoin([]);
-        }
-        
+		public function clearJoin() : void {
+			$this->setJoin([]);
+		}
+		
 		public function appendToJoin(string $value) : void {
 			$this->join[] = $value;
 		}
@@ -156,9 +156,9 @@
 			$this->group = $group;
 		}
 
-        public function clearGroup() : void {
-            $this->setGroup([]);
-        }
+		public function clearGroup() : void {
+			$this->setGroup([]);
+		}
 
 		public function appendToGroup(string $value) : void {
 			$this->group[] = $value;
@@ -172,9 +172,9 @@
 			$this->having = $having;
 		}
 
-        public function clearHaving() : void {
-            $this->setHaving([]);
-        }
+		public function clearHaving() : void {
+			$this->setHaving([]);
+		}
 
 		public function appendToHaving(string $value) : void {
 			$this->having[] = $value;
@@ -188,9 +188,9 @@
 			$this->order = $order;
 		}
 
-        public function clearOrder() : void {
-            $this->setOrder([]);
-        }
+		public function clearOrder() : void {
+			$this->setOrder([]);
+		}
 
 		public function appendToOrder(string $value) : void {
 			$this->order[] = $value;
@@ -204,9 +204,9 @@
 			$this->limit = $limit;
 		}
 
-        public function clearLimit() : void {
-            $this->setLimit(0);
-        }
+		public function clearLimit() : void {
+			$this->setLimit(0);
+		}
 
 		public function getOffset() : int {
 			return $this->offset;
@@ -216,73 +216,73 @@
 			$this->offset = $offset;
 		}
 
-        public function clearOffset() : void {
-            $this->setOffset(0);
-        }
+		public function clearOffset() : void {
+			$this->setOffset(0);
+		}
 
-        public function getWhereStr() : string {
-            return $this->where_str;
-        }
+		public function getWhereStr() : string {
+			return $this->where_str;
+		}
 
-        public function setWhereStr(string $where_str) : void {
-            $this->where_str = $where_str;
-        }
+		public function setWhereStr(string $where_str) : void {
+			$this->where_str = $where_str;
+		}
 
-        public function clearWhereStr() : void {
-            $this->setWhereStr('');
-        }
+		public function clearWhereStr() : void {
+			$this->setWhereStr('');
+		}
 
-        public function getJoinStr() : string {
-            return $this->join_str;
-        }
+		public function getJoinStr() : string {
+			return $this->join_str;
+		}
 
-        public function setJoinStr(string $join_str) : void {
-            $this->join_str = $join_str;
-        }
+		public function setJoinStr(string $join_str) : void {
+			$this->join_str = $join_str;
+		}
 
-        public function clearJoinStr() : void {
-            $this->setJoinStr('');
-        }
+		public function clearJoinStr() : void {
+			$this->setJoinStr('');
+		}
 		//END: Getters and Setters
 
-        public function insert(): array {
-            if (Helper::ArrayNullOrEmpty($this->data)) {
+		public function insert(): array {
+			if (Helper::ArrayNullOrEmpty($this->data)) {
 				throw new NotEmptyParamException('data');
 			}
-        
-            $columns = [];
-            $this->clearBinds();
-            $rows= [];
-            $i = 1;
-            foreach ($this->data as $row) {
-                $rowColumns = [];
-                foreach ($row as $column => $value) {
-                    if (!in_array("`{$column}`", $columns)) {
-                        $columns[] = "`{$column}`";
-                    }
-                    $bind_key = ":{$column}_{$i}";
-                    $bind_arr = [
-                        'value' => $value,
-                        'type' => self::GetPDOTypeFromValue($value)
-                    ];
-                    $this->appendToBind($bind_key, $bind_arr);
-                    $rowColumns[] = $bind_key;
-                }
-                $rows[] = '(' . implode(', ', $rowColumns) . ')';
-                $i++;
-            }
-        
-            $columnsStr = Helper::ImplodeArrToStr($columns, ', ');
-            $rowsStr = implode(', ', $rows);
-        
-            $sql = "INSERT INTO `{$this->database}`.`{$this->table}` ($columnsStr) VALUES $rowsStr";
-            $this->setSql($sql);
-        
-            return [
-                self::SQL => $this->getSql(),
-                self::BINDS => $this->getBinds()
-            ];
-        }
+		
+			$columns = [];
+			$this->clearBinds();
+			$rows= [];
+			$i = 1;
+			foreach ($this->data as $row) {
+				$rowColumns = [];
+				foreach ($row as $column => $value) {
+					if (!in_array("`{$column}`", $columns)) {
+						$columns[] = "`{$column}`";
+					}
+					$bind_key = ":{$column}_{$i}";
+					$bind_arr = [
+						'value' => $value,
+						'type' => self::GetPDOTypeFromValue($value)
+					];
+					$this->appendToBind($bind_key, $bind_arr);
+					$rowColumns[] = $bind_key;
+				}
+				$rows[] = '(' . implode(', ', $rowColumns) . ')';
+				$i++;
+			}
+		
+			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
+			$rowsStr = implode(', ', $rows);
+		
+			$sql = "INSERT INTO `{$this->database}`.`{$this->table}` ($columnsStr) VALUES $rowsStr";
+			$this->setSql($sql);
+		
+			return [
+				self::SQL => $this->getSql(),
+				self::BINDS => $this->getBinds()
+			];
+		}
 
 
 		// public function update(): array {
@@ -386,13 +386,13 @@
 					$whereStr .= "`{$column}` = :{$column} AND ";
 					$bind_key = ':' . $column;
 
-                    $this->appendToBind(
-                            $bind_key,
-                            [
-                                'value' => $value,
-                                'type' => self::GetPDOTypeFromValue($value)
-                            ]
-                        );
+					$this->appendToBind(
+							$bind_key,
+							[
+								'value' => $value,
+								'type' => self::GetPDOTypeFromValue($value)
+							]
+						);
 
 					$binds[$bind_key] = [
 						'value' => $value,
@@ -410,22 +410,21 @@
 
 		public function getJoinStatement(): void {
 			if (!Helper::ArrayNullOrEmpty($this->join)) {
-                $joinStr = Helper::ImplodeArrToStr($this->join , ', ');
-                $this->join_str = $joinStr;
-            } else {
-                $this->join_str = '';
-            }
+				$joinStr = Helper::ImplodeArrToStr($this->join , ', ');
+				$this->join_str = $joinStr;
+			} else {
+				$this->join_str = '';
+			}
 		}
 
-		// public function getOrderByStatement(): string {
-		// 	if (!empty($this->order)) {
-		// 		$this->order = " ORDER BY $this->order";
-		// 	} else {
-		// 		$this->order = '';
-		// 	}
-
-		// 	return $this->order;
-		// }
+		public function getOrderByStatement(): void {
+			if (!Helper::ArrayNullOrEmpty($this->order)) {
+				$orderStr = Helper::ImplodeArrToStr($this->order, ', ');
+				$this->order_str = " ORDER BY $orderStr";
+			} else {
+				$this->order_str = '';
+			}
+		}
 
 		// public function getLimitStatement(): void {
 		// 	if (!empty($this->limit)) {
