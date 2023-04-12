@@ -659,6 +659,35 @@
 			$queryBuilder->clearLimitStr();
 			$this->assertEquals('', $queryBuilder->getLimitStr());
 		}
+
+		public function testGetHavingStr() : void {
+			$database = 'db';
+			$table = 'table';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getHavingStr());
+		}
+
+		public function testSetHavingStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$havingStr = ' HAVING name = Hadi Darwish';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setHavingStr($havingStr);
+			$this->assertEquals($havingStr, $queryBuilder->getHavingStr());
+		}
+
+		public function testClearHavingStr() : void {
+			$database = 'db';
+			$table = 'table';
+			$havingStr = ' HAVING name = Hadi Darwish';
+			
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setHavingStr($havingStr);
+			$queryBuilder->clearHavingStr();
+			$this->assertEquals('', $queryBuilder->getHavingStr());
+		}
 		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
