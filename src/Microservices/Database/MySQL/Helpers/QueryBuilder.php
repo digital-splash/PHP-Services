@@ -410,7 +410,7 @@
 
 		public function getJoinStatement(): void {
 			if (!Helper::ArrayNullOrEmpty($this->join)) {
-                $joinStr = Helper::ImplodeArrToStr($this->join , ' ,');
+                $joinStr = Helper::ImplodeArrToStr($this->join , ', ');
                 $this->join_str = $joinStr;
             } else {
                 $this->join_str = '';

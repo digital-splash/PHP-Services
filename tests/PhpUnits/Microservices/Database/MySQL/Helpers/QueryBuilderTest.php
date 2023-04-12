@@ -1080,4 +1080,38 @@
 			
 		}
 
+		public function getJoinStatementProvider() : array {
+			return [
+				'empty join' => [
+					'join' => [],
+					'expectedSql' => '',
+				],
+				'join with one column' => [
+					['LEFT JOIN db.table2 ON table.id = table2.id'],
+					'expectedSql' => 'LEFT JOIN db.table2 ON table.id = table2.id',
+				],
+				'join with many columns' => [
+					'join' => [
+						'LEFT JOIN db.table2 ON table.id = table2.id',
+						'RIGHT JOIN db.table3 ON table.id = table3.id',
+					],
+					'expectedSql' => 'LEFT JOIN db.table2 ON table.id = table2.id, RIGHT JOIN db.table3 ON table.id = table3.id',
+				],
+			];
+					
+		}
+
+		/**
+		 * @dataProvider getJoinStatementProvider
+		 */
+		public function testGetJoinStatementSuccess(array $join, string $expectedSql) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setJoin($join);
+			$queryBuilder->getJoinStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getJoinStr());
+			
+		}
+
+
 	}
