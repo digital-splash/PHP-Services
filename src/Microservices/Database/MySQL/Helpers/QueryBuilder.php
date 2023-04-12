@@ -219,6 +219,18 @@
         public function clearOffset() : void {
             $this->setOffset(0);
         }
+
+        public function getWhereStr() : string {
+            return $this->where_str;
+        }
+
+        protected function setWhereStr(string $where_str) : void {
+            $this->where_str = $where_str;
+        }
+
+        public function clearWhereStr() : void {
+            $this->setWhereStr('');
+        }
 		//END: Getters and Setters
 
         public function insert(): array {
