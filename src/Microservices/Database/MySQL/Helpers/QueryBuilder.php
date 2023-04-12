@@ -396,17 +396,14 @@
 
 		}
 
-		// public function getJoinStatement(): void {
-		// 	if (!Helper::ArrayNullOrEmpty($this->joinValues)) {
-		// 		$joinStr = '';
-		// 		foreach ($this->joinValues as $joinData) {
-		// 			$joinStr .= " {$joinData['type']} JOIN {$joinData['table']} ON {$joinData['on']}";
-		// 		}
-		// 		$this->join = $joinStr;
-		// 	} else {
-		// 		$this->join = '';
-		// 	}
-		// }
+		public function getJoinStatement(): void {
+			if (!Helper::ArrayNullOrEmpty($this->join)) {
+                $joinStr = Helper::ImplodeArrToStr($this->join , ' ,');
+                $this->join_str = $joinStr;
+            } else {
+                $this->join_str = '';
+            }
+		}
 
 		// public function getOrderByStatement(): string {
 		// 	if (!empty($this->order)) {
