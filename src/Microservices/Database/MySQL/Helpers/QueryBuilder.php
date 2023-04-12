@@ -144,8 +144,8 @@
             $this->setJoin([]);
         }
         
-		public function appendToJoin(string $key, $value) : void {
-			$this->join[$key] = $value;
+		public function appendToJoin(string $value) : void {
+			$this->join[] = $value;
 		}
 
 		public function getGroup() : array {
@@ -160,7 +160,7 @@
             $this->setGroup([]);
         }
 
-		public function appendToGroup($value) : void {
+		public function appendToGroup(string $value) : void {
 			$this->group[] = $value;
 		}
 
@@ -176,8 +176,8 @@
             $this->setHaving([]);
         }
 
-		public function appendToHaving(string $key, $value) : void {
-			$this->having[$key] = $value;
+		public function appendToHaving(string $value) : void {
+			$this->having[] = $value;
 		}
 
 		public function getOrder() : array {
@@ -192,8 +192,8 @@
             $this->setOrder([]);
         }
 
-		public function appendToOrder(string $key, $value) : void {
-			$this->order[$key] = $value;
+		public function appendToOrder(string $value) : void {
+			$this->order[] = $value;
 		}
 
 		public function getLimit() : int {
@@ -220,7 +220,6 @@
             $this->setOffset(0);
         }
 		//END: Getters and Setters
-
 
         public function insert(): array {
             if (Helper::ArrayNullOrEmpty($this->data)) {

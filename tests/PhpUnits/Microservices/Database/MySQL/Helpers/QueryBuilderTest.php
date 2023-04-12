@@ -302,14 +302,8 @@
 			$database = 'db';
 			$table = 'table';
 			$join = [
-				'table1' => [
-					'type' => 'LEFT',
-					'on' => ['table1.id' => 'table.id']
-				],
-				'table2' => [
-					'type' => 'RIGHT',
-					'on' => ['table2.id' => 'table.id']
-				]
+				'LEFT JOIN table1 ON table1.id = table.id',
+				'RIGHT JOIN table2 ON table2.id = table.id'
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -321,14 +315,8 @@
 			$database = 'db';
 			$table = 'table';
 			$join = [
-				'table1' => [
-					'type' => 'LEFT',
-					'on' => ['table1.id' => 'table.id']
-				],
-				'table2' => [
-					'type' => 'RIGHT',
-					'on' => ['table2.id' => 'table.id']
-				]
+				'LEFT JOIN table1 ON table1.id = table.id',
+				'RIGHT JOIN table2 ON table2.id = table.id'
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -341,23 +329,14 @@
 			$database = 'db';
 			$table = 'table';
 			$join = [
-				'table1' => [
-					'type' => 'LEFT',
-					'on' => ['table1.id' => 'table.id']
-				],
-				'table2' => [
-					'type' => 'RIGHT',
-					'on' => ['table2.id' => 'table.id']
-				]
+				'LEFT JOIN table1 ON table1.id = table.id',
+				'RIGHT JOIN table2 ON table2.id = table.id'
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
 			$queryBuilder->setJoin($join);
-			$queryBuilder->appendToJoin('table3',  ['type' =>'INNER','on' => ['table3.id' => 'table.id']]);
-			$join['table3'] = [
-				'type' => 'INNER',
-				'on' => ['table3.id' => 'table.id']
-			];
+			$queryBuilder->appendToJoin('INNER JOIN table3 ON table3.id = table.id');
+			$join[] = 'INNER JOIN table3 ON table3.id = table.id';
 			$this->assertEquals($join, $queryBuilder->getJoin());
 		}
 
@@ -414,9 +393,9 @@
 			$database = 'db';
 			$table = 'table';
 			$having = [
-				'name' => 'Hadi Darwish',
-				'email' => 'hadi@example.com',
-				'age' => 22,
+				'name = Hadi Darwish',
+				'email = hadi@example.com',
+				'age = 22',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -428,9 +407,9 @@
 			$database = 'db';
 			$table = 'table';
 			$having = [
-				'name' => 'Hadi Darwish',
-				'email' => 'hadi@example.com',
-				'age' => 22,
+				'name = Hadi Darwish',
+				'email = hadi@example.com',
+				'age = 22',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -443,15 +422,15 @@
 			$database = 'db';
 			$table = 'table';
 			$having = [
-				'name' => 'Hadi Darwish',
-				'email' => 'hadi@example.com',
-				'age' => 22,
+				'name = Hadi Darwish',
+				'email = hadi@example.com',
+				'age = 22',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
 			$queryBuilder->setHaving($having);
-			$queryBuilder->appendToHaving('age', 23);
-			$having['age'] = 23;
+			$queryBuilder->appendToHaving('age = 23');
+			$having[] = 'age = 23';
 			$this->assertEquals($having, $queryBuilder->getHaving());
 		}
 
@@ -467,9 +446,9 @@
 			$database = 'db';
 			$table = 'table';
 			$order = [
-				'name' => 'ASC',
-				'email' => 'DESC',
-				'age' => 'ASC',
+				'name = ASC',
+				'email = DESC',
+				'age = ASC',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -481,9 +460,9 @@
 			$database = 'db';
 			$table = 'table';
 			$order = [
-				'name' => 'ASC',
-				'email' => 'DESC',
-				'age' => 'ASC',
+				'name = ASC',
+				'email = DESC',
+				'age = ASC',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
@@ -496,14 +475,14 @@
 			$database = 'db';
 			$table = 'table';
 			$order = [
-				'name' => 'ASC',
-				'email' => 'DESC',
+				'name = ASC',
+				'email = DESC',
 			];
 
 			$queryBuilder = new QueryBuilder($database, $table);
 			$queryBuilder->setOrder($order);
-			$queryBuilder->appendToOrder('age', 'DESC');
-			$order['age'] = 'DESC';
+			$queryBuilder->appendToOrder('age = DESC');
+			$order[] = 'age = DESC';
 			$this->assertEquals($order, $queryBuilder->getOrder());
 		}
 
