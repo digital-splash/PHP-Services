@@ -231,6 +231,18 @@
         public function clearWhereStr() : void {
             $this->setWhereStr('');
         }
+
+        public function getJoinStr() : string {
+            return $this->join_str;
+        }
+
+        public function setJoinStr(string $join_str) : void {
+            $this->join_str = $join_str;
+        }
+
+        public function clearJoinStr() : void {
+            $this->setJoinStr('');
+        }
 		//END: Getters and Setters
 
         public function insert(): array {
