@@ -1142,5 +1142,36 @@
 			
 		}
 
+		public function getOrderByStatementProvider() : array {
+			return [
+				'empty order by' => [
+					'orderBy' => [],
+					'expectedSql' => '',
+				],
+				'order by with one column' => [
+					'orderBy' => ['name ASC'],
+					'expectedSql' => ' ORDER BY name ASC',
+				],
+				'order by with many columns' => [
+					'orderBy' => ['name ASC', 'age DESC'],
+					'expectedSql' => ' ORDER BY name ASC, age DESC',
+				],
+			];
+					
+		}
 
+		/**
+		 * @dataProvider getOrderByStatementProvider
+		 */
+		public function testGetOrderByStatementSuccess(array $orderBy, string $expectedSql) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setOrder($orderBy);
+			$queryBuilder->getOrderByStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getOrderStr());
+			
+		}
+
+
+		
 	}
