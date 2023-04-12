@@ -993,4 +993,62 @@
 
 		// }
 
+		public function getWhereStatementProvider() : array {
+			return [
+				'empty where' => [
+					'where' => [],
+					'expectedSql' => '',
+					'expectedBinds' => []
+				],
+				'where with one column' => [
+					'where' => [
+						'id' => 1
+					],
+					'expectedSql' => ' WHERE `id` = :id',
+					'expectedBinds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						]
+					]
+				],
+				'where with many columns' => [
+					'where' => [
+						'id' => 1,
+						'name' => 'test',
+						'age' => 2
+					],
+					'expectedSql' => ' WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expectedBinds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'test',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 2,
+							'type' => 1
+						]
+					]
+				],
+			];
+					
+		}
+
+		/**
+		 * @dataProvider getWhereStatementProvider
+		 */
+		public function testGetWhereStatementSuccess(array $where, string $expectedSql, array $expectedBinds) : void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->setWhere($where);
+			$queryBuilder->getWhereStatement();
+
+			$this->assertEquals($expectedSql, $queryBuilder->getWhereStr());
+			$this->assertEquals($expectedBinds, $queryBuilder->getBinds());
+			
+		}
+
 	}
