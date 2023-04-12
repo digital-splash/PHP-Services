@@ -255,6 +255,18 @@
 		public function clearOrderStr() : void {
 			$this->setOrderStr('');
 		}
+
+		public function getLimitStr() : string {
+			return $this->limit_str;
+		}
+
+		public function setLimitStr(string $limit_str) : void {
+			$this->limit_str = $limit_str;
+		}
+
+		public function clearLimitStr() : void {
+			$this->setLimitStr('');
+		}
 		//END: Getters and Setters
 
 		public function insert(): array {
