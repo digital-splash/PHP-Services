@@ -267,6 +267,18 @@
 		public function clearLimitStr() : void {
 			$this->setLimitStr('');
 		}
+
+		public function getHavingStr() : string {
+			return $this->having_str;
+		}
+
+		public function setHavingStr(string $having_str) : void {
+			$this->having_str = $having_str;
+		}
+
+		public function clearHavingStr() : void {
+			$this->setHavingStr('');
+		}
 		//END: Getters and Setters
 
 		public function insert(): array {
