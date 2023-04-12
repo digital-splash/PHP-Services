@@ -4,594 +4,567 @@
 	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
-use PDO;
-use PHPUnit\Framework\TestCase;
+	use PDO;
+	use PHPUnit\Framework\TestCase;
 
 	class QueryBuilderTest extends TestCase {
 
-
-        //testing the constructor using data provider
-
-        public function TestConstructorProvider(): array {
-            return [
-                'empty database' => [
-                     '',
-                    'table'
-                ],
-                'empty table' => [
-                    'db',
-                    ''
-                ],
-                'empty database and table' => [
-                    '',
-                    ''
-                ]
-                // ,
-                // 'valid database and table' => [
-                //     'db',
-                //     'table'
-                // ]
-            ];
-        }
-
-        /**
-         * @dataProvider TestConstructorProvider
-         */
-
-        // public function testConstructor(
-        //     string $database,
-        //     string $table
-        // ): void {
-        //     if (empty($database) || empty($table)) {
-        //         $this->expectException(NotEmptyParamException::class);
-        //         $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-        //             "::params::" => empty($database) ? 'database' : 'table'
-        //         ]));
-        //     }
-
-        //     $queryBuilder = new QueryBuilder($database, $table);
-        //     $this->assertEquals($database, $queryBuilder->getDatabase());
-        //     $this->assertEquals($table, $queryBuilder->getTable());
-        // }
-
-
-        public function testConstructorThrows(
-            string $database,
-            string $table
-        ): void {
-            $this->expectException(NotEmptyParamException::class);
-            $this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-                "::params::" => empty($database) ? 'database' : 'table'
-            ]));
-
-            $queryBuilder = new QueryBuilder($database, $table);
-        }
-
-        public function testConstructorSuccess(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals($database, $queryBuilder->getDatabase());
-            $this->assertEquals($table, $queryBuilder->getTable());
-        }
-
-        public function GetPDOTypeFromValueProvider(): array {
-            return [
-                'null' => [
-                    null,
-                    PDO::PARAM_STR
-                ],
-                'int' => [
-                    1,
-                    PDO::PARAM_INT
-                ],
-                'string' => [
-                    'string',
-                    PDO::PARAM_STR
-                ],
-                'bool' => [
-                    true,
-                    PDO::PARAM_STR
-                ],
-                'double' => [
-                    1.1,
-                    PDO::PARAM_INT
-                ]
-            ];
-        }
-
-        /**
-         * @dataProvider GetPDOTypeFromValueProvider
-         */
-
-        public function testGetPDOTypeFromValue(
-            $value,
-            int $expected
-        ): void {
-            $queryBuilder = new QueryBuilder('db', 'table');
-            $this->assertEquals($expected, $queryBuilder->getPDOTypeFromValue($value));
-        }
-
-        public function testGetDatabase(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals($database, $queryBuilder->getDatabase());
-        }
-
-        public function testGetTable(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals($table, $queryBuilder->getTable());
-        }
-
-        public function testGetSql(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals('', $queryBuilder->getSql());
-        }
-
-        public function testSetSql(): void {
-            $database = 'db';
-            $table = 'table';
-            $sql = 'SELECT * FROM `db`.`table`';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setSql($sql);
-            $this->assertEquals($sql, $queryBuilder->getSql());
-        }
-
-        public function testClearSql(): void {
-            $database = 'db';
-            $table = 'table';
-            $sql = 'SELECT * FROM `db`.`table`';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setSql($sql);
-            $queryBuilder->clearSql();
-            $this->assertEquals('', $queryBuilder->getSql());
-        }
-
-        public function testGetBinds(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getBinds());
-        }
-
-        public function testSetBinds(): void {
-            $database = 'db';
-            $table = 'table';
-            $binds = [
-                ':name' => 'Hadi Darwish',
-                ':email' => 'hadi@example.com',
-                ':age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setBinds($binds);
-            $this->assertEquals($binds, $queryBuilder->getBinds());
-        }
-
-        public function testClearBinds(): void {
-            $database = 'db';
-            $table = 'table';
-            $binds = [
-                ':name' => 'Hadi Darwish',
-                ':email' => 'hadi@example.com',
-                ':age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setBinds($binds);
-            $queryBuilder->clearBinds();
-            $this->assertEquals([], $queryBuilder->getBinds());
-        }
-
-        public function testAppendToBind(): void {
-            $database = 'db';
-            $table = 'table';
-            $binds = [
-                ':name' => 'Hadi Darwish',
-                ':email' => 'hadi@example.com',
-                ':age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setBinds($binds);
-            $queryBuilder->appendToBind(':address', 'Beirut');
-            $binds[':address'] = 'Beirut';
-            $this->assertEquals($binds, $queryBuilder->getBinds());
-        }
-
-        public function testGetData(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getData());
-        }
-
-        public function testSetData(): void {
-            $database = 'db';
-            $table = 'table';
-            $data = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setData($data);
-            $this->assertEquals($data, $queryBuilder->getData());
-        }
-
-        public function testClearData(): void {
-            $database = 'db';
-            $table = 'table';
-            $data = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setData($data);
-            $queryBuilder->clearData();
-            $this->assertEquals([], $queryBuilder->getData());
-        }
-
-        public function testAppendToData(): void {
-            $database = 'db';
-            $table = 'table';
-            $data = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setData($data);
-            $queryBuilder->appendToData('address', 'Beirut');
-            $data['address'] = 'Beirut';
-            $this->assertEquals($data, $queryBuilder->getData());
-        }
-
-        public function testGetWhere(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getWhere());
-        }
-
-        public function testSetWhere(): void {
-            $database = 'db';
-            $table = 'table';
-            $where = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setWhere($where);
-            $this->assertEquals($where, $queryBuilder->getWhere());
-        }
-
-        public function testClearWhere(): void {
-            $database = 'db';
-            $table = 'table';
-            $where = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->clearWhere();
-            $this->assertEquals([], $queryBuilder->getWhere());
-        }
-
-        public function testAppendToWhere(): void {
-            $database = 'db';
-            $table = 'table';
-            $where = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setWhere($where);
-            $queryBuilder->appendToWhere('address', 'Beirut');
-            $where['address'] = 'Beirut';
-            $this->assertEquals($where, $queryBuilder->getWhere());
-        }
-
-        public function testGetJoin(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getJoin());
-        }
-
-        public function testSetJoin(): void {
-            $database = 'db';
-            $table = 'table';
-            $join = [
-                'table1' => [
-                    'type' => 'LEFT',
-                    'on' => ['table1.id' => 'table.id']
-                ],
-                'table2' => [
-                    'type' => 'RIGHT',
-                    'on' => ['table2.id' => 'table.id']
-                ]
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setJoin($join);
-            $this->assertEquals($join, $queryBuilder->getJoin());
-        }
-
-        public function testClearJoin(): void {
-            $database = 'db';
-            $table = 'table';
-            $join = [
-                'table1' => [
-                    'type' => 'LEFT',
-                    'on' => ['table1.id' => 'table.id']
-                ],
-                'table2' => [
-                    'type' => 'RIGHT',
-                    'on' => ['table2.id' => 'table.id']
-                ]
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setJoin($join);
-            $queryBuilder->clearJoin();
-            $this->assertEquals([], $queryBuilder->getJoin());
-        }
-
-        public function testAppendToJoin(): void {
-            $database = 'db';
-            $table = 'table';
-            $join = [
-                'table1' => [
-                    'type' => 'LEFT',
-                    'on' => ['table1.id' => 'table.id']
-                ],
-                'table2' => [
-                    'type' => 'RIGHT',
-                    'on' => ['table2.id' => 'table.id']
-                ]
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setJoin($join);
-            $queryBuilder->appendToJoin('table3',  ['type' =>'INNER','on' => ['table3.id' => 'table.id']]);
-            $join['table3'] = [
-                'type' => 'INNER',
-                'on' => ['table3.id' => 'table.id']
-            ];
-            $this->assertEquals($join, $queryBuilder->getJoin());
-        }
-
-        public function testGetGroup(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getGroup());
-        }
-
-        public function testSetGroup(): void {
-            $database = 'db';
-            $table = 'table';
-            $group = ['name', 'email'];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setGroup($group);
-            $this->assertEquals($group, $queryBuilder->getGroup());
-        }
-
-        public function testClearGroup(): void {
-            $database = 'db';
-            $table = 'table';
-            $group = ['name', 'email'];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setGroup($group);
-            $queryBuilder->clearGroup();
-            $this->assertEquals([], $queryBuilder->getGroup());
-        }
-
-        public function testAppendToGroup(): void {
-            $database = 'db';
-            $table = 'table';
-            $group = ['name', 'email'];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setGroup($group);
-            $queryBuilder->appendToGroup('age');
-            $group[] = 'age';
-            $this->assertEquals($group, $queryBuilder->getGroup());
-        }
-
-        public function testGetHaving(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getHaving());
-        }
-
-        public function testSetHaving(): void {
-            $database = 'db';
-            $table = 'table';
-            $having = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setHaving($having);
-            $this->assertEquals($having, $queryBuilder->getHaving());
-        }
-
-        public function testClearHaving(): void {
-            $database = 'db';
-            $table = 'table';
-            $having = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setHaving($having);
-            $queryBuilder->clearHaving();
-            $this->assertEquals([], $queryBuilder->getHaving());
-        }
-
-        public function testAppendToHaving(): void {
-            $database = 'db';
-            $table = 'table';
-            $having = [
-                'name' => 'Hadi Darwish',
-                'email' => 'hadi@example.com',
-                'age' => 22,
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setHaving($having);
-            $queryBuilder->appendToHaving('age', 23);
-            $having['age'] = 23;
-            $this->assertEquals($having, $queryBuilder->getHaving());
-        }
-
-        public function testGetOrder(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals([], $queryBuilder->getOrder());
-        }
-
-        public function testSetOrder(): void {
-            $database = 'db';
-            $table = 'table';
-            $order = [
-                'name' => 'ASC',
-                'email' => 'DESC',
-                'age' => 'ASC',
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setOrder($order);
-            $this->assertEquals($order, $queryBuilder->getOrder());
-        }
-
-        public function testClearOrder(): void {
-            $database = 'db';
-            $table = 'table';
-            $order = [
-                'name' => 'ASC',
-                'email' => 'DESC',
-                'age' => 'ASC',
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setOrder($order);
-            $queryBuilder->clearOrder();
-            $this->assertEquals([], $queryBuilder->getOrder());
-        }
-
-        public function testAppendToOrder(): void {
-            $database = 'db';
-            $table = 'table';
-            $order = [
-                'name' => 'ASC',
-                'email' => 'DESC',
-            ];
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setOrder($order);
-            $queryBuilder->appendToOrder('age', 'DESC');
-            $order['age'] = 'DESC';
-            $this->assertEquals($order, $queryBuilder->getOrder());
-        }
-
-        public function testGetLimit(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals(0, $queryBuilder->getLimit());
-        }
-        
-        public function testSetLimit(): void {
-            $database = 'db';
-            $table = 'table';
-            $limit = 10;
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setLimit($limit);
-            $this->assertEquals($limit, $queryBuilder->getLimit());
-        }
-
-        public function testClearLimit(): void {
-            $database = 'db';
-            $table = 'table';
-            $limit = 10;
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setLimit($limit);
-            $queryBuilder->clearLimit();
-            $this->assertEquals(0, $queryBuilder->getLimit());
-        }
-
-        public function testGetOffset(): void {
-            $database = 'db';
-            $table = 'table';
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $this->assertEquals(0, $queryBuilder->getOffset());
-        }
-
-        public function testSetOffset(): void {
-            $database = 'db';
-            $table = 'table';
-            $offset = 10;
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setOffset($offset);
-            $this->assertEquals($offset, $queryBuilder->getOffset());
-        }
-
-        public function testClearOffset(): void {
-            $database = 'db';
-            $table = 'table';
-            $offset = 10;
-
-            $queryBuilder = new QueryBuilder($database, $table);
-            $queryBuilder->setOffset($offset);
-            $queryBuilder->clearOffset();
-            $this->assertEquals(0, $queryBuilder->getOffset());
-        }
-        
+		public function constructorThrowsProvider(): array {
+			return [
+				'empty database' => [
+					 '',
+					'table'
+				],
+				'empty table' => [
+					'db',
+					''
+				],
+				'empty database and table' => [
+					'',
+					''
+				]
+			];
+		}
+
+		/**
+		 * @dataProvider constructorThrowsProvider
+		 */
+		public function testConstructorThrows(
+			string $database,
+			string $table
+		): void {
+			$this->expectException(NotEmptyParamException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+				"::params::" => empty($database) ? 'database' : 'table'
+			]));
+
+			new QueryBuilder($database, $table);
+		}
+
+		public function testConstructorSuccess(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals($database, $queryBuilder->getDatabase());
+			$this->assertEquals($table, $queryBuilder->getTable());
+		}
+
+		public function getPDOTypeFromValueProvider(): array {
+			return [
+				'null' => [
+					null,
+					PDO::PARAM_STR
+				],
+				'int' => [
+					1,
+					PDO::PARAM_INT
+				],
+				'string' => [
+					'string',
+					PDO::PARAM_STR
+				],
+				'bool' => [
+					true,
+					PDO::PARAM_STR
+				],
+				'double' => [
+					1.1,
+					PDO::PARAM_INT
+				]
+			];
+		}
+
+		/**
+		 * @dataProvider getPDOTypeFromValueProvider
+		 */
+		public function testGetPDOTypeFromValue(
+			$value,
+			int $expected
+		): void {
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$this->assertEquals($expected, $queryBuilder->getPDOTypeFromValue($value));
+		}
+
+		public function testGetDatabase(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals($database, $queryBuilder->getDatabase());
+		}
+
+		public function testGetTable(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals($table, $queryBuilder->getTable());
+		}
+
+		public function testGetSql(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals('', $queryBuilder->getSql());
+		}
+
+		public function testSetSql(): void {
+			$database = 'db';
+			$table = 'table';
+			$sql = 'SELECT * FROM `db`.`table`';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setSql($sql);
+			$this->assertEquals($sql, $queryBuilder->getSql());
+		}
+
+		public function testClearSql(): void {
+			$database = 'db';
+			$table = 'table';
+			$sql = 'SELECT * FROM `db`.`table`';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setSql($sql);
+			$queryBuilder->clearSql();
+			$this->assertEquals('', $queryBuilder->getSql());
+		}
+
+		public function testGetBinds(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getBinds());
+		}
+
+		public function testSetBinds(): void {
+			$database = 'db';
+			$table = 'table';
+			$binds = [
+				':name' => 'Hadi Darwish',
+				':email' => 'hadi@example.com',
+				':age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setBinds($binds);
+			$this->assertEquals($binds, $queryBuilder->getBinds());
+		}
+
+		public function testClearBinds(): void {
+			$database = 'db';
+			$table = 'table';
+			$binds = [
+				':name' => 'Hadi Darwish',
+				':email' => 'hadi@example.com',
+				':age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setBinds($binds);
+			$queryBuilder->clearBinds();
+			$this->assertEquals([], $queryBuilder->getBinds());
+		}
+
+		public function testAppendToBind(): void {
+			$database = 'db';
+			$table = 'table';
+			$binds = [
+				':name' => 'Hadi Darwish',
+				':email' => 'hadi@example.com',
+				':age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setBinds($binds);
+			$queryBuilder->appendToBind(':address', 'Beirut');
+			$binds[':address'] = 'Beirut';
+			$this->assertEquals($binds, $queryBuilder->getBinds());
+		}
+
+		public function testGetData(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getData());
+		}
+
+		public function testSetData(): void {
+			$database = 'db';
+			$table = 'table';
+			$data = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setData($data);
+			$this->assertEquals($data, $queryBuilder->getData());
+		}
+
+		public function testClearData(): void {
+			$database = 'db';
+			$table = 'table';
+			$data = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setData($data);
+			$queryBuilder->clearData();
+			$this->assertEquals([], $queryBuilder->getData());
+		}
+
+		public function testAppendToData(): void {
+			$database = 'db';
+			$table = 'table';
+			$data = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setData($data);
+			$queryBuilder->appendToData('address', 'Beirut');
+			$data['address'] = 'Beirut';
+			$this->assertEquals($data, $queryBuilder->getData());
+		}
+
+		public function testGetWhere(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getWhere());
+		}
+
+		public function testSetWhere(): void {
+			$database = 'db';
+			$table = 'table';
+			$where = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setWhere($where);
+			$this->assertEquals($where, $queryBuilder->getWhere());
+		}
+
+		public function testClearWhere(): void {
+			$database = 'db';
+			$table = 'table';
+			$where = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setWhere($where);
+			$queryBuilder->clearWhere();
+			$this->assertEquals([], $queryBuilder->getWhere());
+		}
+
+		public function testAppendToWhere(): void {
+			$database = 'db';
+			$table = 'table';
+			$where = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setWhere($where);
+			$queryBuilder->appendToWhere('address', 'Beirut');
+			$where['address'] = 'Beirut';
+			$this->assertEquals($where, $queryBuilder->getWhere());
+		}
+
+		public function testGetJoin(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getJoin());
+		}
+
+		public function testSetJoin(): void {
+			$database = 'db';
+			$table = 'table';
+			$join = [
+				'table1' => [
+					'type' => 'LEFT',
+					'on' => ['table1.id' => 'table.id']
+				],
+				'table2' => [
+					'type' => 'RIGHT',
+					'on' => ['table2.id' => 'table.id']
+				]
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setJoin($join);
+			$this->assertEquals($join, $queryBuilder->getJoin());
+		}
+
+		public function testClearJoin(): void {
+			$database = 'db';
+			$table = 'table';
+			$join = [
+				'table1' => [
+					'type' => 'LEFT',
+					'on' => ['table1.id' => 'table.id']
+				],
+				'table2' => [
+					'type' => 'RIGHT',
+					'on' => ['table2.id' => 'table.id']
+				]
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setJoin($join);
+			$queryBuilder->clearJoin();
+			$this->assertEquals([], $queryBuilder->getJoin());
+		}
+
+		public function testAppendToJoin(): void {
+			$database = 'db';
+			$table = 'table';
+			$join = [
+				'table1' => [
+					'type' => 'LEFT',
+					'on' => ['table1.id' => 'table.id']
+				],
+				'table2' => [
+					'type' => 'RIGHT',
+					'on' => ['table2.id' => 'table.id']
+				]
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setJoin($join);
+			$queryBuilder->appendToJoin('table3',  ['type' =>'INNER','on' => ['table3.id' => 'table.id']]);
+			$join['table3'] = [
+				'type' => 'INNER',
+				'on' => ['table3.id' => 'table.id']
+			];
+			$this->assertEquals($join, $queryBuilder->getJoin());
+		}
+
+		public function testGetGroup(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getGroup());
+		}
+
+		public function testSetGroup(): void {
+			$database = 'db';
+			$table = 'table';
+			$group = ['name', 'email'];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setGroup($group);
+			$this->assertEquals($group, $queryBuilder->getGroup());
+		}
+
+		public function testClearGroup(): void {
+			$database = 'db';
+			$table = 'table';
+			$group = ['name', 'email'];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setGroup($group);
+			$queryBuilder->clearGroup();
+			$this->assertEquals([], $queryBuilder->getGroup());
+		}
+
+		public function testAppendToGroup(): void {
+			$database = 'db';
+			$table = 'table';
+			$group = ['name', 'email'];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setGroup($group);
+			$queryBuilder->appendToGroup('age');
+			$group[] = 'age';
+			$this->assertEquals($group, $queryBuilder->getGroup());
+		}
+
+		public function testGetHaving(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getHaving());
+		}
+
+		public function testSetHaving(): void {
+			$database = 'db';
+			$table = 'table';
+			$having = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setHaving($having);
+			$this->assertEquals($having, $queryBuilder->getHaving());
+		}
+
+		public function testClearHaving(): void {
+			$database = 'db';
+			$table = 'table';
+			$having = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setHaving($having);
+			$queryBuilder->clearHaving();
+			$this->assertEquals([], $queryBuilder->getHaving());
+		}
+
+		public function testAppendToHaving(): void {
+			$database = 'db';
+			$table = 'table';
+			$having = [
+				'name' => 'Hadi Darwish',
+				'email' => 'hadi@example.com',
+				'age' => 22,
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setHaving($having);
+			$queryBuilder->appendToHaving('age', 23);
+			$having['age'] = 23;
+			$this->assertEquals($having, $queryBuilder->getHaving());
+		}
+
+		public function testGetOrder(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals([], $queryBuilder->getOrder());
+		}
+
+		public function testSetOrder(): void {
+			$database = 'db';
+			$table = 'table';
+			$order = [
+				'name' => 'ASC',
+				'email' => 'DESC',
+				'age' => 'ASC',
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOrder($order);
+			$this->assertEquals($order, $queryBuilder->getOrder());
+		}
+
+		public function testClearOrder(): void {
+			$database = 'db';
+			$table = 'table';
+			$order = [
+				'name' => 'ASC',
+				'email' => 'DESC',
+				'age' => 'ASC',
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOrder($order);
+			$queryBuilder->clearOrder();
+			$this->assertEquals([], $queryBuilder->getOrder());
+		}
+
+		public function testAppendToOrder(): void {
+			$database = 'db';
+			$table = 'table';
+			$order = [
+				'name' => 'ASC',
+				'email' => 'DESC',
+			];
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOrder($order);
+			$queryBuilder->appendToOrder('age', 'DESC');
+			$order['age'] = 'DESC';
+			$this->assertEquals($order, $queryBuilder->getOrder());
+		}
+
+		public function testGetLimit(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals(0, $queryBuilder->getLimit());
+		}
+		
+		public function testSetLimit(): void {
+			$database = 'db';
+			$table = 'table';
+			$limit = 10;
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setLimit($limit);
+			$this->assertEquals($limit, $queryBuilder->getLimit());
+		}
+
+		public function testClearLimit(): void {
+			$database = 'db';
+			$table = 'table';
+			$limit = 10;
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setLimit($limit);
+			$queryBuilder->clearLimit();
+			$this->assertEquals(0, $queryBuilder->getLimit());
+		}
+
+		public function testGetOffset(): void {
+			$database = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$this->assertEquals(0, $queryBuilder->getOffset());
+		}
+
+		public function testSetOffset(): void {
+			$database = 'db';
+			$table = 'table';
+			$offset = 10;
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOffset($offset);
+			$this->assertEquals($offset, $queryBuilder->getOffset());
+		}
+
+		public function testClearOffset(): void {
+			$database = 'db';
+			$table = 'table';
+			$offset = 10;
+
+			$queryBuilder = new QueryBuilder($database, $table);
+			$queryBuilder->setOffset($offset);
+			$queryBuilder->clearOffset();
+			$this->assertEquals(0, $queryBuilder->getOffset());
+		}
+		
 		public function testInsertNoDataToInsertThrows(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
@@ -605,14 +578,16 @@ use PHPUnit\Framework\TestCase;
 		public function testInsertSingleRecordSuccess(): void {
 			$db = 'db';
 			$table = 'table';
-			$values = [
-				'name' => 'Hadi Darwish',
-				'email' => 'hadi@example.com',
-				'age' => 22,
+			$data = [
+				[
+					'name' => 'Hadi Darwish',
+					'email' => 'hadi@example.com',
+					'age' => 22,
+				]
 			];
 
 			$queryBuilder = new QueryBuilder($db, $table);
-			$queryBuilder->setData($values);
+			$queryBuilder->setData($data);
 			[
 				'sql' => $sql,
 				'binds' => $binds
@@ -621,50 +596,66 @@ use PHPUnit\Framework\TestCase;
 			$expectedSql = "INSERT INTO `{$db}`.`{$table}` (`name`, `email`, `age`) VALUES (:name_1, :email_1, :age_1)";
 			$expectedBinds = [];
 
-			foreach ($values AS $column => $value) {
-				$bind_key = ":{$column}_1";
-				$expectedBinds[$bind_key] = [
-					'value' => $value,
-					'type' => QueryBuilder::GetPDOTypeFromValue($value)
-				];
+			foreach ($data AS $row) {
+				foreach ($row AS $column => $value) {
+					$bind_key = ":{$column}_1";
+					$expectedBinds[$bind_key] = [
+						'value' => $value,
+						'type' => QueryBuilder::GetPDOTypeFromValue($value)
+					];
+				}
 			}
 
 			$this->assertEquals($expectedSql, $sql);
 			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		}
 
-        public function testInsertInBulk(): void {
-            $db = 'db';
+		public function testInsertInBulk(): void {
+			$db = 'db';
 			$table = 'table';
-            $data = [
-                ['name' => 'John', 'age' => 25],
-                ['name' => 'Jane', 'age' => 30],
-                ['name' => 'Bob', 'age' => 40],
-            ];
-            $queryBuilder = new QueryBuilder($db, $table);
+			$data = [
+				['name' => 'John', 'age' => 25],
+				['name' => 'Jane', 'age' => 30],
+				['name' => 'Bob', 'age' => 40],
+			];
+			$queryBuilder = new QueryBuilder($db, $table);
 			$queryBuilder->setData($data);
 			[
 				'sql' => $sql,
 				'binds' => $binds
-			] = $queryBuilder->insertInBulk();
-        
-            // Execute function and get result
-        
-            // Check that SQL statement is correctly constructed
-            $expectedSql = "INSERT INTO `db`.`table` (`name`, `age`) VALUES (:name_0, :age_0), (:name_1, :age_1), (:name_2, :age_2)";
-            $this->assertEquals($expectedSql,$sql);
-        
-            // Check that binds are correctly constructed
-            $expectedBinds = [
-                ':name_0' => ['value' => 'John', 'type' => PDO::PARAM_STR],
-                ':age_0' => ['value' => 25, 'type' => PDO::PARAM_INT],
-                ':name_1' => ['value' => 'Jane', 'type' => PDO::PARAM_STR],
-                ':age_1' => ['value' => 30, 'type' => PDO::PARAM_INT],
-                ':name_2' => ['value' => 'Bob', 'type' => PDO::PARAM_STR],
-                ':age_2' => ['value' => 40, 'type' => PDO::PARAM_INT],
-            ];
-            $this->assertEquals($expectedBinds, $binds);
-        }
+			] = $queryBuilder->insert();
+		
+			$expectedSql = "INSERT INTO `db`.`table` (`name`, `age`) VALUES (:name_1, :age_1), (:name_2, :age_2), (:name_3, :age_3)";
+			$this->assertEquals($expectedSql,$sql);
+		
+			$expectedBinds = [
+				':name_1' => [
+					'value' => 'John',
+					'type' => PDO::PARAM_STR
+				],
+				':age_1' => [
+					'value' => 25,
+					'type' => PDO::PARAM_INT
+				],
+				':name_2' => [
+					'value' => 'Jane',
+					'type' => PDO::PARAM_STR
+				],
+				':age_2' => [
+					'value' => 30,
+					'type' => PDO::PARAM_INT
+				],
+				':name_3' => [
+					'value' => 'Bob',
+					'type' => PDO::PARAM_STR
+				],
+				':age_3' => [
+					'value' => 40,
+					'type' => PDO::PARAM_INT
+				],
+			];
+			$this->assertEquals($expectedBinds, $binds);
+		}
 
 		// public function testUpdateNoDataToUpdateThrows(): void {
 		// 	$this->expectException(NotEmptyParamException::class);
