@@ -45,7 +45,7 @@
 			if (Helper::StringNullOrEmpty($table)) {
 				throw new NotEmptyParamException('table');
 			}
-			
+
 			$this->database = $database;
 			$this->table = $table;
 		}
@@ -76,11 +76,11 @@
 			return $this->sql;
 		}
 
-		public function setSql(string $sql) : void {
+		public function setSql(string $sql): void {
 			$this->sql = $sql;
 		}
 
-		public function clearSql() : void {
+		public function clearSql(): void {
 			$this->setSql('');
 		}
 
@@ -88,207 +88,207 @@
 			return $this->binds;
 		}
 
-		public function setBinds(array $data) : void {
+		public function setBinds(array $data): void {
 			$this->binds = $data;
 		}
 
-		public function clearBinds() : void {
+		public function clearBinds(): void {
 			$this->setBinds([]);
 		}
 
-		public function appendToBind(string $key, $value) : void {
+		public function appendToBind(string $key, $value): void {
 			$this->binds[$key] = $value;
 		}
 
-		public function getData() : array {
+		public function getData(): array {
 			return $this->data;
 		}
 
-		public function setData(array $data) : void {
+		public function setData(array $data): void {
 			$this->data = $data;
 		}
 
-		public function clearData() : void {
+		public function clearData(): void {
 			$this->setData([]);
 		}
 
-		public function appendToData(string $key, $value) : void {
+		public function appendToData(string $key, $value): void {
 			$this->data[$key] = $value;
 		}
 
-		public function getWhere() : array {
+		public function getWhere(): array {
 			return $this->where;
 		}
 
-		public function setWhere(array $where) : void {
+		public function setWhere(array $where): void {
 			$this->where = $where;
 		}
 
-		public function clearWhere() : void {
+		public function clearWhere(): void {
 			$this->setWhere([]);
 		}
-		
-		public function appendToWhere(string $key, $value) : void {
+
+		public function appendToWhere(string $key, $value): void {
 			$this->where[$key] = $value;
 		}
 
-		public function getJoin() : array {
+		public function getJoin(): array {
 			return $this->join;
 		}
 
-		public function setJoin(array $join) : void {
+		public function setJoin(array $join): void {
 			$this->join = $join;
 		}
 
-		public function clearJoin() : void {
+		public function clearJoin(): void {
 			$this->setJoin([]);
 		}
-		
-		public function appendToJoin(string $value) : void {
+
+		public function appendToJoin(string $value): void {
 			$this->join[] = $value;
 		}
 
-		public function getGroup() : array {
+		public function getGroup(): array {
 			return $this->group;
 		}
 
-		public function setGroup(array $group) : void {
+		public function setGroup(array $group): void {
 			$this->group = $group;
 		}
 
-		public function clearGroup() : void {
+		public function clearGroup(): void {
 			$this->setGroup([]);
 		}
 
-		public function appendToGroup(string $value) : void {
+		public function appendToGroup(string $value): void {
 			$this->group[] = $value;
 		}
 
-		public function getHaving() : array {
+		public function getHaving(): array {
 			return $this->having;
 		}
 
-		public function setHaving(array $having) : void {
+		public function setHaving(array $having): void {
 			$this->having = $having;
 		}
 
-		public function clearHaving() : void {
+		public function clearHaving(): void {
 			$this->setHaving([]);
 		}
 
-		public function appendToHaving(string $value) : void {
+		public function appendToHaving(string $value): void {
 			$this->having[] = $value;
 		}
 
-		public function getOrder() : array {
+		public function getOrder(): array {
 			return $this->order;
 		}
 
-		public function setOrder(array $order) : void {
+		public function setOrder(array $order): void {
 			$this->order = $order;
 		}
 
-		public function clearOrder() : void {
+		public function clearOrder(): void {
 			$this->setOrder([]);
 		}
 
-		public function appendToOrder(string $value) : void {
+		public function appendToOrder(string $value): void {
 			$this->order[] = $value;
 		}
 
-		public function getLimit() : int {
+		public function getLimit(): int {
 			return $this->limit;
 		}
 
-		public function setLimit(int $limit) : void {
+		public function setLimit(int $limit): void {
 			$this->limit = $limit;
 		}
 
-		public function clearLimit() : void {
+		public function clearLimit(): void {
 			$this->setLimit(0);
 		}
 
-		public function getOffset() : int {
+		public function getOffset(): int {
 			return $this->offset;
 		}
 
-		public function setOffset(int $offset) : void {
+		public function setOffset(int $offset): void {
 			$this->offset = $offset;
 		}
 
-		public function clearOffset() : void {
+		public function clearOffset(): void {
 			$this->setOffset(0);
 		}
 
-		public function getWhereStr() : string {
+		public function getWhereStr(): string {
 			return $this->where_str;
 		}
 
-		public function setWhereStr(string $where_str) : void {
+		public function setWhereStr(string $where_str): void {
 			$this->where_str = $where_str;
 		}
 
-		public function clearWhereStr() : void {
+		public function clearWhereStr(): void {
 			$this->setWhereStr('');
 		}
 
-		public function getJoinStr() : string {
+		public function getJoinStr(): string {
 			return $this->join_str;
 		}
 
-		public function setJoinStr(string $join_str) : void {
+		public function setJoinStr(string $join_str): void {
 			$this->join_str = $join_str;
 		}
 
-		public function clearJoinStr() : void {
+		public function clearJoinStr(): void {
 			$this->setJoinStr('');
 		}
 
-		public function getOrderStr() : string {
+		public function getOrderStr(): string {
 			return $this->order_str;
 		}
 
-		public function setOrderStr(string $order_str) : void {
+		public function setOrderStr(string $order_str): void {
 			$this->order_str = $order_str;
 		}
 
-		public function clearOrderStr() : void {
+		public function clearOrderStr(): void {
 			$this->setOrderStr('');
 		}
 
-		public function getLimitStr() : string {
+		public function getLimitStr(): string {
 			return $this->limit_str;
 		}
 
-		public function setLimitStr(string $limit_str) : void {
+		public function setLimitStr(string $limit_str): void {
 			$this->limit_str = $limit_str;
 		}
 
-		public function clearLimitStr() : void {
+		public function clearLimitStr(): void {
 			$this->setLimitStr('');
 		}
 
-		public function getHavingStr() : string {
+		public function getHavingStr(): string {
 			return $this->having_str;
 		}
 
-		public function setHavingStr(string $having_str) : void {
+		public function setHavingStr(string $having_str): void {
 			$this->having_str = $having_str;
 		}
 
-		public function clearHavingStr() : void {
+		public function clearHavingStr(): void {
 			$this->setHavingStr('');
 		}
 
-		public function getGroupStr() : string {
+		public function getGroupStr(): string {
 			return $this->group_str;
 		}
 
-		public function setGroupStr(string $group_str) : void {
+		public function setGroupStr(string $group_str): void {
 			$this->group_str = $group_str;
 		}
 
-		public function clearGroupStr() : void {
+		public function clearGroupStr(): void {
 			$this->setGroupStr('');
 		}
 		//END: Getters and Setters
@@ -297,7 +297,7 @@
 			if (Helper::ArrayNullOrEmpty($this->data)) {
 				throw new NotEmptyParamException('data');
 			}
-		
+
 			$columns = [];
 			$this->clearBinds();
 			$rows= [];
@@ -319,13 +319,13 @@
 				$rows[] = '(' . implode(', ', $rowColumns) . ')';
 				$i++;
 			}
-		
+
 			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
 			$rowsStr = implode(', ', $rows);
-		
+
 			$sql = "INSERT INTO `{$this->database}`.`{$this->table}` ($columnsStr) VALUES $rowsStr";
 			$this->setSql($sql);
-		
+
 			return [
 				self::SQL => $this->getSql(),
 				self::BINDS => $this->getBinds()
