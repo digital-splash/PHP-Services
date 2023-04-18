@@ -18,4 +18,11 @@
 				$singleValue->setFinalString('test');
 				$this->assertEquals('test', $singleValue->getFinalString());
 			}
+	
+			public function testClearFinalString(): void {
+				$singleValue = new SingleValue('SET');
+				$singleValue->setFinalString('test');
+				$singleValue->clearFinalString();
+				$this->assertEquals('', $singleValue->getFinalString());
+			}
 	}
