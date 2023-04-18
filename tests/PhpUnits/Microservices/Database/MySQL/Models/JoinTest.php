@@ -4,7 +4,7 @@
     use DigitalSplash\Database\MySQL\Models\Join;
     use PHPUnit\Framework\TestCase;
 
-    class GroupTest extends TestCase{
+    class JoinTest extends TestCase{
             
         public function generateStringStatementProvider(): array {
 			return [
