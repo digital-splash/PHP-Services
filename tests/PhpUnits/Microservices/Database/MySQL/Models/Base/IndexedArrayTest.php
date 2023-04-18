@@ -11,8 +11,7 @@
 
 	class IndexedArrayTest extends TestCase {
 
-		public function constructorThrowsProvider(
-		): array {
+		public function constructorThrowsProvider(): array {
 			return [
 				'empty implodeValue' => [
 					'implodeValue' => '',
@@ -41,8 +40,12 @@
 			$indexedArray = new IndexedArray($implodeValue, $statementPrefix);
 		}
 
-        public function generateStringStatementProvider(
-        ): array {
+        public function testGetFinalString(): void {
+            $indexedArray = new IndexedArray(', ', 'SET');
+            $this->assertEquals('', $indexedArray->getFinalString());
+        }
+
+        public function generateStringStatementProvider(): array {
             return [
                 'empty array' => [
                     'array' => [],
@@ -77,6 +80,4 @@
 
             $this->assertEquals($expectFinalString, $indexedArray->getFinalString());
         }
-
-
 	}
