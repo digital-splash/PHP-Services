@@ -14,6 +14,20 @@ use PHPUnit\Framework\TestCase;
                 $this->assertEqualsCanonicalizing([], $binds->getBinds());
             }
 
-
+            public function testSetBinds(): void {
+                $binds = new Binds();
+                $binds->setBinds([
+                    ':name_1' => [
+                        'value' => 'John',
+                        'type' => PDO::PARAM_STR
+				    ]
+                ]);
+                $this->assertEqualsCanonicalizing([
+                    ':name_1' => [
+                        'value' => 'John',
+                        'type' => PDO::PARAM_STR
+				    ]
+                ], $binds->getBinds());
+            }
             
     }
