@@ -772,7 +772,7 @@
 				['name' => 'Bob', 'age' => 40],
 			];
 			$queryBuilder = new QueryBuilder($db, $table);
-			$queryBuilder->setData($data);
+			$queryBuilder->data->setData($data);
 			[
 				'sql' => $sql,
 				'binds' => $binds

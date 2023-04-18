@@ -78,44 +78,40 @@
 			return $this->table;
 		}
 
-		// public function insert(): array {
-		// 	if (Helper::ArrayNullOrEmpty($this->data)) {
-		// 		throw new NotEmptyParamException('data');
-		// 	}
+		public function insert(): array {
+			if (Helper::ArrayNullOrEmpty($this->data->getData())) {
+                throw new NotEmptyParamException('data');
+            }
 
-		// 	$columns = [];
-		// 	$this->clearBinds();
-		// 	$rows= [];
-		// 	$i = 1;
-		// 	foreach ($this->data as $row) {
-		// 		$rowColumns = [];
-		// 		foreach ($row as $column => $value) {
-		// 			if (!in_array("`{$column}`", $columns)) {
-		// 				$columns[] = "`{$column}`";
-		// 			}
-		// 			$bind_key = ":{$column}_{$i}";
-		// 			$bind_arr = [
-		// 				'value' => $value,
-		// 				'type' => self::GetPDOTypeFromValue($value)
-		// 			];
-		// 			$this->appendToBind($bind_key, $bind_arr);
-		// 			$rowColumns[] = $bind_key;
-		// 		}
-		// 		$rows[] = '(' . implode(', ', $rowColumns) . ')';
-		// 		$i++;
-		// 	}
+            $columns = [];
+            $binds = [];
+            $columnsStr = '';
+            $bindsStr = '';
+            foreach ($this->data->getData() AS $column => $value) {
+                if (!in_array($column, $columns)) {
+                    $columns[] = "`{$column}`";
+                }
+                $bind_key = ':' . $column;
 
-		// 	$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
-		// 	$rowsStr = implode(', ', $rows);
+                $binds[$bind_key] = [
+                    'value' => $value,
+                    'type' => self::GetPDOTypeFromValue($value)
+                ];
 
-		// 	$sql = "INSERT INTO `{$this->database}`.`{$this->table}` ($columnsStr) VALUES $rowsStr";
-		// 	$this->setSql($sql);
+                $columnsStr .= "`{$column}`, ";
+                $bindsStr .= ":{$column}, ";
+            }
 
-		// 	return [
-		// 		self::SQL => $this->getSql(),
-		// 		self::BINDS => $this->getBinds()
-		// 	];
-		// }
+            $columnsStr = rtrim($columnsStr, ', ');
+            $bindsStr = rtrim($bindsStr, ', ');
+
+            $sql = "INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES ({$bindsStr})";
+
+            return [
+                self::SQL => $sql,
+                self::BINDS => $binds
+            ];
+		}
 
 
 		// public function update(): array {
