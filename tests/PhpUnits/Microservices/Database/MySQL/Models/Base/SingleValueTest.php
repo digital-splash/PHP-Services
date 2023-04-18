@@ -25,4 +25,9 @@
 				$singleValue->clearFinalString();
 				$this->assertEquals('', $singleValue->getFinalString());
 			}
+
+			public function testGetValue(): void {
+				$singleValue = new SingleValue('SET');
+				$this->assertEquals(null, $singleValue->getValue());
+			}
 	}
