@@ -4,7 +4,8 @@
 	use DigitalSplash\Database\MySQL\Models\Base\IndexedArray;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
-	use PHPUnit\Framework\TestCase;
+use PDO;
+use PHPUnit\Framework\TestCase;
 
 	class IndexedArrayTest extends TestCase {
 
@@ -85,20 +86,37 @@
 			return [
 				'empty array' => [
 					'array' => [],
-					'expectFinalString' => ''
+					'expectFinalString' => '',
+                    'expectBinds' => []
 				],
 				'array with one element' => [
 					'array' => [
 						'key1' => 'value1'
 					],
-					'expectFinalString' => 'SET `key1` = :key1'
+					'expectFinalString' => 'SET `key1` = :key1',
+                    'expectBinds' => [
+                        ':key1' => [
+                            'value' => 'value1',
+                            'type' => PDO::PARAM_STR
+                        ]
+                    ]
 				],
 				'array with two elements' => [
 					'array' => [
 						'key1' => 'value1',
 						'key2' => 'value2'
 					],
-					'expectFinalString' => 'SET `key1` = :key1, `key2` = :key2'
+					'expectFinalString' => 'SET `key1` = :key1, `key2` = :key2',
+                    'expectBinds' => [
+                        ':key1' => [
+                            'value' => 'value1',
+					        'type' => PDO::PARAM_STR
+                        ],
+                        ':key2' => [
+                            'value' => 'value2',
+                            'type' => PDO::PARAM_STR
+                        ]
+                    ]
 				]
 			];
 		}
@@ -108,12 +126,15 @@
 		 */
 		public function testGenerateStringStatement(
 			array $array,
-			string $expectFinalString
+			string $expectFinalString,
+            array $expectBinds
 		): void {
 			$indexedArray = new IndexedArray(', ', 'SET');
 			$indexedArray->setArray($array);
 			$indexedArray->generateStringStatement();
 
 			$this->assertEquals($expectFinalString, $indexedArray->getFinalString());
+        
+            $this->assertEqualsCanonicalizing($expectBinds, $indexedArray->binds->getBinds());
 		}
 	}
