@@ -12,4 +12,10 @@
 				$singleValue = new SingleValue('SET');
 				$this->assertEquals('', $singleValue->getFinalString());
 			}
+	
+			public function testSetFinalString(): void {
+				$singleValue = new SingleValue('SET');
+				$singleValue->setFinalString('test');
+				$this->assertEquals('test', $singleValue->getFinalString());
+			}
 	}
