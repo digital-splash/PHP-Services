@@ -69,6 +69,13 @@
             $this->assertEquals(['test'], $indexedArray->getArray());
         }
 
+        public function testClearArray(): void {
+            $indexedArray = new IndexedArray(', ', 'SET');
+            $indexedArray->setArray(['test']);
+            $indexedArray->clearArray();
+            $this->assertEquals([], $indexedArray->getArray());
+        }
+
         public function generateStringStatementProvider(): array {
             return [
                 'empty array' => [
