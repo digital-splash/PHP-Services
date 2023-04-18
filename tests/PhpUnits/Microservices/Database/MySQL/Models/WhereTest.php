@@ -1,11 +1,11 @@
 <?php
     namespace DigitalSplash\Tests\Database\MySQL\Models;
 
-    use DigitalSplash\Database\MySQL\Models\Having;
+    use DigitalSplash\Database\MySQL\Models\Where;
     use PDO;
     use PHPUnit\Framework\TestCase;
 
-    class HavingTest extends TestCase {
+    class WhereTest extends TestCase {
                 
         public function generateStringStatementProvider(): array {
 			return [
@@ -18,7 +18,7 @@
                     'array' => [
                         'name' => 'John'
                     ],
-                    'expectFinalString' => 'HAVING `name` = :name',
+                    'expectFinalString' => 'WHERE `name` = :name',
                     'expectBinds' => [
                         ':name' => [
                             'value' => 'John',
@@ -31,7 +31,7 @@
                         'name' => 'John',
                         'age' => 25
                     ],
-                    'expectFinalString' => 'HAVING `name` = :name AND `age` = :age',
+                    'expectFinalString' => 'WHERE `name` = :name AND `age` = :age',
                     'expectBinds' => [
                         ':name' => [
                             'value' => 'John',
@@ -43,6 +43,7 @@
                         ]
                     ]
                 ]
+
             ];
 		}
 
@@ -54,7 +55,7 @@
             string $expectFinalString,
             array $expectBinds
         ): void {
-            $having = new Having();
+            $having = new Where();
             $having->setArray($array);
             $having->generateStringStatement();
             $this->assertEquals($expectFinalString, $having->getFinalString());
