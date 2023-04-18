@@ -2,8 +2,6 @@
 	namespace DigitalSplash\Tests\Database\MySQL\Models;
 
 	use DigitalSplash\Database\MySQL\Models\Binds;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Language\Helpers\Translate;
 	use PDO;
 	use PHPUnit\Framework\TestCase;
 
