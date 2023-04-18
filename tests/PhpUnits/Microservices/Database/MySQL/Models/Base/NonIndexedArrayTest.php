@@ -76,4 +76,34 @@
             $this->assertEqualsCanonicalizing([], $nonIndexedArray->getArray());
         }
 
+        public function generateStringStatementProvider(): array {
+			return [
+				'empty array' => [
+                    'array' => [],
+                    'expectFinalString' => ''
+                ],
+                'array with one element' => [
+                    'array' => ['test'],
+                    'expectFinalString' => 'SET test'
+                ],
+                'array with two elements' => [
+                    'array' => ['test', 'test2'],
+                    'expectFinalString' => 'SET test, test2'
+                ]
+			];
+		}
+
+		/**
+		 * @dataProvider generateStringStatementProvider
+		 */
+		public function testGenerateStringStatement(
+			array $array,
+			string $expectFinalString
+		): void {
+			$indexedArray = new NonIndexedArray(', ', 'SET');
+			$indexedArray->setArray($array);
+			$indexedArray->generateStringStatement();
+
+			$this->assertEquals($expectFinalString, $indexedArray->getFinalString());
+		}
     }
