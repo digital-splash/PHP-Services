@@ -43,4 +43,27 @@
 				$singleValue->clearValue();
 				$this->assertEquals(null, $singleValue->getValue());
 			}
+			
+			public function generateStringStatementProvider(): array {
+				return [
+					'empty' => [
+						'value' => null,
+						'expect' => ''
+					],
+					'not empty' => [
+						'value' => 'test',
+						'expect' => 'SET test'
+					]
+				];
+			}
+
+			/**
+			 * @dataProvider generateStringStatementProvider
+			 */
+			public function testGenerateStringStatement($value, $expect): void {
+				$singleValue = new SingleValue('SET');
+				$singleValue->setValue($value);
+				$singleValue->generateStringStatement();
+				$this->assertEquals($expect, $singleValue->getFinalString());
+			}
 	}
