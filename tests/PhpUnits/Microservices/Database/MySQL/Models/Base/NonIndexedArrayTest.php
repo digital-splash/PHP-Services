@@ -100,10 +100,10 @@
 			array $array,
 			string $expectFinalString
 		): void {
-			$indexedArray = new NonIndexedArray(', ', 'SET');
-			$indexedArray->setArray($array);
-			$indexedArray->generateStringStatement();
+			$nonIndexedArray = new NonIndexedArray(', ', 'SET');
+			$nonIndexedArray->setArray($array);
+			$nonIndexedArray->generateStringStatement();
 
-			$this->assertEquals($expectFinalString, $indexedArray->getFinalString());
+			$this->assertEquals($expectFinalString, $nonIndexedArray->getFinalString());
 		}
     }
