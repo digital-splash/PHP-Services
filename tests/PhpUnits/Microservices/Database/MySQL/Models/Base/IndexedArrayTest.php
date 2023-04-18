@@ -45,6 +45,12 @@
             $this->assertEquals('', $indexedArray->getFinalString());
         }
 
+        public function testSetFinalString(): void {
+            $indexedArray = new IndexedArray(', ', 'SET');
+            $indexedArray->setFinalString('test');
+            $this->assertEquals('test', $indexedArray->getFinalString());
+        }
+
         public function generateStringStatementProvider(): array {
             return [
                 'empty array' => [
