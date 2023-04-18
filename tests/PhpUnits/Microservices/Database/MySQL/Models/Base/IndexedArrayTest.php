@@ -51,6 +51,13 @@
             $this->assertEquals('test', $indexedArray->getFinalString());
         }
 
+        public function testClearFinalString(): void {
+            $indexedArray = new IndexedArray(', ', 'SET');
+            $indexedArray->setFinalString('test');
+            $indexedArray->clearFinalString();
+            $this->assertEquals('', $indexedArray->getFinalString());
+        }
+
         public function generateStringStatementProvider(): array {
             return [
                 'empty array' => [
