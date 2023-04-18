@@ -30,4 +30,10 @@
 				$singleValue = new SingleValue('SET');
 				$this->assertEquals(null, $singleValue->getValue());
 			}
+
+			public function testSetValue(): void {
+				$singleValue = new SingleValue('SET');
+				$singleValue->setValue('test');
+				$this->assertEquals('test', $singleValue->getValue());
+			}
 	}
