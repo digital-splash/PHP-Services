@@ -36,4 +36,11 @@
 				$singleValue->setValue('test');
 				$this->assertEquals('test', $singleValue->getValue());
 			}
+
+			public function testClearValue(): void {
+				$singleValue = new SingleValue('SET');
+				$singleValue->setValue('test');
+				$singleValue->clearValue();
+				$this->assertEquals(null, $singleValue->getValue());
+			}
 	}
