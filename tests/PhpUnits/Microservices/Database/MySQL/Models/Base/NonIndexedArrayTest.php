@@ -49,4 +49,12 @@
             $nonIndexedArray->setFinalString('test');
             $this->assertEquals('test', $nonIndexedArray->getFinalString());
         }
+
+        public function testClearFinalString(): void {
+            $nonIndexedArray = new NonIndexedArray(', ', 'SET');
+            $nonIndexedArray->setFinalString('test');
+            $nonIndexedArray->clearFinalString();
+            $this->assertEquals('', $nonIndexedArray->getFinalString());
+        }
+
     }
