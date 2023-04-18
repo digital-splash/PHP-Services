@@ -56,5 +56,11 @@
             $nonIndexedArray->clearFinalString();
             $this->assertEquals('', $nonIndexedArray->getFinalString());
         }
+        //! ask if i should keep it canonicalizing
+        public function testGetArray(): void {
+            $nonIndexedArray = new NonIndexedArray(', ', 'SET');
+            $this->assertEqualsCanonicalizing([], $nonIndexedArray->getArray());
+        }
 
+       
     }
