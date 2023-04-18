@@ -44,4 +44,9 @@
             $this->assertEquals('', $nonIndexedArray->getFinalString());
         }
 
+        public function testSetFinalString(): void {
+            $nonIndexedArray = new NonIndexedArray(', ', 'SET');
+            $nonIndexedArray->setFinalString('test');
+            $this->assertEquals('test', $nonIndexedArray->getFinalString());
+        }
     }
