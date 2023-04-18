@@ -58,6 +58,11 @@
             $this->assertEquals('', $indexedArray->getFinalString());
         }
 
+        public function testGetArray(): void {
+            $indexedArray = new IndexedArray(', ', 'SET');
+            $this->assertEquals([], $indexedArray->getArray());
+        }
+
         public function generateStringStatementProvider(): array {
             return [
                 'empty array' => [
