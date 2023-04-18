@@ -37,4 +37,11 @@
             new NonIndexedArray($implodeValue, $statementPrefix);
         }
 
+        // ! IMPORTANT ask about the success test?? 
+
+        public function testGetFinalString(): void {
+            $nonIndexedArray = new NonIndexedArray(', ', 'SET');
+            $this->assertEquals('', $nonIndexedArray->getFinalString());
+        }
+
     }
