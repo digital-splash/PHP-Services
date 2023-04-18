@@ -62,5 +62,11 @@
             $this->assertEqualsCanonicalizing([], $nonIndexedArray->getArray());
         }
 
+        public function testSetArray(): void {
+            $nonIndexedArray = new NonIndexedArray(', ', 'SET');
+            $nonIndexedArray->setArray(['test']);
+            $this->assertEqualsCanonicalizing(['test'], $nonIndexedArray->getArray());
+        }
+
        
     }
