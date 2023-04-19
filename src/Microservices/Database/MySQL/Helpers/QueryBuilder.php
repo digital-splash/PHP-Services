@@ -172,44 +172,47 @@
 			];
 		}
 
-		// public function select(): array {
+		public function select(): array {
 
-		// 	if (Helper::ArrayNullOrEmpty($this->data)) {
-		// 		throw new NotEmptyParamException('data');
-		// 	}
+			$columnsStr = '*';
 
-		// 	$columnsStr = '*';
+			if (!Helper::ArrayNullOrEmpty($this->data->getData()) && $this->data->getData()[0] != '') {
+				$columnsStr = Helper::ImplodeArrToStr($this->data->getData(), ', ');
+			}
 
-		// 	if (!Helper::ArrayNullOrEmpty($this->data)) {
-		// 		$columnsStr = Helper::ImplodeArrToStr($this->data, ', ');
-		// 	}
+			$this->where->generateStringStatement();
 
-		// 	$this->getWhereStatement();
+			$this->join->generateStringStatement();
 
-		// 	$this->getJoinStatement();
+			$this->group->generateStringStatement();
 
-		// 	$this->getLimitStatement();
+			$this->having->generateStringStatement();
 
-		// 	$this->getOrderByStatement();
+			$this->order->generateStringStatement();
 
-		// 	$this->getGroupByStatement();
+			$this->limit->generateStringStatement();
 
-		// 	$this->getHavingStatement();
+			$this->offset->generateStringStatement();
 
-		// 	$this->getSuffixStatement();
+			$this->binds->setBinds($this->where->binds->getBinds());
+			foreach ($this->having->binds->getBinds() AS $bind_key => $bind_value) {
+				$this->binds->appendToBinds($bind_key, $bind_value);
+			}
 
+			$this->sql->setValue("SELECT $columnsStr FROM {$this->database}.{$this->table}"
+				. (Helper::StringNullOrEmpty($this->join->getFinalString()) 	? '' : ' ' . $this->join->getFinalString())
+				. (Helper::StringNullOrEmpty($this->where->getFinalString()) 	? '' : ' ' . $this->where->getFinalString())
+				. (Helper::StringNullOrEmpty($this->group->getFinalString()) 	? '' : ' ' . $this->group->getFinalString())
+				. (Helper::StringNullOrEmpty($this->having->getFinalString()) 	? '' : ' ' . $this->having->getFinalString())
+				. (Helper::StringNullOrEmpty($this->order->getFinalString()) 	? '' : ' ' . $this->order->getFinalString())
+				. (Helper::StringNullOrEmpty($this->limit->getFinalString()) 	? '' : ' ' . $this->limit->getFinalString())
+				. (Helper::StringNullOrEmpty($this->offset->getFinalString()) 	? '' : ' ' . $this->offset->getFinalString())
+			);
+			$this->sql->generateStringStatement();
 
-
-		// 	$sql = "SELECT $columnsStr FROM {$this->database}.{$this->table}"
-		// 			. $this->join   . $this->where
-		// 			. $this->group  . $this->having
-		// 			. $this->order  . $this->limit
-		// 			. $this->suffix;
-
-		// 	return [
-		// 		self::SQL => $sql,
-		// 		self::BINDS => $this->_binds
-		// 	];
-		// }
-
+			return [
+				self::SQL => $this->sql->getFinalString(),
+				self::BINDS => $this->binds->getBinds()
+			];
+		}
 	}
