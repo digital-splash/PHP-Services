@@ -4,8 +4,8 @@
 	use DigitalSplash\Database\MySQL\Models\Base\IndexedArray;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
-use PDO;
-use PHPUnit\Framework\TestCase;
+	use PDO;
+	use PHPUnit\Framework\TestCase;
 
 	class IndexedArrayTest extends TestCase {
 
@@ -31,86 +31,79 @@ use PHPUnit\Framework\TestCase;
 			string $expectExeption,
 			string $expectExeptionMessage
 		): void {
-
 			$this->expectException($expectExeption);
 			$this->expectExceptionMessage($expectExeptionMessage);
 
 			new IndexedArray($implodeValue, $statementPrefix);
 		}
 
-		// ! IMPORTANT ask about the success test?? 
-
-		public function testGetFinalString(): void {
+		public function testFinalStringAllCases(): void {
 			$indexedArray = new IndexedArray(', ', 'SET');
-			$this->assertEquals('', $indexedArray->getFinalString());
-		}
+			$this->assertEmpty($indexedArray->getFinalString());
 
-		public function testSetFinalString(): void {
-			$indexedArray = new IndexedArray(', ', 'SET');
-			$indexedArray->setFinalString('test');
-			$this->assertEquals('test', $indexedArray->getFinalString());
-		}
+			$value = 'This is a final String';
+			$indexedArray->setFinalString($value);
+			$this->assertEquals($value, $indexedArray->getFinalString());
 
-		public function testClearFinalString(): void {
-			$indexedArray = new IndexedArray(', ', 'SET');
-			$indexedArray->setFinalString('test');
 			$indexedArray->clearFinalString();
-			$this->assertEquals('', $indexedArray->getFinalString());
-		}
-		//! ask if i should keep it canonicalizing
-		public function testGetArray(): void {
-			$indexedArray = new IndexedArray(', ', 'SET');
-			$this->assertEqualsCanonicalizing([], $indexedArray->getArray());
+			$this->assertEmpty($indexedArray->getFinalString());
 		}
 
-		public function testSetArray(): void {
+		public function testArrayAllCases(): void {
 			$indexedArray = new IndexedArray(', ', 'SET');
-			$indexedArray->setArray(['test' => 'test']);
-			$this->assertEqualsCanonicalizing(['test' => 'test'], $indexedArray->getArray());
-		}
+			$this->assertCount(0, $indexedArray->getArray());
 
-		public function testClearArray(): void {
-			$indexedArray = new IndexedArray(', ', 'SET');
-			$indexedArray->setArray(['test' => 'test']);
+			$value = [
+				'key1' => 'value1',
+				'key2' => 'value2',
+				'key3' => 'value3',
+			];
+			$indexedArray->setArray($value);
+			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
+
+			$value['key4'] = 'value4';
+			$indexedArray->appendToArray('key4', 'value4');
+			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
+
 			$indexedArray->clearArray();
-			$this->assertEqualsCanonicalizing([], $indexedArray->getArray());
-		}
+			$this->assertCount(0, $indexedArray->getArray());
 
-		public function testAppendToArray(): void {
-			$indexedArray = new IndexedArray(', ', 'SET');
-			$indexedArray->appendToArray('test', 'test');
-			$this->assertEqualsCanonicalizing(['test' => 'test'], $indexedArray->getArray());
+			$value = [
+				'key5' => 'value5'
+			];
+			$indexedArray->appendToArray('key5', 'value5');
+			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
 		}
 
 		public function generateStringStatementProvider(): array {
 			return [
-				'empty array' => [
+				'empty_array' => [
 					'array' => [],
-					'expectFinalString' => '',
-                    'expectBinds' => []
+					'expectedFinalString' => '',
+                    'expectedBinds' => []
 				],
-				'array with one element' => [
+				'array_with_one_element' => [
 					'array' => [
 						'key1' => 'value1'
 					],
-					'expectFinalString' => 'SET `key1` = :key1',
-                    'expectBinds' => [
+					'expectedFinalString' => 'SET `key1` = :key1',
+                    'expectedBinds' => [
                         ':key1' => [
                             'value' => 'value1',
                             'type' => PDO::PARAM_STR
                         ]
                     ]
 				],
-				'array with two elements' => [
+				'array_with_two_elements' => [
 					'array' => [
-						'key1' => 'value1',
+						'key1' => 1,
 						'key2' => 'value2'
 					],
-					'expectFinalString' => 'SET `key1` = :key1, `key2` = :key2',
-                    'expectBinds' => [
+					'expectedFinalString' => 'SET `key1` = :key1, `key2` = :key2',
+                    'expectedBinds' => [
                         ':key1' => [
-                            'value' => 'value1',
-					        'type' => PDO::PARAM_STR
+                            'value' => 1,
+					        'type' => PDO::PARAM_INT
                         ],
                         ':key2' => [
                             'value' => 'value2',
@@ -126,15 +119,14 @@ use PHPUnit\Framework\TestCase;
 		 */
 		public function testGenerateStringStatement(
 			array $array,
-			string $expectFinalString,
-            array $expectBinds
+			string $expectedFinalString,
+            array $expectedBinds
 		): void {
 			$indexedArray = new IndexedArray(', ', 'SET');
 			$indexedArray->setArray($array);
 			$indexedArray->generateStringStatement();
 
-			$this->assertEquals($expectFinalString, $indexedArray->getFinalString());
-        
-            $this->assertEqualsCanonicalizing($expectBinds, $indexedArray->binds->getBinds());
+			$this->assertEquals($expectedFinalString, $indexedArray->getFinalString());
+            $this->assertEqualsCanonicalizing($expectedBinds, $indexedArray->binds->getBinds());
 		}
 	}
