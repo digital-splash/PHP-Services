@@ -1,7 +1,6 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Helpers;
 
-	use DigitalSplash\Classes\Database\Order;
 	use DigitalSplash\Database\MySQL\Models\Binds;
 	use DigitalSplash\Database\MySQL\Models\Data;
 	use DigitalSplash\Database\MySQL\Models\Group;
@@ -9,7 +8,8 @@
 	use DigitalSplash\Database\MySQL\Models\Join;
 	use DigitalSplash\Database\MySQL\Models\Limit;
 	use DigitalSplash\Database\MySQL\Models\Offset;
-	use DigitalSplash\Database\MySQL\Models\Sql;
+use DigitalSplash\Database\MySQL\Models\Order;
+use DigitalSplash\Database\MySQL\Models\Sql;
 	use DigitalSplash\Database\MySQL\Models\Where;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
