@@ -6,28 +6,15 @@
 
 	class DataTest extends TestCase {
 
-		public function testGetData(): void {
-			$data = new Data();
+        public function testData(): void {
+
+            $data = new Data();
 			$this->assertEqualsCanonicalizing([], $data->getData());
-		}
-
-		public function testSetData(): void {
-			$data = new Data();
-			$data->setData(['name' => 'John', 'age' => 25]);
-			$this->assertEqualsCanonicalizing(['name' => 'John', 'age' => 25], $data->getData());
-		}
-
-		public function testClearData(): void {
-			$data = new Data();
-			$data->setData(['name' => 'John', 'age' => 25]);
-			$data->clearData();
-			$this->assertEqualsCanonicalizing([], $data->getData());
-		}
-
-		public function testAppendToData(): void {
-			$data = new Data();
             $data->setData(['name' => 'John', 'age' => 25]);
-			$data->appendToData('email','john@example.com');
+			$this->assertEqualsCanonicalizing(['name' => 'John', 'age' => 25], $data->getData());
+            $data->appendToData('email','john@example.com');
 			$this->assertEqualsCanonicalizing(['name' => 'John','age' => 25,'email' => 'john@example.com'], $data->getData());
-		}
+            $data->clearData();
+			$this->assertEqualsCanonicalizing([], $data->getData());
+        }
 	}
