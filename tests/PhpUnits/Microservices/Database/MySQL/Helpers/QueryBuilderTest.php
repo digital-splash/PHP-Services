@@ -360,39 +360,15 @@
 			$this->assertEqualsCanonicalizing($expected_binds, $binds);
 		}
 
+		public function testSelectNoDataToSelectThrows(): void {
+			$this->expectException(NotEmptyParamException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+				"::params::" => "data"
+			]));
 
-		// public function testDeleteSingleRecordSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setWhere($where);
-		// 	[
-		// 		'sql' => $sql,
-		// 		'binds' => $binds
-		// 	] = $queryBuilder->delete(['id' => 1]);
-
-		// 	$expectedSql = 'DELETE FROM db.table WHERE `id` = :id';
-		// 	$expectedBinds = [
-		// 		':id' => ['value' => 1, 'type' => 1],
-		// 	];
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		// }
-
-		// public function testSelectNoDataToSelectThrows(): void {
-		// 	$this->expectException(NotEmptyParamException::class);
-		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-		// 		"::params::" => "data"
-		// 	]));
-
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->select();
-		// }
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->select();
+		}
 
 		// public function testSelectSingleRecordSuccess(): void {
 		// 	$db = 'db';
