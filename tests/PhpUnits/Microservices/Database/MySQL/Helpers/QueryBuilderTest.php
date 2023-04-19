@@ -370,6 +370,292 @@
 			$queryBuilder->select();
 		}
 
+		public function selectProvider(): array {
+			return [
+				'select_all' => [
+					'data' => [''],
+					'expected_sql' => 'SELECT * FROM db.table',
+					'expected_binds' => []
+				],
+				'select_without_where' =>[
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table',
+					'expected_binds' => []
+				],
+				'select_with_where' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					]
+				],
+				'select_with_where_and_join' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					]
+				],
+				'select_with_where_and_join_and_order' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+						],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'order' => [
+						'`users`.`id` DESC'
+					]
+				],
+				'select_with_where_and_join_and_order_and_limit' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'order' => [
+						'`users`.`id` DESC'
+					],
+					'limit' => 10
+				],
+				'select_with_where_and_join_and_order_and_limit_and_offset' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'order' => [
+						'`users`.`id` DESC'
+					],
+					'limit' => 10,
+					'offset' => 5
+				],
+				'select_with_where_and_join_and_order_and_limit_and_offset_and_group' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'order' => [
+						'`users`.`id` DESC'
+					],
+					'limit' => 10,
+					'offset' => 5,
+					'group' => [
+						'users.id'
+					]
+				],
+				'select_with_where_and_join_and_order_and_limit_and_offset_and_group_and_having' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id HAVING `users.id` = :users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						],
+						':users.id' => [
+							'value' => 1,
+							'type' => 1
+						]
+					],
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'order' => [
+						'`users`.`id` DESC'
+					],
+					'limit' => 10,
+					'offset' => 5,
+					'group' => [
+						'users.id'
+					],
+					'having' => [
+						'users.id' => 1
+					]
+				]
+			];
+		}
+
+		/**
+		 * @dataProvider selectProvider
+		 */
+		public function testSelectSuccess(array $data, string $expectedSql, array $expectedBinds, array $where = [], array $join = [], array $order = [], int $limit = null, int $offset = null, array $group = [], array $having = []): void {
+			$db = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->data->setData($data);
+			$queryBuilder->where->setArray($where);
+			$queryBuilder->join->setArray($join);
+			$queryBuilder->order->setArray($order);
+			$queryBuilder->limit->setValue($limit);
+			$queryBuilder->offset->setValue($offset);
+			$queryBuilder->group->setArray($group);
+			$queryBuilder->having->setArray($having);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->select();
+
+			$this->assertEquals($expectedSql, $sql);
+			$this->assertEquals($expectedBinds, $binds);
+		}
+
 		// public function testSelectSingleRecordSuccess(): void {
 		// 	$db = 'db';
 		// 	$table = 'table';
