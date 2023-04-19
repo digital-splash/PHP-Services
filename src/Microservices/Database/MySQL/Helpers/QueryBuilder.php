@@ -155,21 +155,22 @@
 		// 	];
 		// }
 
-		// public function delete(): array {
+		public function delete(): array {
+			$this->where->generateStringStatement();
+			$whereStr = $this->where->getFinalString();
+			if (Helper::StringNullOrEmpty($whereStr)) {
+				$this->sql->setValue("DELETE FROM `{$this->database}`.`{$this->table}`");
+			} else {
+				$this->sql->setValue("DELETE FROM `{$this->database}`.`{$this->table}` {$whereStr}");
+			}
 
-		// 	if (Helper::ArrayNullOrEmpty($this->whereData)) {
-		// 		throw new NotEmptyParamException('whereData');
-		// 	}
-
-		// 	$this->getWhereStatement();
-
-		// 	$sql = "DELETE FROM {$this->database}.{$this->table}" . $this->where;
-
-		// 	return [
-		// 		self::SQL => $sql,
-		// 		self::BINDS => $this->_binds
-		// 	];
-		// }
+			$this->sql->generateStringStatement();
+			$this->binds->setBinds($this->where->binds->getBinds());
+			return [
+				self::SQL => $this->sql->getFinalString(),
+				self::BINDS => $this->binds->getBinds()
+			];
+		}
 
 		// public function select(): array {
 
