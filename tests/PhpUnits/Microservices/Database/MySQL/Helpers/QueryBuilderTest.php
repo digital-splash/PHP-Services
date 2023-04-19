@@ -148,52 +148,52 @@
 			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		}
 
-		// public function testInsertInBulk(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$data = [
-		// 		['name' => 'John', 'age' => 25],
-		// 		['name' => 'Jane', 'age' => 30],
-		// 		['name' => 'Bob', 'age' => 40],
-		// 	];
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->data->setData($data);
-		// 	[
-		// 		'sql' => $sql,
-		// 		'binds' => $binds
-		// 	] = $queryBuilder->insert();
+		public function testInsertInBulk(): void {
+			$db = 'db';
+			$table = 'table';
+			$data = [
+				['name' => 'John', 'age' => 25],
+				['name' => 'Jane', 'age' => 30],
+				['name' => 'Bob', 'age' => 40],
+			];
+			$queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->data->setData($data);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->insert();
 
-		// 	$expectedSql = "INSERT INTO `db`.`table` (`name`, `age`) VALUES (:name_1, :age_1), (:name_2, :age_2), (:name_3, :age_3)";
-		// 	$this->assertEquals($expectedSql,$sql);
+			$expectedSql = "INSERT INTO `db`.`table` (`name`, `age`) VALUES (:name_1, :age_1), (:name_2, :age_2), (:name_3, :age_3)";
+			$this->assertEquals($expectedSql,$sql);
 
-		// 	$expectedBinds = [
-		// 		':name_1' => [
-		// 			'value' => 'John',
-		// 			'type' => PDO::PARAM_STR
-		// 		],
-		// 		':age_1' => [
-		// 			'value' => 25,
-		// 			'type' => PDO::PARAM_INT
-		// 		],
-		// 		':name_2' => [
-		// 			'value' => 'Jane',
-		// 			'type' => PDO::PARAM_STR
-		// 		],
-		// 		':age_2' => [
-		// 			'value' => 30,
-		// 			'type' => PDO::PARAM_INT
-		// 		],
-		// 		':name_3' => [
-		// 			'value' => 'Bob',
-		// 			'type' => PDO::PARAM_STR
-		// 		],
-		// 		':age_3' => [
-		// 			'value' => 40,
-		// 			'type' => PDO::PARAM_INT
-		// 		],
-		// 	];
-		// 	$this->assertEquals($expectedBinds, $binds);
-		// }
+			$expectedBinds = [
+				':name_1' => [
+					'value' => 'John',
+					'type' => PDO::PARAM_STR
+				],
+				':age_1' => [
+					'value' => 25,
+					'type' => PDO::PARAM_INT
+				],
+				':name_2' => [
+					'value' => 'Jane',
+					'type' => PDO::PARAM_STR
+				],
+				':age_2' => [
+					'value' => 30,
+					'type' => PDO::PARAM_INT
+				],
+				':name_3' => [
+					'value' => 'Bob',
+					'type' => PDO::PARAM_STR
+				],
+				':age_3' => [
+					'value' => 40,
+					'type' => PDO::PARAM_INT
+				],
+			];
+			$this->assertEquals($expectedBinds, $binds);
+		}
 
 		// public function testUpdateNoDataToUpdateThrows(): void {
 		// 	$this->expectException(NotEmptyParamException::class);
