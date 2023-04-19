@@ -85,12 +85,12 @@
 
 			$columns = [];
 			$binds = [];
-			$r = 0;
+			$r = 1;
 			foreach ($this->data->getData() AS $rows) {
 				$row_binds = [];
 
 				foreach ($rows AS $column => $value) {
-					if (!in_array($column, $columns)) {
+					if (!in_array("`{$column}`", $columns)) {
 						$columns[] = "`{$column}`";
 					}
 
@@ -112,7 +112,7 @@
 			$bindsStr = Helper::ImplodeArrToStr($binds, ', ');
 
 			$this->sql->setValue("INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES {$bindsStr}");
-
+			$this->sql->generateStringStatement();
 			return [
 				self::SQL => $this->sql->getFinalString(),
 				self::BINDS => $this->binds->getBinds()
