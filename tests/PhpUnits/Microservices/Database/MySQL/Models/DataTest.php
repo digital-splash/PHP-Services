@@ -26,7 +26,8 @@
 
 		public function testAppendToData(): void {
 			$data = new Data();
-			$data->appendToData('name','John');
-			$this->assertEqualsCanonicalizing(['name' => 'John'], $data->getData());
+            $data->setData(['name' => 'John', 'age' => 25]);
+			$data->appendToData('email','john@example.com');
+			$this->assertEqualsCanonicalizing(['name' => 'John','age' => 25,'email' => 'john@example.com'], $data->getData());
 		}
 	}
