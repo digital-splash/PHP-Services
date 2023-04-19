@@ -277,15 +277,89 @@
 		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		// }
 
-		// public function testDeleteNoDataToInsertThrows(): void {
-		// 	$this->expectException(NotEmptyParamException::class);
-		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-		// 		"::params::" => "whereData"
-		// 	]));
+		public function deleteProvider(): array {
+			return [
+				[
+					'where' => [],
+					'expected_sql' => 'DELETE FROM `db`.`table`',
+					'expected_binds' => []
+				],
+				[
+					'where' => [
+						'id' => 1,
+					],
+					'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						]
+					]
+				],
+				[
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish'
+					],
+					'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id AND `name` = :name',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						]
+					]
+				],
+				[
+						'where' => [
+							'id' => 1,
+							'name' => 'Hadi Darwish',
+							'age' => 22
+						],
+						'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id AND `name` = :name AND `age` = :age',
+						'expected_binds' => [
+							':id' => [
+								'value' => 1,
+								'type' => 1
+							],
+							':name' => [
+								'value' => 'Hadi Darwish',
+								'type' => 2
+							],
+							':age' => [
+								'value' => 22,
+								'type' => 1
+							]
+						]
+				],
+			];
+		}
 
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->delete();
-		// }
+		/**
+		 * @dataProvider deleteProvider
+		 */
+		public function testDeleteSuccess(
+			array $where,
+			string $expected_sql,
+			array $expected_binds
+		): void {
+			$db = 'db';
+			$table = 'table';
+
+			$queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->where->setArray($where);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->delete();
+
+			$this->assertEquals($expected_sql, $sql);
+			$this->assertEqualsCanonicalizing($expected_binds, $binds);
+		}
+
 
 		// public function testDeleteSingleRecordSuccess(): void {
 		// 	$db = 'db';
