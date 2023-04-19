@@ -42,15 +42,23 @@
 
 		public function testAppendToBinds(): void {
 			$binds = new Binds();
-			$binds->appendToBinds(':name_1', [
+			$binds->setBinds([':name_1' => [
 				'value' => 'John',
 				'type' => PDO::PARAM_STR
-			]);
+			]]);
+            $binds->appendToBinds(':name_2', [
+                'value' => 'Jane',
+                'type' => PDO::PARAM_STR
+            ]);
 			$this->assertEqualsCanonicalizing([
 				':name_1' => [
 					'value' => 'John',
 					'type' => PDO::PARAM_STR
-				]
+                ],
+                ':name_2' => [
+                    'value' => 'Jane',
+                    'type' => PDO::PARAM_STR
+                ]
 			], $binds->getBinds());
 		}
 	}
