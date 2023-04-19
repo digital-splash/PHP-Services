@@ -5,7 +5,7 @@
 	use PHPUnit\Framework\TestCase;
 
 	class DataTest extends TestCase {
-				
+
 		public function testGetData(): void {
 			$data = new Data();
 			$this->assertEqualsCanonicalizing([], $data->getData());

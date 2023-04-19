@@ -1,36 +1,36 @@
 <?php
-    namespace DigitalSplash\Tests\Database\MySQL\Models;
+	namespace DigitalSplash\Tests\Database\MySQL\Models;
 
-    use DigitalSplash\Database\MySQL\Models\Group;
-    use PHPUnit\Framework\TestCase;
+	use DigitalSplash\Database\MySQL\Models\Group;
+	use PHPUnit\Framework\TestCase;
 
-    class GroupTest extends TestCase{
-            
-        public function generateStringStatementProvider(): array {
+	class GroupTest extends TestCase{
+
+		public function generateStringStatementProvider(): array {
 			return [
-                'empty array' => [
-                    'array' => [],
-                    'expectFinalString' => ''
-                ],
-                'one element' => [
-                    'array' => ['name'],
-                    'expectFinalString' => 'GROUP BY name'
-                ],
-                'two elements' => [
-                    'array' => ['name', 'age'],
-                    'expectFinalString' => 'GROUP BY name, age'
-                ]
-            ];
+				'empty array' => [
+					'array' => [],
+					'expectFinalString' => ''
+				],
+				'one element' => [
+					'array' => ['name'],
+					'expectFinalString' => 'GROUP BY name'
+				],
+				'multiple elements' => [
+					'array' => ['name', 'age', 'email'],
+					'expectFinalString' => 'GROUP BY name, age, email'
+				]
+			];
 		}
 
-        /**
+		/**
 		 * @dataProvider generateStringStatementProvider
 		 */
-        public function testGenerateStringStatement(array $array, string $expectFinalString): void {
-            $group = new Group();
-            $group->setArray($array);
-            $group->generateStringStatement();
-            $this->assertEquals($expectFinalString, $group->getFinalString());
-        }
-       
-    }
+		public function testGenerateStringStatement(array $array, string $expectFinalString): void {
+			$group = new Group();
+			$group->setArray($array);
+			$group->generateStringStatement();
+			$this->assertEquals($expectFinalString, $group->getFinalString());
+		}
+
+	}
