@@ -2,68 +2,59 @@
 	namespace DigitalSplash\Tests\Database\MySQL\Models\Base;
 
 	use DigitalSplash\Database\MySQL\Models\Base\SingleValue;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Language\Helpers\Translate;
 	use PHPUnit\Framework\TestCase;
 
 	class SingleValueTest extends TestCase {
-			
-			public function testGetFinalString(): void {
-				$singleValue = new SingleValue('SET');
-				$this->assertEquals('', $singleValue->getFinalString());
-			}
-	
-			public function testSetFinalString(): void {
-				$singleValue = new SingleValue('SET');
-				$singleValue->setFinalString('test');
-				$this->assertEquals('test', $singleValue->getFinalString());
-			}
-	
-			public function testClearFinalString(): void {
-				$singleValue = new SingleValue('SET');
-				$singleValue->setFinalString('test');
-				$singleValue->clearFinalString();
-				$this->assertEquals('', $singleValue->getFinalString());
-			}
 
-			public function testGetValue(): void {
-				$singleValue = new SingleValue('SET');
-				$this->assertEquals(null, $singleValue->getValue());
-			}
+		public function testFinalStringAllCases(): void {
+			$singleValue = new SingleValue('SET');
+			$this->assertEmpty($singleValue->getFinalString());
 
-			public function testSetValue(): void {
-				$singleValue = new SingleValue('SET');
-				$singleValue->setValue('test');
-				$this->assertEquals('test', $singleValue->getValue());
-			}
+			$value = 'This is a final String';
+			$singleValue->setFinalString($value);
+			$this->assertEquals($value, $singleValue->getFinalString());
 
-			public function testClearValue(): void {
-				$singleValue = new SingleValue('SET');
-				$singleValue->setValue('test');
-				$singleValue->clearValue();
-				$this->assertEquals(null, $singleValue->getValue());
-			}
-			
-			public function generateStringStatementProvider(): array {
-				return [
-					'empty' => [
-						'value' => null,
-						'expect' => ''
-					],
-					'not empty' => [
-						'value' => 'test',
-						'expect' => 'SET test'
-					]
-				];
-			}
+			$singleValue->clearFinalString();
+			$this->assertEmpty($singleValue->getFinalString());
+		}
 
-			/**
-			 * @dataProvider generateStringStatementProvider
-			 */
-			public function testGenerateStringStatement($value, $expect): void {
-				$singleValue = new SingleValue('SET');
-				$singleValue->setValue($value);
-				$singleValue->generateStringStatement();
-				$this->assertEquals($expect, $singleValue->getFinalString());
-			}
+		public function testValueAllCases(): void {
+			$singleValue = new SingleValue('SET');
+			$this->assertNull($singleValue->getValue());
+
+			$value = 'value';
+			$singleValue->setValue($value);
+			$this->assertEquals($value, $singleValue->getValue());
+
+			$singleValue->clearValue();
+			$this->assertNull($singleValue->getValue());
+		}
+
+		public function generateStringStatementProvider(): array {
+			return [
+				'empty' => [
+					'value' => null,
+					'expected' => ''
+				],
+				'not_empty' => [
+					'value' => 'value',
+					'expected' => 'SET value'
+				]
+			];
+		}
+
+		/**
+		 * @dataProvider generateStringStatementProvider
+		 */
+		public function testGenerateStringStatement(
+			$value,
+			string $expected
+		): void {
+			$singleValue = new SingleValue('SET');
+			$singleValue->setValue($value);
+			$singleValue->generateStringStatement();
+
+			$this->assertEquals($expected, $singleValue->getFinalString());
+		}
+
 	}

@@ -1,9 +1,6 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Models\Base;
 
-	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Helpers\Helper;
-
 	class SingleValue {
 		private string $statementPrefix;
 		protected string $finalString;

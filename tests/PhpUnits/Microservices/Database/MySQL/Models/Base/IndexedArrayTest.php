@@ -80,36 +80,41 @@
 				'empty_array' => [
 					'array' => [],
 					'expectedFinalString' => '',
-                    'expectedBinds' => []
+					'expectedBinds' => []
 				],
 				'array_with_one_element' => [
 					'array' => [
 						'key1' => 'value1'
 					],
 					'expectedFinalString' => 'SET `key1` = :key1',
-                    'expectedBinds' => [
-                        ':key1' => [
-                            'value' => 'value1',
-                            'type' => PDO::PARAM_STR
-                        ]
-                    ]
+					'expectedBinds' => [
+						':key1' => [
+							'value' => 'value1',
+							'type' => PDO::PARAM_STR
+						]
+					]
 				],
-				'array_with_two_elements' => [
+				'array_with_multiple_elements' => [
 					'array' => [
 						'key1' => 1,
-						'key2' => 'value2'
+						'key2' => 'value2',
+						'key3' => '2023-01-01',
 					],
-					'expectedFinalString' => 'SET `key1` = :key1, `key2` = :key2',
-                    'expectedBinds' => [
-                        ':key1' => [
-                            'value' => 1,
-					        'type' => PDO::PARAM_INT
-                        ],
-                        ':key2' => [
-                            'value' => 'value2',
-                            'type' => PDO::PARAM_STR
-                        ]
-                    ]
+					'expectedFinalString' => 'SET `key1` = :key1, `key2` = :key2, `key3` = :key3',
+					'expectedBinds' => [
+						':key1' => [
+							'value' => 1,
+							'type' => PDO::PARAM_INT
+						],
+						':key2' => [
+							'value' => 'value2',
+							'type' => PDO::PARAM_STR
+						],
+						':key3' => [
+							'value' => '2023-01-01',
+							'type' => PDO::PARAM_STR
+						]
+					]
 				]
 			];
 		}
@@ -120,13 +125,14 @@
 		public function testGenerateStringStatement(
 			array $array,
 			string $expectedFinalString,
-            array $expectedBinds
+			array $expectedBinds
 		): void {
 			$indexedArray = new IndexedArray(', ', 'SET');
 			$indexedArray->setArray($array);
 			$indexedArray->generateStringStatement();
 
 			$this->assertEquals($expectedFinalString, $indexedArray->getFinalString());
-            $this->assertEqualsCanonicalizing($expectedBinds, $indexedArray->binds->getBinds());
+			$this->assertEqualsCanonicalizing($expectedBinds, $indexedArray->binds->getBinds());
 		}
+
 	}
