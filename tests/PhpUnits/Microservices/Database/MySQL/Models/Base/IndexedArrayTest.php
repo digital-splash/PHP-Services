@@ -60,10 +60,12 @@
 			];
 			$indexedArray->setArray($value);
 			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
+			$this->assertCount(3, $indexedArray->getArray());
 
 			$value['key4'] = 'value4';
 			$indexedArray->appendToArray('key4', 'value4');
 			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
+			$this->assertCount(4, $indexedArray->getArray());
 
 			$indexedArray->clearArray();
 			$this->assertCount(0, $indexedArray->getArray());
@@ -73,6 +75,7 @@
 			];
 			$indexedArray->appendToArray('key5', 'value5');
 			$this->assertEqualsCanonicalizing($value, $indexedArray->getArray());
+			$this->assertCount(1, $indexedArray->getArray());
 		}
 
 		public function generateStringStatementProvider(): array {
