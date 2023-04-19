@@ -103,15 +103,15 @@
 		}
 
 
-		// public function testInsertNoDataToInsertThrows(): void {
-		// 	$this->expectException(NotEmptyParamException::class);
-		// 	$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-		// 		"::params::" => "data"
-		// 	]));
+		public function testInsertNoDataToInsertThrows(): void {
+			$this->expectException(NotEmptyParamException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
+				"::params::" => "data"
+			]));
 
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->insert();
-		// }
+			$queryBuilder = new QueryBuilder('db', 'table');
+			$queryBuilder->insert();
+		}
 
 		// public function testInsertSingleRecordSuccess(): void {
 		// 	$db = 'db';
@@ -125,7 +125,7 @@
 		// 	];
 
 		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($data);
+		// 	$queryBuilder->data->setData($data);
 		// 	[
 		// 		'sql' => $sql,
 		// 		'binds' => $binds
