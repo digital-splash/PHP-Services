@@ -113,40 +113,40 @@
 			$queryBuilder->insert();
 		}
 
-		// public function testInsertSingleRecordSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$data = [
-		// 		[
-		// 			'name' => 'Hadi Darwish',
-		// 			'email' => 'hadi@example.com',
-		// 			'age' => 22,
-		// 		]
-		// 	];
+		public function testInsertSingleRecordSuccess(): void {
+			$db = 'db';
+			$table = 'table';
+			$data = [
+				[
+					'name' => 'Hadi Darwish',
+					'email' => 'hadi@example.com',
+					'age' => 22,
+				]
+			];
 
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->data->setData($data);
-		// 	[
-		// 		'sql' => $sql,
-		// 		'binds' => $binds
-		// 	] = $queryBuilder->insert();
+			$queryBuilder = new QueryBuilder($db, $table);
+			$queryBuilder->data->setData($data);
+			[
+				'sql' => $sql,
+				'binds' => $binds
+			] = $queryBuilder->insert();
 
-		// 	$expectedSql = "INSERT INTO `{$db}`.`{$table}` (`name`, `email`, `age`) VALUES (:name_1, :email_1, :age_1)";
-		// 	$expectedBinds = [];
+			$expectedSql = "INSERT INTO `{$db}`.`{$table}` (`name`, `email`, `age`) VALUES (:name_1, :email_1, :age_1)";
+			$expectedBinds = [];
 
-		// 	foreach ($data AS $row) {
-		// 		foreach ($row AS $column => $value) {
-		// 			$bind_key = ":{$column}_1";
-		// 			$expectedBinds[$bind_key] = [
-		// 				'value' => $value,
-		// 				'type' => QueryBuilder::GetPDOTypeFromValue($value)
-		// 			];
-		// 		}
-		// 	}
+			foreach ($data AS $row) {
+				foreach ($row AS $column => $value) {
+					$bind_key = ":{$column}_1";
+					$expectedBinds[$bind_key] = [
+						'value' => $value,
+						'type' => QueryBuilder::GetPDOTypeFromValue($value)
+					];
+				}
+			}
 
-		// 	$this->assertEquals($expectedSql, $sql);
-		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		// }
+			$this->assertEquals($expectedSql, $sql);
+			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
+		}
 
 		// public function testInsertInBulk(): void {
 		// 	$db = 'db';
