@@ -8,8 +8,8 @@
 	use DigitalSplash\Database\MySQL\Models\Join;
 	use DigitalSplash\Database\MySQL\Models\Limit;
 	use DigitalSplash\Database\MySQL\Models\Offset;
-use DigitalSplash\Database\MySQL\Models\Order;
-use DigitalSplash\Database\MySQL\Models\Sql;
+	use DigitalSplash\Database\MySQL\Models\Order;
+	use DigitalSplash\Database\MySQL\Models\Sql;
 	use DigitalSplash\Database\MySQL\Models\Where;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
@@ -80,37 +80,43 @@ use DigitalSplash\Database\MySQL\Models\Sql;
 
 		public function insert(): array {
 			if (Helper::ArrayNullOrEmpty($this->data->getData())) {
-                throw new NotEmptyParamException('data');
-            }
+				throw new NotEmptyParamException('data');
+			}
 
-            $columns = [];
-            $binds = [];
-            $columnsStr = '';
-            $bindsStr = '';
-            foreach ($this->data->getData() AS $column => $value) {
-                if (!in_array($column, $columns)) {
-                    $columns[] = "`{$column}`";
-                }
-                $bind_key = ':' . $column;
+			$columns = [];
+			$binds = [];
+			$r = 0;
+			foreach ($this->data->getData() AS $rows) {
+				$row_binds = [];
 
-                $binds[$bind_key] = [
-                    'value' => $value,
-                    'type' => self::GetPDOTypeFromValue($value)
-                ];
+				foreach ($rows AS $column => $value) {
+					if (!in_array($column, $columns)) {
+						$columns[] = "`{$column}`";
+					}
 
-                $columnsStr .= "`{$column}`, ";
-                $bindsStr .= ":{$column}, ";
-            }
+					$bind_key = ':' . $column . "_" . $r;
+					$this->binds->appendToBinds($bind_key, [
+						'value' => $value,
+						'type' => self::GetPDOTypeFromValue($value)
+					]);
 
-            $columnsStr = rtrim($columnsStr, ', ');
-            $bindsStr = rtrim($bindsStr, ', ');
+					$row_binds[] = $bind_key;
+				}
 
-            $sql = "INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES ({$bindsStr})";
+				$binds[] = "(" . Helper::ImplodeArrToStr($row_binds, ', ') . ")";
 
-            return [
-                self::SQL => $sql,
-                self::BINDS => $binds
-            ];
+				$r++;
+			}
+
+			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
+			$bindsStr = Helper::ImplodeArrToStr($binds, ', ');
+
+			$this->sql->setValue("INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES {$bindsStr}");
+
+			return [
+				self::SQL => $this->sql->getFinalString(),
+				self::BINDS => $this->binds->getBinds()
+			];
 		}
 
 
