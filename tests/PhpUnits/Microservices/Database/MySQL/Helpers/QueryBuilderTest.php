@@ -277,7 +277,8 @@
 		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		// }
 
-		public function deleteProvider(): array {
+		//TODO: Add Cases with JOIN
+		public function deleteAllCasesSuccessProvider(): array {
 			return [
 				[
 					'where' => [],
@@ -339,9 +340,9 @@
 		}
 
 		/**
-		 * @dataProvider deleteProvider
+		 * @dataProvider deleteAllCasesSuccessProvider
 		 */
-		public function testDeleteSuccess(
+		public function testDeleteAllCasesSuccess(
 			array $where,
 			string $expected_sql,
 			array $expected_binds
@@ -360,21 +361,11 @@
 			$this->assertEqualsCanonicalizing($expected_binds, $binds);
 		}
 
-		public function testSelectNoDataToSelectThrows(): void {
-			$this->expectException(NotEmptyParamException::class);
-			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "data"
-			]));
-
-			$queryBuilder = new QueryBuilder('db', 'table');
-			$queryBuilder->select();
-		}
-
-		public function selectProvider(): array {
+		public function selectAllCasesSuccessProvider(): array {
 			return [
 				'select_all' => [
 					'data' => [''],
-					'expected_sql' => 'SELECT * FROM db.table',
+					'expected_sql' => 'SELECT * FROM `db`.`table`',
 					'expected_binds' => []
 				],
 				'select_without_where' =>[
@@ -383,7 +374,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table`',
 					'expected_binds' => []
 				],
 				'select_with_where' => [
@@ -392,7 +383,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` WHERE `id` = :id AND `name` = :name AND `age` = :age',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -419,7 +410,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -449,7 +440,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -482,7 +473,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -516,7 +507,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -551,7 +542,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -589,7 +580,7 @@
 						'email',
 						'age',
 					],
-					'expected_sql' => 'SELECT name, email, age FROM db.table INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id HAVING `users.id` = :users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age GROUP BY users.id HAVING `users.id` = :users.id ORDER BY `users`.`id` DESC LIMIT 10 OFFSET 5',
 					'expected_binds' => [
 						':id' => [
 							'value' => 1,
@@ -632,9 +623,20 @@
 		}
 
 		/**
-		 * @dataProvider selectProvider
+		 * @dataProvider selectAllCasesSuccessProvider
 		 */
-		public function testSelectSuccess(array $data, string $expectedSql, array $expectedBinds, array $where = [], array $join = [], array $order = [], int $limit = null, int $offset = null, array $group = [], array $having = []): void {
+		public function testSelectAllCasesSuccess(
+			array $data,
+			string $expectedSql,
+			array $expectedBinds,
+			array $where = [],
+			array $join = [],
+			array $order = [],
+			int $limit = null,
+			int $offset = null,
+			array $group = [],
+			array $having = []
+		): void {
 			$db = 'db';
 			$table = 'table';
 
@@ -655,473 +657,5 @@
 			$this->assertEquals($expectedSql, $sql);
 			$this->assertEquals($expectedBinds, $binds);
 		}
-
-		// public function testSelectSingleRecordSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereAndLimitSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereAndLimitAndOffsetSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-		// 	$offset = 1;
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id LIMIT 1 OFFSET 1';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereAndLimitAndOrderBySuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-		// 	$orderBy = 'name ASC';
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	$queryBuilder->setOrder($orderBy);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id ORDER BY name ASC LIMIT 1';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupBySuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-		// 	$orderBy = 'name ASC';
-		// 	$groupBy = 'name';
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	$queryBuilder->setOrder($orderBy);
-		// 	$queryBuilder->setGroup($groupBy);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name ORDER BY name ASC LIMIT 1';
-
-		// 	$this->assertEquals($expectedSql, $sql);
-		// }
-
-		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-		// 	$orderBy = 'name ASC';
-		// 	$groupBy = 'name';
-		// 	$having = [
-		// 		'name' => 'test',
-		// 		'age' => 2
-		// 	];
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	$queryBuilder->setOrder($orderBy);
-		// 	$queryBuilder->setGroup($groupBy);
-		// 	$queryBuilder->setHaving($having);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
-		// 	$this->assertEquals($expectedSql, $sql);
-
-		// }
-
-
-		// public function testSelectSingleRecordWithWhereAndLimitAndOrderByAndGroupByAndHavingAndJoinSuccess(): void {
-		// 	$db = 'db';
-		// 	$table = 'table';
-		// 	$columns = [
-		// 		'name',
-		// 		'email',
-		// 		'age',
-		// 	];
-		// 	$where = [
-		// 		'id' => 1,
-		// 	];
-		// 	$limit = 1;
-		// 	$orderBy = 'name ASC';
-		// 	$groupBy = 'name';
-		// 	$having = [
-		// 		'name' => 'test',
-		// 		'age' => 2
-		// 	];
-		// 	$join = [
-		// 		'table' => 'table2',
-		// 		'on' => 'table.id = table2.id',
-		// 		'type' => 'LEFT'
-		// 	];
-
-		// 	$queryBuilder = new QueryBuilder($db, $table);
-		// 	$queryBuilder->setData($columns);
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->setLimit($limit);
-		// 	$queryBuilder->setOrder($orderBy);
-		// 	$queryBuilder->setGroup($groupBy);
-		// 	$queryBuilder->setHaving($having);
-		// 	$queryBuilder->setJoin($join);
-		// 	[
-		// 		'sql' => $sql
-		// 	] = $queryBuilder->select();
-
-		// 	$expectedSql = 'SELECT name, email, age FROM db.table LEFT JOIN db.table2 ON table.id = table2.id WHERE `id` = :id GROUP BY name HAVING `name` = :name AND `age` = :age ORDER BY name ASC LIMIT 1';
-		// 	$this->assertEquals($expectedSql, $sql);
-
-		// }
-
-		// public function getWhereStatementProvider() : array {
-		// 	return [
-		// 		'empty where' => [
-		// 			'where' => [],
-		// 			'expectedSql' => '',
-		// 			'expectedBinds' => []
-		// 		],
-		// 		'where with one column' => [
-		// 			'where' => [
-		// 				'id' => 1
-		// 			],
-		// 			'expectedSql' => ' WHERE `id` = :id',
-		// 			'expectedBinds' => [
-		// 				':id' => [
-		// 					'value' => 1,
-		// 					'type' => 1
-		// 				]
-		// 			]
-		// 		],
-		// 		'where with many columns' => [
-		// 			'where' => [
-		// 				'id' => 1,
-		// 				'name' => 'test',
-		// 				'age' => 2
-		// 			],
-		// 			'expectedSql' => ' WHERE `id` = :id AND `name` = :name AND `age` = :age',
-		// 			'expectedBinds' => [
-		// 				':id' => [
-		// 					'value' => 1,
-		// 					'type' => 1
-		// 				],
-		// 				':name' => [
-		// 					'value' => 'test',
-		// 					'type' => 2
-		// 				],
-		// 				':age' => [
-		// 					'value' => 2,
-		// 					'type' => 1
-		// 				]
-		// 			]
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getWhereStatementProvider
-		//  */
-		// public function testGetWhereStatementSuccess(array $where, string $expectedSql, array $expectedBinds) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setWhere($where);
-		// 	$queryBuilder->getWhereStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getWhereStr());
-		// 	$this->assertEquals($expectedBinds, $queryBuilder->getBinds());
-
-		// }
-
-		// public function getJoinStatementProvider() : array {
-		// 	return [
-		// 		'empty join' => [
-		// 			'join' => [],
-		// 			'expectedSql' => '',
-		// 		],
-		// 		'join with one column' => [
-		// 			['LEFT JOIN db.table2 ON table.id = table2.id'],
-		// 			'expectedSql' => 'LEFT JOIN db.table2 ON table.id = table2.id',
-		// 		],
-		// 		'join with many columns' => [
-		// 			'join' => [
-		// 				'LEFT JOIN db.table2 ON table.id = table2.id',
-		// 				'RIGHT JOIN db.table3 ON table.id = table3.id',
-		// 			],
-		// 			'expectedSql' => 'LEFT JOIN db.table2 ON table.id = table2.id, RIGHT JOIN db.table3 ON table.id = table3.id',
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getJoinStatementProvider
-		//  */
-		// public function testGetJoinStatementSuccess(array $join, string $expectedSql) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setJoin($join);
-		// 	$queryBuilder->getJoinStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getJoinStr());
-
-		// }
-
-		// public function getOrderByStatementProvider() : array {
-		// 	return [
-		// 		'empty order by' => [
-		// 			'orderBy' => [],
-		// 			'expectedSql' => '',
-		// 		],
-		// 		'order by with one column' => [
-		// 			'orderBy' => ['name ASC'],
-		// 			'expectedSql' => ' ORDER BY name ASC',
-		// 		],
-		// 		'order by with many columns' => [
-		// 			'orderBy' => ['name ASC', 'age DESC'],
-		// 			'expectedSql' => ' ORDER BY name ASC, age DESC',
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getOrderByStatementProvider
-		//  */
-		// public function testGetOrderByStatementSuccess(array $orderBy, string $expectedSql) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setOrder($orderBy);
-		// 	$queryBuilder->getOrderByStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getOrderStr());
-
-		// }
-
-		// public function getLimitStatementProvider() : array {
-		// 	return [
-		// 		'empty limit' => [
-		// 			'limit' => 0,
-		// 			'expectedSql' => '',
-		// 		],
-		// 		'limit with' => [
-		// 			'limit' => 1,
-		// 			'expectedSql' => ' LIMIT 1',
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getLimitStatementProvider
-		//  */
-		// public function testGetLimitStatementSuccess(int $limit, string $expectedSql) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setLimit($limit);
-		// 	$queryBuilder->getLimitStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getLimitStr());
-
-		// }
-
-		// public function getHavingStatementProvider() : array {
-		// 	return [
-		// 		'empty having' => [
-		// 			'having' => [],
-		// 			'expectedSql' => '',
-		// 			'expectedBinds' => []
-		// 		],
-		// 		'having with one column' => [
-		// 			'having' => [
-		// 				'id' => 1
-		// 			],
-		// 			'expectedSql' => ' HAVING `id` = :id',
-		// 			'expectedBinds' => [
-		// 				':id' => [
-		// 					'value' => 1,
-		// 					'type' => 1
-		// 				]
-		// 			]
-		// 		],
-		// 		'having with many columns' => [
-		// 			'having' => [
-		// 				'id' => 1,
-		// 				'name' => 'test',
-		// 				'age' => 2
-		// 			],
-		// 			'expectedSql' => ' HAVING `id` = :id AND `name` = :name AND `age` = :age',
-		// 			'expectedBinds' => [
-		// 				':id' => [
-		// 					'value' => 1,
-		// 					'type' => 1
-		// 				],
-		// 				':name' => [
-		// 					'value' => 'test',
-		// 					'type' => 2
-		// 				],
-		// 				':age' => [
-		// 					'value' => 2,
-		// 					'type' => 1
-		// 				]
-		// 			]
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getHavingStatementProvider
-		//  */
-		// public function testGetHavingStatementSuccess(array $having, string $expectedSql, array $expectedBinds) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setHaving($having);
-		// 	$queryBuilder->getHavingStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getHavingStr());
-		// 	$this->assertEquals($expectedBinds, $queryBuilder->getBinds());
-
-		// }
-
-		// public function getGroupByStatementProvider() : array {
-		// 	return [
-		// 		'empty group by' => [
-		// 			'groupBy' => [],
-		// 			'expectedSql' => '',
-		// 		],
-		// 		'group by with one column' => [
-		// 			'groupBy' => ['name'],
-		// 			'expectedSql' => ' GROUP BY name',
-		// 		],
-		// 		'group by with many columns' => [
-		// 			'groupBy' => ['name', 'age'],
-		// 			'expectedSql' => ' GROUP BY name, age',
-		// 		],
-		// 	];
-
-		// }
-
-		// /**
-		//  * @dataProvider getGroupByStatementProvider
-		//  */
-		// public function testGetGroupByStatementSuccess(array $groupBy, string $expectedSql) : void {
-		// 	$queryBuilder = new QueryBuilder('db', 'table');
-		// 	$queryBuilder->setGroup($groupBy);
-		// 	$queryBuilder->getGroupByStatement();
-
-		// 	$this->assertEquals($expectedSql, $queryBuilder->getGroupStr());
-
-		// }
-
 
 	}

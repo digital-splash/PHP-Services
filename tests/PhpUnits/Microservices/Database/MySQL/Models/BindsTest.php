@@ -7,11 +7,11 @@
 
 	class BindsTest extends TestCase {
 
-        public function testBinds(): void {
-            $binds = new Binds();
+		public function testBindsAllCases(): void {
+			$binds = new Binds();
 			$this->assertEqualsCanonicalizing([], $binds->getBinds());
 
-            $binds->setBinds([
+			$binds->setBinds([
 				':name_1' => [
 					'value' => 'John',
 					'type' => PDO::PARAM_STR
@@ -24,22 +24,22 @@
 				]
 			], $binds->getBinds());
 
-            $binds->appendToBinds(':name_2', [
-                'value' => 'Jane',
-                'type' => PDO::PARAM_STR
-            ]);
+			$binds->appendToBinds(':name_2', [
+				'value' => 'Jane',
+				'type' => PDO::PARAM_STR
+			]);
 			$this->assertEqualsCanonicalizing([
 				':name_1' => [
 					'value' => 'John',
 					'type' => PDO::PARAM_STR
-                ],
-                ':name_2' => [
-                    'value' => 'Jane',
-                    'type' => PDO::PARAM_STR
-                ]
+				],
+				':name_2' => [
+					'value' => 'Jane',
+					'type' => PDO::PARAM_STR
+				]
 			], $binds->getBinds());
 
-            $binds->clearBinds();
+			$binds->clearBinds();
 			$this->assertEqualsCanonicalizing([], $binds->getBinds());
-        }
+		}
 	}

@@ -90,8 +90,8 @@
 				$row_binds = [];
 
 				foreach ($rows AS $column => $value) {
-					if (!in_array("`{$column}`", $columns)) {
-						$columns[] = "`{$column}`";
+					if (!in_array($column, $columns)) {
+						$columns[] = $column;
 					}
 
 					$bind_key = ':' . $column . "_" . $r;
@@ -104,11 +104,10 @@
 				}
 
 				$binds[] = "(" . Helper::ImplodeArrToStr($row_binds, ', ') . ")";
-
 				$r++;
 			}
 
-			$columnsStr = Helper::ImplodeArrToStr($columns, ', ');
+			$columnsStr = '`' . Helper::ImplodeArrToStr($columns, '`, `') . '`';
 			$bindsStr = Helper::ImplodeArrToStr($binds, ', ');
 
 			$this->sql->setValue("INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES {$bindsStr}");
@@ -156,16 +155,19 @@
 		// }
 
 		public function delete(): array {
+			$this->join->generateStringStatement();
 			$this->where->generateStringStatement();
-			$whereStr = $this->where->getFinalString();
-			if (Helper::StringNullOrEmpty($whereStr)) {
-				$this->sql->setValue("DELETE FROM `{$this->database}`.`{$this->table}`");
-			} else {
-				$this->sql->setValue("DELETE FROM `{$this->database}`.`{$this->table}` {$whereStr}");
-			}
 
+			$sql = Helper::ImplodeArrToStr([
+				"DELETE FROM `{$this->database}`.`{$this->table}`",
+				$this->join->getFinalString(),
+				$this->where->getFinalString()
+			], ' ');
+
+			$this->sql->setValue($sql);
 			$this->sql->generateStringStatement();
 			$this->binds->setBinds($this->where->binds->getBinds());
+
 			return [
 				self::SQL => $this->sql->getFinalString(),
 				self::BINDS => $this->binds->getBinds()
@@ -173,41 +175,40 @@
 		}
 
 		public function select(): array {
-
-			$columnsStr = '*';
-
-			if (!Helper::ArrayNullOrEmpty($this->data->getData()) && $this->data->getData()[0] != '') {
-				$columnsStr = Helper::ImplodeArrToStr($this->data->getData(), ', ');
+			$columnsStr = Helper::ImplodeArrToStr($this->data->getData(), '`, `');
+			if (Helper::StringNullOrEmpty($columnsStr)) {
+				$columnsStr = '*';
+			} else {
+				$columnsStr = '`' . $columnsStr . '`';
 			}
 
 			$this->where->generateStringStatement();
-
 			$this->join->generateStringStatement();
-
 			$this->group->generateStringStatement();
-
 			$this->having->generateStringStatement();
-
 			$this->order->generateStringStatement();
-
 			$this->limit->generateStringStatement();
-
 			$this->offset->generateStringStatement();
 
-			$this->binds->setBinds($this->where->binds->getBinds());
-			foreach ($this->having->binds->getBinds() AS $bind_key => $bind_value) {
-				$this->binds->appendToBinds($bind_key, $bind_value);
-			}
+			$this->binds->setBinds(array_merge(
+				$this->where->binds->getBinds(),
+				$this->having->binds->getBinds()
+			));
+			// foreach ($this->having->binds->getBinds() AS $bind_key => $bind_value) {
+			// 	$this->binds->appendToBinds($bind_key, $bind_value);
+			// }
 
-			$this->sql->setValue("SELECT $columnsStr FROM {$this->database}.{$this->table}"
-				. (Helper::StringNullOrEmpty($this->join->getFinalString()) 	? '' : ' ' . $this->join->getFinalString())
-				. (Helper::StringNullOrEmpty($this->where->getFinalString()) 	? '' : ' ' . $this->where->getFinalString())
-				. (Helper::StringNullOrEmpty($this->group->getFinalString()) 	? '' : ' ' . $this->group->getFinalString())
-				. (Helper::StringNullOrEmpty($this->having->getFinalString()) 	? '' : ' ' . $this->having->getFinalString())
-				. (Helper::StringNullOrEmpty($this->order->getFinalString()) 	? '' : ' ' . $this->order->getFinalString())
-				. (Helper::StringNullOrEmpty($this->limit->getFinalString()) 	? '' : ' ' . $this->limit->getFinalString())
-				. (Helper::StringNullOrEmpty($this->offset->getFinalString()) 	? '' : ' ' . $this->offset->getFinalString())
-			);
+			$sql = Helper::ImplodeArrToStr([
+				"SELECT $columnsStr FROM `{$this->database}`.`{$this->table}`",
+				$this->join->getFinalString(),
+				$this->where->getFinalString(),
+				$this->group->getFinalString(),
+				$this->having->getFinalString(),
+				$this->order->getFinalString(),
+				$this->limit->getFinalString(),
+				$this->offset->getFinalString(),
+			], ' ');
+			$this->sql->setValue($sql);
 			$this->sql->generateStringStatement();
 
 			return [
