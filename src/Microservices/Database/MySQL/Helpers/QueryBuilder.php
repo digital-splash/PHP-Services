@@ -194,9 +194,6 @@
 				$this->where->binds->getBinds(),
 				$this->having->binds->getBinds()
 			));
-			// foreach ($this->having->binds->getBinds() AS $bind_key => $bind_value) {
-			// 	$this->binds->appendToBinds($bind_key, $bind_value);
-			// }
 
 			$sql = Helper::ImplodeArrToStr([
 				"SELECT $columnsStr FROM `{$this->database}`.`{$this->table}`",
