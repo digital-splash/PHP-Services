@@ -4,6 +4,7 @@
 	use DigitalSplash\Database\MySQL\Models\Base\NonIndexedArray;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
+	use PDO;
 	use PHPUnit\Framework\TestCase;
 
 	class NonIndexedArrayTest extends TestCase {
@@ -121,6 +122,22 @@
 			$nonIndexedArray->generateStringStatement();
 
 			$this->assertEquals($expectFinalString, $nonIndexedArray->getFinalString());
+		}
+
+		public function testGenerateStringStatementWithBinds(): void {
+			$nonIndexedArray = new NonIndexedArray(', ', 'SET');
+			$nonIndexedArray->setArray([
+				'value1 = :value1'
+			]);
+			$nonIndexedArray->generateStringStatement();
+			$nonIndexedArray->binds->appendToBinds(':value1', 'value1');
+			$this->assertEquals('SET value1 = :value1', $nonIndexedArray->getFinalString());
+			$this->assertEqualsCanonicalizing([
+					':value1' => [
+						'value' => 'value1',
+						'dataType' => PDO::PARAM_STR
+					]
+			], $nonIndexedArray->binds->getBinds());
 		}
 
 	}

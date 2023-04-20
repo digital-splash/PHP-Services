@@ -1,8 +1,8 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Models\Base;
 
-    use DigitalSplash\Database\MySQL\Models\Binds;
-    use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Database\MySQL\Models\Binds;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 
 	class NonIndexedArray {
@@ -55,11 +55,11 @@
 			$this->array[] = $value;
 		}
 
-        public function appendArrayToArray(array $array): void {
-            foreach ($array AS $value) {
-                $this->appendToArray($value);
-            }
-        }
+		public function appendArrayToArray(array $array): void {
+			foreach ($array AS $value) {
+				$this->appendToArray($value);
+			}
+		}
 
 		public function generateStringStatement(): void {
 			if (Helper::ArrayNullOrEmpty($this->array)) {
