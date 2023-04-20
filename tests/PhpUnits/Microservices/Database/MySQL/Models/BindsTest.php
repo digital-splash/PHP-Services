@@ -53,9 +53,9 @@
 			], $binds->getBinds());
 
 			$binds->appendArrayToBinds([
-			    ':name_4' => [
-			        'value' => 'Jill',
-			        'type' => PDO::PARAM_STR
+				':name_4' => [
+					'value' => 'Jill',
+					'type' => PDO::PARAM_STR
 				],
 				':age_1' => [
 					'value' => 22
@@ -66,21 +66,21 @@
 				],
 			]);
 			$this->assertEqualsCanonicalizing([
-			    ':name_1' => [
-			        'value' => 'John',
-			        'type' => PDO::PARAM_STR
-			    ],
-			    ':name_2' => [
-			        'value' => 'Jane',
-			        'type' => PDO::PARAM_STR
-			    ],
-			    ':name_3' => [
-			        'value' => 'Jack',
-			        'type' => PDO::PARAM_STR
-			    ],
-			    ':name_4' => [
-			        'value' => 'Jill',
-			        'type' => PDO::PARAM_STR
+				':name_1' => [
+					'value' => 'John',
+					'type' => PDO::PARAM_STR
+				],
+				':name_2' => [
+					'value' => 'Jane',
+					'type' => PDO::PARAM_STR
+				],
+				':name_3' => [
+					'value' => 'Jack',
+					'type' => PDO::PARAM_STR
+				],
+				':name_4' => [
+					'value' => 'Jill',
+					'type' => PDO::PARAM_STR
 				],
 				':age_1' => [
 					'value' => 22,

@@ -76,14 +76,14 @@
 			$this->assertEqualsCanonicalizing($value, $nonIndexedArray->getArray());
 			$this->assertCount(1, $nonIndexedArray->getArray());
 
-            $values = [
-                'value6',
-                'value7',
-                'value8'
-            ];
-            $nonIndexedArray->appendArrayToArray($values);
-            $this->assertEqualsCanonicalizing(array_merge($value, $values), $nonIndexedArray->getArray());
-            $this->assertCount(4, $nonIndexedArray->getArray());
+			$values = [
+				'value6',
+				'value7',
+				'value8'
+			];
+			$nonIndexedArray->appendArrayToArray($values);
+			$this->assertEqualsCanonicalizing(array_merge($value, $values), $nonIndexedArray->getArray());
+			$this->assertCount(4, $nonIndexedArray->getArray());
 		}
 
 		public function generateStringStatementProvider(): array {
