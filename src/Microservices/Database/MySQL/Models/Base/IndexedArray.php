@@ -56,6 +56,12 @@
 			$this->array[$key] = $value;
 		}
 
+        public function appendArrayToArray(array $array): void {
+            foreach ($array AS $key => $value) {
+                $this->appendToArray($key, $value);
+            }
+        }
+
 		public function generateStringStatement(): void {
 			if (Helper::ArrayNullOrEmpty($this->array)) {
 				$this->clearFinalString();
