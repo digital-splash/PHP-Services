@@ -282,6 +282,7 @@
 			return [
 				[
 					'where' => [],
+					'join' => [],
 					'expected_sql' => 'DELETE FROM `db`.`table`',
 					'expected_binds' => []
 				],
@@ -289,6 +290,7 @@
 					'where' => [
 						'id' => 1,
 					],
+					'join' => [],
 					'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id',
 					'expected_binds' => [
 						':id' => [
@@ -302,6 +304,7 @@
 						'id' => 1,
 						'name' => 'Hadi Darwish'
 					],
+					'join' => [],
 					'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id AND `name` = :name',
 					'expected_binds' => [
 						':id' => [
@@ -320,6 +323,7 @@
 							'name' => 'Hadi Darwish',
 							'age' => 22
 						],
+						'join' => [],
 						'expected_sql' => 'DELETE FROM `db`.`table` WHERE `id` = :id AND `name` = :name AND `age` = :age',
 						'expected_binds' => [
 							':id' => [
@@ -336,6 +340,37 @@
 							]
 						]
 				],
+				[
+					'where' => [],
+					'join' => ['INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'],
+					'expected_sql' => 'DELETE FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`',
+					'expected_binds' => []
+				],
+				[
+					'where' => [
+						'id' => 1,
+						'name' => 'Hadi Darwish',
+						'age' => 22
+					],
+					'join' => [
+						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
+					],
+					'expected_sql' => 'DELETE FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id` WHERE `id` = :id AND `name` = :name AND `age` = :age',
+					'expected_binds' => [
+						':id' => [
+							'value' => 1,
+							'type' => 1
+						],
+						':name' => [
+							'value' => 'Hadi Darwish',
+							'type' => 2
+						],
+						':age' => [
+							'value' => 22,
+							'type' => 1
+						]
+					]
+				]
 			];
 		}
 
@@ -344,6 +379,7 @@
 		 */
 		public function testDeleteAllCasesSuccess(
 			array $where,
+			array $join,
 			string $expected_sql,
 			array $expected_binds
 		): void {
@@ -352,6 +388,7 @@
 
 			$queryBuilder = new QueryBuilder($db, $table);
 			$queryBuilder->where->setArray($where);
+			$queryBuilder->join->setArray($join);
 			[
 				'sql' => $sql,
 				'binds' => $binds
@@ -412,10 +449,10 @@
 					],
 					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`',
 					'expected_binds' => [],
-                    'where' => [],
+					'where' => [],
 					'join' => [
 						'INNER JOIN `db`.`users` ON `users`.`id` = `table`.`user_id`'
-                    ]
+					]
 				],
 				'select_with_order' => [
 					'data' => [
@@ -425,8 +462,8 @@
 					],
 					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` ORDER BY `users`.`id` DESC',
 					'expected_binds' => [],
-                    'where' => [],
-                    'join' => [],
+					'where' => [],
+					'join' => [],
 					'order' => [
 						'`users`.`id` DESC'
 					]
@@ -439,8 +476,8 @@
 					],
 					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` LIMIT 10',
 					'expected_binds' => [],
-                    'where' => [],
-                    'join' => [],
+					'where' => [],
+					'join' => [],
 					'order' => [],
 					'limit' => 10
 				],
@@ -452,8 +489,8 @@
 					],
 					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` OFFSET 5',
 					'expected_binds' => [],
-                    'where' => [],
-                    'join' => [],
+					'where' => [],
+					'join' => [],
 					'order' => [],
 					'limit' => null,
 					'offset' => 5
@@ -466,8 +503,8 @@
 					],
 					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` GROUP BY users.id',
 					'expected_binds' => [],
-                    'where' => [],
-                    'join' => [],
+					'where' => [],
+					'join' => [],
 					'order' => [],
 					'limit' => null,
 					'offset' => null,
@@ -475,29 +512,29 @@
 						'users.id'
 					]
 				],
-                'select_with_having' => [
-                    'data' => [
-                        'name',
-                        'email',
-                        'age',
-                    ],
-                    'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` HAVING `users.id` = :users.id',
-                    'expected_binds' => [
-                        ':users.id' => [
-                            'value' => 1,
-                            'type' => 1
-                        ]
-                    ],
-                    'where' => [],
-                    'join' => [],
-                    'order' => [],
-                    'limit' => null,
-                    'offset' => null,
-                    'group' => [],
-                    'having' => [
-                        'users.id' => 1
-                    ]
-                ],
+				'select_with_having' => [
+					'data' => [
+						'name',
+						'email',
+						'age',
+					],
+					'expected_sql' => 'SELECT `name`, `email`, `age` FROM `db`.`table` HAVING `users.id` = :users.id',
+					'expected_binds' => [
+						':users.id' => [
+							'value' => 1,
+							'type' => 1
+						]
+					],
+					'where' => [],
+					'join' => [],
+					'order' => [],
+					'limit' => null,
+					'offset' => null,
+					'group' => [],
+					'having' => [
+						'users.id' => 1
+					]
+				],
 				'select_with_all_cases' => [
 					'data' => [
 						'name',
