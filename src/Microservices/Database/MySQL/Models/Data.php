@@ -24,4 +24,10 @@
 			$this->data[$key] = $value;
 		}
 
+        public function appendArrayToData(array $data): void {
+            foreach ($data as $key => $value) {
+                $this->appendToData($key, $value);
+            }
+        }
+
 	}
