@@ -25,4 +25,11 @@
 			$this->binds[$key] = $value;
 		}
 
+		//TODO: Add Unit Test
+		public function appendArrayToBinds(array $binds): void {
+			foreach ($binds as $key => $value) {
+				$this->appendToBinds($key, $value);
+			}
+		}
+
 	}

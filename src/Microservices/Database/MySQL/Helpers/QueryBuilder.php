@@ -118,41 +118,113 @@
 			];
 		}
 
+		public function update(): array {
+			if (Helper::ArrayNullOrEmpty($this->data->getData())) {
+				throw new NotEmptyParamException('data');
+			}
 
-		// public function update(): array {
-		// 	if (Helper::ArrayNullOrEmpty($this->data)) {
-		// 		throw new NotEmptyParamException('data');
-		// 	}
+			$singleUpdate = count($this->data->getData()) === 1;
+			if ($singleUpdate) {
+				return $this->update_single();
+			}
+			return $this->update_bulk();
+		}
 
-		// 	$columns = [];
-		// 	$binds = [];
-		// 	$columnsStr = '';
-		// 	foreach ($this->data AS $column => $value) {
-		// 		if (!in_array($column, $columns)) {
-		// 			$columns[] = "`{$column}`";
-		// 		}
-		// 		$bind_key = ':' . $column;
+		private function update_single(): array {
+			$updates = [];
+			$r = 1;
+			foreach ($this->data->getData()[0] AS [
+				'filter' => $filter,
+				'values' => $values
+			]) {
+				foreach ($filter AS $column => $value) {
+					$this->where->appendToArray($column, $value);
+				}
 
-		// 		$binds[$bind_key] = [
-		// 			'value' => $value,
-		// 			'type' => self::GetPDOTypeFromValue($value)
-		// 		];
+				foreach ($values AS $column => $value) {
+					$bind_key = ':' . $column . "_" . $r;
+					$this->binds->appendToBinds($bind_key, [
+						'value' => $value,
+						'type' => self::GetPDOTypeFromValue($value)
+					]);
+					$updates[] = "`{$column}` = $bind_key";
+				}
+			}
+			$updateStr = Helper::ImplodeArrToStr($updates, ', ');
 
-		// 		$columnsStr .= "`{$column}` = :{$column}, ";
+			$this->where->generateStringStatement();
 
-		// 	}
+			$sql = Helper::ImplodeArrToStr([
+				"UPDATE `{$this->database}`.`{$this->table}` SET {$updateStr}",
+				$this->where->getFinalString()
+			], ' ');
 
-		// 	$this->getWhereStatement();
-		// 	$binds = array_merge($binds, $this->_binds);
+			$this->sql->setValue($sql);
+			$this->sql->generateStringStatement();
+			$this->binds->appendArrayToBinds($this->where->binds->getBinds());
 
-		// 	$columnsStr = rtrim($columnsStr, ', ');
-		// 	$sql = "UPDATE {$this->database}.{$this->table} SET $columnsStr" . $this->where;
+			return [
+				self::SQL => $this->sql->getFinalString(),
+				self::BINDS => $this->binds->getBinds()
+			];
+		}
 
-		// 	return [
-		// 		self::SQL => $sql,
-		// 		self::BINDS => $binds
-		// 	];
-		// }
+		private function update_bulk(): array {
+			// $updates = [];
+			// $cases = [];
+			// $r = 1;
+			// foreach ($this->data->getData() AS $row) {
+			// 	foreach ($row AS [
+			// 		'filter' => $filter,
+			// 		'values' => $values
+			// 	]) {
+			// 		//TODO: Implement IN () in WHERE statment cz now we will have `id` = 1 AND `id` = 2 instead of `id` IN (1, 2)
+			// 		foreach ($filter AS $column => $value) {
+			// 			$this->where->appendToArray($column, $value);
+			// 		}
+
+			// 		foreach ($values AS $column => $value) {
+			// 			if (!array_key_exists($column, $cases)) {
+			// 				$cases[$column] = [];
+			// 			}
+
+			// 			$caseWhere = [];
+			// 			foreach ($filter AS $column => $value) {
+			// 				$caseWhereBindKey = ':' $column
+			// 				$caseWhere[] =
+			// 			}
+
+			// 		}
+
+			// // 		$bind_key = ':' . $column . "_" . $r;
+			// // 		$this->binds->appendToBinds($bind_key, [
+			// // 			'value' => $value,
+			// // 			'type' => self::GetPDOTypeFromValue($value)
+			// // 		]);
+
+			// // 		$updates[] = "`{$column}` = $bind_key";
+			// 	}
+
+			// 	$r++;
+			// }
+			// // $updateStr = ''; //Helper::ImplodeArrToStr($updates, ', ');
+
+			// // $this->where->generateStringStatement();
+
+			// // $sql = Helper::ImplodeArrToStr([
+			// // 	"UPDATE `{$this->database}`.`{$this->table}` SET {$updateStr}",
+			// // 	$this->where->getFinalString()
+			// // ], ' ');
+
+			// // $this->sql->setValue($sql);
+			// // $this->sql->generateStringStatement();
+			// // $this->binds->setBinds($this->where->binds->getBinds());
+
+			return [
+				self::SQL => $this->sql->getFinalString(),
+				self::BINDS => $this->binds->getBinds()
+			];
+		}
 
 		public function delete(): array {
 			$this->join->generateStringStatement();
