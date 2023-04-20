@@ -83,7 +83,7 @@
                 'key8' => 'value8',
             ];
             $indexedArray->appendArrayToArray($values);
-            $this->assertEqualsCanonicalizing(array_merge(['key5' => 'value5'], $values), $indexedArray->getArray());
+            $this->assertEqualsCanonicalizing(array_merge($value, $values), $indexedArray->getArray());
             $this->assertCount(4, $indexedArray->getArray());
 		}
 
