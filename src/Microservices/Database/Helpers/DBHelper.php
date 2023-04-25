@@ -35,7 +35,7 @@
 				[
 					$host,
 					$port
-				] = Helper::ExplodeStrToArr($host, ':');
+				] = Helper::ExplodeStrToArr(':', $host);
 
 				if (!Helper::StringNullOrEmpty($port)) {
 					return $port;

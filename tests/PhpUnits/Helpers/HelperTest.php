@@ -566,7 +566,7 @@
 					"Do",
 					"e"
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", "", 2)
+				Helper::ExplodeStrToArr("", "John Matt Doe", 2)
 			);
 
 			$this->assertEquals(
@@ -575,7 +575,7 @@
 					"Matt",
 					"Doe",
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", " ")
+				Helper::ExplodeStrToArr("", "John Matt Doe")
 			);
 
 			$this->assertEquals(
@@ -584,7 +584,7 @@
 					"hn Matt D",
 					"e"
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", "o")
+				Helper::ExplodeStrToArr("o", "John Matt Doe")
 			);
 		}
 
