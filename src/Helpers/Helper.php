@@ -474,8 +474,8 @@
 		 * Converts the given String into an Array
 		 */
 		public static function ExplodeStrToArr(
-			?string $str,
 			string $delimiter="",
+			?string $str,
 			int $chunkLength=0
 		): array {
 			if (self::StringNullOrEmpty($str)) {
@@ -508,8 +508,8 @@
 		 * Returns a [delimiter] seperated string from the values inside the given array
 		 */
 		public static function ImplodeArrToStr(
-			?array $array,
-			string $delimiter=" "
+			string $delimiter=" ",
+			?array $array
 		): string {
 			if (self::ArrayNullOrEmpty($array)) {
 				return "";
