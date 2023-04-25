@@ -72,7 +72,7 @@
 				$html[] = $script;
 			}
 
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 	}

@@ -103,12 +103,12 @@
 					$row_binds[] = $bind_key;
 				}
 
-				$binds[] = "(" . Helper::ImplodeArrToStr($row_binds, ', ') . ")";
+				$binds[] = "(" . Helper::ImplodeArrToStr(', ', $row_binds) . ")";
 				$r++;
 			}
 
-			$columnsStr = '`' . Helper::ImplodeArrToStr($columns, '`, `') . '`';
-			$bindsStr = Helper::ImplodeArrToStr($binds, ', ');
+			$columnsStr = '`' . Helper::ImplodeArrToStr('`, `', $columns) . '`';
+			$bindsStr = Helper::ImplodeArrToStr(', ', $binds);
 
 			$this->sql->setValue("INSERT INTO `{$this->database}`.`{$this->table}` ({$columnsStr}) VALUES {$bindsStr}");
 			$this->sql->generateStringStatement();
@@ -150,14 +150,14 @@
 					$updates[] = "`{$column}` = $bind_key";
 				}
 			}
-			$updateStr = Helper::ImplodeArrToStr($updates, ', ');
+			$updateStr = Helper::ImplodeArrToStr(', ', $updates);
 
 			$this->where->generateStringStatement();
 
-			$sql = Helper::ImplodeArrToStr([
+			$sql = Helper::ImplodeArrToStr(' ', [
 				"UPDATE `{$this->database}`.`{$this->table}` SET {$updateStr}",
 				$this->where->getFinalString()
-			], ' ');
+			]);
 
 			$this->sql->setValue($sql);
 			$this->sql->generateStringStatement();
@@ -207,14 +207,14 @@
 
 			// 	$r++;
 			// }
-			// // $updateStr = ''; //Helper::ImplodeArrToStr($updates, ', ');
+			// // $updateStr = ''; //Helper::ImplodeArrToStr(', ', $updates);
 
 			// // $this->where->generateStringStatement();
 
-			// // $sql = Helper::ImplodeArrToStr([
+			// // $sql = Helper::ImplodeArrToStr(' ', [
 			// // 	"UPDATE `{$this->database}`.`{$this->table}` SET {$updateStr}",
 			// // 	$this->where->getFinalString()
-			// // ], ' ');
+			// // ]);
 
 			// // $this->sql->setValue($sql);
 			// // $this->sql->generateStringStatement();
@@ -230,11 +230,11 @@
 			$this->join->generateStringStatement();
 			$this->where->generateStringStatement();
 
-			$sql = Helper::ImplodeArrToStr([
+			$sql = Helper::ImplodeArrToStr(' ', [
 				"DELETE FROM `{$this->database}`.`{$this->table}`",
 				$this->join->getFinalString(),
 				$this->where->getFinalString()
-			], ' ');
+			]);
 
 			$this->sql->setValue($sql);
 			$this->sql->generateStringStatement();
@@ -247,7 +247,7 @@
 		}
 
 		public function select(): array {
-			$columnsStr = Helper::ImplodeArrToStr($this->data->getData(), '`, `');
+			$columnsStr = Helper::ImplodeArrToStr('`, `', $this->data->getData());
 			if (Helper::StringNullOrEmpty($columnsStr)) {
 				$columnsStr = '*';
 			} else {
@@ -267,7 +267,7 @@
 				$this->having->binds->getBinds()
 			));
 
-			$sql = Helper::ImplodeArrToStr([
+			$sql = Helper::ImplodeArrToStr(' ', [
 				"SELECT $columnsStr FROM `{$this->database}`.`{$this->table}`",
 				$this->join->getFinalString(),
 				$this->where->getFinalString(),
@@ -276,7 +276,7 @@
 				$this->order->getFinalString(),
 				$this->limit->getFinalString(),
 				$this->offset->getFinalString(),
-			], ' ');
+			]);
 			$this->sql->setValue($sql);
 			$this->sql->generateStringStatement();
 

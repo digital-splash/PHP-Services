@@ -80,7 +80,7 @@
 					]
 				);
 			}
-			$strValue = Helper::ImplodeArrToStr($strArr, $this->implodeValue);
+			$strValue = Helper::ImplodeArrToStr($this->implodeValue, $strArr);
 			$this->setFinalString(trim(" " . $this->statementPrefix . " " . $strValue));
 		}
 

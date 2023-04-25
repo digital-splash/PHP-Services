@@ -64,7 +64,7 @@
 				return;
 			}
 
-			$strValue = Helper::ImplodeArrToStr($this->array, $this->implodeValue);
+			$strValue = Helper::ImplodeArrToStr($this->implodeValue, $this->array);
 			$this->setFinalString(trim(" " . $this->statementPrefix . " " . $strValue));
 		}
 

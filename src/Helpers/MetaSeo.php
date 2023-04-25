@@ -73,7 +73,7 @@
 
 			$html[] = self::RenderPostHeadArray();
 
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 		protected static function BuildMetaArray(): void {
@@ -289,7 +289,7 @@
 				}
 			}
 
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 		protected static function RenderPreHeadArray(): string {
@@ -297,7 +297,7 @@
 			foreach (self::$preHeadArray AS $index => $preHead) {
 				$html[] = $preHead;
 			}
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 		protected static function RenderPostHeadArray(): string {
@@ -305,7 +305,7 @@
 			foreach (self::$postHeadArray AS $index => $postHead) {
 				$html[] = $postHead;
 			}
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 		public static function AddToMetaArray(string $key, array $array): void {
@@ -387,11 +387,11 @@
 		}
 
 		public static function GetTitle(): string {
-			return Helper::ImplodeArrToStr([
+			return Helper::ImplodeArrToStr(" | ", [
 				self::$preTitle,
 				self::$title,
 				self::$postTitle
-			], " | ");
+			]);
 		}
 
 		public static function SetTitle(string $var): void {
@@ -412,7 +412,7 @@
 
 		public static function SetKeywords($var): void {
 			if (is_array($var)) {
-				$var = Helper::ImplodeArrToStr($var, ",");
+				$var = Helper::ImplodeArrToStr(",", $var);
 			}
 			self::$keywords = $var;
 		}

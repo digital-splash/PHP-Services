@@ -18,14 +18,14 @@
 				$port = $tempPort;
 			}
 
-			return Helper::EncryptString(Helper::ImplodeArrToStr([
+			return Helper::EncryptString(Helper::ImplodeArrToStr(';', [
                 $engine,
 				$host,
 				$port,
 				$username,
 				$password,
 				$database
-			], ';'));
+			]));
 		}
 
         public static function GetPortFromHost(
