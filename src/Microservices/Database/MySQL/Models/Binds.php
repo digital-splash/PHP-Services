@@ -33,7 +33,6 @@
 			];
 		}
 
-		//TODO: Add Unit Test
 		public function appendArrayToBinds(array $binds): void {
 			foreach ($binds as $key => $bind) {
 				$this->appendToBinds($key, $bind['value'], $bind['type'] = null);

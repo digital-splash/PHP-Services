@@ -25,17 +25,17 @@
 				'age' => 25,
 				'email' => 'john@example.com'
 			], $data->getData());
-            $data->appendArrayToData([
-               'phone' => '1234567890',
-                'address' => '123 Main St.'
-            ]);
-            $this->assertEqualsCanonicalizing([
-                'name' => 'John',
-                'age' => 25,
-                'email' => 'john@example.com',
-                'phone' => '1234567890',
-                'address' => '123 Main St.'
-            ], $data->getData());
+			$data->appendArrayToData([
+			   'phone' => '1234567890',
+				'address' => '123 Main St.'
+			]);
+			$this->assertEqualsCanonicalizing([
+				'name' => 'John',
+				'age' => 25,
+				'email' => 'john@example.com',
+				'phone' => '1234567890',
+				'address' => '123 Main St.'
+			], $data->getData());
 
 			$data->clearData();
 			$this->assertEqualsCanonicalizing([], $data->getData());
