@@ -277,7 +277,6 @@
 		// 	$this->assertEqualsCanonicalizing($expectedBinds, $binds);
 		// }
 
-		//TODO: Add Cases with JOIN
 		public function deleteAllCasesSuccessProvider(): array {
 			return [
 				[
