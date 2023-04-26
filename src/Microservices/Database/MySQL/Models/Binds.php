@@ -1,7 +1,6 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Models;
 
-	//TODO: Fix the way we are appending binds
 	class Binds {
 		protected array $binds;
 
