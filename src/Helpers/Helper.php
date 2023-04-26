@@ -474,33 +474,33 @@
 		 * Converts the given String into an Array
 		 */
 		public static function ExplodeStrToArr(
-			string $delimiter="",
-			?string $str,
+			string $separator='',
+			?string $string,
 			int $chunkLength=0
 		): array {
-			if (self::StringNullOrEmpty($str)) {
+			if (self::StringNullOrEmpty($string)) {
 				return [];
 			}
 
-			if (!self::StringNullOrEmpty($delimiter)) {
-				return explode($delimiter, $str);
+			if (!self::StringNullOrEmpty($separator)) {
+				return explode($separator, $string);
 			}
 
 			if ($chunkLength > 0) {
 				$arr = [];
-				while (strlen($str) > $chunkLength) {
-					$chunk = substr($str, 0, $chunkLength);
+				while (strlen($string) > $chunkLength) {
+					$chunk = substr($string, 0, $chunkLength);
 
 					$arr[] = $chunk;
-					$str   = substr($str, $chunkLength);
+					$string = substr($string, $chunkLength);
 				}
-				if (strlen($str) > 0) {
-					$arr[] = $str;
+				if (strlen($string) > 0) {
+					$arr[] = $string;
 				}
 				return $arr;
 			}
 
-			return [$str];
+			return [$string];
 		}
 
 
@@ -508,13 +508,13 @@
 		 * Returns a [delimiter] seperated string from the values inside the given array
 		 */
 		public static function ImplodeArrToStr(
-			string $delimiter=" ",
+			string $separator=' ',
 			?array $array
 		): string {
 			if (self::ArrayNullOrEmpty($array)) {
-				return "";
+				return '';
 			}
-			return implode($delimiter, self::UnsetArrayEmptyValues($array));
+			return implode($separator, self::UnsetArrayEmptyValues($array));
 		}
 
 
