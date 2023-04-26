@@ -14,7 +14,7 @@
 			string $implodeValue,
 			string $statementPrefix
 		) {
-			if (Helper::StringNullOrEmpty($implodeValue)) {
+			if (Helper::IsNullOrEmpty($implodeValue)) {
 				throw new NotEmptyParamException('implodeValue');
 			}
 
@@ -59,7 +59,7 @@
 		}
 
 		public function generateStringStatement(): void {
-			if (Helper::ArrayNullOrEmpty($this->array)) {
+			if (Helper::IsNullOrEmpty($this->array)) {
 				$this->clearFinalString();
 				return;
 			}

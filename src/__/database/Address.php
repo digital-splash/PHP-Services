@@ -12,7 +12,7 @@
 
 			$this->_table	= "address";
 			$this->_key		= "id";
-			
+
 			$this->hideDeleted();
 			$this->getInstance();
 
@@ -81,7 +81,7 @@
 			$addressesArr[$arr["id"]] = $arr;
 
 			self::SetCookie($addressesArr);
-			
+
 			$retArr["code"] = HTTP_OK;
 			$retArr["msg"] = "AddressSavedSuccess";
 
@@ -89,7 +89,7 @@
 
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"]);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
-			
+
 			return $retArr;
 		}
 
@@ -114,7 +114,7 @@
 			$address = new Address($addressId);
 			$address->row = $arr;
 			$address->save();
-			
+
 			if ($address->error) {
 				$retArr["code"] = HTTP_INTERNALERROR;
 				$retArr["msg"] = "AddressSavedError";
@@ -128,7 +128,7 @@
 
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"]);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
-			
+
 			return $retArr;
 		}
 
@@ -166,7 +166,7 @@
 				$retArr["status"] = STATUS_CODE_ERROR;
 				$retArr["msg"] = "AddressNotFound";
 			}
-			
+
 			return $retArr;
 		}
 
@@ -191,7 +191,7 @@
 				$retArr["msg"] = "";
 				$retArr["response"]["address"] = $address->row;
 			}
-			
+
 			return $retArr;
 		}
 
@@ -204,8 +204,8 @@
 		private static function GetCookie() : array {
 			$cookie = new Cookie("address");
 			$addressCookie = $cookie->GetCookie();
-			
-			return Helper::StringNullOrEmpty($addressCookie) ? [] : json_decode($addressCookie, true);
+
+			return Helper::IsNullOrEmpty($addressCookie) ? [] : json_decode($addressCookie, true);
 		}
 
 
@@ -231,10 +231,10 @@
 
 	// 	public static function AdminTable($filterArr=[]) {
 	// 		$userId		= isset($filterArr["user_id"])	? $filterArr["user_id"]		: 0;
-			
+
 	// 		$addresses	= new Address();
 	// 		$addresses->loadByUserId($userId);
-			
+
 	// 		$headValues = [
 	// 			"Address Nickname",
 	// 			"Status",
@@ -259,7 +259,7 @@
 	// 				if ($isPrimary) {
 	// 					$statusHtml = "<label class='label label-success'>Primary</label>";
 	// 				}
-			
+
 	// 				$actions	= "";
 	// 				$actions .= $mySheet->cellBtnEdit(getFullUrl(PAGE_SHIPPING_ADDRESS_EDIT, LANG, [], ["id"=>$addressId]));
 	// 				if (!$isPrimary) {
@@ -272,7 +272,7 @@
 	// 				$mySheet->addBodyCell($nickname);
 	// 				$mySheet->addBodyCell($statusHtml);
 	// 				$mySheet->addBodyCell($actions);
-				
+
 	// 				$mySheet->newBodyRow();
 	// 			}
 	// 		}
@@ -328,7 +328,7 @@
 	// 				"value"	=> 1
 	// 			]
 	// 		];
-			
+
 	// 		$form->addElement("<div class='col-md-4'>");
 	// 			$form->addElement(new \Form_Checkbox($props, $opts));
 	// 		$form->addElement("</div>");
@@ -367,7 +367,7 @@
 	// 			$form->addElement(new \Form_Input(_text("PersonFullName"), $props));
 	// 		$form->addElement("</div>");
 	// 		//END: Person Full Name
-			
+
 	// 		$form->addElement("<div class='clear'></div>");
 
 	// 		//BEGIN: Mobile Number
@@ -447,7 +447,7 @@
 	// 			"required"		=> true,
 	// 			"data-value"	=> $address->row["city"],
 	// 		];
-				
+
 	// 		$form->addElement("<div class='col-md-4'>");
 	// 			$form->addElement(new \Form_Select(_text("City"), $props));
 	// 		$form->addElement("</div>");
@@ -672,7 +672,7 @@
 	// 		$isPrimary	= isset($arr["is_primary"])	? 1								: 0;
 
 	// 		$address = new Address($addressId);
-			
+
 	// 		if ($isPrimary) {
 	// 			Address::removeAllPrimary($userId);
 	// 		}

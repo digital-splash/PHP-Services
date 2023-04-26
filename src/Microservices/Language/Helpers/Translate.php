@@ -39,7 +39,7 @@
 		public static function AddCustomDir(
 			string $customDir
 		): void {
-			if (!Helper::StringNullOrEmpty($customDir) && is_dir($customDir)) {
+			if (!Helper::IsNullOrEmpty($customDir) && is_dir($customDir)) {
 				$filesArr = Helper::GetAllFiles($customDir);
 
 				foreach ($filesArr AS $filePath) {
@@ -59,15 +59,15 @@
 			array $replace=[],
 			bool $withType=true
 		): string {
-			if (Helper::StringNullOrEmpty($key)) {
+			if (Helper::IsNullOrEmpty($key)) {
 				throw new NotEmptyParamException("key");
 			}
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
 			$vals = !$withType ? self::$VALS_WITHOUT_TYPE : self::$VALS;
-			if (Helper::ArrayNullOrEmpty($vals)) {
+			if (Helper::IsNullOrEmpty($vals)) {
 				self::AddDefaults();
 				$vals = !$withType ? self::$VALS_WITHOUT_TYPE : self::$VALS;
 			}
@@ -80,7 +80,7 @@
 				$str = "";
 			}
 
-			if (!Helper::StringNullOrEmpty($str) && count($replace) > 0) {
+			if (!Helper::IsNullOrEmpty($str) && count($replace) > 0) {
 				$str = str_replace(
 					array_keys($replace),
 					array_values($replace),
@@ -114,15 +114,15 @@
 			array $replace=[],
 			bool $withType=true
 		): string {
-			if (Helper::StringNullOrEmpty($string)) {
+			if (Helper::IsNullOrEmpty($string)) {
 				throw new NotEmptyParamException("string");
 			}
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
 			$vals = !$withType ? self::$VALS_WITHOUT_TYPE : self::$VALS;
-			if (Helper::ArrayNullOrEmpty($vals)) {
+			if (Helper::IsNullOrEmpty($vals)) {
 				self::AddDefaults();
 				$vals = !$withType ? self::$VALS_WITHOUT_TYPE : self::$VALS;
 			}
@@ -135,7 +135,7 @@
 				}
 			}
 
-			if (!Helper::StringNullOrEmpty($string) && count($replace) > 0) {
+			if (!Helper::IsNullOrEmpty($string) && count($replace) > 0) {
 				foreach ($replace AS $k => $v) {
 					$string = str_replace($k, $v, $string);
 				}

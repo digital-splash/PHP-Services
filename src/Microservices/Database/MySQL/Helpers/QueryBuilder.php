@@ -36,11 +36,11 @@
 			string $database,
 			string $table
 		) {
-			if (Helper::StringNullOrEmpty($database)) {
+			if (Helper::IsNullOrEmpty($database)) {
 				throw new NotEmptyParamException('database');
 			}
 
-			if (Helper::StringNullOrEmpty($table)) {
+			if (Helper::IsNullOrEmpty($table)) {
 				throw new NotEmptyParamException('table');
 			}
 
@@ -79,7 +79,7 @@
 		}
 
 		public function insert(): array {
-			if (Helper::ArrayNullOrEmpty($this->data->getData())) {
+			if (Helper::IsNullOrEmpty($this->data->getData())) {
 				throw new NotEmptyParamException('data');
 			}
 
@@ -119,7 +119,7 @@
 		}
 
 		public function update(): array {
-			if (Helper::ArrayNullOrEmpty($this->data->getData())) {
+			if (Helper::IsNullOrEmpty($this->data->getData())) {
 				throw new NotEmptyParamException('data');
 			}
 
@@ -248,7 +248,7 @@
 
 		public function select(): array {
 			$columnsStr = Helper::ImplodeArrToStr('`, `', $this->data->getData());
-			if (Helper::StringNullOrEmpty($columnsStr)) {
+			if (Helper::IsNullOrEmpty($columnsStr)) {
 				$columnsStr = '*';
 			} else {
 				$columnsStr = '`' . $columnsStr . '`';

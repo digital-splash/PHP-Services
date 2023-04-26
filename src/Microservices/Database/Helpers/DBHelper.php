@@ -14,7 +14,7 @@
 			?string $port = null
 		): string {
 			$tempPort = self::GetPortFromHost($host);
-			if (!Helper::StringNullOrEmpty($tempPort)) {
+			if (!Helper::IsNullOrEmpty($tempPort)) {
 				$port = $tempPort;
 			}
 
@@ -37,7 +37,7 @@
 					$port
 				] = Helper::ExplodeStrToArr(':', $host);
 
-				if (!Helper::StringNullOrEmpty($port)) {
+				if (!Helper::IsNullOrEmpty($port)) {
 					return $port;
 				}
 			}

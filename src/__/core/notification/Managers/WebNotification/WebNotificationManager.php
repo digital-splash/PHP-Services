@@ -9,7 +9,7 @@
 
 		// private $user = null;
 		// private $store = null;
-		
+
 		// private $templateData = [];
 		// private $template = "";
 
@@ -17,7 +17,7 @@
 		// private $toUserId;
 		// private $fromStoreId;
 		// private $toStoreId;
-		
+
 		public function __construct() {
 			// $this->fromUserId = 0;
 			// $this->toUserId = 0;
@@ -41,8 +41,8 @@
 			//     "to_store_id"   => $this->toStoreId,
 			//     "payload"       => count($this->templateData) > 0 ? json_encode($this->templateData) : "",
 			//     "created_by"    => $this->user->id,
-			// ]); 
-			
+			// ]);
+
 			// $retArr = [
 			//     "status" => AppCode::SUCCESS,
 			//     "message" => "Web Notification Sent"
@@ -52,13 +52,13 @@
 		}
 
 		private function SetDefaultValues() {
-			// if (!Helper::ObjectNullOrEmpty($this->user)) {
+			// if (!Helper::IsNullOrEmpty($this->user)) {
 			//     if ($this->toUserId == 0) {
 			//         $this->toUserId = $this->user->id;
 			//     }
 			// }
-			
-			// if (!Helper::ObjectNullOrEmpty($this->store)) {
+
+			// if (!Helper::IsNullOrEmpty($this->store)) {
 			//     if ($this->toStoreId == 0) {
 			//         $this->toStoreId = $this->store->id;
 			//     }
@@ -73,7 +73,7 @@
 			//     ];
 			// }
 
-			// if (Helper::ObjectNullOrEmpty($this->user)) {
+			// if (Helper::IsNullOrEmpty($this->user)) {
 			//     return [
 			//         "status" => ERROR,
 			//         "message" => "Receiving User is not Defined!"
@@ -87,7 +87,7 @@
 		public function SetUser(User $user) {
 			// $this->user = $user;
 		}
-		
+
 		public function SetStore(Store $store) {
 			// $this->store = $store;
 		}
@@ -126,7 +126,7 @@
 		//END: Setters
 
 
-		//BEGIN: Static functions: 
+		//BEGIN: Static functions:
 		public static function get($id, $userId=0) {
 			// $retArr = [
 			//     "status" => AppCode::ERROR,
@@ -136,7 +136,7 @@
 
 			// $notification = WebNotification::where("id", $id)->where("deleted", 0)->first();
 
-			// if (!Helper::ObjectNullOrEmpty($notification)) {
+			// if (!Helper::IsNullOrEmpty($notification)) {
 			//     $can = true;
 			//     if ($userId != 0 && $userId != $notification->to_id) {
 			//         $can = false;
@@ -145,12 +145,12 @@
 			//     if ($can) {
 			//         $retArr["status"] = AppCode::SUCCESS;
 			//         $retArr["message"] = __("notification.Found");
-	
+
 			//         $dbPayloadArr = $notification->payload != "" ? json_decode($notification->payload, true) : [];
 			//         $finalPayload = Notification_Resolver::Resolve($notification->type, $dbPayloadArr);
-	
+
 			//         $body = view(self::$TemplatePrefix . $notification->type, $finalPayload)->render();
-	
+
 			//         $retArr["data"] = [
 			//             "id" => $notification->id,
 			//             "avatar" => "",
@@ -161,7 +161,7 @@
 			//         ];
 			//     }
 			// }
-			
+
 			// return $retArr;
 		}
 
@@ -179,5 +179,5 @@
 			// $unreadNotifications = WebNotification::where('to_id', $user_id)->where('deleted', 0)->where('is_read', 0)->get();
 			// return count($unreadNotifications);
 		}
-	
+
 	}

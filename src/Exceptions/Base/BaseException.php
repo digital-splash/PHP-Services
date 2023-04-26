@@ -11,7 +11,7 @@
 			string $message = "",
 			array $replace = []
 		) {
-			if (!Helper::StringNullOrEmpty($message)) {
+			if (!Helper::IsNullOrEmpty($message)) {
 				$this->message = $message;
 			}
 

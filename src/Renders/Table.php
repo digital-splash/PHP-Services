@@ -61,7 +61,7 @@
 		}
 
 		public function Render(): string {
-			if (Helper::StringNullOrEmpty($this->id)) {
+			if (Helper::IsNullOrEmpty($this->id)) {
 				$this->id = "custom_table_" . time() . "_" . rand(1000, 9999);
 			}
 
@@ -153,7 +153,7 @@
 			string $class="",
 			array $params=[]
 		) {
-			if (!Helper::StringNullOrEmpty($this->cellButtonsDefaultClass)) {
+			if (!Helper::IsNullOrEmpty($this->cellButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->cellButtonsDefaultClass,
 					" " . $this->cellButtonsDefaultClass . " ",
@@ -162,7 +162,7 @@
 					$class .= " " . $this->cellButtonsDefaultClass;
 				}
 			}
-			if (!isset($params["title"]) && !Helper::StringNullOrEmpty($title)) {
+			if (!isset($params["title"]) && !Helper::IsNullOrEmpty($title)) {
 				$params["title"] = $title;
 			}
 			if (!isset($params["data-toggle"])) {
@@ -186,7 +186,7 @@
 			string $class="",
 			array $params=[]
 		): void {
-			if (!Helper::StringNullOrEmpty($this->topButtonsDefaultClass)) {
+			if (!Helper::IsNullOrEmpty($this->topButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->topButtonsDefaultClass,
 					" " . $this->topButtonsDefaultClass . " ",
@@ -212,7 +212,7 @@
 			string $class="",
 			array $params=[]
 		): void {
-			if (!Helper::StringNullOrEmpty($this->bottomButtonsDefaultClass)) {
+			if (!Helper::IsNullOrEmpty($this->bottomButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->bottomButtonsDefaultClass,
 					" " . $this->bottomButtonsDefaultClass . " ",

@@ -34,7 +34,7 @@
 			string $database
 		) {
 			$tempPort = DBHelper::GetPortFromHost($host);
-			if (!Helper::StringNullOrEmpty($tempPort)) {
+			if (!Helper::IsNullOrEmpty($tempPort)) {
 				$port = $tempPort;
 			}
 

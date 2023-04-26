@@ -49,24 +49,24 @@
 
 			$html[] = self::RenderPreHeadArray();
 
-			if (!Helper::StringNullOrEmpty(self::GetTitle())) {
+			if (!Helper::IsNullOrEmpty(self::GetTitle())) {
 				$html[] = "<title>" . self::GetTitle() . "</title>";
 			}
 
-			if (!Helper::StringNullOrEmpty(self::GetFavicon())) {
+			if (!Helper::IsNullOrEmpty(self::GetFavicon())) {
 				$html[] = "<link rel=\"icon\" type=\"image/png\" href=\"" . self::GetFavicon() . "\">";
 			}
 
 			$html[] = self::RenderMetaArray();
 
 			$stylesHtml = Style::GetFilesIncludes();
-			if (!Helper::StringNullOrEmpty($stylesHtml)) {
+			if (!Helper::IsNullOrEmpty($stylesHtml)) {
 				$html[] = "<!-- Styles -->";
 				$html[] = $stylesHtml;
 			}
 
 			$scriptsHtml = Script::GetFilesIncludes();
-			if (!Helper::StringNullOrEmpty($scriptsHtml)) {
+			if (!Helper::IsNullOrEmpty($scriptsHtml)) {
 				$html[] = "<!-- Scripts -->";
 				$html[] = $scriptsHtml;
 			}
@@ -220,7 +220,7 @@
 				"content" => self::GetPhoto()
 			]);
 
-			if (!Helper::StringNullOrEmpty(self::GetFacebookAppId())) {
+			if (!Helper::IsNullOrEmpty(self::GetFacebookAppId())) {
 				self::AddToMetaArray("fbAppId", [
 					"type" => "meta",
 					"property" => "fb:app_id",
@@ -228,7 +228,7 @@
 				]);
 			}
 
-			if (!Helper::StringNullOrEmpty(self::GetFacebookAdmins())) {
+			if (!Helper::IsNullOrEmpty(self::GetFacebookAdmins())) {
 				self::AddToMetaArray("fbAdmins", [
 					"type" => "meta",
 					"property" => "fb:admins",

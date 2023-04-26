@@ -35,7 +35,7 @@
 		}
 
 		public function Render(): string {
-			if (Helper::StringNullOrEmpty($this->id)) {
+			if (Helper::IsNullOrEmpty($this->id)) {
 				$this->id = "custom_tabs_" . time() . "_" . rand(1000, 9999);
 			}
 
@@ -50,7 +50,7 @@
 				"title" => $title,
 				"content" => $content
 			]) {
-				$tabClass = ($this->activeTab === $key) || (Helper::StringNullOrEmpty($this->activeTab) && $this->tabsCount == 0) ? "active" : "";
+				$tabClass = ($this->activeTab === $key) || (Helper::IsNullOrEmpty($this->activeTab) && $this->tabsCount == 0) ? "active" : "";
 
 				$topTabs .= Helper::GetContentFromFile(self::CONTENT_DIR . "TopTab.html", [
 					"::class::" => $tabClass,

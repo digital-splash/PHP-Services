@@ -9,7 +9,7 @@
 			string $file,
 			$key=""
 		): void {
-			if (!Helper::StringNullOrEmpty($key)) {
+			if (!Helper::IsNullOrEmpty($key)) {
 				self::$filesArray[$key] = $file;
 				return;
 			}
@@ -36,7 +36,7 @@
 			string $script,
 			$key=""
 		): void {
-			if (!Helper::StringNullOrEmpty($key)) {
+			if (!Helper::IsNullOrEmpty($key)) {
 				self::$scriptsArray[$key] = $script;
 				return;
 			}

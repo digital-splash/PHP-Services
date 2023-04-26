@@ -23,14 +23,14 @@
 		public $_orderField;
 		public $_orderFieldRelation;
 		public $_deleteIsAFlag;
-		
+
 		public $sql;
 		public $group;
 		public $having;
 		public $order;
 		public $limit;
 		public $suffix;
-		
+
 		public $isCustomTable;
 
 		public $result;
@@ -82,12 +82,12 @@
 			$this->_orderField			= "order";
 			$this->_orderFieldRelation	= "";
 			$this->_deleteIsAFlag		= true;
-			
+
 			$this->isCustomTable	= false;
 
 			$this->autoSaveCreate	= true;
 			$this->autoSaveUpdate	= true;
-			
+
 			$this->decArr	= [];
 			$this->intArr	= [];
 
@@ -168,7 +168,7 @@
 			if ($this->_key == "") {
 				return $this->_set($row);
 			}
-			
+
 			$this->mainRow = $this->mainData[$row[$this->_key]] = $row;
 			return $this->row = $this->data[$row[$this->_key]] = $row;
 		}
@@ -427,7 +427,7 @@
 				if ($newId > 0) {
 					$values[$this->_key]	= $newId;
 					$this->row				= $values;
-						
+
 					return $values[$this->_key];
 				}
 			}
@@ -457,7 +457,7 @@
 				$setArr	= array();
 				foreach ($values AS $key => $val) {
 					$key	= "`$key`";
-	
+
 					if ($val === "" || $val === null) {
 						$setArr[] = $key . " = NULL";
 					}
@@ -467,7 +467,7 @@
 					}
 				}
 				$setStr	= implode(",", $setArr);
-	
+
 				$filter	= "";
 				if ($condition != "") {
 					$filter = " WHERE " . $condition;
@@ -476,10 +476,10 @@
 					$val	= $values[$this->_key] ?? $this->row[$this->_key] ?? "";
 					$filter	= " WHERE `" . $this->_key . "` = '" . $val . "'";
 				}
-	
+
 				$sql = "UPDATE `" . $this->_database . "`.`" . $this->_table . "` " . $join . " SET " . $setStr . $filter;
 				$this->query($sql);
-			}	
+			}
 		}
 
 
@@ -555,7 +555,7 @@
 			if ($this->_showActive != -1) {
 				$condition .= " AND e.`" . $this->_activeField . "` = " . $this->_showActive;
 			}
-			
+
 			if ($this->_showArchived != -1) {
 				$condition .= " AND e.`" . $this->_archivedField . "` = " . $this->_showArchived;
 			}
@@ -757,13 +757,13 @@
 			$this->autoOrder();
 		}
 
-	
+
 		/**
 		* limits a db connection
 		*/
 		public function limit($offset=0, $nbOfRecs=1000) {
 			$this->limit = "";
-			
+
 			if ($nbOfRecs > 0) {
 				$this->limit = "LIMIT " . $offset . ", " . $nbOfRecs;
 			}
@@ -793,12 +793,12 @@
 			if ($id == 0) {
 				$id = $this->row[$this->_key];
 			}
-			
+
 			$sql = "DELETE FROM `" . $this->_database . "`.`" . $this->_table . "` WHERE `" . $this->_key . "` = " . $id;
 			$this->query($sql);
 		}
 
-		
+
 		public function unDelete(int $id=0) : void {
 			if ($id == 0) {
 				$id = $this->row[$this->_key];
@@ -817,7 +817,7 @@
 				$this->purgeAll($condition);
 			}
 		}
-		
+
 		private function flagDeletedAdd(string $condition="1") : void {
 			if ($condition != "") {
 				$now = date("Y-m-d H:i:s");
@@ -888,7 +888,7 @@
 					$arr[$k] = Helper::ConvertToDec($arr[$k]);
 				}
 			}
-			
+
 			foreach ($this->intArr AS $k) {
 				if (isset($arr[$k])) {
 					$arr[$k] = Helper::ConvertToInt($arr[$k]);
@@ -906,7 +906,7 @@
 
 		public function removeUnchangedValues(array $values = [], array $mainValues = []) : array {
 			foreach ($values AS $k => $v) {
-				if (Helper::StringNullOrEmpty($v) && isset($mainValues[$k]) && Helper::StringNullOrEmpty($mainValues[$k])) {
+				if (Helper::IsNullOrEmpty($v) && isset($mainValues[$k]) && Helper::IsNullOrEmpty($mainValues[$k])) {
 					unset($values[$k]);
 					continue;
 				}
@@ -923,11 +923,11 @@
 		public function getUniqueValue($val, $key, $isSafe=true) {
 			$keyVal	= $this->row[$this->_key] ?? "";
 			$newVal = $val;
-			
+
 			if ($val != "") {
 				$obj = clone($this);
 				$obj->listAll("e.`$key` = '$val' AND e.`" . $obj->_key . "` != '$keyVal'");
-				
+
 				if ($obj->count > 0) {
 					$obj->reset();
 					$i		= 1;

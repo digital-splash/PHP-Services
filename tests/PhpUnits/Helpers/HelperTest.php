@@ -187,61 +187,53 @@
 			);
 		}
 
-		public function testStringNullOrEmptySuccess() {
+		public function testIsNullOrEmptySuccess() {
 			$this->assertTrue(
-				Helper::StringNullOrEmpty(null)
+				Helper::IsNullOrEmpty(null)
 			);
 
 			$this->assertTrue(
-				Helper::StringNullOrEmpty("")
+				Helper::IsNullOrEmpty(0)
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty('')
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty('0')
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty([])
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty(json_decode(""))
 			);
 
 			$this->assertFalse(
-				Helper::StringNullOrEmpty(1)
+				Helper::IsNullOrEmpty(1)
 			);
 
 			$this->assertFalse(
-				Helper::StringNullOrEmpty("John")
-			);
-		}
-
-		public function testArrayNullOrEmptySuccess() {
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty(null)
-			);
-
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty([])
-			);
-
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty(json_decode(""))
+				Helper::IsNullOrEmpty("John")
 			);
 
 			$this->assertFalse(
-				Helper::ArrayNullOrEmpty([
+				Helper::IsNullOrEmpty([
 					"John"
 				])
 			);
 
 			$this->assertFalse(
-				Helper::ArrayNullOrEmpty(json_decode(json_encode([
+				Helper::IsNullOrEmpty(json_decode(json_encode([
 					"John"
 				])))
 			);
-		}
-
-		public function testObjectNullOrEmptySuccess() {
-			$this->assertTrue(
-				Helper::ObjectNullOrEmpty(null)
-			);
-
-			$this->assertTrue(
-				Helper::ObjectNullOrEmpty(json_decode(""))
-			);
 
 			$this->assertFalse(
-				Helper::ObjectNullOrEmpty(json_decode("{}"))
+				Helper::IsNullOrEmpty(json_decode("{}"))
 			);
 		}
 

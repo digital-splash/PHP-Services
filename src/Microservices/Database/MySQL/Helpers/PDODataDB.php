@@ -58,7 +58,7 @@
 		private function createDsn(): string {
 			$dnsArr = [
 				'host=' . $this->host,
-				Helper::StringNullOrEmpty($this->port) ? '' : 'port=' . $this->port,
+				Helper::IsNullOrEmpty($this->port) ? '' : 'port=' . $this->port,
 				'dbname=' . $this->database,
 			];
 			return DBSettings::ENGINE_MYSQL . ':' . Helper::ImplodeArrToStr(';', $dnsArr);
