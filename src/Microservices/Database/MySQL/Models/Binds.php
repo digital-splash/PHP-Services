@@ -2,8 +2,7 @@
 	namespace DigitalSplash\Database\MySQL\Models;
 
 	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder;
-
-	//TODO: Fix the way we are appending binds
+  
 	class Binds {
 		protected array $binds;
 
