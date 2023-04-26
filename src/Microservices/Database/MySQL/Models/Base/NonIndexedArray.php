@@ -1,6 +1,7 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Models\Base;
 
+	use DigitalSplash\Database\MySQL\Models\Binds;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 
@@ -9,6 +10,7 @@
 		private string $statementPrefix;
 		protected string $finalString;
 		protected array $array;
+		public Binds $binds;
 
 		public function __construct(
 			string $implodeValue,
@@ -22,6 +24,7 @@
 			$this->statementPrefix = $statementPrefix;
 			$this->finalString = '';
 			$this->array = [];
+			$this->binds = new Binds();
 		}
 
 		public function getFinalString(): string {
