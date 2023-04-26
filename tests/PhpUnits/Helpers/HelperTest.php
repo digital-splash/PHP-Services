@@ -401,15 +401,15 @@
 
 		public function testIsInStringSuccess() {
 			$this->assertTrue(
-				Helper::IsInString("John", "John Doe")
+				Helper::IsInString("John Doe", "John")
 			);
 
 			$this->assertTrue(
-				Helper::IsInString("Doe", "John Doe")
+				Helper::IsInString("John Doe", "Doe")
 			);
 
 			$this->assertFalse(
-				Helper::IsInString("Johnn", "John Doe")
+				Helper::IsInString("John Doe", "Johnn")
 			);
 		}
 

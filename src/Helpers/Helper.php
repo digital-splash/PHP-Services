@@ -302,8 +302,8 @@
 		 * Check if a given substring exists in a string
 		 */
 		public static function IsInString(
-			string $search,
-			string $string
+			string $string,
+			string $search
 		): bool {
 			return strpos($string, $search) !== false ? true : false;
 		}
