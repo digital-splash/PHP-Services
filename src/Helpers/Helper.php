@@ -314,9 +314,9 @@
 		 */
 		public static function StripHtml(
 			string $content,
-			$allow=""
+			$allowedTags=null
 		): string {
-			return strip_tags($content, $allow);
+			return strip_tags($content, $allowedTags);
 		}
 
 
