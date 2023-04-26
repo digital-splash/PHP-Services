@@ -72,7 +72,7 @@
 				$html[] = $style;
 			}
 
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 	}

@@ -533,19 +533,19 @@
 		public function testExplodeStrToArrSuccess() {
 			$this->assertEquals(
 				[],
-				Helper::ExplodeStrToArr(null)
+				Helper::ExplodeStrToArr("", null)
 			);
 
 			$this->assertEquals(
 				[],
-				Helper::ExplodeStrToArr("")
+				Helper::ExplodeStrToArr("", "")
 			);
 
 			$this->assertEquals(
 				[
 					"John Matt Doe",
 				],
-				Helper::ExplodeStrToArr("John Matt Doe")
+				Helper::ExplodeStrToArr("", "John Matt Doe")
 			);
 
 			$this->assertEquals(
@@ -567,7 +567,7 @@
 					"Matt",
 					"Doe",
 				],
-				Helper::ExplodeStrToArr("", "John Matt Doe")
+				Helper::ExplodeStrToArr(" ", "John Matt Doe")
 			);
 
 			$this->assertEquals(
@@ -583,17 +583,17 @@
 		public function testImplodeArrToStrSuccess() {
 			$this->assertEquals(
 				"",
-				Helper::ImplodeArrToStr(null)
+				Helper::ImplodeArrToStr("", null)
 			);
 
 			$this->assertEquals(
 				"",
-				Helper::ImplodeArrToStr([])
+				Helper::ImplodeArrToStr("", [])
 			);
 
 			$this->assertEquals(
 				"John Matt Doe",
-				Helper::ImplodeArrToStr([
+				Helper::ImplodeArrToStr(" ", [
 					"John",
 					"Matt",
 					"Doe"
@@ -602,7 +602,7 @@
 
 			$this->assertEquals(
 				"John Matt Doe",
-				Helper::ImplodeArrToStr([
+				Helper::ImplodeArrToStr(" ", [
 					"John",
 					"",
 					"Matt",
@@ -932,7 +932,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",
