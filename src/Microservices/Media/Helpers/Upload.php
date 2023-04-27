@@ -74,4 +74,8 @@
 				];
 			}
 		}
+
+		public static function safeName($str="") {
+			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
+		}
 	}
