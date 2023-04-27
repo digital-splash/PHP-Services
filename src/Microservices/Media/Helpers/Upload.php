@@ -56,4 +56,22 @@
 			$this->error				= 0;
 			$this->isTest				= false;
 		}
+
+		private static function uploadToServer($tmpName="", $uploadPath="", $fileName="") {
+			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
+
+			if (move_uploaded_file($tmpName, $uploadPath)) {
+				return [
+					"status"	=> self::Success,
+					"message"	=> "File successfully uploaded!",
+					"fileName"	=> $uploadedFileName
+				];
+			}else {
+				return [
+					"status"	=> self::Error,
+					"message"	=> "Error while uploading file!",
+					"fileName"	=> $uploadedFileName
+				];
+			}
+		}
 	}
