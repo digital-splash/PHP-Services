@@ -57,7 +57,7 @@
 			$this->isTest				= false;
 		}
 
-		public static function uploadToServer($tmpName="", $uploadPath="", $fileName="") {
+		public static function uploadToServer($tmpName="", $uploadPath="", $fileName=""): array {
 			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
 
 			if (move_uploaded_file($tmpName, $uploadPath)) {
@@ -75,7 +75,7 @@
 			}
 		}
 
-		public static function safeName($str="") {
+		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
 		}
 	}
