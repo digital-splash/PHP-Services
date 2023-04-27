@@ -78,4 +78,17 @@
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
 		}
+
+		public static function CheckExtensionValidity($files, $allowedExtensionsArr=array()) {
+			foreach ($files AS $elemName) {
+				$fileName	= $_FILES[$elemName]["name"] ;
+				$extName	= strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+				if ($fileName != "" && !in_array($extName, $allowedExtensionsArr)) {
+					return $fileName;
+				}
+			}
+
+			return true;
+		}
 	}
