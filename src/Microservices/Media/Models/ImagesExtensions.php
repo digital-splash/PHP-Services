@@ -17,7 +17,7 @@
 			self::WEBP,
 		];
 
-		public function getExtensions(): array {
+		public static function getExtensions(): array {
 			return self::EXTENSIONS;
 		}
 	}
