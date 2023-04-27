@@ -58,10 +58,10 @@
 		private function createDsn(): string {
 			$dnsArr = [
 				'host=' . $this->host,
-				Helper::StringNullOrEmpty($this->port) ? '' : 'port=' . $this->port,
+				Helper::IsNullOrEmpty($this->port) ? '' : 'port=' . $this->port,
 				'dbname=' . $this->database,
 			];
-			return DBSettings::ENGINE_MYSQL . ':' . Helper::ImplodeArrToStr($dnsArr, ';');
+			return DBSettings::ENGINE_MYSQL . ':' . Helper::ImplodeArrToStr(';', $dnsArr);
 		}
 
 		public static function getInstance(): self {
@@ -95,13 +95,13 @@
 			}
 
 			if (self::$instanceMain->pdo === null) {
-				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr([
+				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr(';', [
 					$host,
 					$port,
 					$username,
 					$password,
 					$database
-				], ';'));
+				]));
 			}
 
 			return self::$instanceMain;
@@ -128,13 +128,13 @@
 			}
 
 			if (self::$instanceLogs->pdo === null) {
-				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr([
+				throw new DatabaseInvalidConnectorException(Helper::ImplodeArrToStr(';', [
 					$host,
 					$port,
 					$username,
 					$password,
 					$database
-				], ';'));
+				]));
 			}
 
 			return self::$instanceLogs;

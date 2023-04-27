@@ -20,7 +20,7 @@
 		public static function CleanDate(
 			?string $val
 		): string {
-			if (Helper::StringNullOrEmpty($val)) {
+			if (Helper::IsNullOrEmpty($val)) {
 				return "null";
 			}
 			return "'$val'";
@@ -36,11 +36,11 @@
 			?string $lang="",
 			bool $isStr=false
 		): string {
-			if (Helper::StringNullOrEmpty($date)) {
+			if (Helper::IsNullOrEmpty($date)) {
 				throw new NotEmptyParamException("date");
 			}
 
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
@@ -77,7 +77,7 @@
 				throw new InvalidParamException("month");
 			}
 
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
@@ -93,7 +93,7 @@
 			string $weekDay,
 			?string $lang=""
 		): string {
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
@@ -113,7 +113,7 @@
 			string $formatType=DateFormatType::NICE,
 			?string $comparisonDate=null
 		): string {
-			if (Helper::StringNullOrEmpty($date)) {
+			if (Helper::IsNullOrEmpty($date)) {
 				throw new NotEmptyParamException("date");
 			}
 
@@ -122,7 +122,7 @@
 			}
 			$comparisonDateStr = strtotime($comparisonDate);
 
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
@@ -180,10 +180,10 @@
 			?string $date1=null,
 			?string $date2=null
 		): float {
-			if (Helper::StringNullOrEmpty($date1)) {
+			if (Helper::IsNullOrEmpty($date1)) {
 				throw new NotEmptyParamException("date1");
 			}
-			if (Helper::StringNullOrEmpty($date2)) {
+			if (Helper::IsNullOrEmpty($date2)) {
 				throw new NotEmptyParamException("date2");
 			}
 
@@ -207,15 +207,15 @@
 			bool $getMonths=true,
 			bool $getDays=true
 		): string {
-			if (Helper::StringNullOrEmpty($dob)) {
+			if (Helper::IsNullOrEmpty($dob)) {
 				throw new NotEmptyParamException("dob");
 			}
 
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
-			if (Helper::StringNullOrEmpty($dateTime)) {
+			if (Helper::IsNullOrEmpty($dateTime)) {
 				$dateTime = 'now';
 			}
 

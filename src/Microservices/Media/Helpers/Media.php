@@ -71,13 +71,13 @@
 			bool $withVersion=true,
 			bool $withDomain=true
 		): string {
-			if (Helper::StringNullOrEmpty(self::$UPLOAD_DIR)) {
+			if (Helper::IsNullOrEmpty(self::$UPLOAD_DIR)) {
 				throw new NotEmptyParamException("UPLOAD_DIR");
 			}
-			if (Helper::StringNullOrEmpty(self::$MEDIA_ROOT)) {
+			if (Helper::IsNullOrEmpty(self::$MEDIA_ROOT)) {
 				throw new NotEmptyParamException("MEDIA_ROOT");
 			}
-			if (Helper::StringNullOrEmpty($path)) {
+			if (Helper::IsNullOrEmpty($path)) {
 				throw new NotEmptyParamException("path");
 			}
 
@@ -94,7 +94,7 @@
 				$extension = $newExtension;
 			}
 
-			if (!Helper::StringNullOrEmpty($imageCode)) {
+			if (!Helper::IsNullOrEmpty($imageCode)) {
 				$imageCodes = [];
 				if ($imageCode === Image::THUMBNAIL_CODE) {
 					$imageCodes = [
@@ -133,11 +133,11 @@
 				}
 			}
 
-			if (Helper::StringNullOrEmpty($url)) {
+			if (Helper::IsNullOrEmpty($url)) {
 				throw new FileNotFoundException(self::$MEDIA_ROOT . $path);
 			}
 
-			if ($withVersion && !Helper::StringNullOrEmpty(self::$WEBSITE_VERSION)) {
+			if ($withVersion && !Helper::IsNullOrEmpty(self::$WEBSITE_VERSION)) {
 				$url .= "?v=" . self::$WEBSITE_VERSION;
 			}
 

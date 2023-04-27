@@ -14,18 +14,18 @@
 			?string $port = null
 		): string {
 			$tempPort = self::GetPortFromHost($host);
-			if (!Helper::StringNullOrEmpty($tempPort)) {
+			if (!Helper::IsNullOrEmpty($tempPort)) {
 				$port = $tempPort;
 			}
 
-			return Helper::EncryptString(Helper::ImplodeArrToStr([
+			return Helper::EncryptString(Helper::ImplodeArrToStr(';', [
                 $engine,
 				$host,
 				$port,
 				$username,
 				$password,
 				$database
-			], ';'));
+			]));
 		}
 
         public static function GetPortFromHost(
@@ -35,9 +35,9 @@
 				[
 					$host,
 					$port
-				] = Helper::ExplodeStrToArr($host, ':');
+				] = Helper::ExplodeStrToArr(':', $host);
 
-				if (!Helper::StringNullOrEmpty($port)) {
+				if (!Helper::IsNullOrEmpty($port)) {
 					return $port;
 				}
 			}

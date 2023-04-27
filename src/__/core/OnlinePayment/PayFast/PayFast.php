@@ -13,14 +13,14 @@
 		public const STATUS_SUCCESS = STATUS_CODE_SUCCESS;
 		public const STATUS_ERROR = STATUS_CODE_ERROR;
 		public const STATUS_NOTIFY = "notify";
-		
+
 		public const SIGNATURE_PASSPHRASE = "";
 		private const API_VERSION = 1;
 		private const IS_TEST = !IS_LIVE_ENV;
-		
+
 		public $merchantId;
 		public $merchantKey;
-		
+
 		public $apiUrl;
 		public $url;
 
@@ -70,7 +70,7 @@
 			$htmlForm .= '</form>';
 
 			OnlinePaymentPayFastLog::saveBeforeSend($type, $data["m_payment_id"] ?? 0, $payment->url, $data);
-			
+
 			return $htmlForm;
 		}
 
@@ -94,13 +94,13 @@
 			// 		]);
 
 			// 		$userId = $order->row["user_id"];
-					
+
 			// 		$amount = $order->GetPayableAmount();
 			// 		$itemName = "New Order";
 			// 		$itemDesc = "New Order from Plush Queens Website";
 			// 		break;
 			// }
-			
+
 			// self::$returnUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_SUCCESS]);
 			// self::$cancelUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_ERROR]);
 			// self::$notifyUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_NOTIFY]);
@@ -150,7 +150,7 @@
 			}
 
 			$url = $payment->apiUrl . "/process/query/" . $data["id"];
-			
+
 			$curl = new Curl();
 			$curl->setOpt(CURLOPT_HEADER, false);
 			$curl->setOpt(CURLOPT_RETURNTRANSFER, true);
@@ -188,7 +188,7 @@
 				case self::STATUS_NOTIFY:
 					$status = OnlinePaymentPayFastLog::SUCCESS;
 					break;
-				
+
 				case self::STATUS_ERROR:
 				default:
 					$status = OnlinePaymentPayFastLog::ERROR;
@@ -220,14 +220,14 @@
 			switch ($returnType) {
 				case self::STATUS_SUCCESS:
 					$retArr = self::SendSuccessEmails($postVals);
-					
+
 					break;
-				
+
 				case self::STATUS_ERROR:
 					$retArr = self::SendErrorEmails($postVals);
-					
+
 					break;
-				
+
 				default:
 			}
 
@@ -321,13 +321,13 @@
 					]);
 
 					$userId = $order->row["user_id"];
-					
+
 					$amount = $order->GetPayableAmount();
 					$itemName = "New Order";
 					$itemDesc = "New Order from Plush Queens Website";
 					break;
 			}
-			
+
 			self::$returnUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_SUCCESS]);
 			self::$cancelUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_ERROR]);
 			self::$notifyUrl = getFullUrl("payment-response", "", [], ["type"=>$type, "type_id"=>$typeId, "remote_id"=> $remoteId, "return_type"=>PayFast::STATUS_NOTIFY]);
@@ -359,7 +359,7 @@
 
 			//Remove empty keys
 			$data = array_filter($data, function($value) {
-				return !Helper::StringNullOrEmpty($value);
+				return !Helper::IsNullOrEmpty($value);
 			});
 
 			return $data;
@@ -383,14 +383,14 @@
 			foreach ($pfData as $key => $val) {
 				$data[$key] = stripslashes($val);
 			}
-		
+
 			if ($passPhrase !== "") {
 				$pfData['passphrase'] = $passPhrase;
 			}
-		
+
 			// Sort the array by key, alphabetically
 			ksort($pfData);
-		
+
 			// Normalise the array into a parameter string
 			$pfParamString = '';
 			foreach ($pfData as $key => $val) {
@@ -398,7 +398,7 @@
 					$pfParamString .= $key . '=' . urlencode($val) . '&';
 				}
 			}
-		
+
 			// Remove the last '&amp;' from the parameter string
 			$pfParamString = substr($pfParamString, 0, -1);
 			return md5($pfParamString);
@@ -427,11 +427,11 @@
 				"remote_id" => $paymentId
 			]);
 			$retArr = $queue->SendEmail(false);
-			
+
 			if ($retArr["status"] !== SUCCESS) {
 				return $retArr;
 			}
-			
+
 			$queue = new Queue();
 			$queue->name = "SendPaymentSuccessEmailToUser";
 			$queue->payload = json_encode([
@@ -440,7 +440,7 @@
 				"remote_id" => $paymentId
 			]);
 			$retArr = $queue->SendEmail(false);
-			
+
 			return $retArr;
 		}
 
@@ -467,11 +467,11 @@
 				"remote_id" => $paymentId
 			]);
 			$retArr = $queue->SendEmail(false);
-			
+
 			if ($retArr["status"] !== SUCCESS) {
 				return $retArr;
 			}
-			
+
 			$queue = new Queue();
 			$queue->name = "SendPaymentErrorEmailToUser";
 			$queue->payload = json_encode([
@@ -480,8 +480,8 @@
 				"remote_id" => $paymentId
 			]);
 			$retArr = $queue->SendEmail(false);
-			
+
 			return $retArr;
 		}
-		
+
 	}

@@ -9,7 +9,7 @@
 			string $file,
 			$key=""
 		): void {
-			if (!Helper::StringNullOrEmpty($key)) {
+			if (!Helper::IsNullOrEmpty($key)) {
 				self::$filesArray[$key] = $file;
 				return;
 			}
@@ -36,7 +36,7 @@
 			string $style,
 			$key=""
 		): void {
-			if (!Helper::StringNullOrEmpty($key)) {
+			if (!Helper::IsNullOrEmpty($key)) {
 				self::$stylesArray[$key] = $style;
 				return;
 			}
@@ -72,7 +72,7 @@
 				$html[] = $style;
 			}
 
-			return Helper::ImplodeArrToStr($html, "\n");
+			return Helper::ImplodeArrToStr("\n", $html);
 		}
 
 	}

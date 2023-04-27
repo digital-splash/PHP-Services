@@ -56,7 +56,7 @@
 				case "string":
 					$val = trim($val);
 					if (
-						Helper::StringNullOrEmpty($val)
+						Helper::IsNullOrEmpty($val)
 						||
 						$val === "false"
 					) {
@@ -119,34 +119,10 @@
 			return number_format(self::ConvertToDec($val, $decimalPlaces), $decimalPlaces);
 		}
 
-
-		/**
-		 * Check if the given string is null or empty
-		 */
-		public static function StringNullOrEmpty(
-			$str
+		public static function IsNullOrEmpty(
+			$value
 		): bool {
-			return is_null($str) || empty($str) || (is_string($str) && (strlen($str) == 0 || $str == ""));
-		}
-
-
-		/**
-		 * Check if the given array is null or empty
-		 */
-		public static function ArrayNullOrEmpty(
-			?array $arr
-		): bool {
-			return is_null($arr) || !is_array($arr) || count($arr) == 0;
-		}
-
-
-		/**
-		 * Check if the given object is null or empty
-		 */
-		public static function ObjectNullOrEmpty(
-			?object $obj
-		): bool {
-			return is_null($obj) || !is_object($obj) || count(array($obj)) == 0;
+			return empty($value);
 		}
 
 
@@ -326,8 +302,8 @@
 		 * Check if a given substring exists in a string
 		 */
 		public static function IsInString(
-			string $search,
-			string $string
+			string $string,
+			string $search
 		): bool {
 			return strpos($string, $search) !== false ? true : false;
 		}
@@ -338,9 +314,9 @@
 		 */
 		public static function StripHtml(
 			string $content,
-			$allow=""
+			$allowedTags=null
 		): string {
-			return strip_tags($content, $allow);
+			return strip_tags($content, $allowedTags);
 		}
 
 
@@ -377,7 +353,7 @@
 		public static function GetStringSafe(
 			?string $str
 		): string {
-			if (self::StringNullOrEmpty($str)) {
+			if (self::IsNullOrEmpty($str)) {
 				return "";
 			}
 			return $str;
@@ -474,33 +450,33 @@
 		 * Converts the given String into an Array
 		 */
 		public static function ExplodeStrToArr(
-			?string $str,
-			string $delimiter="",
+			string $separator='',
+			?string $string,
 			int $chunkLength=0
 		): array {
-			if (self::StringNullOrEmpty($str)) {
+			if (self::IsNullOrEmpty($string)) {
 				return [];
 			}
 
-			if (!self::StringNullOrEmpty($delimiter)) {
-				return explode($delimiter, $str);
+			if (!self::IsNullOrEmpty($separator)) {
+				return explode($separator, $string);
 			}
 
 			if ($chunkLength > 0) {
 				$arr = [];
-				while (strlen($str) > $chunkLength) {
-					$chunk = substr($str, 0, $chunkLength);
+				while (strlen($string) > $chunkLength) {
+					$chunk = substr($string, 0, $chunkLength);
 
 					$arr[] = $chunk;
-					$str   = substr($str, $chunkLength);
+					$string = substr($string, $chunkLength);
 				}
-				if (strlen($str) > 0) {
-					$arr[] = $str;
+				if (strlen($string) > 0) {
+					$arr[] = $string;
 				}
 				return $arr;
 			}
 
-			return [$str];
+			return [$string];
 		}
 
 
@@ -508,13 +484,13 @@
 		 * Returns a [delimiter] seperated string from the values inside the given array
 		 */
 		public static function ImplodeArrToStr(
-			?array $array,
-			string $delimiter=" "
+			string $separator=' ',
+			?array $array
 		): string {
-			if (self::ArrayNullOrEmpty($array)) {
-				return "";
+			if (self::IsNullOrEmpty($array)) {
+				return '';
 			}
-			return implode($delimiter, self::UnsetArrayEmptyValues($array));
+			return implode($separator, self::UnsetArrayEmptyValues($array));
 		}
 
 
@@ -525,7 +501,7 @@
 			?array $arr,
 			string $key=""
 		): string {
-			if (self::ArrayNullOrEmpty($arr) || !isset($arr[$key])) {
+			if (self::IsNullOrEmpty($arr) || !isset($arr[$key])) {
 				return "";
 			}
 			return $arr[$key];
@@ -538,7 +514,7 @@
 		public static function UnsetArrayEmptyValues(
 			?array $array
 		): array {
-			if (self::ArrayNullOrEmpty($array)) {
+			if (self::IsNullOrEmpty($array)) {
 				return [];
 			}
 
@@ -546,7 +522,7 @@
 				array_filter(
 					$array,
 					function($value) {
-						if (!Helper::StringNullOrEmpty($value)) {
+						if (!Helper::IsNullOrEmpty($value)) {
 							return $value;
 						}
 					}
@@ -565,7 +541,7 @@
 			string $valueHolder="\"",
 			string $elemsJoin=" "
 		): string {
-			if (self::ArrayNullOrEmpty($params)) {
+			if (self::IsNullOrEmpty($params)) {
 				return "";
 			}
 
@@ -586,7 +562,7 @@
 			string $path="./",
 			bool $checkSubFolders=false
 		): bool {
-			if (self::StringNullOrEmpty($dirName)) {
+			if (self::IsNullOrEmpty($dirName)) {
 				return false;
 			}
 
@@ -685,7 +661,7 @@
 		public static function GetYoutubeId(
 			?string $url
 		): string {
-			if (self::StringNullOrEmpty($url)) {
+			if (self::IsNullOrEmpty($url)) {
 				return "";
 			}
 
@@ -721,7 +697,7 @@
 		public static function EncryptLink(
 			?string $link
 		): string {
-			if (self::StringNullOrEmpty($link)) {
+			if (self::IsNullOrEmpty($link)) {
 				return "";
 			}
 			return str_replace("&", "[amp;]", base64_encode($link));
@@ -734,7 +710,7 @@
 		public static function DecryptLink(
 			?string $link
 		): string {
-			if (self::StringNullOrEmpty($link)) {
+			if (self::IsNullOrEmpty($link)) {
 				return "";
 			}
 			return base64_decode(str_replace("[amp;]", "&", $link));
@@ -786,7 +762,7 @@
 			?string $filePath=null,
 			?array $replace=null
 		): string {
-			if (self::StringNullOrEmpty($filePath)) {
+			if (self::IsNullOrEmpty($filePath)) {
 				throw new NotEmptyParamException('filePath');
 			}
 			if (!file_exists($filePath)) {
@@ -794,7 +770,7 @@
 			}
 
 			$content = file_get_contents($filePath);
-			if (!Helper::ArrayNullOrEmpty($replace)) {
+			if (!Helper::IsNullOrEmpty($replace)) {
 				$content = str_replace(
 					array_keys($replace),
 					array_values($replace),
@@ -811,7 +787,7 @@
 		public static function GetJsonContentFromFileAsArray(
 			?string $filePath
 		): array {
-			if (self::StringNullOrEmpty($filePath)) {
+			if (self::IsNullOrEmpty($filePath)) {
 				throw new NotEmptyParamException('filePath');
 			}
 			if (!file_exists($filePath)) {
@@ -865,7 +841,7 @@
 				}
 			}
 
-			if (!self::StringNullOrEmpty($root) && !self::StringEndsWith($root, "/")) {
+			if (!self::IsNullOrEmpty($root) && !self::StringEndsWith($root, "/")) {
 				$root .= "/";
 			}
 			$url = $root . $page . $args;
@@ -878,7 +854,7 @@
 				$urlScheme = "https://";
 			}
 
-			if (!self::StringNullOrEmpty($urlScheme)) {
+			if (!self::IsNullOrEmpty($urlScheme)) {
 				$url = str_replace($urlScheme, "", $url);
 			}
 
@@ -962,10 +938,10 @@
 			string $string,
 			string $scheme
 		): string {
-			if (self::StringNullOrEmpty($string)) {
+			if (self::IsNullOrEmpty($string)) {
 				return "";
 			}
-			if (self::StringNullOrEmpty($scheme)) {
+			if (self::IsNullOrEmpty($scheme)) {
 				return $string;
 			}
 			if (self::IsValidUrl($string)) {
@@ -986,10 +962,10 @@
 			string $string,
 			string $scheme
 		): string {
-			if (self::StringNullOrEmpty($string)) {
+			if (self::IsNullOrEmpty($string)) {
 				return "";
 			}
-			if (self::StringNullOrEmpty($scheme)) {
+			if (self::IsNullOrEmpty($scheme)) {
 				return $string;
 			}
 

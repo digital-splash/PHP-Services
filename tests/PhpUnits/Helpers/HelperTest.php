@@ -187,61 +187,53 @@
 			);
 		}
 
-		public function testStringNullOrEmptySuccess() {
+		public function testIsNullOrEmptySuccess() {
 			$this->assertTrue(
-				Helper::StringNullOrEmpty(null)
+				Helper::IsNullOrEmpty(null)
 			);
 
 			$this->assertTrue(
-				Helper::StringNullOrEmpty("")
+				Helper::IsNullOrEmpty(0)
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty('')
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty('0')
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty([])
+			);
+
+			$this->assertTrue(
+				Helper::IsNullOrEmpty(json_decode(""))
 			);
 
 			$this->assertFalse(
-				Helper::StringNullOrEmpty(1)
+				Helper::IsNullOrEmpty(1)
 			);
 
 			$this->assertFalse(
-				Helper::StringNullOrEmpty("John")
-			);
-		}
-
-		public function testArrayNullOrEmptySuccess() {
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty(null)
-			);
-
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty([])
-			);
-
-			$this->assertTrue(
-				Helper::ArrayNullOrEmpty(json_decode(""))
+				Helper::IsNullOrEmpty("John")
 			);
 
 			$this->assertFalse(
-				Helper::ArrayNullOrEmpty([
+				Helper::IsNullOrEmpty([
 					"John"
 				])
 			);
 
 			$this->assertFalse(
-				Helper::ArrayNullOrEmpty(json_decode(json_encode([
+				Helper::IsNullOrEmpty(json_decode(json_encode([
 					"John"
 				])))
 			);
-		}
-
-		public function testObjectNullOrEmptySuccess() {
-			$this->assertTrue(
-				Helper::ObjectNullOrEmpty(null)
-			);
-
-			$this->assertTrue(
-				Helper::ObjectNullOrEmpty(json_decode(""))
-			);
 
 			$this->assertFalse(
-				Helper::ObjectNullOrEmpty(json_decode("{}"))
+				Helper::IsNullOrEmpty(json_decode("{}"))
 			);
 		}
 
@@ -409,15 +401,15 @@
 
 		public function testIsInStringSuccess() {
 			$this->assertTrue(
-				Helper::IsInString("John", "John Doe")
+				Helper::IsInString("John Doe", "John")
 			);
 
 			$this->assertTrue(
-				Helper::IsInString("Doe", "John Doe")
+				Helper::IsInString("John Doe", "Doe")
 			);
 
 			$this->assertFalse(
-				Helper::IsInString("Johnn", "John Doe")
+				Helper::IsInString("John Doe", "Johnn")
 			);
 		}
 
@@ -541,19 +533,19 @@
 		public function testExplodeStrToArrSuccess() {
 			$this->assertEquals(
 				[],
-				Helper::ExplodeStrToArr(null)
+				Helper::ExplodeStrToArr("", null)
 			);
 
 			$this->assertEquals(
 				[],
-				Helper::ExplodeStrToArr("")
+				Helper::ExplodeStrToArr("", "")
 			);
 
 			$this->assertEquals(
 				[
 					"John Matt Doe",
 				],
-				Helper::ExplodeStrToArr("John Matt Doe")
+				Helper::ExplodeStrToArr("", "John Matt Doe")
 			);
 
 			$this->assertEquals(
@@ -566,7 +558,7 @@
 					"Do",
 					"e"
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", "", 2)
+				Helper::ExplodeStrToArr("", "John Matt Doe", 2)
 			);
 
 			$this->assertEquals(
@@ -575,7 +567,7 @@
 					"Matt",
 					"Doe",
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", " ")
+				Helper::ExplodeStrToArr(" ", "John Matt Doe")
 			);
 
 			$this->assertEquals(
@@ -584,24 +576,24 @@
 					"hn Matt D",
 					"e"
 				],
-				Helper::ExplodeStrToArr("John Matt Doe", "o")
+				Helper::ExplodeStrToArr("o", "John Matt Doe")
 			);
 		}
 
 		public function testImplodeArrToStrSuccess() {
 			$this->assertEquals(
 				"",
-				Helper::ImplodeArrToStr(null)
+				Helper::ImplodeArrToStr("", null)
 			);
 
 			$this->assertEquals(
 				"",
-				Helper::ImplodeArrToStr([])
+				Helper::ImplodeArrToStr("", [])
 			);
 
 			$this->assertEquals(
 				"John Matt Doe",
-				Helper::ImplodeArrToStr([
+				Helper::ImplodeArrToStr(" ", [
 					"John",
 					"Matt",
 					"Doe"
@@ -610,7 +602,7 @@
 
 			$this->assertEquals(
 				"John Matt Doe",
-				Helper::ImplodeArrToStr([
+				Helper::ImplodeArrToStr(" ", [
 					"John",
 					"",
 					"Matt",
@@ -940,7 +932,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",

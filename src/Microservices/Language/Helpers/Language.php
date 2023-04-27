@@ -28,7 +28,7 @@
 			string $field,
 			?string $lang=null
 		): string {
-			if (Helper::StringNullOrEmpty($lang)) {
+			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = self::GetActive();
 			}
 

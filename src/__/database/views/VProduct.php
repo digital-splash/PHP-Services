@@ -9,7 +9,7 @@
 
 		public function __construct($id=0) {
 			parent::__construct();
-			
+
 			$this->_table	= "v_product";
 			$this->_key		= "id";
 
@@ -49,27 +49,27 @@
 			$productIds = $params["product_ids"] ?? "";
 
 			$condition = "1";
-			if (!Helper::StringNullOrEmpty($key)) {
+			if (!Helper::IsNullOrEmpty($key)) {
 				$condition .= self::GetNameFilter($key);
 			}
-			if (!Helper::StringNullOrEmpty($type)) {
+			if (!Helper::IsNullOrEmpty($type)) {
 				switch ($type) {
 					case "onsale":
 						$condition .= " AND (`e`.`discount_percentage` > 0 OR `e`.`discount_amount` > 0)";
 						break;
-					
+
 					case "new":
 						$condition .= " AND `e`.`is_new` = 1";
 						break;
 				}
 			}
-			if (!Helper::StringNullOrEmpty($fromPrice)) {
+			if (!Helper::IsNullOrEmpty($fromPrice)) {
 				$condition .= " AND `e`.`min_sell_price_after_discount` >= $fromPrice";
 			}
-			if (!Helper::StringNullOrEmpty($toPrice)) {
+			if (!Helper::IsNullOrEmpty($toPrice)) {
 				$condition .= " AND `e`.`max_sell_price_after_discount` <= $toPrice";
 			}
-			if (!Helper::ArrayNullOrEmpty($categories)) {
+			if (!Helper::IsNullOrEmpty($categories)) {
 				$subCondition = [];
 				foreach ($categories AS $catId) {
 					$subCondition[] = "FIND_IN_SET($catId, e.`category`)";
@@ -87,7 +87,7 @@
 					$condition .= " AND (" . implode(" OR ", $subCondition) . ")";
 				}
 			}
-			if (!Helper::StringNullOrEmpty($productIds)) {
+			if (!Helper::IsNullOrEmpty($productIds)) {
 				$condition .= " AND `e`.`id` NOT IN ($productIds)";
 			}
 
@@ -101,26 +101,26 @@
 					$nbOfRecs = PRODUCTS_TO_RANDOMIZE;
 					$orderParam = "RAND()";
 					break;
-					
+
 				case PRODUCT_ORDER_NEWEST:
 					$orderParam = "`e`.`created_on` DESC";
 					break;
-					
+
 				case PRODUCT_ORDER_PRICE_ASC:
 					$orderParam = "`e`.`min_sell_price_after_discount` ASC";
 					break;
-					
+
 				case PRODUCT_ORDER_PRICE_DESC:
 					$orderParam = "`e`.`min_sell_price_after_discount` DESC";
 					break;
-					
+
 			}
 
 			$self = new self();
 			$self->showActive();
 			$self->hideArchived();
 			$self->limit($offset, $nbOfRecs);
-			if (!Helper::StringNullOrEmpty($orderParam)) {
+			if (!Helper::IsNullOrEmpty($orderParam)) {
 				$self->orderBy($orderParam);
 			}
 			$self->listAll($condition);
@@ -143,7 +143,7 @@
 
 		public static function GetImages(string $imagesStr) {
 			$images = [];
-			if (!Helper::StringNullOrEmpty($imagesStr)) {
+			if (!Helper::IsNullOrEmpty($imagesStr)) {
 				$images = explode(",", $imagesStr);
 			}
 
@@ -170,7 +170,7 @@
 						OR `e`.`categories_names` LIKE '%$key%'
 						OR " . QueryHelper::GenericNameFilter($key, "`e`.`categories_names`");
 				}
-				
+
 				$condition .= "($_cond)";
 			}
 			else {
@@ -183,11 +183,11 @@
 				$condition .= "($_cond)";
 			}
 
-			if ($addAnd && !Helper::StringNullOrEmpty($condition)) {
+			if ($addAnd && !Helper::IsNullOrEmpty($condition)) {
 				$condition = " AND " . $condition;
 			}
 
 			return $condition;
 		}
-		
+
 	}

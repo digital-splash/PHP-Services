@@ -61,14 +61,14 @@
 		}
 
 		public static function GetCacheFileName(string $name): string {
-			if (Helper::StringNullOrEmpty(self::$versionFolder)) {
+			if (Helper::IsNullOrEmpty(self::$versionFolder)) {
 				throw new NotEmptyParamException("ServerCache::\$versionFolder");
 			}
 			return self::$versionFolder . "/" . $name . ".txt";
 		}
 
 		protected static function SetVersionFolderAndCacheFile(): void {
-			if (!Helper::StringNullOrEmpty(self::$version) && !Helper::StringNullOrEmpty(self::$cacheFolder)) {
+			if (!Helper::IsNullOrEmpty(self::$version) && !Helper::IsNullOrEmpty(self::$cacheFolder)) {
 				self::SetVersionFolder(self::$cacheFolder . "/" . self::$version);
 				Helper::CreateFolderRecursive(self::$versionFolder);
 			}

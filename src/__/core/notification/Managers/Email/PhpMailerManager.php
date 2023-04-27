@@ -9,7 +9,7 @@
 	use DigitalSplash\Classes\Database\Logs\EmailLog;
 
 	class PhpMailerManager extends MailerManager {
-		
+
 		public function __construct() {
 			parent::__construct();
 		}
@@ -17,7 +17,7 @@
 		public function Send() : array {
 			$this->setDefaultValues();
 			$retArr = $this->ValidateBeforeSend();
-			
+
 			if (count($retArr) > 0) {
 				return $retArr;
 			}
@@ -30,7 +30,7 @@
 				$emailLog->row["name"] = $this->queueName;
 				$emailLog->row["payload"] = count($this->payload) > 0 ? json_encode($this->payload) : "";
 
-				if (!Helper::ObjectNullOrEmpty($this->user)) {
+				if (!Helper::IsNullOrEmpty($this->user)) {
 					$emailLog->row["user_id"] = $this->user->row["id"];
 				}
 				$emailLog->row["from"] = self::MAIL_FROM_ADDRESS;
@@ -44,7 +44,7 @@
 				$emailLog->insert();
 
 				$this->FixForNonProduction();
-				
+
 				$mail->SMTPDebug = 0; //4: Enables Debugging
 				$mail->isSMTP();
 				$mail->SMTPAuth = true;
@@ -75,7 +75,7 @@
 					foreach ($this->attachments as $att) {
 						$mail->addAttachment($att["path"], $att["name"]);
 					}
-				}   
+				}
 
 				$mail->Subject	= $this->subject;
 				$mail->Body		= $this->body;
@@ -101,8 +101,8 @@
 					"message" => $e->errorMessage()
 				];
 			}
-			
-			if (!Helper::ObjectNullOrEmpty($emailLog)) {
+
+			if (!Helper::IsNullOrEmpty($emailLog)) {
 				$emailLog->update([
 					"status" => $retArr["status"],
 					"response" => json_encode($retArr),

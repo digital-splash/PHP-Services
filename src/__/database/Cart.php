@@ -20,10 +20,10 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 
 		public function __construct($id=0) {
 			parent::__construct();
-			
+
 			$this->_table	= "cart";
 			$this->_key		= "id";
-			
+
 			$this->_deleteIsAFlag = false;
 			$this->getInstance();
 
@@ -74,8 +74,8 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$this->loadByCartGroupId($cartGroup->row["id"], $params);
 			}
 		}
-		
-		
+
+
 		public static function getCartCount() : int {
 			$count = 0;
 
@@ -86,7 +86,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			else {
 				$cart = new Cart();
 				$cart->loadByUserId(LOGGED_ID);
-				
+
 				$count = Helper::ConvertToInt($cart->count ?? 0);
 			}
 
@@ -145,16 +145,16 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			return $retArr;
 		}
 
-		
+
 		public static function CopyFromCookieToUser() : bool {
 			if (!IS_LOGGED) {
 				return false;
 			}
-			
+
 			$cartArr = self::GetCookie();
 			$cartCount = Helper::ConvertToInt($cartArr["count"] ?? 0);
 			$cartData = $cartArr["data"] ?? [];
-			
+
 			if ($cartCount > 0) {
 				foreach ($cartData AS $productOpts) {
 					foreach ($productOpts AS $productOpt) {
@@ -190,7 +190,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				"msg" => "UnknownErrorOccurred",
 				"response" => []
 			];
-			
+
 			$cartArr = self::GetCookie();
 			if (count($cartArr) == 0) {
 				$cartArr = [
@@ -206,7 +206,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$retArr["code"] = HTTP_OK;
 			$retArr["msg"] = "ProductAddedToCart";
 			$retArr["response"]["cart_count"] = Helper::ConvertToInt($cartArr["count"] ?? 0);
-			
+
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"] ?? HTTP_INTERNALERROR);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
 
@@ -219,7 +219,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$optionIdsArr = $row["option_ids"] ?? [];
 			$optionIdsStr = count($optionIdsArr) > 0 ? implode(",", $optionIdsArr) : "";
 			$row["option_ids"] = $optionIdsStr;
-			
+
 			if (!isset($items[$productId])) {
 				$items[$productId] = [];
 			}
@@ -302,7 +302,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			else {
 				$retArr = self::UpdateCookieItems($arr, $addressId);
 			}
-			
+
 			return $retArr;
 		}
 
@@ -325,7 +325,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$_qty = Helper::ConvertToInt($row["qty"] ?? 0);
 				$_optionsIdsStr = $row["optionsIds"] ?? "";
 				$_optionsIdsArr = explode(",", $_optionsIdsStr);
-				
+
 				$cookieArr["count"]++;
 				$cookieArr["data"] = self::AddCookieItem([
 					"product_id" => $_productId,
@@ -334,11 +334,11 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				], $cookieArr["data"]);
 			}
 			self::SetCookie($cookieArr);
-			
+
 			$retArr["code"] = HTTP_OK;
 			$retArr["msg"] = "CartUpdatedSuccessfully";
 			$retArr["response"]["cart_count"] = Helper::ConvertToInt($cookieArr["count"]);
-			
+
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"] ?? HTTP_INTERNALERROR);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
 
@@ -353,7 +353,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				"msg" => "UnknownErrorOccurred",
 				"response" => []
 			];
-			
+
 			foreach ($arr AS $row) {
 				$_productId = Helper::ConvertToInt($row["productId"] ?? 0);
 				$_qty = Helper::ConvertToInt($row["qty"] ?? 0);
@@ -372,7 +372,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$retArr["code"] = HTTP_OK;
 			$retArr["msg"] = "CartUpdatedSuccessfully";
 			$retArr["response"]["cart_count"] = Helper::ConvertToInt(self::getCartCount());
-			
+
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"] ?? HTTP_INTERNALERROR);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
 
@@ -387,7 +387,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			else {
 				$retArr = self::DeleteFromCookie($arr);
 			}
-			
+
 			return $retArr;
 		}
 
@@ -415,7 +415,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				}
 				$cartArr["count"] = $count;
 			}
-			
+
 			self::SetCookie($cartArr);
 
 			$retArr["code"] = HTTP_OK;
@@ -444,7 +444,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$retArr["msg"] = "ProductNotFound";
 				return $retArr;
 			}
-			
+
 			$cartGroup = new CartGroup($cart->row["cart_group_id"]);
 			if ($cartGroup->count === 0) {
 				$retArr["code"] = HTTP_NOTFOUND;
@@ -456,7 +456,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$retArr["msg"] = "NoPrivilegeToPerformAction";
 				return $retArr;
 			}
-			
+
 			$cart->delete();
 
 			if (!$cart->error) {
@@ -502,7 +502,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$retArr["msg"] = "NoPrivilegeToPerformAction";
 				return $retArr;
 			}
-			
+
 			$cartGroup->update([
 				"shipping_breakdown" => json_encode($arr)
 			]);
@@ -518,25 +518,25 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			return $retArr;
 		}
 
-		
+
 		public static function UpdateCookieShippingBreakdown(array $arr, int $cartGroupId=0): array {
 			$retArr = [];
 
 			$cartArr = self::GetCookie();
 			$cartArr["shipping_breakdown"] = json_encode($arr);
 			self::SetCookie($cartArr);
-			
+
 			return $retArr;
 		}
 
 
 		private static function GetCookie() : array {
-			if (Helper::StringNullOrEmpty(self::$cartArr)) {
+			if (Helper::IsNullOrEmpty(self::$cartArr)) {
 				$cookie = new Cookie("cart");
 				self::$cartArr = $cookie->GetCookie();
 			}
 
-			return Helper::StringNullOrEmpty(self::$cartArr) ? [] : json_decode(self::$cartArr, true);
+			return Helper::IsNullOrEmpty(self::$cartArr) ? [] : json_decode(self::$cartArr, true);
 		}
 
 
@@ -561,7 +561,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$cookie = new Cookie("guest_checkout");
 			$data = $cookie->GetCookie();
 
-			return Helper::StringNullOrEmpty($data) ? [] : json_decode($data, true);
+			return Helper::IsNullOrEmpty($data) ? [] : json_decode($data, true);
 		}
 
 
@@ -647,7 +647,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$products = new VProduct();
 			$products->forWebsite();
 			$products->listAll("`e`.`id` IN ($productIdsStr)", "", "", "_setByKey");
-			
+
 			$options = new VProductOption();
 			$options->forWebsite();
 			$options->listAll("`e`.`id` IN ($optionsIdsStr)", "", "", "_setByKey");
@@ -656,7 +656,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				if (count($row) == 0) {
 					continue;
 				}
-				
+
 				$type = $row["type"] ?? "";
 				$cartId = Helper::ConvertToInt($row["id"] ?? 0);
 				$cartGroupId = Helper::ConvertToInt($row["cart_group_id"] ?? 0);
@@ -714,7 +714,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				if ($retArr["address_id"] === 0) {
 					$retArr["address_id"] = Helper::ConvertToInt($cartGroup["shipping_address"] ?? 0);
 				}
-				
+
 				$retailPrice = Helper::ConvertToDec($_productRow["final_retail_price"] ?? 0);
 				$cartTotalPriceBeforeDiscount = Helper::ConvertToDec($_productRow["cart_total_price_before_discount"] ?? 0);
 				$cartTotalPriceAfterDiscount = Helper::ConvertToDec($_productRow["cart_total_price_after_discount"] ?? 0);
@@ -735,7 +735,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			else {
 				$quote = json_decode($shippingBreakdown, true);
 			}
-			
+
 			$shippingAmount = Helper::ConvertToDec($quote["total"] ?? 0);
 			$retArr["breakdown"]["shipping"]["amount"] += $shippingAmount;
 			$retArr["breakdown"]["total"]["amount"] += $shippingAmount;
@@ -780,12 +780,12 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				$retArr["msg"] = "CheckoutAddressError";
 				return $retArr;
 			}
-			
+
 			$retArr["code"] = HTTP_OK;
 			$retArr["status"] = STATUS_CODE_SUCCESS;
 			$retArr["msg"] = "";
 			$retArr["response"] = $arr;
-			
+
 			return $retArr;
 		}
 
@@ -816,24 +816,24 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			$productIdsArr = [];
 			foreach ($arr AS $row) {
 				$_productId = $row["product_id"] ?? 0;
-				
+
 				if (!in_array($_productId, $productIdsArr)) {
 					$productIdsArr[] = $_productId;
 				}
 			}
 
 			$productIdsStr = implode(",", $productIdsArr);
-			
+
 			$products = new VProduct();
 			$products->forWebsite();
 			$products->listAll("`e`.`id` IN ($productIdsStr)", "", "", "_setByKey");
-			
+
 			$i = 1;
 			foreach ($arr AS $row) {
 				if (count($row) == 0) {
 					continue;
 				}
-				
+
 				$type = $row["type"] ?? "";
 				$cartId = Helper::ConvertToInt($row["id"] ?? 0);
 				$cartGroupId = Helper::ConvertToInt($row["cart_group_id"] ?? 0);
@@ -877,7 +877,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			foreach ($shippingModels AS $shippingModel) {
 				$shipping->AddContentModel($shippingModel);
 			}
-			
+
 			return $shipping->RequestQuote();
 		}
 
@@ -896,7 +896,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			// 		$quote["total"] = ShippingProviderInterface::MINIMUM_SHIPPING_AMOUNT;
 			// 	}
 			// }
-			
+
 			if ($update && count($quote) > 0) {
 				$cartGroupId = Helper::ConvertToInt($fixedArr[0]["cart_group_id"] ?? 0);
 				self::UpdateShippingBreakdown($quote, $cartGroupId);
@@ -913,7 +913,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 				"msg" => "UnknownErrorOccurred",
 				"response" => []
 			];
-			
+
 			if (count($arr) > 0) {
 				self::SetGuestCheckoutCookie($arr);
 
@@ -923,7 +923,7 @@ use DigitalSplash\Classes\Core\ShippingProvider\TheCourierGuy\Models\QuoteConten
 			else {
 				self::ClearGuestCheckoutCookie($arr);
 			}
-			
+
 			$retArr["status"] = Helper::GetStatusClassFromCode($retArr["code"] ?? HTTP_INTERNALERROR);
 			$retArr["msg"] = Helper::CleanHtmlText($retArr["msg"] ?? "UnknownErrorOccurred");
 
