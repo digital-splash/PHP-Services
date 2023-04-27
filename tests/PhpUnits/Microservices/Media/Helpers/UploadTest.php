@@ -52,4 +52,13 @@
 
 			unlink($uploadPath . $fileName);
 		}
+
+		public function testSafeName(): void {
+			$upload = new Upload();
+			$fileName = "testfile.txt";
+
+			$result = $upload->safeName($fileName);
+
+			$this->assertEquals("testfiletxt", $result);
+		}
 	}
