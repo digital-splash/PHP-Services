@@ -33,4 +33,23 @@
 			$this->assertEquals(false, $upload->isTest);
 
 		}
+
+		public function testUploadToServer(): void {
+			$upload = new Upload();
+			$tmpName = "tests\PhpUnits\Microservices\Media\Uploads\testfile";
+			$uploadPath = "src\Microservices\Media\Uploads";
+			$fileName = "testfile.txt";
+
+			$result = $upload->uploadToServer($tmpName, $uploadPath, $fileName);
+
+			$this->assertTrue(file_exists($uploadPath . $fileName));
+
+			$this->assertEquals([
+				"status"    => 1,
+				"message"   => "File successfully uploaded!",
+				"fileName"  => $fileName
+			], $result);
+
+			unlink($uploadPath . $fileName);
+		}
 	}

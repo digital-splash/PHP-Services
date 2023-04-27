@@ -57,7 +57,7 @@
 			$this->isTest				= false;
 		}
 
-		private static function uploadToServer($tmpName="", $uploadPath="", $fileName="") {
+		public static function uploadToServer($tmpName="", $uploadPath="", $fileName="") {
 			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
 
 			if (move_uploaded_file($tmpName, $uploadPath)) {
