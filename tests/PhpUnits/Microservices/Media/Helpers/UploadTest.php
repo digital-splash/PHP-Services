@@ -61,4 +61,24 @@
 
 			$this->assertEquals("testfiletxt", $result);
 		}
+
+		public function testCheckExtensionValidity(): void {
+			$upload = new Upload();
+			$files = [
+				"testfile.jpg",
+				"testfile.png",
+				"testfile.gif",
+				"testfile.pdf",
+				"testfile.doc",
+				"testfile.docx",
+				"testfile.xls",
+				"testfile.xlsx",
+				"testfile.ppt",
+				"testfile.pptx",
+			];
+
+			$result = $upload->checkExtensionValidity($files);
+
+			$this->assertEquals(true, $result);
+		}
 	}
