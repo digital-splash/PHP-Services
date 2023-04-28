@@ -5,9 +5,9 @@
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Upload{
-		public const convertToNextGen	= false;
-		public const Error		= 0;
-		public const Success	= 1;
+		public const convertToNextGen = false;
+		public const Error = 0;
+		public const Success = 1;
 
 		public $_name;
 		public $_type;
@@ -34,27 +34,27 @@
 		public $isTest;
 
 		public function __construct() {
-			$this->_name				= "";
-			$this->_type				= "";
-			$this->_tmp_name			= "";
-			$this->_error				= 0;
-			$this->_size				= 0;
-			$this->fileFullPath			= "";
-			$this->elemName				= "";
-			$this->uploadPath			= "";
-			$this->folders				= "";
-			$this->destName				= "";
-			$this->allowedExtensions	= ImagesExtensions::getExtensions();
-			$this->ratio				= 0;
-			$this->convertToNextGen		= Upload::convertToNextGen;
-			$this->resize				= true;
-			$this->retArr				= [];
-			$this->uploadedPaths		= [];
-			$this->uploadedData			= [];
-			$this->successArr			= [];
-			$this->errorArr				= [];
-			$this->error				= 0;
-			$this->isTest				= false;
+			$this->_name = "";
+			$this->_type = "";
+			$this->_tmp_name = "";
+			$this->_error = 0;
+			$this->_size = 0;
+			$this->fileFullPath = "";
+			$this->elemName	 = "";
+			$this->uploadPath = "";
+			$this->folders = "";
+			$this->destName	= "";
+			$this->allowedExtensions = ImagesExtensions::getExtensions();
+			$this->ratio = 0;
+			$this->convertToNextGen = Upload::convertToNextGen;
+			$this->resize = true;
+			$this->retArr = [];
+			$this->uploadedPaths = [];
+			$this->uploadedData	= [];
+			$this->successArr = [];
+			$this->errorArr = [];
+			$this->error = 0;
+			$this->isTest = false;
 		}
 
 		public static function uploadToServer($tmpName="", $uploadPath="", $fileName=""): array {
