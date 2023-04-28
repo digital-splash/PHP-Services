@@ -10,23 +10,27 @@
 		private const UPLOAD_DIR = __DIR__ . "/../../_CommonFiles/Upload/";
 
 		public function testUploadToServer(): void {
-			$upload = new Upload();
-			$tmpName =  __DIR__ . "../../../_CommonFiles/Upload/test.txt";
-			$uploadPath = self::UPLOAD_DIR;
-
-			$this->mockfi
-
-			$fileName = "file.txt";
-			$expectedResult = [
-				"status" => 1,
-				"message" => "File successfully uploaded!",
-				"fileName" => $fileName
-			];
-
-			$result =$upload->uploadToServer($tmpName, $uploadPath, $fileName);
-			$this->assertEqualsCanonicalizing($expectedResult, $result);
-
-			unlink($uploadPath . $fileName);
+			 // Create a temporary file to use as the uploaded file
+			 $file = tmpfile();
+			 fwrite($file, 'Test data');
+			 $filePath = stream_get_meta_data($file)['uri'];
+			 // Simulate the uploaded file using $_FILES superglobal
+			 $_FILES['test_file'] = array(
+				 'name' => 'test.txt',
+				 'type' => 'text/plain',
+				 'tmp_name' => $filePath,
+				 'error' => 0,
+				 'size' => filesize($filePath)
+			 );
+			 $upload = new Upload();
+			 // Mock the file upload in your method
+			 $result = $upload->uploadToServer();
+			 // Assert the result
+			 $this->assertEquals([
+				"status"	=> 1,
+				"message"	=> "File successfully uploaded!",
+				"fileName"	=> 'test.txt'
+			], $result);
 		}
 
 		public function testSafeName(): void {
