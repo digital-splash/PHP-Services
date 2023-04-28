@@ -2,7 +2,6 @@
 	namespace DigitalSplash\Media\Models;
 
 	class DocumentsExtensions {
-
 		public const PDF = "pdf";
 		public const DOC = "doc";
 		public const DOCX = "docx";

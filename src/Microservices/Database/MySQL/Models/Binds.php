@@ -1,7 +1,8 @@
 <?php
 	namespace DigitalSplash\Database\MySQL\Models;
 
-	//TODO: Fix the way we are appending binds
+	use DigitalSplash\Database\MySQL\Helpers\QueryBuilder;
+  
 	class Binds {
 		protected array $binds;
 
@@ -21,13 +22,19 @@
 			$this->setBinds([]);
 		}
 
-		public function appendToBinds(string $key, $value): void {
-			$this->binds[$key] = $value;
+		public function appendToBinds(string $key, $value, ?int $type = null): void {
+			if (empty($type)) {
+				$type = QueryBuilder::GetPDOTypeFromValue($value);
+			}
+			$this->binds[$key] = [
+				'value' => $value,
+				'type' => $type
+			];
 		}
 
 		public function appendArrayToBinds(array $binds): void {
-			foreach ($binds as $key => $value) {
-				$this->appendToBinds($key, $value);
+			foreach ($binds as $key => $bind) {
+				$this->appendToBinds($key, $bind['value'], $bind['type'] = null);
 			}
 		}
 

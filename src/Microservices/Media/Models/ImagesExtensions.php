@@ -2,7 +2,6 @@
 	namespace DigitalSplash\Media\Models;
 
 	class ImagesExtensions {
-
 		public const JPG = "jpg";
 		public const JPEG = "jpeg";
 		public const PNG = "png";
