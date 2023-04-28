@@ -9,15 +9,13 @@
 		public const GIF = "gif";
 		public const WEBP = "webp";
 
-		public const EXTENSIONS = [
-			self::JPG,
-			self::JPEG,
-			self::PNG,
-			self::GIF,
-			self::WEBP,
-		];
-
 		public static function getExtensions(): array {
-			return self::EXTENSIONS;
+			return [
+				self::JPG,
+				self::JPEG,
+				self::PNG,
+				self::GIF,
+				self::WEBP,
+			];
 		}
 	}
