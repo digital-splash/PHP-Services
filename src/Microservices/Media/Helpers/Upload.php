@@ -1,7 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-	use DigitalSplash\Media\Models\DocumentsExtensions;
+use DigitalSplash\Exceptions\UploadException;
+use DigitalSplash\Media\Models\DocumentsExtensions;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Upload{
@@ -97,8 +98,27 @@
 			return $this->_size;
 		}
 
+		public function upload() {
+			if(isset($_FILES['fileToUpload'])){
+				$this->setName($_FILES['fileToUpload']['name']);
+				$this->setType($_FILES['fileToUpload']['type']);
+				$this->setTmpName($_FILES['fileToUpload']['tmp_name']);
+				$this->setError($_FILES['fileToUpload']['error']);
+				$this->setSize($_FILES['fileToUpload']['size']);
 
-		public static function uploadToServer($tmpName="", $uploadPath="", $fileName=""): array {
+				if($this->_error === 0){
+					self::uploadToServer();
+					echo "File uploaded successfully.";
+				}else{
+					echo "Error uploading file.";
+					throw new UploadException();
+				}
+			}
+		}
+
+		public static function uploadToServer($uploadPath=""): array {
+			$tmpName=self::getTmpName();
+			$fileName=self::getName();
 			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
 
 			if (move_uploaded_file($tmpName, $uploadPath)) {
@@ -108,11 +128,7 @@
 					"fileName"	=> $uploadedFileName
 				];
 			}else {
-				return [
-					"status"	=> self::Error,
-					"message"	=> "Error while uploading file!",
-					"fileName"	=> $uploadedFileName
-				];
+				throw new UploadException();
 			}
 		}
 
