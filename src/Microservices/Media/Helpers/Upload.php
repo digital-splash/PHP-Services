@@ -115,6 +115,20 @@
 			return $this->allowedExtensions;
 		}
 
+		public function setRetArr(array $retArr): void {
+			$this->retArr = $retArr;
+		}
+
+		public function getRetArr(): array {
+			return $this->retArr;
+		}
+
+		public function appendToRetArr($string): void {
+			$this->retArr[] = $string;
+		}
+
+
+		
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
