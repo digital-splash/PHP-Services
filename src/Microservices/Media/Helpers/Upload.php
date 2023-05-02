@@ -1,8 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-use DigitalSplash\Exceptions\UploadException;
-use DigitalSplash\Media\Models\DocumentsExtensions;
+	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Media\Models\DocumentsExtensions;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Upload{
@@ -15,6 +15,7 @@ use DigitalSplash\Media\Models\DocumentsExtensions;
 		private $_tmp_name;
 		private $_error;
 		private $_size;
+		private $_files;
 
 		// public $fileFullPath;
 
@@ -22,11 +23,11 @@ use DigitalSplash\Media\Models\DocumentsExtensions;
 		// public $uploadPath; //upload path
 		// public $folders; //folders inside the upload folder
 		// public $destName; //destination filename
-		// public $allowedExtensions; //allowed extensions
+		private $allowedExtensions; //allowed extensions
 		// public $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		// public $convertToNextGen;
 		// public $resize;
-		// public $retArr;
+		private $retArr;
 		// public $uploadedPaths;
 		// public $uploadedData;
 		// public $successArr;
@@ -45,11 +46,11 @@ use DigitalSplash\Media\Models\DocumentsExtensions;
 			// $this->uploadPath = "";
 			// $this->folders = "";
 			// $this->destName	= "";
-			// $this->allowedExtensions = ImagesExtensions::getExtensions();
+			$this->allowedExtensions = ImagesExtensions::getExtensions();
 			// $this->ratio = 0;
 			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
-			// $this->retArr = [];
+			$this->retArr = [];
 			// $this->uploadedPaths = [];
 			// $this->uploadedData	= [];
 			// $this->successArr = [];
@@ -98,53 +99,27 @@ use DigitalSplash\Media\Models\DocumentsExtensions;
 			return $this->_size;
 		}
 
-		public function upload() {
-			if(isset($_FILES['fileToUpload'])){
-				$this->setName($_FILES['fileToUpload']['name']);
-				$this->setType($_FILES['fileToUpload']['type']);
-				$this->setTmpName($_FILES['fileToUpload']['tmp_name']);
-				$this->setError($_FILES['fileToUpload']['error']);
-				$this->setSize($_FILES['fileToUpload']['size']);
-
-				if($this->_error === 0){
-					self::uploadToServer();
-					echo "File uploaded successfully.";
-				}else{
-					echo "Error uploading file.";
-					throw new UploadException();
-				}
-			}
+		public function setFiles(array $files): void {
+			$this->_files = $files;
 		}
 
-		public static function uploadToServer($uploadPath=""): array {
-			$tmpName=self::getTmpName();
-			$fileName=self::getName();
-			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
-
-			if (move_uploaded_file($tmpName, $uploadPath)) {
-				return [
-					"status"	=> self::Success,
-					"message"	=> "File successfully uploaded!",
-					"fileName"	=> $uploadedFileName
-				];
-			}else {
-				throw new UploadException();
-			}
+		public function getFiles(): array {
+			return $this->_files;
 		}
+
+		
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
 		}
 
-		public static function CheckExtensionValidity($files, $allowedExtensionsArr=array()) {
-			foreach ($files AS $elemName) {
-				$fileName	= $_FILES[$elemName]["name"] ;
+		public static function CheckExtensionValidity($file, $allowedExtensionsArr=array()) {
+				$fileName	= $file['name'];
 				$extName	= strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
 				if ($fileName != "" && !in_array($extName, $allowedExtensionsArr)) {
 					return $fileName;
 				}
-			}
 
 			return true;
 		}
