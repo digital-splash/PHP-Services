@@ -61,4 +61,31 @@
 
 			$this->assertEquals(true, $result);
 		}
+
+		public function testBuildFiles(): void {
+			// Mock file data
+			$files = [
+				'name' => ['file1.txt', 'file2.txt', 'file3.txt'],
+				'type' => ['text/plain', 'text/plain', 'text/plain'],
+				'size' => [1024, 2048, 3072],
+				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
+				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
+			];
+
+			// Expected result
+			$expected = [
+				['file1.txt', 'text/plain', 1024, '/tmp/phpABC123', UPLOAD_ERR_OK],
+				['file2.txt', 'text/plain', 2048, '/tmp/phpDEF456', UPLOAD_ERR_OK],
+				['file3.txt', 'text/plain', 3072, '/tmp/phpGHI789', UPLOAD_ERR_OK],
+			];
+
+			// Instantiate object
+			$obj = new Upload();
+
+			// Call the function
+			$obj->buildFiles($files);
+
+			// Check the result
+			$this->assertEqualsCanonicalizing($expected, $obj->getFiles());
+		}
 	}
