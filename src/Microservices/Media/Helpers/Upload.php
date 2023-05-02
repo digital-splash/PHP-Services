@@ -209,7 +209,45 @@
 			}
 		}
 
-		
+		private function handleUploadFileError(): void {
+			switch ($this->_error) {
+				case UPLOAD_ERR_INI_SIZE:
+					$this->appendToRetArr(new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini"));
+				break;
+
+				case UPLOAD_ERR_FORM_SIZE:
+					$maxSize	= $_POST["MAX_FILE_SIZE"];
+					$maxSizeKb	= round($maxSize / 1024);
+
+					$this->appendToRetArr(new UploadException("The uploaded file is larger than the maximum allowed of $maxSizeKb Kb."));
+
+				break;
+
+				case UPLOAD_ERR_PARTIAL:
+					$this->appendToRetArr(new UploadException("The uploaded file was only partially uploaded."));
+				break;
+
+				case UPLOAD_ERR_NO_FILE:
+					$this->appendToRetArr(new UploadException("No file was uploaded."));
+				break;
+
+				case UPLOAD_ERR_NO_TMP_DIR:
+					$this->appendToRetArr(new UploadException("Missing a temporary folder."));
+				break;
+
+				case UPLOAD_ERR_CANT_WRITE:
+					$this->appendToRetArr(new UploadException("Failed to write file to disk."));
+				break;
+
+				case UPLOAD_ERR_EXTENSION:
+					$this->appendToRetArr(new UploadException("File upload stopped by extension."));
+				break;
+
+				default:
+					$this->appendToRetArr(new UploadException("Unknown upload error."));
+				break;
+			}
+		}
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
