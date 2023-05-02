@@ -107,7 +107,14 @@
 			return $this->_files;
 		}
 
-		
+		public function appendToFiles($array): void {
+			$this->_files[] = $array;
+		}
+
+		public function getAllowedExtensions(): array {
+			return $this->allowedExtensions;
+		}
+
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
