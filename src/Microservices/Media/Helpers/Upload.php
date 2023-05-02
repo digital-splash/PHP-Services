@@ -209,6 +209,81 @@
 			}
 		}
 
+		private function uploadFile($file) {
+			if ($file['error'] == 0) {
+
+				if (!is_uploaded_file($file['tmp_name'])) {
+					$this->appendToRetArr(new UploadException("File is not uploaded!"));
+				}
+				else {
+					$extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+					if (!self::CheckExtensionValidity($file, $this->allowedExtensions)) {
+						$allowed = implode(", ", $this->allowedExtensions);
+						$this->appendToRetArr(new UploadException("File extension is not allowed!"));
+					}
+					else {
+						self::createFolders($this->uploadPath, $this->folders);
+
+						if ($this->destName == "") {
+							$this->destName = time() . " " . rand(1000, 9999);
+						}
+						$destNameNoExtension = self::safeName($this->destName);
+						$this->destName		= $destNameNoExtension . "." . $extension;
+						$uploadPath	= $this->uploadPath . $this->folders . $this->destName;
+
+						$this->uploadedPaths[]	= $this->folders . $this->destName;
+						$this->uploadedData[]	= [
+							"path"		=> $this->folders . $this->destName,
+							"real_name"	=> $file['name'],
+							"real_size"	=> $file['size'],
+							"real_type"	=> $file['type'],
+						];
+
+						if (in_array($extension, self::imgsExt)) {
+							if ($this->ratio > 0) {
+								//Upload Original Image
+								$originalFileName	= $destNameNoExtension . "-original." . $extension;
+								$originalPath		= $this->uploadPath . $this->folders . $originalFileName;
+								self::uploadToServer($file['tmp_name'], $originalPath, $originalFileName);
+								
+								//Change Ratio
+								$this->retArr[] = self::changeImgRatio($this->ratio, $uploadPath, $originalPath);
+							}
+							else {
+								$this->retArr[]	= self::uploadToServer($file['tmp_name'], $uploadPath, $this->destName);
+							}
+
+							if ($this->convertToNextGen) {
+								$this->retArr[] = self::convertImgToNextGen($uploadPath, "webp", false);
+							}
+
+							if ($this->resize) {
+								$imgResizeOptions = [
+									"hd",
+									"ld",
+									"th",
+								];
+								foreach ($imgResizeOptions AS $resizeOption) {
+									$resizeRet = self::resizeImg($uploadPath, $resizeOption, $this->convertToNextGen);
+									$this->retArr[] = $resizeRet;
+								}
+							}
+
+							$this->retArr[] = self::generateFacebookImg($uploadPath);
+						}
+						else {
+							self::deleteFile($uploadPath);
+							$this->retArr[] = self::uploadToServer($file['tmp_name'], $uploadPath, $file['name']);
+						}
+					}
+				}
+			}
+			else {
+				self::handleUploadFileError();
+			}
+		}
+
 		private function handleUploadFileError(): void {
 			switch ($this->_error) {
 				case UPLOAD_ERR_INI_SIZE:
