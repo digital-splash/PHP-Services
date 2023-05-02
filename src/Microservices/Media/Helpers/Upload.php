@@ -142,7 +142,74 @@
 
 		}
 
-	
+		public function upload() {
+			$this->buildFiles($_FILES);
+			$files = $this->getFiles();
+			$filesCount = count($files);
+
+			for ($i=0; $i < $filesCount; $i++) {
+				$this->setName($files[$i]['name']);
+				$this->setType($files[$i]['type']);
+				$this->setTmpName($files[$i]['tmp_name']);
+				$this->setError($files[$i]['error']);
+				$this->setSize($files[$i]['size']);
+
+				
+
+				if ($files[$i]['name'] != "" && $this->getError() == 0) {
+					if (self::CheckExtensionValidity($files[$i], $this->getAllowedExtensions())) {
+						$fileName = self::safeName($files[$i]['name']);
+						$uploadPath = $this->uploadPath . $this->folders . $fileName;
+
+						if ($this->isTest) {
+							$this->uploadedPaths[] = $uploadPath;
+							$this->uploadedData[] = $this->getFiles()[$i];
+							$this->successArr[] = $fileName;
+						}else {
+							$uploadResult = $this->uploadToServer($uploadPath);
+
+							if ($uploadResult['status'] == self::Success) {
+								$this->uploadedPaths[] = $uploadPath;
+								$this->uploadedData[] = $this->getFiles()[$i];
+								$this->successArr[] = $fileName;
+							}else {
+								$this->errorArr[] = $fileName;
+								$this->error = 1;
+							}
+						}
+					}else {
+						$this->errorArr[] = $fileName;
+						$this->error = 1;
+					}
+				}
+			}
+
+			$this->retArr = [
+				"success"	=> $this->successArr,
+				"error"		=> $this->errorArr,
+				"errorFlag"	=> $this->error
+			];
+
+			return $this->retArr;
+		}
+
+		public static function uploadToServer($uploadPath=""): array {
+			$tmpName=self::getTmpName();
+			$fileName=self::getName();
+			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
+
+			if (move_uploaded_file($tmpName, $uploadPath)) {
+				return [
+					"status"	=> self::Success,
+					"message"	=> "File successfully uploaded!",
+					"fileName"	=> $uploadedFileName
+				];
+			}else {
+				throw new UploadException();
+			}
+		}
+
+		
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
