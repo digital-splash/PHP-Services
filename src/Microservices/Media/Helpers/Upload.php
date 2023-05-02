@@ -128,7 +128,21 @@
 		}
 
 
-		
+		public function buildFiles($files): void {
+			$filesCount = count($files['name']);
+			$filesKeys = array_keys($files);
+
+			for ($i=0; $i < $filesCount; $i++) {
+				$array = [];
+				foreach ($filesKeys as $key) {
+					$array[] = $files[$key][$i];
+				}
+				$this->appendToFiles($array);
+			}
+
+		}
+
+	
 
 		public static function safeName($str=""): string {
 			return preg_replace("/[-]+/", "-", preg_replace("/[^a-z0-9-]/", "", strtolower(str_replace(" ", "-", $str)))) ;
