@@ -42,6 +42,8 @@
 			// $this->uploadedData	= [];
 
 			parent::__construct($phpFiles);
+
+			$this->buildFiles();
 		}
 
 		public function setAllowedExtensions(array $array): void {
@@ -218,54 +220,70 @@
 		// 	}
 		// }
 
-		// private function handleUploadFileError(): void {
-		// 	switch ($this->_error) {
-		// 		case UPLOAD_ERR_INI_SIZE:
-		// 			$this->appendToRetArr(new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini"));
-		// 		break;
+		public  function handleUploadFileError(File $file): void {
+			switch ($file->getError()) {
+				case 1:
+					throw new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini");
+				case 2:
+					throw new UploadException("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form");
+				case 3:
+					throw new UploadException("The uploaded file was only partially uploaded");
+				case 4:
+					throw new UploadException("No file was uploaded");
+				case 6:
+					throw new UploadException("Missing a temporary folder");
+				case 7:
+					throw new UploadException("Failed to write file to disk");
+				case 8:
+					throw new UploadException("A PHP extension stopped the file upload");
+				default:
+					throw new UploadException("Unknown upload error");
+			}
+		}
 
-		// 		case UPLOAD_ERR_FORM_SIZE:
-		// 			$maxSize	= $_POST["MAX_FILE_SIZE"];
-		// 			$maxSizeKb	= round($maxSize / 1024);
 
-		// 			$this->appendToRetArr(new UploadException("The uploaded file is larger than the maximum allowed of $maxSizeKb Kb."));
+		//check if file is uploaded
+		public function isFileUploaded($tmp_name) {
+			return is_uploaded_file($tmp_name);
+		}
 
-		// 		break;
+		//check if file format is allowed
+		public function isFileFormatAllowed(File $file) {
+			$fileName	= $file->getName();
+			$extName	= strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-		// 		case UPLOAD_ERR_PARTIAL:
-		// 			$this->appendToRetArr(new UploadException("The uploaded file was only partially uploaded."));
-		// 		break;
+			if ($fileName != "" && !in_array($extName, $this->getAllowedExtensions())) {
+				// $allowed = implode(", ", $this->getAllowedExtensions());
+				// throw new UploadException("Invalid file format. Please upload a compatible file format ($allowed)");
+				return false;
+			}
 
-		// 		case UPLOAD_ERR_NO_FILE:
-		// 			$this->appendToRetArr(new UploadException("No file was uploaded."));
-		// 		break;
+			return true;
+		}
 
-		// 		case UPLOAD_ERR_NO_TMP_DIR:
-		// 			$this->appendToRetArr(new UploadException("Missing a temporary folder."));
-		// 		break;
+		// public function uploadFileTrial(File $file){
 
-		// 		case UPLOAD_ERR_CANT_WRITE:
-		// 			$this->appendToRetArr(new UploadException("Failed to write file to disk."));
-		// 		break;
-
-		// 		case UPLOAD_ERR_EXTENSION:
-		// 			$this->appendToRetArr(new UploadException("File upload stopped by extension."));
-		// 		break;
-
-		// 		default:
-		// 			$this->appendToRetArr(new UploadException("Unknown upload error."));
-		// 		break;
+		// 	if (!isset($file->getName())) {
+		// 		throw new UploadException("No file uploaded '");
 		// 	}
+
+
+		// 	if ($file->getError() !== UPLOAD_ERR_OK) {
+		// 		$this->handleUploadFileError($file);
+		// 		return;
+		// 	}
+
+		// 	$filepath = "{"dir path"}/{$file->getName()}";
+		// 	move_uploaded_file($file->getTmpName(), $filepath);
+
+		// 	return [
+		// 		'name' => $file->getName(),
+		// 		'type' => $file->getType(),
+		// 		'size' => $file->getSize(),
+		// 		'filepath' => $filepath,
+		// 	];
 		// }
 
-		// public static function CheckExtensionValidity($file, $allowedExtensionsArr=array()) {
-		// 		$fileName	= $file['name'];
-		// 		$extName	= strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-		// 		if ($fileName != "" && !in_array($extName, $allowedExtensionsArr)) {
-		// 			return $fileName;
-		// 		}
 
-		// 	return true;
-		// }
 	}

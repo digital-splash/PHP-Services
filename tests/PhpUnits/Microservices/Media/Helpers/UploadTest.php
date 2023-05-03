@@ -5,6 +5,7 @@
 	use DigitalSplash\Media\Helpers\Upload;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\DocumentsExtensions;
+	use DigitalSplash\Media\Models\File;
 
 	class UploadTest extends TestCase {
 		private const UPLOAD_DIR = __DIR__ . "/../../_CommonFiles/Upload/";
@@ -88,4 +89,58 @@
 			// Check the result
 			$this->assertEqualsCanonicalizing($expected, $obj->getFiles());
 		}
+
+		public function testIsFileUploaded(): void {
+			$files = [
+				'name' => ['file1.txt', 'file2.txt', 'file3.txt'],
+				'type' => ['text/plain', 'text/plain', 'text/plain'],
+				'size' => [1024, 2048, 3072],
+				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
+				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
+			];
+
+			$upload = new Upload($files);
+
+			// $this->assertEquals(true, $upload->isFileUploaded(should i pass the name));
+		}
+
+		public function testIsFileFormatAllowed(): void {
+			$files = [
+				'files' => [
+					'name' => ['file1.txt', 'file2.png', 'file3.jpg'],
+					'type' => ['text/plain', ImagesExtensions::PNG, ImagesExtensions::JPG],
+					'size' => [1024, 2048, 3072],
+					'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
+					'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
+				]
+			];
+
+			$upload = new Upload($files);
+			$upload->upload();
+			// // How to pass the file type
+			// //?
+
+			$file1 = new File('file_1', 'file1.txt', 'text/plain', '/tmp/phpABC123',  UPLOAD_ERR_OK, 1024);
+			$this->assertEquals(false, $upload->isFileFormatAllowed($file1));
+			// $this->assertEquals(true, $upload->isFileFormatAllowed(1));
+			// $this->assertEquals(true, $upload->isFileFormatAllowed(2));
+			$this->assertTrue(true);
+		}
+
+		public function testHandleUploadFileError(): void {
+			$files = [
+				'name' => ['file1.txt', 'file2.png', 'file3.jpg'],
+				'type' => ['text/plain',ImagesExtensions::PNG,ImagesExtensions::JPG],
+				'size' => [1024, 2048, 3072],
+				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
+				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
+			];
+
+			$upload = new Upload($files);
+
+			$this->assertEquals(true, $upload->handleUploadFileError(0));
+			$this->assertEquals(true, $upload->handleUploadFileError(1));
+			$this->assertEquals(true, $upload->handleUploadFileError(2));
+		}
+
 	}
