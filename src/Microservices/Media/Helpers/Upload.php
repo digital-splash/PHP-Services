@@ -5,8 +5,8 @@
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
-use DigitalSplash\Models\Code;
-use Throwable;
+	use DigitalSplash\Models\Code;
+	use Throwable;
 
 	class Upload extends Files {
 		public const convertToNextGen = false;
