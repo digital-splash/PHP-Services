@@ -68,7 +68,7 @@
 			return true;
 		}
 
-		private function handleUploadFileError(): void {
+		public function handleUploadFileError(): void {
 			//how do you prefer putting the cases as number or its corresponding variable as UPLOAD_ERR_INI_SIZE
 			switch ($this->getError()) {
 				case 1:
@@ -90,6 +90,11 @@
 				default:
 					throw new UploadException("Unknown upload error");
 			}
+		}
+
+		public function validateFile(array $allowedExtensions): void {
+			$this->isFileUploaded();
+			$this->isFileFormatAllowed($allowedExtensions);
 		}
 
 	}
