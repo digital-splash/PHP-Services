@@ -43,7 +43,6 @@
 
 			parent::__construct($phpFiles);
 
-			$this->buildFiles();
 		}
 
 		public function setAllowedExtensions(array $array): void {

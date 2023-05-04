@@ -51,12 +51,23 @@
 			return $this->_size;
 		}
 
+		public function createFile(): array {
+			$file = [
+				"name"		=> $this->getName(),
+				"type"		=> $this->getType(),
+				"tmp_name"	=> $this->getTmpName(),
+				"error"		=> $this->getError(),
+				"size"		=> $this->getSize()
+			];
 
-		private function isFileUploaded(): bool {
+			return $file;
+		}
+
+		public function isFileUploaded(): bool {
 			return is_uploaded_file($this->getTmpName());
 		}
 
-		private function isFileFormatAllowed(array $allowedExtensions): bool {
+		public function isFileFormatAllowed(array $allowedExtensions): bool {
 			$fileName = $this->getName();
 			$fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
