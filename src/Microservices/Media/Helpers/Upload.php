@@ -241,12 +241,6 @@
 			}
 		}
 
-
-		//check if file is uploaded
-		public function isFileUploaded($tmp_name) {
-			return is_uploaded_file($tmp_name);
-		}
-
 		//check if file format is allowed
 		public function isFileFormatAllowed(File $file) {
 			$fileName	= $file->getName();

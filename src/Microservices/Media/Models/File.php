@@ -49,4 +49,9 @@
 			return $this->_size;
 		}
 
+
+		private function isFileUploaded(): bool {
+			return is_uploaded_file($this->getTmpName());
+		}
+
 	}
