@@ -220,28 +220,6 @@
 		// 	}
 		// }
 
-		public  function handleUploadFileError(File $file): void {
-			switch ($file->getError()) {
-				case 1:
-					throw new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini");
-				case 2:
-					throw new UploadException("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form");
-				case 3:
-					throw new UploadException("The uploaded file was only partially uploaded");
-				case 4:
-					throw new UploadException("No file was uploaded");
-				case 6:
-					throw new UploadException("Missing a temporary folder");
-				case 7:
-					throw new UploadException("Failed to write file to disk");
-				case 8:
-					throw new UploadException("A PHP extension stopped the file upload");
-				default:
-					throw new UploadException("Unknown upload error");
-			}
-		}
-
-
 		// public function uploadFileTrial(File $file){
 
 		// 	if (!isset($file->getName())) {

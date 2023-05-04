@@ -68,4 +68,28 @@
 			return true;
 		}
 
+		private function handleUploadFileError(): void {
+			//how do you prefer putting the cases as number or its corresponding variable as UPLOAD_ERR_INI_SIZE
+			switch ($this->getError()) {
+				case 1:
+					throw new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini");
+				case 2:
+					$maxSize	= $_POST["MAX_FILE_SIZE"];
+					$maxSizeKb	= round($maxSize / 1024);
+					throw new UploadException("The uploaded file is larger than the maximum allowed of $maxSizeKb Kb.");
+				case 3:
+					throw new UploadException("The uploaded file was only partially uploaded");
+				case 4:
+					throw new UploadException("No file was uploaded");
+				case 6:
+					throw new UploadException("Missing a temporary folder");
+				case 7:
+					throw new UploadException("Failed to write file to disk");
+				case 8:
+					throw new UploadException("A PHP extension stopped the file upload");
+				default:
+					throw new UploadException("Unknown upload error");
+			}
+		}
+
 	}
