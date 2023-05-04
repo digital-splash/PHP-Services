@@ -85,9 +85,7 @@
 				case 1:
 					throw new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini");
 				case 2:
-					$maxSize	= $_POST["MAX_FILE_SIZE"];
-					$maxSizeKb	= round($maxSize / 1024);
-					throw new UploadException("The uploaded file is larger than the maximum allowed of $maxSizeKb Kb.");
+					throw new UploadException("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.");
 				case 3:
 					throw new UploadException("The uploaded file was only partially uploaded");
 				case 4:

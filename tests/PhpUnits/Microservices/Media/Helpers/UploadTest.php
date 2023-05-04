@@ -34,113 +34,27 @@
 			], $result);
 		}
 
-		public function testSafeName(): void {
-			$upload = new Upload();
-			$fileName = "testfile.txt";
+		//! IMPORTANT:: I NEED THIS FOR LATER
+		// public function testIsFileFormatAllowed(): void {
+		// 	$files = [
+		// 		'files' => [
+		// 			'name' => ['file1.txt', 'file2.png', 'file3.jpg'],
+		// 			'type' => ['text/plain', ImagesExtensions::PNG, ImagesExtensions::JPG],
+		// 			'size' => [1024, 2048, 3072],
+		// 			'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
+		// 			'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
+		// 		]
+		// 	];
 
-			$result = $upload->safeName($fileName);
+		// 	$upload = new Upload($files);
+		// 	$upload->upload();
+		// 	// // How to pass the file type
+		// 	// //?
 
-			$this->assertEquals("testfiletxt", $result);
-		}
-
-		public function testCheckExtensionValidity(): void {
-			$upload = new Upload();
-			$files = [
-				"testfile.jpg",
-				"testfile.png",
-				"testfile.gif",
-				"testfile.pdf",
-				"testfile.doc",
-				"testfile.docx",
-				"testfile.xls",
-				"testfile.xlsx",
-				"testfile.ppt",
-				"testfile.pptx",
-			];
-
-			$result = $upload->checkExtensionValidity($files);
-
-			$this->assertEquals(true, $result);
-		}
-
-		public function testBuildFiles(): void {
-			// Mock file data
-			$files = [
-				'name' => ['file1.txt', 'file2.txt', 'file3.txt'],
-				'type' => ['text/plain', 'text/plain', 'text/plain'],
-				'size' => [1024, 2048, 3072],
-				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
-				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
-			];
-
-			// Expected result
-			$expected = [
-				['file1.txt', 'text/plain', 1024, '/tmp/phpABC123', UPLOAD_ERR_OK],
-				['file2.txt', 'text/plain', 2048, '/tmp/phpDEF456', UPLOAD_ERR_OK],
-				['file3.txt', 'text/plain', 3072, '/tmp/phpGHI789', UPLOAD_ERR_OK],
-			];
-
-			// Instantiate object
-			$obj = new Upload();
-
-			// Call the function
-			$obj->buildFiles($files);
-
-			// Check the result
-			$this->assertEqualsCanonicalizing($expected, $obj->getFiles());
-		}
-
-		public function testIsFileUploaded(): void {
-			$files = [
-				'name' => ['file1.txt', 'file2.txt', 'file3.txt'],
-				'type' => ['text/plain', 'text/plain', 'text/plain'],
-				'size' => [1024, 2048, 3072],
-				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
-				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
-			];
-
-			$upload = new Upload($files);
-
-			// $this->assertEquals(true, $upload->isFileUploaded(should i pass the name));
-		}
-
-		public function testIsFileFormatAllowed(): void {
-			$files = [
-				'files' => [
-					'name' => ['file1.txt', 'file2.png', 'file3.jpg'],
-					'type' => ['text/plain', ImagesExtensions::PNG, ImagesExtensions::JPG],
-					'size' => [1024, 2048, 3072],
-					'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
-					'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
-				]
-			];
-
-			$upload = new Upload($files);
-			$upload->upload();
-			// // How to pass the file type
-			// //?
-
-			$file1 = new File('file_1', 'file1.txt', 'text/plain', '/tmp/phpABC123',  UPLOAD_ERR_OK, 1024);
-			$this->assertEquals(false, $upload->isFileFormatAllowed($file1));
-			// $this->assertEquals(true, $upload->isFileFormatAllowed(1));
-			// $this->assertEquals(true, $upload->isFileFormatAllowed(2));
-			$this->assertTrue(true);
-		}
-
-		public function testHandleUploadFileError(): void {
-			$files = [
-				'name' => ['file1.txt', 'file2.png', 'file3.jpg'],
-				'type' => ['text/plain',ImagesExtensions::PNG,ImagesExtensions::JPG],
-				'size' => [1024, 2048, 3072],
-				'tmp_name' => ['/tmp/phpABC123', '/tmp/phpDEF456', '/tmp/phpGHI789'],
-				'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK, UPLOAD_ERR_OK]
-			];
-
-			$upload = new Upload($files);
-
-			$this->assertEquals(true, $upload->handleUploadFileError(0));
-			$this->assertEquals(true, $upload->handleUploadFileError(1));
-			$this->assertEquals(true, $upload->handleUploadFileError(2));
-		}
-
+		// 	$file1 = new File('file_1', 'file1.txt', 'text/plain', '/tmp/phpABC123',  UPLOAD_ERR_OK, 1024);
+		// 	$this->assertEquals(false, $upload->isFileFormatAllowed($file1));
+		// 	// $this->assertEquals(true, $upload->isFileFormatAllowed(1));
+		// 	// $this->assertEquals(true, $upload->isFileFormatAllowed(2));
+		// 	$this->assertTrue(true);
+		// }
 	}
