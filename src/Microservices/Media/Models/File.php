@@ -1,6 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Models;
 
+	use DigitalSplash\Exceptions\UploadException;
+
 	class File {
 		private string $_elemName;
 		private string $_name;
@@ -52,6 +54,18 @@
 
 		private function isFileUploaded(): bool {
 			return is_uploaded_file($this->getTmpName());
+		}
+
+		private function isFileFormatAllowed(array $allowedExtensions): bool {
+			$fileName = $this->getName();
+			$fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+			if($fileName != "" && !in_array($fileExtension, $allowedExtensions)) {
+				$allowed = implode(", ", $allowedExtensions);
+				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
+			}
+
+			return true;
 		}
 
 	}

@@ -241,19 +241,6 @@
 			}
 		}
 
-		//check if file format is allowed
-		public function isFileFormatAllowed(File $file) {
-			$fileName	= $file->getName();
-			$extName	= strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-			if ($fileName != "" && !in_array($extName, $this->getAllowedExtensions())) {
-				// $allowed = implode(", ", $this->getAllowedExtensions());
-				// throw new UploadException("Invalid file format. Please upload a compatible file format ($allowed)");
-				return false;
-			}
-
-			return true;
-		}
 
 		// public function uploadFileTrial(File $file){
 
