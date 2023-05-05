@@ -67,7 +67,26 @@
 		}
 
 		public function testValidateFile_NotAllowedExtensionThrows(): void {
-			$this->assertTrue(true);
+			$elemName = "testElemName";
+			$name = "testName.txt";
+			$type = "testType";
+			$tmpName = "testTmpName";
+			$error = 0;
+			$size = 1000;
+
+			$fileMock = $this->getMockBuilder(File::class)
+				->setConstructorArgs([$elemName, $name, $type, $tmpName, $error, $size])
+				->onlyMethods([
+					'isFileUploaded',
+				])
+				->getMock();
+			$fileMock->expects($this->once())
+				->method('isFileUploaded');
+
+			$this->expectException(UploadException::class);
+			$this->expectExceptionMessage('File extension is not allowed! Allowed extensions: jpg, png');
+
+			$fileMock->validateFile(['jpg', 'png']);
 		}
 
 		// public function testIsFileUploaded(): void {
