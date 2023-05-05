@@ -167,34 +167,42 @@
 		// 	$this->assertEquals($expected, $file->isFileFormatAllowed($upload->getAllowedExtensions()));
 		// }
 
-		// public function handleUploadFileErrorProvider(): array {
-		// 	return [
-		// 		[1, "The uploaded file exceeds the upload_max_filesize directive in php.ini."],
-		// 		[2, "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form."],
-		// 		[3, "The uploaded file was only partially uploaded."],
-		// 		[4, "No file was uploaded."],
-		// 		[6, "Missing a temporary folder."],
-		// 		[7, "Failed to write file to disk."],
-		// 		[8, "A PHP extension stopped the file upload."],
-		// 	];
-		// }
+		public function handleUploadFileErrorProvider(): array {
+			return [
+				[1, 'The uploaded file exceeds the upload_max_filesize directive in php.ini'],
+				[2, 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'],
+				[3, 'The uploaded file was only partially uploaded'],
+				[4, 'No file was uploaded'],
+				[6, 'Missing a temporary folder'],
+				[7, 'Failed to write file to disk'],
+				[8, 'A PHP extension stopped the file upload'],
+			];
+		}
 
-		// /**
-		//  * @dataProvider handleUploadFileErrorProvider
-		//  */
-		// public function testHandleUploadFileError(int $error, string $expected): void {
-		// 	$elemName = "testElemName";
-		// 	$name = "testName";
-		// 	$type = "testType";
-		// 	$tmpName = "testTmpName";
-		// 	$size = "testSize";
+		/**
+		 * @dataProvider handleUploadFileErrorProvider
+		 */
+		public function testHandleUploadFileError(int $error, string $expected): void {
+			$elemName = "testElemName";
+			$name = "testName.txt";
+			$type = "testType";
+			$tmpName = "testTmpName";
+			$size = 1000;
 
-		// 	$file = new File($elemName, $name, $type, $tmpName, $error, $size);
+			$fileMock = $this->getMockBuilder(File::class)
+				->setConstructorArgs([$elemName, $name, $type, $tmpName, $error, $size])
+				->onlyMethods([
+					'isFileUploaded',
+				])
+				->getMock();
+			$fileMock->expects($this->once())
+				->method('isFileUploaded');
 
-		// 	$this->expectException(UploadException::class);
-		// 	$this->expectExceptionMessage($expected);
-		// 	$file->handleUploadFileError();
-		// }
+			$this->expectException(UploadException::class);
+			$this->expectExceptionMessage($expected);
+
+			$fileMock->validateFile(['txt']);
+		}
 
 		public function testValidateFileSuccess(): void {
 			$elemName = "testElemName";
