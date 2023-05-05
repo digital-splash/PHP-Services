@@ -2,6 +2,7 @@
 	namespace DigitalSplash\Media\Models;
 
 	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Helpers\Helper;
 
 	class File {
 		private string $_elemName;
@@ -9,7 +10,7 @@
 		private string $_type;
 		private string $_tmpName;
 		private int $_error;
-		private string $_size;
+		private int $_size;
 
 		public function __construct(
 			string $elemName,
@@ -17,7 +18,7 @@
 			string $type,
 			string $tmpName,
 			int $error,
-			string $size
+			int $size
 		) {
 			$this->_elemName = $elemName;
 			$this->_name = $name;
@@ -47,39 +48,41 @@
 			return $this->_error;
 		}
 
-		public function getSize(): string {
+		public function getSize(): int {
 			return $this->_size;
 		}
 
-		public function createFile(): array {
-			return [
-				$this->getElemName()=>[
-				"name"		=> $this->getName(),
-				"type"		=> $this->getType(),
-				"tmp_name"	=> $this->getTmpName(),
-				"error"		=> $this->getError(),
-				"size"		=> $this->getSize()
-				]
-			];
+		public function validateFile(array $allowedExtensions = []): void {
+			$this->isFileUploaded();
+			$this->isFileFormatAllowed($allowedExtensions);
+			$this->handleUploadFileError();
 		}
 
-		public function isFileUploaded(): bool {
-			return is_uploaded_file($this->getTmpName());
+		protected function isFileUploaded(): void {
+			if (!is_uploaded_file($this->getTmpName())) {
+				throw new UploadException("An unknown error occured while uploading the file");
+			}
 		}
 
-		public function isFileFormatAllowed(array $allowedExtensions): bool {
+		protected function isFileFormatAllowed(array $allowedExtensions = []): void {
+			if (empty($allowedExtensions)) {
+				throw new UploadException("You should define at least one supported extension");
+			}
+
 			$fileName = $this->getName();
 			$fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-			if($fileName != "" && !in_array($fileExtension, $allowedExtensions)) {
+			if (!Helper::IsNullOrEmpty($fileName) && !in_array($fileExtension, $allowedExtensions)) {
 				$allowed = implode(", ", $allowedExtensions);
 				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
 			}
-
-			return true;
 		}
 
-		public function handleUploadFileError(): void {
+		protected function handleUploadFileError(): void {
+			if ($this->getError() === UPLOAD_ERR_OK) {
+				return;
+			}
+
 			//how do you prefer putting the cases as number or its corresponding variable as UPLOAD_ERR_INI_SIZE
 			switch ($this->getError()) {
 				case 1:
@@ -99,11 +102,6 @@
 				default:
 					throw new UploadException("Unknown upload error");
 			}
-		}
-
-		public function validateFile(array $allowedExtensions): void {
-			$this->isFileUploaded();
-			$this->isFileFormatAllowed($allowedExtensions);
 		}
 
 	}
