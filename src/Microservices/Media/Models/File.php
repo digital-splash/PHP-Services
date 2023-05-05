@@ -52,15 +52,15 @@
 		}
 
 		public function createFile(): array {
-			$file = [
+			return [
+				$this->getElemName()=>[
 				"name"		=> $this->getName(),
 				"type"		=> $this->getType(),
 				"tmp_name"	=> $this->getTmpName(),
 				"error"		=> $this->getError(),
 				"size"		=> $this->getSize()
+				]
 			];
-
-			return $file;
 		}
 
 		public function isFileUploaded(): bool {
