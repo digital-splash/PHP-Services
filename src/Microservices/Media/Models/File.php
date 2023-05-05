@@ -83,21 +83,20 @@
 				return;
 			}
 
-			//how do you prefer putting the cases as number or its corresponding variable as UPLOAD_ERR_INI_SIZE
 			switch ($this->getError()) {
-				case 1:
+				case UPLOAD_ERR_INI_SIZE:
 					throw new UploadException("The uploaded file exceeds the upload_max_filesize directive in php.ini");
-				case 2:
+				case UPLOAD_ERR_FORM_SIZE:
 					throw new UploadException("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.");
-				case 3:
+				case UPLOAD_ERR_PARTIAL:
 					throw new UploadException("The uploaded file was only partially uploaded");
-				case 4:
+				case UPLOAD_ERR_NO_FILE:
 					throw new UploadException("No file was uploaded");
-				case 6:
+				case UPLOAD_ERR_NO_TMP_DIR:
 					throw new UploadException("Missing a temporary folder");
-				case 7:
+				case UPLOAD_ERR_CANT_WRITE:
 					throw new UploadException("Failed to write file to disk");
-				case 8:
+				case UPLOAD_ERR_EXTENSION:
 					throw new UploadException("A PHP extension stopped the file upload");
 				default:
 					throw new UploadException("Unknown upload error");
