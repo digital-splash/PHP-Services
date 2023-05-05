@@ -43,7 +43,27 @@
 		}
 
 		public function testValidateFile_NoFormatPassedThrows(): void {
-			$this->assertTrue(true);
+			$elemName = "testElemName";
+			$name = "testName.txt";
+			$type = "testType";
+			$tmpName = "testTmpName";
+			$error = 0;
+			$size = 1000;
+
+			$fileMock = $this->getMockBuilder(File::class)
+				->setConstructorArgs([$elemName, $name, $type, $tmpName, $error, $size])
+				->onlyMethods([
+					'isFileUploaded',
+				])
+				->getMock();
+			$fileMock->expects($this->once())
+				->method('isFileUploaded');
+
+			$this->expectException(UploadException::class);
+			$this->expectExceptionMessage('You should define at least one supported extension');
+
+			$fileMock->validateFile([]);
+
 		}
 
 		public function testValidateFile_NotAllowedExtensionThrows(): void {
