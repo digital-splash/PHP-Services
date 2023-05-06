@@ -27,7 +27,7 @@
 		 * Convert the $_FILES array to an Array of Arrays that holds all the data needed to perform the upload later.
 		 * This function is always called before we start the upload
 		 */
-		protected function buildFiles(): void {
+		public function buildFiles(): void {
 			$this->_files = [];
 
 			foreach ($this->_phpfiles as $elemName => $elemPhpFiles) {
