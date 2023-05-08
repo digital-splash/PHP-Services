@@ -1,6 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Models;
 
+	use DigitalSplash\Helpers\Helper;
+
 	class Files {
 
 		/**
@@ -21,6 +23,19 @@
 		 */
 		public function getFiles(): array {
 			return $this->_files;
+		}
+
+		public function toArray(): array {
+			$array = [];
+
+			/**
+			 * @pvar File $file
+			 */
+			foreach ($this->_files AS $file) {
+				$array[$file->getElemName()] = $file->toArray();
+			}
+
+			return $array;
 		}
 
 		/**
@@ -50,7 +65,11 @@
 			] = $elemFiles;
 
 			if (is_string($name)) {
-				$files[] = new File("[{$elemName}]", $name, $type, $tmp_name, $error, $size);
+				if (Helper::StringHasChar($elemName, '][')) {
+					$elemName = "[{$elemName}]";
+				}
+
+				$files[] = new File($elemName, $name, $type, $tmp_name, $error, $size);
 			} else {
 				foreach ($name as $i => $v) {
 					$_elemFiles = [

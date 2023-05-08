@@ -2,7 +2,8 @@
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\UploadException;
-	use DigitalSplash\Media\Models\ImagesExtensions;
+use DigitalSplash\Helpers\Helper;
+use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Models\Code;
@@ -15,9 +16,8 @@
 
 		private array $allowedExtensions;
 
-		// public $fileFullPath;
+			// public $fileFullPath;
 		// public $uploadPath; //upload path
-		// public $folders; //folders inside the upload folder
 		// public $destName; //destination filename
 		// public $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		// public $convertToNextGen;
@@ -26,14 +26,13 @@
 		// public $uploadedData;
 
 		public function __construct(
-			array $phpFiles
+			array $phpFiles,
+			array $allowedExtensions = []
 		) {
-			$this->allowedExtensions = ImagesExtensions::getExtensions();
+			$this->allowedExtensions = $allowedExtensions;
 
 			// $this->fileFullPath = "";
-			// $this->elemName	 = "";
 			// $this->uploadPath = "";
-			// $this->folders = "";
 			// $this->destName	= "";
 			// $this->ratio = 0;
 			// $this->convertToNextGen = Upload::convertToNextGen;
@@ -41,20 +40,12 @@
 			// $this->uploadedPaths = [];
 			// $this->uploadedData	= [];
 
+			if (Helper::IsNullOrEmpty($this->allowedExtensions)) {
+				$this->allowedExtensions = ImagesExtensions::getExtensions();
+			}
+
 			parent::__construct($phpFiles);
 
-		}
-
-		public function setAllowedExtensions(array $array): void {
-			$this->allowedExtensions = $array;
-		}
-
-		public function getAllowedExtensions(): array {
-			return $this->allowedExtensions;
-		}
-
-		public function appendToAllowedExtensions($array): void {
-			$this->allowedExtensions[] = $array;
 		}
 
 		public function upload(): array {
@@ -124,41 +115,13 @@
 			// return $this->retArr;
 		}
 
-		// public static function uploadToServer($uploadPath=""): array {
-		// 	$tmpName=self::getTmpName();
-		// 	$fileName=self::getName();
-		// 	$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
-
-		// 	if (move_uploaded_file($tmpName, $uploadPath)) {
-		// 		return [
-		// 			"status"	=> self::Success,
-		// 			"message"	=> "File successfully uploaded!",
-		// 			"fileName"	=> $uploadedFileName
-		// 		];
-		// 	}else {
-		// 		throw new UploadException();
-		// 	}
-		// }
-
 		private function uploadFile(File $file): void {
-			throw new UploadException('This is a test throw message');
-		}
+			$file->validateFile($this->allowedExtensions);
 
-		// private function uploadFile_old($file) {
-		// 	if ($file['error'] == 0) {
+			$extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
 
-		// 		if (!is_uploaded_file($file['tmp_name'])) {
-		// 			$this->appendToRetArr(new UploadException("File is not uploaded!"));
-		// 		}
-		// 		else {
-		// 			$extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+			// Helper::CreateFolderRecursive($this->uploadPath)
 
-		// 			if (!self::CheckExtensionValidity($file, $this->allowedExtensions)) {
-		// 				$allowed = implode(", ", $this->allowedExtensions);
-		// 				$this->appendToRetArr(new UploadException("File extension is not allowed!"));
-		// 			}
-		// 			else {
-		// 				self::createFolders($this->uploadPath, $this->folders);
 
 		// 				if ($this->destName == "") {
 		// 					$this->destName = time() . " " . rand(1000, 9999);
@@ -211,11 +174,21 @@
 		// 					self::deleteFile($uploadPath);
 		// 					$this->retArr[] = self::uploadToServer($file['tmp_name'], $uploadPath, $file['name']);
 		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// 	else {
-		// 		self::handleUploadFileError();
+		}
+
+		// public static function uploadToServer($uploadPath=""): array {
+		// 	$tmpName=self::getTmpName();
+		// 	$fileName=self::getName();
+		// 	$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
+
+		// 	if (move_uploaded_file($tmpName, $uploadPath)) {
+		// 		return [
+		// 			"status"	=> self::Success,
+		// 			"message"	=> "File successfully uploaded!",
+		// 			"fileName"	=> $uploadedFileName
+		// 		];
+		// 	}else {
+		// 		throw new UploadException();
 		// 	}
 		// }
 

@@ -52,6 +52,16 @@
 			return $this->_size;
 		}
 
+		public function toArray(): array {
+			return [
+				'name' => $this->getName(),
+				'type' => $this->getType(),
+				'tmp_name' => $this->getTmpName(),
+				'error' => $this->getError(),
+				'size' => $this->getSize(),
+			];
+		}
+
 		public function validateFile(array $allowedExtensions = []): void {
 			$this->isFileUploaded();
 			$this->isFileFormatAllowed($allowedExtensions);

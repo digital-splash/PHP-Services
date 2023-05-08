@@ -2,7 +2,6 @@
 	namespace DigitalSplash\Tests\Media\Models;
 
 	use DigitalSplash\Exceptions\UploadException;
-	use DigitalSplash\Media\Helpers\Upload;
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Media\Models\File;
 
@@ -24,6 +23,27 @@
 			$this->assertEquals($tmpName, $file->getTmpName());
 			$this->assertEquals($error, $file->getError());
 			$this->assertEquals($size, $file->getSize());
+		}
+
+		public function toArray(): void {
+			$elemName = "testElemName";
+			$name = "testName.txt";
+			$type = "testType";
+			$tmpName = "testTmpName";
+			$error = 0;
+			$size = 1000;
+
+			$file = new File($elemName, $name, $type, $tmpName, $error, $size);
+			$actual = $file->toArray();
+			$expected = [
+				'name' => $name,
+				'type' => $type,
+				'tmp_name' => $tmpName,
+				'error' => $error,
+				'size' => $size,
+			];
+
+			$this->assertEqualsCanonicalizing($expected, $actual);
 		}
 
 		public function testValidateFile_FileNotUploadedThrows(): void {
@@ -89,18 +109,6 @@
 			$fileMock->validateFile(['jpg', 'png']);
 		}
 
-		public function handleUploadFileErrorProvider(): array {
-			return [
-				[UPLOAD_ERR_INI_SIZE, 'The uploaded file exceeds the upload_max_filesize directive in php.ini'],
-				[UPLOAD_ERR_FORM_SIZE, 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'],
-				[UPLOAD_ERR_PARTIAL, 'The uploaded file was only partially uploaded'],
-				[UPLOAD_ERR_NO_FILE, 'No file was uploaded'],
-				[UPLOAD_ERR_NO_TMP_DIR, 'Missing a temporary folder'],
-				[UPLOAD_ERR_CANT_WRITE, 'Failed to write file to disk'],
-				[UPLOAD_ERR_EXTENSION, 'A PHP extension stopped the file upload'],
-			];
-		}
-
 		/**
 		 * @dataProvider handleUploadFileErrorProvider
 		 */
@@ -124,6 +132,19 @@
 			$this->expectExceptionMessage($expected);
 
 			$fileMock->validateFile(['txt']);
+		}
+
+		public function handleUploadFileErrorProvider(): array {
+			return [
+				[UPLOAD_ERR_INI_SIZE, 'The uploaded file exceeds the upload_max_filesize directive in php.ini'],
+				[UPLOAD_ERR_FORM_SIZE, 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'],
+				[UPLOAD_ERR_PARTIAL, 'The uploaded file was only partially uploaded'],
+				[UPLOAD_ERR_NO_FILE, 'No file was uploaded'],
+				[UPLOAD_ERR_NO_TMP_DIR, 'Missing a temporary folder'],
+				[UPLOAD_ERR_CANT_WRITE, 'Failed to write file to disk'],
+				[UPLOAD_ERR_EXTENSION, 'A PHP extension stopped the file upload'],
+				[10, 'Unknown upload error'],
+			];
 		}
 
 		public function testValidateFileSuccess(): void {
