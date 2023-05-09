@@ -121,65 +121,28 @@
 			// return $this->retArr;
 		}
 
-		private function uploadFile(File $file): void {
+		private function uploadFile(File $file): array {
 			$file->validateFile($this->allowedExtensions);
 
 			$extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
 
-			// Helper::CreateFolderRecursive($this->uploadPath)
+			Helper::CreateFolderRecursive($this->uploadPath);
 
+			$fileName = Helper::SafeName($file->getName());
+			$tmpName = $file->getTmpName();
+			$uploadPath = $this->uploadPath . "/" . $fileName;
 
-			// if ($this->destName == "") {
-			// 	$this->destName = time() . " " . rand(1000, 9999);
-			// }
-			// $destNameNoExtension = self::safeName($this->destName);
-			// $this->destName		= $destNameNoExtension . "." . $extension;
-			// $uploadPath	= $this->uploadPath . $this->folders . $this->destName;
+			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
 
-			// $this->uploadedPaths[]	= $this->folders . $this->destName;
-			// $this->uploadedData[]	= [
-			// 	"path"		=> $this->folders . $this->destName,
-			// 	"real_name"	=> $file['name'],
-			// 	"real_size"	=> $file['size'],
-			// 	"real_type"	=> $file['type'],
-			// ];
-
-			// if (in_array($extension, self::imgsExt)) {
-			// 	if ($this->ratio > 0) {
-			// 		//Upload Original Image
-			// 		$originalFileName	= $destNameNoExtension . "-original." . $extension;
-			// 		$originalPath		= $this->uploadPath . $this->folders . $originalFileName;
-			// 		self::uploadToServer($file['tmp_name'], $originalPath, $originalFileName);
-
-			// 		//Change Ratio
-			// 		$this->retArr[] = self::changeImgRatio($this->ratio, $uploadPath, $originalPath);
-			// 	}
-			// 	else {
-			// 		$this->retArr[]	= self::uploadToServer($file['tmp_name'], $uploadPath, $this->destName);
-			// 	}
-
-			// 	if ($this->convertToNextGen) {
-			// 		$this->retArr[] = self::convertImgToNextGen($uploadPath, "webp", false);
-			// 	}
-
-			// 	if ($this->resize) {
-			// 		$imgResizeOptions = [
-			// 			"hd",
-			// 			"ld",
-			// 			"th",
-			// 		];
-			// 		foreach ($imgResizeOptions AS $resizeOption) {
-			// 			$resizeRet = self::resizeImg($uploadPath, $resizeOption, $this->convertToNextGen);
-			// 			$this->retArr[] = $resizeRet;
-			// 		}
-			// 	}
-
-			// 	$this->retArr[] = self::generateFacebookImg($uploadPath);
-			// }
-			// else {
-			// 	self::deleteFile($uploadPath);
-			// 	$this->retArr[] = self::uploadToServer($file['tmp_name'], $uploadPath, $file['name']);
-			// }
+			if (move_uploaded_file($tmpName, $uploadPath)) {
+				return [
+					"status"	=> self::Success,
+					"message"	=> "File successfully uploaded!",
+					"fileName"	=> $uploadedFileName
+				];
+			}else {
+				throw new UploadException();
+			}
 		}
 
 		// public static function uploadToServer($uploadPath=""): array {
@@ -197,30 +160,5 @@
 		// 		throw new UploadException();
 		// 	}
 		// }
-
-		// public function uploadFileTrial(File $file){
-
-		// 	if (!isset($file->getName())) {
-		// 		throw new UploadException("No file uploaded '");
-		// 	}
-
-
-		// 	if ($file->getError() !== UPLOAD_ERR_OK) {
-		// 		$this->handleUploadFileError($file);
-		// 		return;
-		// 	}
-
-		// 	$filepath = "{"dir path"}/{$file->getName()}";
-		// 	move_uploaded_file($file->getTmpName(), $filepath);
-
-		// 	return [
-		// 		'name' => $file->getName(),
-		// 		'type' => $file->getType(),
-		// 		'size' => $file->getSize(),
-		// 		'filepath' => $filepath,
-		// 	];
-		// }
-
-
 
 	}
