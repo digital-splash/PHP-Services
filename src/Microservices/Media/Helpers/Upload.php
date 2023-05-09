@@ -48,6 +48,8 @@
 
 			if (Helper::IsNullOrEmpty($this->uploadPath)) {
 				$this->uploadPath = Media::GetUploadDir();
+				// $this->uploadPath = "mediafiles/";
+				// $this->uploadPath = "C:\wamp64\www\PHP-Services\\tests\Manual\Microservices\Media\Helpers";
 			}
 
 			parent::__construct($phpFiles);
@@ -128,9 +130,9 @@
 
 			Helper::CreateFolderRecursive($this->uploadPath);
 
-			$fileName = Helper::SafeName($file->getName());
+			$fileName = $file->getName();
 			$tmpName = $file->getTmpName();
-			$uploadPath = $this->uploadPath . "/" . $fileName;
+			$uploadPath = $this->uploadPath . "\\" . $fileName;
 
 			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
 
