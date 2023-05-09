@@ -1,7 +1,6 @@
 <?php
 	namespace DigitalSplash\Tests\Media\Models;
 
-	use DigitalSplash\Media\Models\File;
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\ImagesExtensions;
@@ -310,7 +309,7 @@
 
 		public function buildFilesAllTypesProvider(): array {
 			return [
-				
+
 			];
 		}
 	}

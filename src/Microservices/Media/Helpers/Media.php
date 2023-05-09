@@ -12,7 +12,6 @@
 		private static $MEDIA_ROOT;
 		private static $WEBSITE_VERSION;
 
-
 		/**
 		 * Set the $MEDIA_FOLDER valiable
 		 */
@@ -21,7 +20,6 @@
 		): void {
 			self::$MEDIA_FOLDER = $var;
 		}
-
 
 		/**
 		 * Set the $UPLOAD_DIR valiable
@@ -35,6 +33,9 @@
 			self::$UPLOAD_DIR = $var;
 		}
 
+		public static function GetUploadDir(): ?string {
+			return self::$UPLOAD_DIR;
+		}
 
 		/**
 		 * Set the $MEDIA_ROOT valiable
@@ -48,7 +49,6 @@
 			self::$MEDIA_ROOT = $var;
 		}
 
-
 		/**
 		 * Set the $WEBSITE_VERSION valiable
 		 */
@@ -57,7 +57,6 @@
 		): void {
 			self::$WEBSITE_VERSION = $var;
 		}
-
 
 		/**
 		 * Adds the root folder to a url, and converts it to a safe, user friendly URL
