@@ -79,46 +79,6 @@
 			}
 
 			return $retArr;
-
-			// $files = $this->getFiles();
-			// $filesCount = count($files);
-
-			// for ($i=0; $i < $filesCount; $i++) {
-			// 	if ($files[$i]['name'] != "" && $this->getError() == 0) {
-			// 		if (self::CheckExtensionValidity($files[$i], $this->getAllowedExtensions())) {
-			// 			$fileName = self::safeName($files[$i]['name']);
-			// 			$uploadPath = $this->uploadPath . $this->folders . $fileName;
-
-			// 			if ($this->isTest) {
-			// 				$this->uploadedPaths[] = $uploadPath;
-			// 				$this->uploadedData[] = $this->getFiles()[$i];
-			// 				$this->successArr[] = $fileName;
-			// 			}else {
-			// 				$uploadResult = $this->uploadToServer($uploadPath);
-
-			// 				if ($uploadResult['status'] == self::Success) {
-			// 					$this->uploadedPaths[] = $uploadPath;
-			// 					$this->uploadedData[] = $this->getFiles()[$i];
-			// 					$this->successArr[] = $fileName;
-			// 				}else {
-			// 					$this->errorArr[] = $fileName;
-			// 					$this->error = 1;
-			// 				}
-			// 			}
-			// 		}else {
-			// 			$this->errorArr[] = $fileName;
-			// 			$this->error = 1;
-			// 		}
-			// 	}
-			// }
-
-			// $this->retArr = [
-			// 	"success"	=> $this->successArr,
-			// 	"error"		=> $this->errorArr,
-			// 	"errorFlag"	=> $this->error
-			// ];
-
-			// return $this->retArr;
 		}
 
 		private function uploadFile(File $file, int $i = 1): array {
