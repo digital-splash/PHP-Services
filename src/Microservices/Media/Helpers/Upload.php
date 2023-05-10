@@ -85,6 +85,20 @@
 			$file->validateFile($this->allowedExtensions);
 			$uploadResponse = $this->uploadToServer($file, $i);
 
+			//Check if it is an Image:
+				//Check if we need to change ratio
+					//If yes
+						//Copy to original folder
+						//Change image ratio and save to upload folder
+
+				//Check if we need to convert to next gen (webp)
+					//If yes, convert
+
+				//Check if we need to resize
+					//If yes, resize to all defined sizes
+
+				//Resize to Facebook Ratio
+
 			return $uploadResponse;
 		}
 
