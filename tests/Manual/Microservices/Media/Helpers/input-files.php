@@ -9,10 +9,10 @@
 
 		// var_dump(Helper::ConvertMultidimentionArrayToSingleDimention($_FILES));
 
-		$upload = new Upload($_FILES);
-		$result = $upload->upload();
+		// $upload = new Upload($_FILES);
+		// $result = $upload->upload();
 
-		var_dump($result);
+		// var_dump($result);
 		echo '</pre>';
 	}
 

@@ -2,17 +2,18 @@
     include_once __DIR__ . '/../../../../../vendor/autoload.php';
 
     use DigitalSplash\Helpers\Helper;
-use DigitalSplash\Media\Helpers\Media;
-use DigitalSplash\Media\Helpers\Upload;
+    use DigitalSplash\Media\Helpers\Media;
+    use DigitalSplash\Media\Helpers\Upload;
 
     if (!empty($_FILES)) {
         echo '<pre>';
-        
-		
-		$upload = new Upload($_FILES, [] , __DIR__ . "/../../../../_CommonFiles/Media/UploadFolder");
+
+        Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload/UploadFilesTest");
+
+		$upload = new Upload($_FILES, 'test-upload');
 		$result = $upload->upload();
 		var_dump($result);
-      
+
 
         echo '</pre>';
     }

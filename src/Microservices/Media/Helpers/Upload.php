@@ -12,14 +12,12 @@
 	class Upload extends Files {
 
 		public const convertToNextGen = false;
-		public const Error = 0;
-		public const Success = 1;
 
 		private array $allowedExtensions;
-		public string $uploadPath; //upload path
+		private string $uploadPath;
+		private string $destinationFileName;
 
 			// public $fileFullPath;
-		// public $destName; //destination filename
 		// public $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		// public $convertToNextGen;
 		// public $resize;
@@ -28,14 +26,13 @@
 
 		public function __construct(
 			array $phpFiles = [],
-			array $allowedExtensions = [],
-			string $uploadPath = ''
+			string $destinationFileName = '',
+			array $allowedExtensions = []
 		) {
+			$this->destinationFileName	= $destinationFileName;
 			$this->allowedExtensions = $allowedExtensions;
-			$this->uploadPath = $uploadPath;
 
 			// $this->fileFullPath = "";
-			// $this->destName	= "";
 			// $this->ratio = 0;
 			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
@@ -46,14 +43,18 @@
 				$this->allowedExtensions = ImagesExtensions::getExtensions();
 			}
 
-			if (Helper::IsNullOrEmpty($this->uploadPath)) {
-				$this->uploadPath = Media::GetUploadDir();
-				// $this->uploadPath = "mediafiles/";
-				// $this->uploadPath = "C:\wamp64\www\PHP-Services\\tests\Manual\Microservices\Media\Helpers";
-			}
+			$this->uploadPath = Media::GetUploadDir();
 
 			parent::__construct($phpFiles);
 
+		}
+
+		public function SetUploadPath(string $path): void {
+			if (!Helper::StringEndsWith($path, ["/", "\\"])) {
+				$path .= "/";
+			}
+
+			$this->uploadPath = $path;
 		}
 
 		public function upload(): array {
@@ -61,15 +62,12 @@
 
 			$retArr = [];
 
+			$i = 1;
 			foreach ($this->getFiles() as $file) {
 				try {
-					$this->uploadFile($file);
+					$retArr[] = $this->uploadFile($file, $i);
 
-					$retArr[] = [
-						'status' => Code::SUCCESS,
-						'fileName' => $file->getName(),
-						'elemName' => $file->getElemName(),
-					];
+					$i++;
 				} catch (Throwable $t) {
 					$retArr[] = [
 						'status' => Code::ERROR,
@@ -123,44 +121,34 @@
 			// return $this->retArr;
 		}
 
-		private function uploadFile(File $file): array {
+		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
+			$uploadResponse = $this->uploadToServer($file, $i);
 
-			$extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
+			return $uploadResponse;
+		}
 
+		private function uploadToServer(File $file, int $i = 1): array {
 			Helper::CreateFolderRecursive($this->uploadPath);
+			$extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
+			$destinationFileName = $this->destinationFileName;
+			if (Helper::IsNullOrEmpty($destinationFileName)) {
+				$destinationFileName = time() . '-' . rand(1000, 9999);
+			}
+			$destinationFileName = Helper::SafeName($destinationFileName . '-' . $i) . '.' . $extension;
 
-			$fileName = $file->getName();
-			$tmpName = $file->getTmpName();
-			$uploadPath = $this->uploadPath . "\\" . $fileName;
+			$uploadPath = $this->uploadPath . $destinationFileName;
 
-			$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
-
-			if (move_uploaded_file($tmpName, $uploadPath)) {
+			if (move_uploaded_file($file->getTmpName(), $uploadPath)) {
 				return [
-					"status"	=> self::Success,
-					"message"	=> "File successfully uploaded!",
-					"fileName"	=> $uploadedFileName
+					'status' => Code::SUCCESS,
+					'message' => 'upload.Success',
+					'fileName' => $destinationFileName,
+					'elemName' => $file->getElemName(),
 				];
-			}else {
+			} else {
 				throw new UploadException();
 			}
 		}
-
-		// public static function uploadToServer($uploadPath=""): array {
-		// 	$tmpName=self::getTmpName();
-		// 	$fileName=self::getName();
-		// 	$uploadedFileName	= pathinfo($uploadPath, PATHINFO_BASENAME);
-
-		// 	if (move_uploaded_file($tmpName, $uploadPath)) {
-		// 		return [
-		// 			"status"	=> self::Success,
-		// 			"message"	=> "File successfully uploaded!",
-		// 			"fileName"	=> $uploadedFileName
-		// 		];
-		// 	}else {
-		// 		throw new UploadException();
-		// 	}
-		// }
 
 	}
