@@ -52,6 +52,10 @@
 			return $this->_size;
 		}
 
+		public function getExtension(): string {
+			return strtolower(pathinfo($this->getName(), PATHINFO_EXTENSION));
+		}
+
 		public function toArray(): array {
 			return [
 				'name' => $this->getName(),
