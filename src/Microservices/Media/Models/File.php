@@ -3,6 +3,7 @@
 
 	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
+use DigitalSplash\Media\Helpers\Media;
 
 	class File {
 		private string $_elemName;
@@ -70,6 +71,10 @@
 			$this->isFileUploaded();
 			$this->isFileFormatAllowed($allowedExtensions);
 			$this->handleUploadFileError();
+		}
+
+		public function IsImage(): bool {
+			return Media::IsImage($this->getExtension());
 		}
 
 		protected function isFileUploaded(): void {

@@ -85,15 +85,15 @@
 			$file->validateFile($this->allowedExtensions);
 			$uploadResponse = $this->uploadToServer($file, $i);
 
-			//Check if it is an Image:
-				if (Helper::IsImage($file)) {
+			if ($file->IsImage()) {
 				//Check if we need to change ratio
-					if ($this->ratio != 0) {//If yes
-							//Copy to original folder
-							copy($uploadResponse['newPath'], __DIR__ . '/../../../tests/_CommonFiles/original');
-							//Change image ratio and save to upload folder
-							$this->changeImageRatio();
-					}
+				if ($this->ratio != 0) {
+					//Copy to original folder
+					copy($uploadResponse['newPath'], __DIR__ . '/../../../tests/_CommonFiles/original');
+					//Change image ratio and save to upload folder
+					$this->changeImageRatio($file);
+				}
+
 				//Check if we need to convert to next gen (webp)
 					//If yes, convert
 
@@ -101,7 +101,8 @@
 					//If yes, resize to all defined sizes
 
 				//Resize to Facebook Ratio
-				}
+			}
+
 			return $uploadResponse;
 		}
 

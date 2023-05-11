@@ -5,6 +5,7 @@
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Models\Image;
+use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Media {
 		private static $MEDIA_FOLDER = "mediafiles/";
@@ -145,6 +146,13 @@
 			}
 
 			return $url;
+		}
+
+		/**
+		 * Check if the extension is an image
+		 */
+		public static function IsImage(string $extension): bool {
+			return in_array($extension, ImagesExtensions::getExtensions());
 		}
 
 	}

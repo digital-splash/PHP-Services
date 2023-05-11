@@ -7,8 +7,7 @@
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
 	use DigitalSplash\Language\Models\Lang;
-use DigitalSplash\Media\Models\File;
-use DigitalSplash\Models\Status;
+	use DigitalSplash\Models\Status;
 
 	class Helper {
 
@@ -986,13 +985,6 @@ use DigitalSplash\Models\Status;
 		 */
 		public static function IsValidUrl(string $string): bool {
 			return self::StringBeginsWith($string, ["http://", "https://"]);
-		}
-
-		/**
-		 * Check if the given file is an image
-		 */
-		public static function IsImage(File $file): bool {
-			return in_array($file->getExtension(), ["jpg", "jpeg", "png", "gif", "webp"]);
 		}
 
 	}
