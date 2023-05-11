@@ -16,9 +16,9 @@
 		private array $allowedExtensions;
 		private string $uploadPath;
 		private string $destinationFileName;
+		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 
 			// public $fileFullPath;
-		// public $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		// public $convertToNextGen;
 		// public $resize;
 		// public $uploadedPaths;
@@ -33,7 +33,7 @@
 			$this->allowedExtensions = $allowedExtensions;
 
 			// $this->fileFullPath = "";
-			// $this->ratio = 0;
+			$this->ratio = 0;
 			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
 			// $this->uploadedPaths = [];
@@ -86,11 +86,14 @@
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			//Check if it is an Image:
+				if (Helper::IsImage($file)) {
 				//Check if we need to change ratio
-					//If yes
-						//Copy to original folder
-						//Change image ratio and save to upload folder
-
+					if ($this->ratio != 0) {//If yes
+							//Copy to original folder
+							copy($uploadResponse['newPath'], __DIR__ . '/../../../tests/_CommonFiles/original');
+							//Change image ratio and save to upload folder
+							$this->changeImageRatio();
+					}
 				//Check if we need to convert to next gen (webp)
 					//If yes, convert
 
@@ -98,13 +101,13 @@
 					//If yes, resize to all defined sizes
 
 				//Resize to Facebook Ratio
-
+				}
 			return $uploadResponse;
 		}
 
 		private function uploadToServer(File $file, int $i = 1): array {
 			Helper::CreateFolderRecursive($this->uploadPath);
-			$extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
+			$extension = $file->getExtension();
 			$destinationFileName = $this->destinationFileName;
 			if (Helper::IsNullOrEmpty($destinationFileName)) {
 				$destinationFileName = time() . '-' . rand(1000, 9999);
@@ -119,9 +122,62 @@
 					'message' => 'upload.Success',
 					'fileName' => $destinationFileName,
 					'elemName' => $file->getElemName(),
+					'newPath' => $uploadPath
 				];
 			} else {
 				throw new UploadException();
+			}
+		}
+
+		private function changeImageRatio(File $file): void {
+			//Get image size
+			list($srcImgWidth, $srcImgHeight, $srcImgType) = getimagesize($file->getTmpName());
+
+			$originalRatio = $srcImgWidth / $srcImgHeight;
+
+			if( $this->ratio != $originalRatio) {
+				//Get new image size
+				$newWidth = $srcImgWidth;
+				$newHeight = $srcImgHeight;
+
+				if ($this->ratio > $originalRatio) {
+					$newHeight = $newWidth / $this->ratio;
+				} else {
+					$newWidth = $newHeight * $this->ratio;
+				}
+
+				switch ($srcImgType) {
+					case IMAGETYPE_GIF:
+						$source = imagecreatefromgif($file->getTmpName());
+						break;
+					case IMAGETYPE_JPEG:
+						$source = imagecreatefromjpeg($file->getTmpName());
+						break;
+					case IMAGETYPE_PNG:
+						$source = imagecreatefrompng($file->getTmpName());
+						break;
+					default:
+						throw new UploadException('Type not supported');
+				}
+
+				//Create new image
+				$newImage = imagecreatetruecolor($newWidth, $newHeight);
+				$source = imagecreatefromjpeg($file->getTmpName());
+
+				//Resize
+				imagecopyresized($newImage, $source, 0, 0, 0, 0, $newWidth, $newHeight, $srcImgWidth, $srcImgHeight);
+
+				//Save
+				imagejpeg($newImage, $file->getTmpName());
+
+				//Free memory
+				imagedestroy($source);
+				imagedestroy($newImage);
+				$this->uploadPath = __DIR__ . '/../../../tests/_CommonFiles/original';
+				$this->uploadToServer(
+					$file,
+					1
+				);
 			}
 		}
 
