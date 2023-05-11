@@ -5,13 +5,13 @@
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Models\Image;
+use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Media {
 		private static $MEDIA_FOLDER = "mediafiles/";
 		private static $UPLOAD_DIR;
 		private static $MEDIA_ROOT;
 		private static $WEBSITE_VERSION;
-
 
 		/**
 		 * Set the $MEDIA_FOLDER valiable
@@ -21,7 +21,6 @@
 		): void {
 			self::$MEDIA_FOLDER = $var;
 		}
-
 
 		/**
 		 * Set the $UPLOAD_DIR valiable
@@ -35,6 +34,9 @@
 			self::$UPLOAD_DIR = $var;
 		}
 
+		public static function GetUploadDir(): ?string {
+			return self::$UPLOAD_DIR;
+		}
 
 		/**
 		 * Set the $MEDIA_ROOT valiable
@@ -48,7 +50,6 @@
 			self::$MEDIA_ROOT = $var;
 		}
 
-
 		/**
 		 * Set the $WEBSITE_VERSION valiable
 		 */
@@ -57,7 +58,6 @@
 		): void {
 			self::$WEBSITE_VERSION = $var;
 		}
-
 
 		/**
 		 * Adds the root folder to a url, and converts it to a safe, user friendly URL
@@ -146,6 +146,13 @@
 			}
 
 			return $url;
+		}
+
+		/**
+		 * Check if the extension is an image
+		 */
+		public static function IsImage(string $extension): bool {
+			return in_array($extension, ImagesExtensions::getExtensions());
 		}
 
 	}

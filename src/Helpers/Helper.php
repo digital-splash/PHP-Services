@@ -800,6 +800,7 @@
 		/**
 		 * Adds the root folder to a url, and converts it to a safe, user friendly URL
 		 */
+		//TODO: Is the same function in the Media??
 		public static function GenerateFullUrl(
 			string $page,
 			string $lang="",
@@ -846,6 +847,14 @@
 			}
 			$url = $root . $page . $args;
 
+			$url = self::RemoveMultipleSlashesInUrl($url);
+
+			return $url ;
+		}
+
+
+		//TODO: Add Unit Tests
+		public static function RemoveMultipleSlashesInUrl(string $url): string {
 			$urlScheme = "";
 			if (self::StringBeginsWith($url, "http://")) {
 				$urlScheme = "http://";
@@ -861,9 +870,8 @@
 			while (strpos($url, "//") !== false) {
 				$url = str_replace("//", "/", $url) ;
 			}
-			$url = $urlScheme . $url;
 
-			return $url ;
+			return $urlScheme . $url;
 		}
 
 
