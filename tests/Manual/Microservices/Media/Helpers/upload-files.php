@@ -8,9 +8,9 @@
     if (!empty($_FILES)) {
         echo '<pre>';
 
-        Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload/UploadFilesTest");
+        Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
 
-		$upload = new Upload($_FILES, 'test-upload');
+		$upload = new Upload($_FILES, 'test-upload', '//////UploadFiles/test');
 		$result = $upload->upload();
 		var_dump($result);
 

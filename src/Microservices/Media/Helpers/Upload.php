@@ -7,7 +7,8 @@
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Models\Code;
-	use Throwable;
+use PHPUnit\TextUI\Help;
+use Throwable;
 
 	class Upload extends Files {
 
@@ -15,6 +16,7 @@
 
 		private array $allowedExtensions;
 		private string $uploadPath;
+		private string $folders;
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 
@@ -27,13 +29,16 @@
 		public function __construct(
 			array $phpFiles = [],
 			string $destinationFileName = '',
-			array $allowedExtensions = []
+			string $folders = '',
+			array $allowedExtensions = [],
+			float $ratio = 0
 		) {
-			$this->destinationFileName	= $destinationFileName;
+			$this->destinationFileName = $destinationFileName;
+			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
+			$this->ratio = $ratio;
 
 			// $this->fileFullPath = "";
-			$this->ratio = 0;
 			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
 			// $this->uploadedPaths = [];
@@ -54,7 +59,7 @@
 				$path .= "/";
 			}
 
-			$this->uploadPath = $path;
+			$this->uploadPath = Helper::RemoveMultipleSlashesInUrl($path);
 		}
 
 		public function upload(): array {
@@ -107,23 +112,31 @@
 		}
 
 		private function uploadToServer(File $file, int $i = 1): array {
-			Helper::CreateFolderRecursive($this->uploadPath);
-			$extension = $file->getExtension();
+			$uploadPath = Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders);
+
+			Helper::CreateFolderRecursive($uploadPath);
+
 			$destinationFileName = $this->destinationFileName;
 			if (Helper::IsNullOrEmpty($destinationFileName)) {
 				$destinationFileName = time() . '-' . rand(1000, 9999);
 			}
-			$destinationFileName = Helper::SafeName($destinationFileName . '-' . $i) . '.' . $extension;
+			$destinationFileName = Helper::SafeName($destinationFileName . '-' . $i) . '.' . $file->getExtension();
 
-			$uploadPath = $this->uploadPath . $destinationFileName;
+			$uploadFileDest = Helper::RemoveMultipleSlashesInUrl($uploadPath . '/' . $destinationFileName);
 
-			if (move_uploaded_file($file->getTmpName(), $uploadPath)) {
+			if (move_uploaded_file($file->getTmpName(), $uploadFileDest)) {
+				$mediaPath = Helper::RemoveMultipleSlashesInUrl($this->folders . '/' . $destinationFileName);
+				if (Helper::StringBeginsWith($mediaPath, ["/", "\\"])) {
+					$mediaPath = substr($mediaPath, 1, strlen($mediaPath) - 1);
+				}
+
 				return [
 					'status' => Code::SUCCESS,
 					'message' => 'upload.Success',
-					'fileName' => $destinationFileName,
 					'elemName' => $file->getElemName(),
-					'newPath' => $uploadPath
+					'mediaPath' => $mediaPath,
+					'fileName' => $destinationFileName,
+					'uploadedFile' => $uploadFileDest
 				];
 			} else {
 				throw new UploadException();
