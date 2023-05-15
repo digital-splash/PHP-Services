@@ -6,7 +6,8 @@
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
-	use DigitalSplash\Models\Code;
+use DigitalSplash\Media\Models\Image;
+use DigitalSplash\Models\Code;
 use PHPUnit\TextUI\Help;
 use Throwable;
 
@@ -88,9 +89,12 @@ use Throwable;
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
+			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders));
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
+				$this->createOriginalFile($file, $uploadResponse);
+
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
 					//Copy to original folder
@@ -112,9 +116,7 @@ use Throwable;
 		}
 
 		private function uploadToServer(File $file, int $i = 1): array {
-			$uploadPath = Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders);
-
-			Helper::CreateFolderRecursive($uploadPath);
+			Helper::CreateFolderRecursive($file->getUploadPath());
 
 			$destinationFileName = $this->destinationFileName;
 			if (Helper::IsNullOrEmpty($destinationFileName)) {
@@ -122,7 +124,7 @@ use Throwable;
 			}
 			$destinationFileName = Helper::SafeName($destinationFileName . '-' . $i) . '.' . $file->getExtension();
 
-			$uploadFileDest = Helper::RemoveMultipleSlashesInUrl($uploadPath . '/' . $destinationFileName);
+			$uploadFileDest = Helper::RemoveMultipleSlashesInUrl($file->getUploadPath() . '/' . $destinationFileName);
 
 			if (move_uploaded_file($file->getTmpName(), $uploadFileDest)) {
 				$mediaPath = Helper::RemoveMultipleSlashesInUrl($this->folders . '/' . $destinationFileName);
@@ -141,6 +143,16 @@ use Throwable;
 			} else {
 				throw new UploadException();
 			}
+		}
+
+		private function createOriginalFile(File $file, array $fileToCopy): void {
+			$originalUploadPath = Helper::RemoveMultipleSlashesInUrl(Helper::TextReplace(Image::ORIGINAL_PATH, [
+				'{path}', $file->getUploadPath()
+			]));
+			Helper::CreateFolderRecursive($originalUploadPath);
+
+			$originalFile = Helper::RemoveMultipleSlashesInUrl($originalUploadPath . '/' . $fileToCopy['fileName']);
+			copy($fileToCopy['uploadedFile'], $originalFile);
 		}
 
 		private function changeImageRatio(File $file): void {

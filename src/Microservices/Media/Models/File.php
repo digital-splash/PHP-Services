@@ -3,13 +3,14 @@
 
 	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
-use DigitalSplash\Media\Helpers\Media;
+	use DigitalSplash\Media\Helpers\Media;
 
 	class File {
 		private string $_elemName;
 		private string $_name;
 		private string $_type;
 		private string $_tmpName;
+		private string $uploadPath;
 		private int $_error;
 		private int $_size;
 
@@ -55,6 +56,14 @@ use DigitalSplash\Media\Helpers\Media;
 
 		public function getExtension(): string {
 			return strtolower(pathinfo($this->getName(), PATHINFO_EXTENSION));
+		}
+
+		public function setUploadPath(string $path): void {
+			$this->uploadPath = Helper::RemoveMultipleSlashesInUrl($path);
+		}
+
+		public function getUploadPath(): string {
+			return $this->uploadPath;
 		}
 
 		public function toArray(): array {
