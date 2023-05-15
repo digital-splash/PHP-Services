@@ -6,10 +6,10 @@
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
-use DigitalSplash\Media\Models\Image;
-use DigitalSplash\Models\Code;
-use PHPUnit\TextUI\Help;
-use Throwable;
+	use DigitalSplash\Media\Models\Image;
+	use DigitalSplash\Models\Code;
+	use PHPUnit\TextUI\Help;
+	use Throwable;
 
 	class Upload extends Files {
 
@@ -98,9 +98,10 @@ use Throwable;
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
 					//Copy to original folder
-					copy($uploadResponse['newPath'], __DIR__ . '/../../../tests/_CommonFiles/original');
+					copy($uploadResponse['uploadedFile'], __DIR__ . '/../../../tests/_CommonFiles/original/');
 					//Change image ratio and save to upload folder
-					$this->changeImageRatio($file);
+					$ratio = new Ratio($uploadResponse['uploadedFile'], $this->ratio);
+					$ratio->Resize();
 				}
 
 				//Check if we need to convert to next gen (webp)
