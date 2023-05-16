@@ -12,9 +12,10 @@
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
-		private bool $white;
+		private bool $color;
 		private int $width;
 		private int $height;
+		private string $extension;
 
 		//https://stackoverflow.com/questions/44350072/add-white-space-to-image-using-laravel-5-intervention-image-to-make-square-image
 
@@ -31,13 +32,14 @@
 			float $ratio = 0,
 			string $destination = '',
 			bool $addCanvas = false,
-			bool $white = true,
+			string $color = null,
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;
 			$this->destination = $destination;
 			$this->addCanvas = $addCanvas;
-			$this->white = $white;
+			$this->color = $color;
+			$this->extension = strtolower(pathinfo($this->source, PATHINFO_EXTENSION));
 		}
 
 		private function calculateDimensions(float $width, float $height): void {
@@ -59,6 +61,17 @@
 			}
 		}
 
+		private function colorSetter(): void {
+			switch ($this->extension) {
+				case 'png':
+					$this->color = $this->color ?? null;
+					break;
+				default:
+					$this->color = $this->color ?? '#ffffff';
+					break;
+			}
+		}
+
 		public function Resize(): void {
 			$manager = new ImageManager([
 				'driver' => 'gd'
@@ -66,24 +79,11 @@
 			$image = $manager->make($this->source);
 			$width = $image->width();
 			$height = $image->height();
-			$ratio = $width / $height;
 
-			if ($ratio === $this->ratio) {
-				return;
-			}
+			$this->calculateDimensions($width, $height);
+			$this->colorSetter();
 
-			if ($ratio > $this->ratio) {
-				$targetHeight = $width / $this->ratio;
-				$newHeight = $height + 2 * (($targetHeight - $height) / 2);
-				$newWidth = $width;
-			} else  {
-				$targetWidth = $height * $this->ratio;
-				$newWidth = $width + 2 * (($targetWidth - $width) / 2);
-				$newHeight = $height;
-			}
-
-
-			$image->resizeCanvas($newWidth, $newHeight, 'center', false);
-			$image->save($this->source);
+			$image->resizeCanvas($this->width, $this->height, 'center', false, $this->color);
+			$image->save($this->destination);
 		}
 	}
