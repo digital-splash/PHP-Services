@@ -42,7 +42,18 @@
 			$this->extension = strtolower(pathinfo($this->source, PATHINFO_EXTENSION));
 		}
 
-		private function calculateDimensions(float $width, float $height): void {
+		private function colorSetter(): void {
+			switch ($this->extension) {
+				case 'png':
+					$this->color = $this->color ?? null;
+					break;
+				default:
+					$this->color = $this->color ?? '#ffffff';
+					break;
+			}
+		}
+
+		private function calculateDimensionsWithCanvas(float $width, float $height): void {
 
 			$ratio = $width / $height;
 
@@ -59,18 +70,27 @@
 				$this->width = $width + 2 * (($targetWidth - $width) / 2);
 				$this->height = $height;
 			}
+
+			$this->colorSetter();
 		}
 
-		private function colorSetter(): void {
-			switch ($this->extension) {
-				case 'png':
-					$this->color = $this->color ?? null;
-					break;
-				default:
-					$this->color = $this->color ?? '#ffffff';
-					break;
+		private function calculateDimensionsWithoutCanvas(float $width, float $height): void {
+			$ratio = $width / $height;
+
+			if ($ratio === $this->ratio) {
+				return;
+			}
+
+			if ($ratio > $this->ratio) {
+				$this->height = $width / $this->ratio;
+				$this->width = $width;
+			} else  {
+				$this->width = $height * $this->ratio;
+				$this->height = $height;
 			}
 		}
+
+
 
 		public function Resize(): void {
 			$manager = new ImageManager([
@@ -80,8 +100,7 @@
 			$width = $image->width();
 			$height = $image->height();
 
-			$this->calculateDimensions($width, $height);
-			$this->colorSetter();
+
 
 			$image->resizeCanvas($this->width, $this->height, 'center', false, $this->color);
 			$image->save($this->destination);
