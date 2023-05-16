@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
-		private bool $color;
+		private string $color;
 		private int $width;
 		private int $height;
 		private string $extension;
