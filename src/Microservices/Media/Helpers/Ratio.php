@@ -10,6 +10,11 @@
 	class Ratio {
 		private string $source;
 		private float $ratio;
+		private string $destination;
+		private bool $addCanvas;
+		private bool $white;
+		private int $width;
+		private int $height;
 
 		//https://stackoverflow.com/questions/44350072/add-white-space-to-image-using-laravel-5-intervention-image-to-make-square-image
 
@@ -23,10 +28,35 @@
 
 		public function __construct(
 			string $source,
-			float $ratio = 0
+			float $ratio = 0,
+			string $destination = '',
+			bool $addCanvas = false,
+			bool $white = true,
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;
+			$this->destination = $destination;
+			$this->addCanvas = $addCanvas;
+			$this->white = $white;
+		}
+
+		private function calculateDimensions(float $width, float $height): void {
+
+			$ratio = $width / $height;
+
+			if ($ratio === $this->ratio) {
+				return;
+			}
+
+			if ($ratio > $this->ratio) {
+				$targetHeight = $width / $this->ratio;
+				$this->height = $height + 2 * (($targetHeight - $height) / 2);
+				$this->width = $width;
+			} else  {
+				$targetWidth = $height * $this->ratio;
+				$this->width = $width + 2 * (($targetWidth - $width) / 2);
+				$this->height = $height;
+			}
 		}
 
 		public function Resize(): void {
@@ -43,14 +73,17 @@
 			}
 
 			if ($ratio > $this->ratio) {
-				$newWidth = $height * $this->ratio;
-				$newHeight = $height;
-			} else  {
+				$targetHeight = $width / $this->ratio;
+				$newHeight = $height + 2 * (($targetHeight - $height) / 2);
 				$newWidth = $width;
-				$newHeight = $width / $this->ratio;
+			} else  {
+				$targetWidth = $height * $this->ratio;
+				$newWidth = $width + 2 * (($targetWidth - $width) / 2);
+				$newHeight = $height;
 			}
 
-			$image->resizeCanvas($newWidth, $newHeight, 'center', false, '#ffffff');
+
+			$image->resizeCanvas($newWidth, $newHeight, 'center', false);
 			$image->save($this->source);
 		}
 	}
