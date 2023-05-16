@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
-		private string $color;
+		private string|null $color;
 		private int $width;
 		private int $height;
 		private string $extension;
@@ -98,6 +98,11 @@ use Intervention\Image\ImageManager;
 			}
 
 			Helper::CreateFolderRecursive($this->destination);
+
+			if (file_exists($this->destination)) {
+				unlink($this->destination);
+			}
+
 			$image->save($this->destination);
 		}
 	}
