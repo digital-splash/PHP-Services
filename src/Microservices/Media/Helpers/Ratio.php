@@ -4,7 +4,9 @@
 	/**
 	 * Image Manager Basic Usage: https://image.intervention.io/v2/usage/overview#basic-usage
 	 */
-	use Intervention\Image\ImageManager;
+
+use DigitalSplash\Helpers\Helper;
+use Intervention\Image\ImageManager;
 
 
 	class Ratio {
@@ -44,7 +46,6 @@
 		}
 
 		private function calculateDimensionsWithCanvas(float $width, float $height): void {
-
 			$ratio = $width / $height;
 
 			if ($ratio === $this->ratio) {
@@ -96,6 +97,7 @@
 				$image->resize($this->width, $this->height);
 			}
 
+			Helper::CreateFolderRecursive($this->destination);
 			$image->save($this->destination);
 		}
 	}
