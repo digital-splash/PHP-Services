@@ -97,7 +97,12 @@
 
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
-					$ratio = new Ratio($uploadResponse['uploadedFile'], $this->ratio);
+					$ratio = new Ratio(
+						$uploadResponse['uploadedFile'],
+						$this->ratio,
+						Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders),
+						true
+					);
 					$ratio->Resize();
 				}
 
