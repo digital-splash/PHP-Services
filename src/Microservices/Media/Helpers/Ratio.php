@@ -100,9 +100,14 @@
 			$width = $image->width();
 			$height = $image->height();
 
+			if ($this->addCanvas) {
+				$this->calculateDimensionsWithCanvas($width, $height);
+				$image->resizeCanvas($this->width, $this->height, 'center', false, $this->color);
+			} else {
+				$this->calculateDimensionsWithoutCanvas($width, $height);
+				$image->resize($this->width, $this->height);
+			}
 
-
-			$image->resizeCanvas($this->width, $this->height, 'center', false, $this->color);
 			$image->save($this->destination);
 		}
 	}
