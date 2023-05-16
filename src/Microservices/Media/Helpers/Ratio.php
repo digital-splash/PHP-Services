@@ -17,16 +17,6 @@
 		private int $height;
 		private string $extension;
 
-		//https://stackoverflow.com/questions/44350072/add-white-space-to-image-using-laravel-5-intervention-image-to-make-square-image
-
-		//Add "destination" string: default empty
-		//Add "addCanvas" boolean: default false
-
-		//If destination is not given, set it to be same as source.
-			//Check if destination does not exist, then we need to create an empty image...
-
-		//If canvas is given, we should add white borders to the top/bot or right/left
-
 		public function __construct(
 			string $source,
 			float $ratio = 0,
@@ -89,8 +79,6 @@
 				$this->height = $height;
 			}
 		}
-
-
 
 		public function Resize(): void {
 			$manager = new ImageManager([
