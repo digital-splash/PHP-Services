@@ -10,7 +10,7 @@
 
         Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
 
-		$upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 1.6);
+		$upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 5);
 		$result = $upload->upload();
 		var_dump($result);
 

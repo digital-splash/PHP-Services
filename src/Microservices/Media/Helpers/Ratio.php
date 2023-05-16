@@ -5,7 +5,6 @@
 
 
 	class Ratio {
-
 		private string $source;
 		private float $ratio;
 
@@ -15,25 +14,29 @@
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;
-
-			echo $source;
 		}
 
 		public function Resize(): void {
-			$manager = new ImageManager(['driver' => 'gd']);
+			$manager = new ImageManager([
+				'driver' => 'gd'
+			]);
 			$image = $manager->make($this->source);
 			$width = $image->width();
 			$height = $image->height();
 			$ratio = $width / $height;
 
+			if ($ratio === $this->ratio) {
+				return;
+			}
+
 			if ($ratio > $this->ratio) {
 				$newWidth = $height * $this->ratio;
 				$newHeight = $height;
-			} else {
+			} else  {
 				$newWidth = $width;
 				$newHeight = $width / $this->ratio;
 			}
-			$image->resize($newWidth, $newHeight);
-			$image->save(__DIR__ . '/../../../../_CommonFiles/Upload/resize.jpg');
+			$image->resizeCanvas($newWidth, $newHeight, 'center', false, '#ffffff');
+			$image->save($this->source);
 		}
 	}

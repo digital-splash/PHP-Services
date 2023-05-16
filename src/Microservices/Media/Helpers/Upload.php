@@ -21,7 +21,7 @@
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 
-			// public $fileFullPath;
+		// public $fileFullPath;
 		// public $convertToNextGen;
 		// public $resize;
 		// public $uploadedPaths;
@@ -97,9 +97,6 @@
 
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
-					//Copy to original folder
-					copy($uploadResponse['uploadedFile'], __DIR__ . '/../../../tests/_CommonFiles/original/');
-					//Change image ratio and save to upload folder
 					$ratio = new Ratio($uploadResponse['uploadedFile'], $this->ratio);
 					$ratio->Resize();
 				}
@@ -148,7 +145,7 @@
 
 		private function createOriginalFile(File $file, array $fileToCopy): void {
 			$originalUploadPath = Helper::RemoveMultipleSlashesInUrl(Helper::TextReplace(Image::ORIGINAL_PATH, [
-				'{path}', $file->getUploadPath()
+				'{path}' => $file->getUploadPath()
 			]));
 			Helper::CreateFolderRecursive($originalUploadPath);
 
