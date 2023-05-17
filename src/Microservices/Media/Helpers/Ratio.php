@@ -5,8 +5,8 @@
 	 * Image Manager Basic Usage: https://image.intervention.io/v2/usage/overview#basic-usage
 	 */
 
-use DigitalSplash\Helpers\Helper;
-use Intervention\Image\ImageManager;
+	use DigitalSplash\Helpers\Helper;
+	use Intervention\Image\ImageManager;
 
 
 	class Ratio {
