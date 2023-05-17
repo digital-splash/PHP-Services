@@ -99,10 +99,6 @@
 
 			Helper::CreateFolderRecursive(pathinfo($this->destination, PATHINFO_DIRNAME));
 
-			if (file_exists($this->destination)) {
-				unlink($this->destination);
-			}
-
 			$image->save($this->destination);
 		}
 	}

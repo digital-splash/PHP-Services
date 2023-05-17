@@ -8,7 +8,8 @@
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Models\Code;
-	use PHPUnit\TextUI\Help;
+use Exception;
+use PHPUnit\TextUI\Help;
 	use Throwable;
 
 	class Upload extends Files {
@@ -89,21 +90,24 @@
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
-			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders));
+			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders));
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
+				$mainImagePath = $uploadResponse['uploadedFile'];
 				$this->createOriginalFile($file, $uploadResponse);
 
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
-					$ratio = new Ratio(
-						$uploadResponse['uploadedFile'],
-						$this->ratio,
-						Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders . '/' . $uploadResponse['fileName']),
-						true
-					);
-					$ratio->Resize();
+					try {
+						$ratio = new Ratio(
+							$mainImagePath,
+							$this->ratio,
+							$mainImagePath,
+							true
+						);
+						$ratio->Resize();
+					} catch (Throwable $t) {}
 				}
 
 				//Check if we need to convert to next gen (webp)
