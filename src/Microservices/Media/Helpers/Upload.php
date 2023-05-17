@@ -8,8 +8,8 @@
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Models\Code;
-use Exception;
-use PHPUnit\TextUI\Help;
+	use Exception;
+	use PHPUnit\TextUI\Help;
 	use Throwable;
 
 	class Upload extends Files {
@@ -21,9 +21,9 @@ use PHPUnit\TextUI\Help;
 		private string $folders;
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
+		private bool $convertToNextGen;
 
 		// public $fileFullPath;
-		// public $convertToNextGen;
 		// public $resize;
 		// public $uploadedPaths;
 		// public $uploadedData;
@@ -33,15 +33,16 @@ use PHPUnit\TextUI\Help;
 			string $destinationFileName = '',
 			string $folders = '',
 			array $allowedExtensions = [],
-			float $ratio = 0
+			float $ratio = 0,
+			bool $convertToNextGen = false
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
 			$this->ratio = $ratio;
+			$this->convertToNextGen = $convertToNextGen;
 
 			// $this->fileFullPath = "";
-			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
 			// $this->uploadedPaths = [];
 			// $this->uploadedData	= [];
@@ -111,7 +112,15 @@ use PHPUnit\TextUI\Help;
 				}
 
 				//Check if we need to convert to next gen (webp)
-					//If yes, convert
+				if ($this->convertToNextGen) {
+					try {
+						$convertType = new ConvertType(
+							$mainImagePath,
+							Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders . '/' . pathinfo($uploadResponse['fileName'], PATHINFO_FILENAME) . '.webp')
+						);
+						$convertType->convert();
+					} catch (Throwable $t) {}
+				}
 
 				//Check if we need to resize
 					//If yes, resize to all defined sizes
