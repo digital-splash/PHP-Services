@@ -6,10 +6,11 @@
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
-use DigitalSplash\Media\Models\Image;
-use DigitalSplash\Models\Code;
+	use DigitalSplash\Media\Models\Image;
+	use DigitalSplash\Models\Code;
+use Exception;
 use PHPUnit\TextUI\Help;
-use Throwable;
+	use Throwable;
 
 	class Upload extends Files {
 
@@ -21,7 +22,7 @@ use Throwable;
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 
-			// public $fileFullPath;
+		// public $fileFullPath;
 		// public $convertToNextGen;
 		// public $resize;
 		// public $uploadedPaths;
@@ -89,18 +90,24 @@ use Throwable;
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
-			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . $this->folders));
+			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders));
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
+				$mainImagePath = $uploadResponse['uploadedFile'];
 				$this->createOriginalFile($file, $uploadResponse);
 
 				//Check if we need to change ratio
 				if ($this->ratio != 0) {
-					//Copy to original folder
-					copy($uploadResponse['newPath'], __DIR__ . '/../../../tests/_CommonFiles/original');
-					//Change image ratio and save to upload folder
-					$this->changeImageRatio($file);
+					try {
+						$ratio = new Ratio(
+							$mainImagePath,
+							$this->ratio,
+							$mainImagePath,
+							true
+						);
+						$ratio->Resize();
+					} catch (Throwable $t) {}
 				}
 
 				//Check if we need to convert to next gen (webp)
@@ -147,64 +154,12 @@ use Throwable;
 
 		private function createOriginalFile(File $file, array $fileToCopy): void {
 			$originalUploadPath = Helper::RemoveMultipleSlashesInUrl(Helper::TextReplace(Image::ORIGINAL_PATH, [
-				'{path}', $file->getUploadPath()
+				'{path}' => $file->getUploadPath()
 			]));
 			Helper::CreateFolderRecursive($originalUploadPath);
 
 			$originalFile = Helper::RemoveMultipleSlashesInUrl($originalUploadPath . '/' . $fileToCopy['fileName']);
 			copy($fileToCopy['uploadedFile'], $originalFile);
-		}
-
-		private function changeImageRatio(File $file): void {
-			//Get image size
-			list($srcImgWidth, $srcImgHeight, $srcImgType) = getimagesize($file->getTmpName());
-
-			$originalRatio = $srcImgWidth / $srcImgHeight;
-
-			if( $this->ratio != $originalRatio) {
-				//Get new image size
-				$newWidth = $srcImgWidth;
-				$newHeight = $srcImgHeight;
-
-				if ($this->ratio > $originalRatio) {
-					$newHeight = $newWidth / $this->ratio;
-				} else {
-					$newWidth = $newHeight * $this->ratio;
-				}
-
-				switch ($srcImgType) {
-					case IMAGETYPE_GIF:
-						$source = imagecreatefromgif($file->getTmpName());
-						break;
-					case IMAGETYPE_JPEG:
-						$source = imagecreatefromjpeg($file->getTmpName());
-						break;
-					case IMAGETYPE_PNG:
-						$source = imagecreatefrompng($file->getTmpName());
-						break;
-					default:
-						throw new UploadException('Type not supported');
-				}
-
-				//Create new image
-				$newImage = imagecreatetruecolor($newWidth, $newHeight);
-				$source = imagecreatefromjpeg($file->getTmpName());
-
-				//Resize
-				imagecopyresized($newImage, $source, 0, 0, 0, 0, $newWidth, $newHeight, $srcImgWidth, $srcImgHeight);
-
-				//Save
-				imagejpeg($newImage, $file->getTmpName());
-
-				//Free memory
-				imagedestroy($source);
-				imagedestroy($newImage);
-				$this->uploadPath = __DIR__ . '/../../../tests/_CommonFiles/original';
-				$this->uploadToServer(
-					$file,
-					1
-				);
-			}
 		}
 
 	}
