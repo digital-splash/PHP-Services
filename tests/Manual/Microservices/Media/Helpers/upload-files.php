@@ -1,4 +1,6 @@
 <?php
+    ini_set("memory_limit"			, "1024M"); //1GB
+    ini_set("max_execution_time"	, 900); //15 minutes
     include_once __DIR__ . '/../../../../../vendor/autoload.php';
 
     use DigitalSplash\Helpers\Helper;
@@ -10,7 +12,7 @@
 
         Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
 
-		$upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 5);
+		$upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 5, true);
 		$result = $upload->upload();
 		var_dump($result);
 
