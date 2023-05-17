@@ -14,7 +14,7 @@
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
-		private string|null $color;
+		private string|null $canvasColor;
 		private int $width;
 		private int $height;
 		private string $extension;
@@ -24,23 +24,23 @@
 			float $ratio = 0,
 			string $destination = '',
 			bool $addCanvas = false,
-			string $color = null,
+			string $canvasColor = null,
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;
 			$this->destination = $destination;
 			$this->addCanvas = $addCanvas;
-			$this->color = $color;
+			$this->canvasColor = $canvasColor;
 			$this->extension = strtolower(pathinfo($this->source, PATHINFO_EXTENSION));
 		}
 
-		private function colorSetter(): void {
+		private function canvasColorSetter(): void {
 			switch ($this->extension) {
 				case 'png':
-					$this->color = $this->color ?? null;
+					$this->canvasColor = $this->canvasColor ?? null;
 					break;
 				default:
-					$this->color = $this->color ?? '#ffffff';
+					$this->canvasColor = $this->canvasColor ?? '#ffffff';
 					break;
 			}
 		}
@@ -62,7 +62,7 @@
 				$this->height = $height;
 			}
 
-			$this->colorSetter();
+			$this->canvasColorSetter();
 		}
 
 		private function calculateDimensionsWithoutCanvas(float $width, float $height): void {
@@ -91,13 +91,13 @@
 
 			if ($this->addCanvas) {
 				$this->calculateDimensionsWithCanvas($width, $height);
-				$image->resizeCanvas($this->width, $this->height, 'center', false, $this->color);
+				$image->resizeCanvas($this->width, $this->height, 'center', false, $this->canvasColor);
 			} else {
 				$this->calculateDimensionsWithoutCanvas($width, $height);
 				$image->resize($this->width, $this->height);
 			}
 
-			Helper::CreateFolderRecursive($this->destination);
+			Helper::CreateFolderRecursive(pathinfo($this->destination, PATHINFO_DIRNAME));
 
 			if (file_exists($this->destination)) {
 				unlink($this->destination);
