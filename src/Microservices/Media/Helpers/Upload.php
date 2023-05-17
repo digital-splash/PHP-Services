@@ -3,6 +3,7 @@
 
 	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Models\FacebookImage;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
@@ -23,10 +24,41 @@
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		private bool $convertToNextGen;
 
-		// public $fileFullPath;
-		// public $resize;
-		// public $uploadedPaths;
-		// public $uploadedData;
+		private bool $resize;
+		private array $imageResize = [
+			'thumbnail' => [
+				'width' => Image::THUMBNAIL_WIDTH,
+				'code' => Image::THUMBNAIL_CODE,
+				'path' => Image::THUMBNAIL_PATH
+			],
+			'lowDef' => [
+				'width' => Image::LOW_DEF_WIDTH,
+				'code' => Image::LOW_DEF_CODE,
+				'path' => Image::LOW_DEF_PATH
+			],
+			'highDef' => [
+				'width' => Image::HIGH_DEF_WIDTH,
+				'code' => Image::HIGH_DEF_CODE,
+				'path' => Image::HIGH_DEF_PATH
+			]
+		];
+		// private array $facebookResize = [
+		// 	'profile' => [
+		// 		'width' => FacebookImage::PROFILE_WIDTH,
+		// 		'ratio' => FacebookImage::PROFILE_RATIO,
+		// 		'path' => FacebookImage::PROFILE_PATH
+		// 	],
+		// 	'cover' => [
+		// 		'width' => FacebookImage::COVER_WIDTH,
+		// 		'ratio' => FacebookImage::COVER_RATIO,
+		// 		'path' => FacebookImage::COVER_PATH
+		// 	],
+		// 	'post' => [
+		// 		'width' => FacebookImage::POST_WIDTH,
+		// 		'ratio' => FacebookImage::POST_RATIO,
+		// 		'path' => FacebookImage::POST_PATH
+		// 	]
+		// ];
 
 		public function __construct(
 			array $phpFiles = [],
@@ -34,18 +66,15 @@
 			string $folders = '',
 			array $allowedExtensions = [],
 			float $ratio = 0,
-			bool $convertToNextGen = false
+			bool $convertToNextGen = false,
+			bool $resize = false
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
 			$this->ratio = $ratio;
 			$this->convertToNextGen = $convertToNextGen;
-
-			// $this->fileFullPath = "";
-			// $this->resize = true;
-			// $this->uploadedPaths = [];
-			// $this->uploadedData	= [];
+			$this->resize = $resize;
 
 			if (Helper::IsNullOrEmpty($this->allowedExtensions)) {
 				$this->allowedExtensions = ImagesExtensions::getExtensions();
@@ -54,7 +83,6 @@
 			$this->uploadPath = Media::GetUploadDir();
 
 			parent::__construct($phpFiles);
-
 		}
 
 		public function SetUploadPath(string $path): void {
@@ -107,7 +135,7 @@
 							$mainImagePath,
 							true
 						);
-						$ratio->Resize();
+						$ratio->save();
 					} catch (Throwable $t) {}
 				}
 
@@ -131,7 +159,43 @@
 				}
 
 				//Check if we need to resize
-					//If yes, resize to all defined sizes
+				if ($this->resize) {
+					try {
+						foreach ($this->imageResize as $key => $value) {
+							$resize = new Resize(
+								$mainImagePath,
+								Helper::TextReplace($value['path'], [
+									'{path}' => $file->getUploadPath()
+								]) . pathinfo($uploadResponse['fileName'], PATHINFO_FILENAME) . '_' . $value['code'] . '.' . pathinfo($uploadResponse['fileName'], PATHINFO_EXTENSION),
+								$value['width']
+							);
+							$resize->Resize();
+						}
+					} catch (Throwable $t) {}
+				}
+				// if ($this->resize) {
+				// 	try {
+				// 		foreach ($this->facebookResize as $key => $value) {
+				// 			$fbPath = Helper::TextReplace($value['path'], [
+				// 				'{path}' => $file->getUploadPath()
+				// 			]) . $uploadResponse['fileName'];
+
+				// 			$ratio = new Ratio(
+				// 				$mainImagePath,
+				// 				$value['ratio'],
+				// 				$fbPath,
+				// 				true
+				// 			);
+				// 			$ratio->save();
+				// 			$resize = new Resize(
+				// 				$fbPath,
+				// 				$fbPath,
+				// 				$value['width']
+				// 			);
+				// 			$resize->Resize();
+				// 		}
+				// 	} catch (Throwable $t) {}
+				// }
 
 				//Resize to Facebook Ratio
 			}
@@ -157,7 +221,6 @@
 				}
 
 				[
-					'dirname' => $dirname,
 					'basename' => $basename,
 					'extension' => $extension,
 					'filename' => $filename,
