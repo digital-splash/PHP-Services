@@ -10,8 +10,8 @@
 		private string $destination;
 		private bool $addCanvas;
 		private string|null $canvasColor;
-		private int $width;
-		private int $height;
+		private int|float $width;
+		private int|float $height;
 		private string $extension;
 
 		public function __construct(
@@ -76,7 +76,7 @@
 			}
 		}
 
-		public function Resize(): void {
+		public function save(): void {
 			$manager = new ImageManager([
 				'driver' => 'gd'
 			]);
