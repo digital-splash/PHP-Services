@@ -27,23 +27,6 @@
 		private bool $resize;
 		private array $facebookResize;
 		private string $originalPath;
-		// private array $facebookResize = [
-		// 	'profile' => [
-		// 		'width' => FacebookImage::PROFILE_WIDTH,
-		// 		'ratio' => FacebookImage::PROFILE_RATIO,
-		// 		'path' => FacebookImage::PROFILE_PATH
-		// 	],
-		// 	'cover' => [
-		// 		'width' => FacebookImage::COVER_WIDTH,
-		// 		'ratio' => FacebookImage::COVER_RATIO,
-		// 		'path' => FacebookImage::COVER_PATH
-		// 	],
-		// 	'post' => [
-		// 		'width' => FacebookImage::POST_WIDTH,
-		// 		'ratio' => FacebookImage::POST_RATIO,
-		// 		'path' => FacebookImage::POST_PATH
-		// 	]
-		// ];
 
 		public function __construct(
 			array $phpFiles = [],
