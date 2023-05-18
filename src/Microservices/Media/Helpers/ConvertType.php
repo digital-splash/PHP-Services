@@ -2,10 +2,11 @@
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Media\Interface\IImageModify;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use Intervention\Image\ImageManager;
 
-	class ConvertType {
+	class ConvertType implements IImageModify {
 		private string $source;
 		private string $destination;
 		private string $extension;
@@ -21,12 +22,9 @@
 			$this->destination = $destination;
 			$this->extension = $extension;
 			$this->keepSource = $keepSource;
-			echo '-------------';
-			echo $this->destination;
-			echo '-------------';
 		}
 
-		public function convert(): void {
+		public function save(): void {
 			$allowedExtensions = ImagesExtensions::getExtensions();
 			if (!in_array($this->extension, $allowedExtensions)) {
 				$allowed = implode(", ", $allowedExtensions);

@@ -1,7 +1,32 @@
 <?php
+
+use DigitalSplash\Media\Helpers\Ratio;
+use DigitalSplash\Media\Helpers\Resize;
+use DigitalSplash\Media\Interface\IImageModify;
+
     ini_set("memory_limit"			, "1024M"); //1GB
     ini_set("max_execution_time"	, 900); //15 minutes
     include_once __DIR__ . '/../../../../../vendor/autoload.php';
+
+    // class Test {
+    //     private IImageModify $_mediaModify;
+
+    //     public function __construct(
+    //         IImageModify $mediaModify
+    //     ) {
+    //         $this->_mediaModify = $mediaModify;
+    //     }
+
+    //     public function save() {
+    //         $this->_mediaModify->save();
+    //     }
+    // }
+
+    // $ratio = new Ratio('');
+    // $test1 = new Test($ratio);
+
+    // $resize = new Resize('', '', 1);
+    // $test2 = new Test($resize);
 
     use DigitalSplash\Helpers\Helper;
     use DigitalSplash\Media\Helpers\Media;

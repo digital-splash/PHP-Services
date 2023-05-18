@@ -25,23 +25,6 @@
 		private bool $convertToNextGen;
 
 		private bool $resize;
-		private array $imageResize = [
-			'thumbnail' => [
-				'width' => Image::THUMBNAIL_WIDTH,
-				'code' => Image::THUMBNAIL_CODE,
-				'path' => Image::THUMBNAIL_PATH
-			],
-			'lowDef' => [
-				'width' => Image::LOW_DEF_WIDTH,
-				'code' => Image::LOW_DEF_CODE,
-				'path' => Image::LOW_DEF_PATH
-			],
-			'highDef' => [
-				'width' => Image::HIGH_DEF_WIDTH,
-				'code' => Image::HIGH_DEF_CODE,
-				'path' => Image::HIGH_DEF_PATH
-			]
-		];
 		// private array $facebookResize = [
 		// 	'profile' => [
 		// 		'width' => FacebookImage::PROFILE_WIDTH,
@@ -147,7 +130,7 @@
 							Helper::RemoveMultipleSlashesInUrl($uploadResponse['uploadFolder'] . '/' . $uploadResponse['fileNameWithoutExtension'] . '.' . ImagesExtensions::WEBP),
 							ImagesExtensions::WEBP
 						);
-						$convertType->convert();
+						$convertType->save();
 
 						$oldExtension = $uploadResponse['extension'];
 						foreach ($uploadResponse as $key => &$uploadItem) {
@@ -161,15 +144,17 @@
 				//Check if we need to resize
 				if ($this->resize) {
 					try {
-						foreach ($this->imageResize as $key => $value) {
+						foreach (Image::getArray() as $_image) {
+							$destination = Helper::TextReplace($_image['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+
 							$resize = new Resize(
 								$mainImagePath,
-								Helper::TextReplace($value['path'], [
-									'{path}' => $file->getUploadPath()
-								]) . pathinfo($uploadResponse['fileName'], PATHINFO_FILENAME) . '_' . $value['code'] . '.' . pathinfo($uploadResponse['fileName'], PATHINFO_EXTENSION),
-								$value['width']
+								$destination,
+								$_image['width']
 							);
-							$resize->Resize();
+							$resize->save();
 						}
 					} catch (Throwable $t) {}
 				}
@@ -196,8 +181,6 @@
 				// 		}
 				// 	} catch (Throwable $t) {}
 				// }
-
-				//Resize to Facebook Ratio
 			}
 
 			return $uploadResponse;

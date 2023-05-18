@@ -3,8 +3,9 @@
 
 	use Intervention\Image\ImageManager;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Interface\IImageModify;
 
-	class Ratio {
+	class Ratio implements IImageModify {
 		private string $source;
 		private float $ratio;
 		private string $destination;
