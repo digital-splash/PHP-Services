@@ -89,7 +89,7 @@
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
-			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders));
+			$file->setUploadPath($this->uploadPath . '/' . $this->folders);
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
@@ -114,7 +114,8 @@
 					try {
 						$convertType = new ConvertType(
 							$mainImagePath,
-							Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders . '/' . pathinfo($uploadResponse['fileName'], PATHINFO_FILENAME) . '.webp')
+							Helper::RemoveMultipleSlashesInUrl($uploadResponse['uploadFolder'] . '/' . $uploadResponse['fileNameWithoutExtension'] . '.' . ImagesExtensions::WEBP),
+							ImagesExtensions::WEBP
 						);
 						$convertType->convert();
 					} catch (Throwable $t) {}
@@ -146,12 +147,22 @@
 					$mediaPath = substr($mediaPath, 1, strlen($mediaPath) - 1);
 				}
 
+				[
+					'dirname' => $dirname,
+					'basename' => $basename,
+					'extension' => $extension,
+					'filename' => $filename,
+				] = pathinfo($destinationFileName);
+
 				return [
 					'status' => Code::SUCCESS,
 					'message' => 'upload.Success',
 					'elemName' => $file->getElemName(),
 					'mediaPath' => $mediaPath,
-					'fileName' => $destinationFileName,
+					'fileName' => $basename,
+					'fileNameWithoutExtension' => $filename,
+					'extension' => $extension,
+					'uploadFolder' => $dirname,
 					'uploadedFile' => $uploadFileDest
 				];
 			} else {
