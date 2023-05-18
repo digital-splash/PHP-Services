@@ -8,8 +8,6 @@
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Models\Code;
-	use Exception;
-	use PHPUnit\TextUI\Help;
 	use Throwable;
 
 	class Upload extends Files {

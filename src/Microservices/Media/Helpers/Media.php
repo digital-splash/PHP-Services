@@ -5,7 +5,7 @@
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Models\Image;
-use DigitalSplash\Media\Models\ImagesExtensions;
+	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Media {
 		private static $MEDIA_FOLDER = "mediafiles/";
