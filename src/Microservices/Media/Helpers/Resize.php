@@ -21,7 +21,7 @@
 			$this->source = $source;
 			$this->destination = $destination;
 			$this->width = $width;
-			$this->ratio = $ratio;
+			$this->ratio = $width;
 		}
 
 		public function save(): void {
