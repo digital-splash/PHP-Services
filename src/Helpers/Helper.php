@@ -218,13 +218,16 @@
 			string $text,
 			int $nbOfChar,
 			string $extension="...",
-			string $lang=Lang::EN
+			string $lang=Lang::EN,
+			bool $cleanStr = true
 		): string {
 			if ($lang == Lang::AR) {
 				$nbOfChar = $nbOfChar * 1.8;
 			}
 
-			$text = self::CleanString($text);
+			if ($cleanStr) {
+				$text = self::CleanString($text);
+			}
 
 			if (strlen($text) > $nbOfChar) {
 				$text = substr($text, 0, $nbOfChar) . $extension;
@@ -451,7 +454,7 @@
 		 */
 		public static function ExplodeStrToArr(
 			string $separator='',
-			?string $string,
+			?string $string = '',
 			int $chunkLength=0
 		): array {
 			if (self::IsNullOrEmpty($string)) {
@@ -485,7 +488,7 @@
 		 */
 		public static function ImplodeArrToStr(
 			string $separator=' ',
-			?array $array
+			?array $array = []
 		): string {
 			if (self::IsNullOrEmpty($array)) {
 				return '';

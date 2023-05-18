@@ -8,22 +8,22 @@
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Models\Code;
-use Exception;
-use PHPUnit\TextUI\Help;
 	use Throwable;
 
 	class Upload extends Files {
 
-		public const convertToNextGen = false;
+		private const FILE_ELEMENT_KEYS_TO_REPLACE = [
+			'mediaPath', 'fileName', 'extension', 'uploadedFile'
+		];
 
 		private array $allowedExtensions;
 		private string $uploadPath;
 		private string $folders;
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
+		private bool $convertToNextGen;
 
 		// public $fileFullPath;
-		// public $convertToNextGen;
 		// public $resize;
 		// public $uploadedPaths;
 		// public $uploadedData;
@@ -33,15 +33,16 @@ use PHPUnit\TextUI\Help;
 			string $destinationFileName = '',
 			string $folders = '',
 			array $allowedExtensions = [],
-			float $ratio = 0
+			float $ratio = 0,
+			bool $convertToNextGen = false
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
 			$this->ratio = $ratio;
+			$this->convertToNextGen = $convertToNextGen;
 
 			// $this->fileFullPath = "";
-			// $this->convertToNextGen = Upload::convertToNextGen;
 			// $this->resize = true;
 			// $this->uploadedPaths = [];
 			// $this->uploadedData	= [];
@@ -90,7 +91,7 @@ use PHPUnit\TextUI\Help;
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
-			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders));
+			$file->setUploadPath($this->uploadPath . '/' . $this->folders);
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
@@ -111,7 +112,23 @@ use PHPUnit\TextUI\Help;
 				}
 
 				//Check if we need to convert to next gen (webp)
-					//If yes, convert
+				if ($this->convertToNextGen) {
+					try {
+						$convertType = new ConvertType(
+							$mainImagePath,
+							Helper::RemoveMultipleSlashesInUrl($uploadResponse['uploadFolder'] . '/' . $uploadResponse['fileNameWithoutExtension'] . '.' . ImagesExtensions::WEBP),
+							ImagesExtensions::WEBP
+						);
+						$convertType->convert();
+
+						$oldExtension = $uploadResponse['extension'];
+						foreach ($uploadResponse as $key => &$uploadItem) {
+							if (in_array($key, self::FILE_ELEMENT_KEYS_TO_REPLACE) && Helper::StringEndsWith($uploadItem, $oldExtension)) {
+								$uploadItem = Helper::TruncateStr($uploadItem, strlen($uploadItem) - strlen($oldExtension), 'webp', '', false);
+							}
+						}
+					} catch (Throwable $t) {}
+				}
 
 				//Check if we need to resize
 					//If yes, resize to all defined sizes
@@ -139,12 +156,22 @@ use PHPUnit\TextUI\Help;
 					$mediaPath = substr($mediaPath, 1, strlen($mediaPath) - 1);
 				}
 
+				[
+					'dirname' => $dirname,
+					'basename' => $basename,
+					'extension' => $extension,
+					'filename' => $filename,
+				] = pathinfo($destinationFileName);
+
 				return [
 					'status' => Code::SUCCESS,
 					'message' => 'upload.Success',
 					'elemName' => $file->getElemName(),
 					'mediaPath' => $mediaPath,
-					'fileName' => $destinationFileName,
+					'fileName' => $basename,
+					'fileNameWithoutExtension' => $filename,
+					'extension' => $extension,
+					'uploadFolder' => Helper::RemoveMultipleSlashesInUrl($file->getUploadPath() . '/'),
 					'uploadedFile' => $uploadFileDest
 				];
 			} else {
