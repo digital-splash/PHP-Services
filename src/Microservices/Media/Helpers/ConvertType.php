@@ -21,6 +21,9 @@
 			$this->destination = $destination;
 			$this->extension = $extension;
 			$this->keepSource = $keepSource;
+			echo '-------------';
+			echo $this->destination;
+			echo '-------------';
 		}
 
 		public function convert(): void {

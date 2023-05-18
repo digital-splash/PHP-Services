@@ -12,7 +12,9 @@
 
 	class Upload extends Files {
 
-		public const convertToNextGen = false;
+		private const FILE_ELEMENT_KEYS_TO_REPLACE = [
+			'mediaPath', 'fileName', 'extension', 'uploadedFile'
+		];
 
 		private array $allowedExtensions;
 		private string $uploadPath;
@@ -118,6 +120,13 @@
 							ImagesExtensions::WEBP
 						);
 						$convertType->convert();
+
+						$oldExtension = $uploadResponse['extension'];
+						foreach ($uploadResponse as $key => &$uploadItem) {
+							if (in_array($key, self::FILE_ELEMENT_KEYS_TO_REPLACE) && Helper::StringEndsWith($uploadItem, $oldExtension)) {
+								$uploadItem = Helper::TruncateStr($uploadItem, strlen($uploadItem) - strlen($oldExtension), 'webp', '', false);
+							}
+						}
 					} catch (Throwable $t) {}
 				}
 
@@ -162,7 +171,7 @@
 					'fileName' => $basename,
 					'fileNameWithoutExtension' => $filename,
 					'extension' => $extension,
-					'uploadFolder' => $dirname,
+					'uploadFolder' => Helper::RemoveMultipleSlashesInUrl($file->getUploadPath() . '/'),
 					'uploadedFile' => $uploadFileDest
 				];
 			} else {
