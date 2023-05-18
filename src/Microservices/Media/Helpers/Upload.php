@@ -9,38 +9,22 @@
 	use DigitalSplash\Media\Models\Files;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Models\Code;
-	use Exception;
-	use PHPUnit\TextUI\Help;
 	use Throwable;
 
 	class Upload extends Files {
 
-		public const convertToNextGen = false;
+		private const FILE_ELEMENT_KEYS_TO_REPLACE = [
+			'mediaPath', 'fileName', 'extension', 'uploadedFile'
+		];
 
 		private array $allowedExtensions;
 		private string $uploadPath;
 		private string $folders;
 		private string $destinationFileName;
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
+		private bool $convertToNextGen;
 
 		private bool $resize;
-		private array $imageResize = [
-			'thumbnail' => [
-				'width' => Image::THUMBNAIL_WIDTH,
-				'code' => Image::THUMBNAIL_CODE,
-				'path' => Image::THUMBNAIL_PATH
-			],
-			'lowDef' => [
-				'width' => Image::LOW_DEF_WIDTH,
-				'code' => Image::LOW_DEF_CODE,
-				'path' => Image::LOW_DEF_PATH
-			],
-			'highDef' => [
-				'width' => Image::HIGH_DEF_WIDTH,
-				'code' => Image::HIGH_DEF_CODE,
-				'path' => Image::HIGH_DEF_PATH
-			]
-		];
 		// private array $facebookResize = [
 		// 	'profile' => [
 		// 		'width' => FacebookImage::PROFILE_WIDTH,
@@ -58,10 +42,6 @@
 		// 		'path' => FacebookImage::POST_PATH
 		// 	]
 		// ];
-		// public $fileFullPath;
-		// public $convertToNextGen;
-		// public $uploadedPaths;
-		// public $uploadedData;
 
 		public function __construct(
 			array $phpFiles = [],
@@ -69,18 +49,15 @@
 			string $folders = '',
 			array $allowedExtensions = [],
 			float $ratio = 0,
+			bool $convertToNextGen = false,
 			bool $resize = false
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
 			$this->ratio = $ratio;
-
+			$this->convertToNextGen = $convertToNextGen;
 			$this->resize = $resize;
-			// $this->fileFullPath = "";
-			// $this->convertToNextGen = Upload::convertToNextGen;
-			// $this->uploadedPaths = [];
-			// $this->uploadedData	= [];
 
 			if (Helper::IsNullOrEmpty($this->allowedExtensions)) {
 				$this->allowedExtensions = ImagesExtensions::getExtensions();
@@ -89,7 +66,6 @@
 			$this->uploadPath = Media::GetUploadDir();
 
 			parent::__construct($phpFiles);
-
 		}
 
 		public function SetUploadPath(string $path): void {
@@ -126,7 +102,7 @@
 
 		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
-			$file->setUploadPath(Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders));
+			$file->setUploadPath($this->uploadPath . '/' . $this->folders);
 			$uploadResponse = $this->uploadToServer($file, $i);
 
 			if ($file->IsImage()) {
@@ -147,20 +123,38 @@
 				}
 
 				//Check if we need to convert to next gen (webp)
-					//If yes, convert
+				if ($this->convertToNextGen) {
+					try {
+						$convertType = new ConvertType(
+							$mainImagePath,
+							Helper::RemoveMultipleSlashesInUrl($uploadResponse['uploadFolder'] . '/' . $uploadResponse['fileNameWithoutExtension'] . '.' . ImagesExtensions::WEBP),
+							ImagesExtensions::WEBP
+						);
+						$convertType->save();
+
+						$oldExtension = $uploadResponse['extension'];
+						foreach ($uploadResponse as $key => &$uploadItem) {
+							if (in_array($key, self::FILE_ELEMENT_KEYS_TO_REPLACE) && Helper::StringEndsWith($uploadItem, $oldExtension)) {
+								$uploadItem = Helper::TruncateStr($uploadItem, strlen($uploadItem) - strlen($oldExtension), 'webp', '', false);
+							}
+						}
+					} catch (Throwable $t) {}
+				}
 
 				//Check if we need to resize
 				if ($this->resize) {
 					try {
-						foreach ($this->imageResize as $key => $value) {
+						foreach (Image::getArray() as $_image) {
+							$destination = Helper::TextReplace($_image['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+
 							$resize = new Resize(
 								$mainImagePath,
-								Helper::TextReplace($value['path'], [
-									'{path}' => $file->getUploadPath()
-								]) . pathinfo($uploadResponse['fileName'], PATHINFO_FILENAME) . '_' . $value['code'] . '.' . pathinfo($uploadResponse['fileName'], PATHINFO_EXTENSION),
-								$value['width']
+								$destination,
+								$_image['width']
 							);
-							$resize->Resize();
+							$resize->save();
 						}
 					} catch (Throwable $t) {}
 				}
@@ -187,8 +181,6 @@
 				// 		}
 				// 	} catch (Throwable $t) {}
 				// }
-
-				//Resize to Facebook Ratio
 			}
 
 			return $uploadResponse;
@@ -211,12 +203,21 @@
 					$mediaPath = substr($mediaPath, 1, strlen($mediaPath) - 1);
 				}
 
+				[
+					'basename' => $basename,
+					'extension' => $extension,
+					'filename' => $filename,
+				] = pathinfo($destinationFileName);
+
 				return [
 					'status' => Code::SUCCESS,
 					'message' => 'upload.Success',
 					'elemName' => $file->getElemName(),
 					'mediaPath' => $mediaPath,
-					'fileName' => $destinationFileName,
+					'fileName' => $basename,
+					'fileNameWithoutExtension' => $filename,
+					'extension' => $extension,
+					'uploadFolder' => Helper::RemoveMultipleSlashesInUrl($file->getUploadPath() . '/'),
 					'uploadedFile' => $uploadFileDest
 				];
 			} else {

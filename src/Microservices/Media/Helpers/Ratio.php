@@ -1,15 +1,11 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-	/**
-	 * Image Manager Basic Usage: https://image.intervention.io/v2/usage/overview#basic-usage
-	 */
-
-	use DigitalSplash\Helpers\Helper;
 	use Intervention\Image\ImageManager;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Interface\IImageModify;
 
-
-	class Ratio {
+	class Ratio implements IImageModify {
 		private string $source;
 		private float $ratio;
 		private string $destination;

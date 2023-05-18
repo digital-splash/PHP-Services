@@ -1,30 +1,30 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-	/**
-	 * Image Manager Basic Usage: https://image.intervention.io/v2/usage/overview#basic-usage
-	 */
-
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Interface\IImageModify;
 	use Intervention\Image\ImageManager;
 
-	class Resize {
+	class Resize implements IImageModify {
 
 		private string $source;
 		private string $destination;
 		private int $width;
+		private float $ratio;
 
 		public function __construct(
 			string $source,
 			string $destination,
-			int $width
+			int $width,
+			float $ratio = 0
 		) {
 			$this->source = $source;
 			$this->destination = $destination;
 			$this->width = $width;
+			$this->ratio = $width;
 		}
 
-		public function resize(): void {
+		public function save(): void {
 			$manager = new ImageManager([
 				'driver' => 'gd'
 			]);
