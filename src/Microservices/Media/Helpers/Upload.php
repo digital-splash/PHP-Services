@@ -25,6 +25,8 @@
 		private bool $convertToNextGen;
 
 		private bool $resize;
+		private array $facebookResize;
+		private string $originalPath;
 		// private array $facebookResize = [
 		// 	'profile' => [
 		// 		'width' => FacebookImage::PROFILE_WIDTH,
@@ -50,7 +52,8 @@
 			array $allowedExtensions = [],
 			float $ratio = 0,
 			bool $convertToNextGen = false,
-			bool $resize = false
+			bool $resize = false,
+			array $facebookResize = []
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
@@ -58,6 +61,7 @@
 			$this->ratio = $ratio;
 			$this->convertToNextGen = $convertToNextGen;
 			$this->resize = $resize;
+			$this->facebookResize = FacebookImage::getArray($facebookResize);
 
 			if (Helper::IsNullOrEmpty($this->allowedExtensions)) {
 				$this->allowedExtensions = ImagesExtensions::getExtensions();
@@ -122,6 +126,44 @@
 					} catch (Throwable $t) {}
 				}
 
+				//Check if we need to resize
+				if ($this->resize) {
+					try {
+						foreach (Image::getArray() as $_image) {
+							$destination = Helper::TextReplace($_image['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+							$resize = new Resize(
+								$mainImagePath,
+								$destination,
+								$_image['width'],
+								0,
+								$this->convertToNextGen
+							);
+							$resize->save();
+						}
+					} catch (Throwable $t) {}
+				}
+
+				if (count($this->facebookResize) > 0) {
+					try {
+						foreach ($this->facebookResize as $key => $value) {
+							$fbPath = Helper::TextReplace($value['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+
+							$resize = new Resize(
+								$this->originalPath,
+								$fbPath,
+								$value['width'],
+								$value['ratio'],
+								$this->convertToNextGen
+							);
+							$resize->save();
+						}
+					} catch (Throwable $t) {}
+				}
+
 				//Check if we need to convert to next gen (webp)
 				if ($this->convertToNextGen) {
 					try {
@@ -141,46 +183,6 @@
 					} catch (Throwable $t) {}
 				}
 
-				//Check if we need to resize
-				if ($this->resize) {
-					try {
-						foreach (Image::getArray() as $_image) {
-							$destination = Helper::TextReplace($_image['path'], [
-								'{path}' => $file->getUploadPath()
-							]) . $uploadResponse['fileName'];
-
-							$resize = new Resize(
-								$mainImagePath,
-								$destination,
-								$_image['width']
-							);
-							$resize->save();
-						}
-					} catch (Throwable $t) {}
-				}
-				// if ($this->resize) {
-				// 	try {
-				// 		foreach ($this->facebookResize as $key => $value) {
-				// 			$fbPath = Helper::TextReplace($value['path'], [
-				// 				'{path}' => $file->getUploadPath()
-				// 			]) . $uploadResponse['fileName'];
-
-				// 			$ratio = new Ratio(
-				// 				$mainImagePath,
-				// 				$value['ratio'],
-				// 				$fbPath,
-				// 				true
-				// 			);
-				// 			$ratio->save();
-				// 			$resize = new Resize(
-				// 				$fbPath,
-				// 				$fbPath,
-				// 				$value['width']
-				// 			);
-				// 			$resize->Resize();
-				// 		}
-				// 	} catch (Throwable $t) {}
-				// }
 			}
 
 			return $uploadResponse;
@@ -232,6 +234,7 @@
 			Helper::CreateFolderRecursive($originalUploadPath);
 
 			$originalFile = Helper::RemoveMultipleSlashesInUrl($originalUploadPath . '/' . $fileToCopy['fileName']);
+			$this->originalPath = $originalFile;
 			copy($fileToCopy['uploadedFile'], $originalFile);
 		}
 
