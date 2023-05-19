@@ -15,8 +15,7 @@
 		$upload = new UploadQueue($_FILES, 'test-upload', '///UploadFiles/test', [], 5, true, true, ['all']);
 		$result = $upload->UploadToOriginal();
 		var_dump($result);
-
-
+		$upload->ProcessImages();
 		echo '</pre>';
 	}
 ?>
