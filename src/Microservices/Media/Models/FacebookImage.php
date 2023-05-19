@@ -20,6 +20,10 @@
 		public const POST_PATH = '{path}/fb/post/';
 
 		public static function getArray(array $codes = []): array {
+			if (Helper::IsNullOrEmpty($codes)) {
+				return [];
+			}
+
 			$arrayToReturn = [
 				FacebookImage::PROFILE_CODE => [
 					'width' => FacebookImage::PROFILE_WIDTH,
@@ -41,12 +45,12 @@
 				]
 			];
 
-			if (!Helper::IsNullOrEmpty($codes)) {
-				$arrayToReturn = array_filter($arrayToReturn, function($key) use ($codes) {
-					return in_array($key, $codes);
-				}, ARRAY_FILTER_USE_KEY);
+			if ($codes[0] === 'all') {
+				return $arrayToReturn;
 			}
 
-			return $arrayToReturn;
+			return array_filter($arrayToReturn, function($key) use ($codes) {
+				return in_array($key, $codes);
+			}, ARRAY_FILTER_USE_KEY);
 		}
 	}
