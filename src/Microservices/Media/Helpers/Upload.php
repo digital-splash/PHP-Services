@@ -3,6 +3,7 @@
 
 	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Models\FacebookImage;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use DigitalSplash\Media\Models\File;
 	use DigitalSplash\Media\Models\Files;
@@ -23,10 +24,9 @@
 		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
 		private bool $convertToNextGen;
 
-		// public $fileFullPath;
-		// public $resize;
-		// public $uploadedPaths;
-		// public $uploadedData;
+		private bool $resize;
+		private array $facebookResize;
+		private string $originalPath;
 
 		public function __construct(
 			array $phpFiles = [],
@@ -34,18 +34,17 @@
 			string $folders = '',
 			array $allowedExtensions = [],
 			float $ratio = 0,
-			bool $convertToNextGen = false
+			bool $convertToNextGen = false,
+			bool $resize = false,
+			array $facebookResize = []
 		) {
 			$this->destinationFileName = $destinationFileName;
 			$this->folders = Helper::RemoveMultipleSlashesInUrl($folders);
 			$this->allowedExtensions = $allowedExtensions;
 			$this->ratio = $ratio;
 			$this->convertToNextGen = $convertToNextGen;
-
-			// $this->fileFullPath = "";
-			// $this->resize = true;
-			// $this->uploadedPaths = [];
-			// $this->uploadedData	= [];
+			$this->resize = $resize;
+			$this->facebookResize = FacebookImage::getArray($facebookResize);
 
 			if (Helper::IsNullOrEmpty($this->allowedExtensions)) {
 				$this->allowedExtensions = ImagesExtensions::getExtensions();
@@ -54,7 +53,6 @@
 			$this->uploadPath = Media::GetUploadDir();
 
 			parent::__construct($phpFiles);
-
 		}
 
 		public function SetUploadPath(string $path): void {
@@ -107,7 +105,45 @@
 							$mainImagePath,
 							true
 						);
-						$ratio->Resize();
+						$ratio->save();
+					} catch (Throwable $t) {}
+				}
+
+				//Check if we need to resize
+				if ($this->resize) {
+					try {
+						foreach (Image::getArray() as $_image) {
+							$destination = Helper::TextReplace($_image['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+							$resize = new Resize(
+								$mainImagePath,
+								$destination,
+								$_image['width'],
+								0,
+								$this->convertToNextGen
+							);
+							$resize->save();
+						}
+					} catch (Throwable $t) {}
+				}
+
+				if (count($this->facebookResize) > 0) {
+					try {
+						foreach ($this->facebookResize as $key => $value) {
+							$fbPath = Helper::TextReplace($value['path'], [
+								'{path}' => $file->getUploadPath()
+							]) . $uploadResponse['fileName'];
+
+							$resize = new Resize(
+								$this->originalPath,
+								$fbPath,
+								$value['width'],
+								$value['ratio'],
+								$this->convertToNextGen
+							);
+							$resize->save();
+						}
 					} catch (Throwable $t) {}
 				}
 
@@ -119,7 +155,7 @@
 							Helper::RemoveMultipleSlashesInUrl($uploadResponse['uploadFolder'] . '/' . $uploadResponse['fileNameWithoutExtension'] . '.' . ImagesExtensions::WEBP),
 							ImagesExtensions::WEBP
 						);
-						$convertType->convert();
+						$convertType->save();
 
 						$oldExtension = $uploadResponse['extension'];
 						foreach ($uploadResponse as $key => &$uploadItem) {
@@ -130,10 +166,6 @@
 					} catch (Throwable $t) {}
 				}
 
-				//Check if we need to resize
-					//If yes, resize to all defined sizes
-
-				//Resize to Facebook Ratio
 			}
 
 			return $uploadResponse;
@@ -157,7 +189,6 @@
 				}
 
 				[
-					'dirname' => $dirname,
 					'basename' => $basename,
 					'extension' => $extension,
 					'filename' => $filename,
@@ -186,6 +217,7 @@
 			Helper::CreateFolderRecursive($originalUploadPath);
 
 			$originalFile = Helper::RemoveMultipleSlashesInUrl($originalUploadPath . '/' . $fileToCopy['fileName']);
+			$this->originalPath = $originalFile;
 			copy($fileToCopy['uploadedFile'], $originalFile);
 		}
 

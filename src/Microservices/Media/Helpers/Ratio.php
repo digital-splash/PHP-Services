@@ -3,15 +3,16 @@
 
 	use Intervention\Image\ImageManager;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Media\Interface\IImageModify;
 
-	class Ratio {
+	class Ratio implements IImageModify {
 		private string $source;
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
 		private string|null $canvasColor;
-		private int $width;
-		private int $height;
+		private int|float $width;
+		private int|float $height;
 		private string $extension;
 
 		public function __construct(
@@ -76,7 +77,7 @@
 			}
 		}
 
-		public function Resize(): void {
+		public function save(): void {
 			$manager = new ImageManager([
 				'driver' => 'gd'
 			]);
