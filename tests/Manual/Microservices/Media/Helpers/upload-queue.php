@@ -12,10 +12,18 @@
 
 		Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
 
-		$upload = new UploadQueue($_FILES, 'test-upload', '///UploadFiles/test', [], 5, true, true, ['all']);
-		$result = $upload->UploadToOriginal();
-		var_dump($result);
-		$upload->ProcessImages();
+		$upload = new UploadQueue($_FILES, 'test-upload-queue', '///UploadFiles/test', [], 5, true, true, ['all']);
+		$results = $upload->upload();
+		var_dump($results);
+
+
+		$queue = [];
+		foreach ($results as $result) {
+			$queue[] = $result['uploadedFile'];
+		}
+		Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
+		$upload2 = new UploadQueue([], '', '///UploadFiles/test', [], 5, true, true, ['all']);
+		$upload2->processImages($queue);
 		echo '</pre>';
 	}
 ?>
