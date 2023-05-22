@@ -10,38 +10,14 @@
 
 	class UploadQueue extends Upload {
 
-		private array $queue;
-
-		public function __construct (
-			array $phpFiles = [],
-			string $destinationFileName = '',
-			string $folders = '',
-			array $allowedExtensions = [],
-			float $ratio = 0,
-			bool $convertToNextGen = false,
-			bool $resize = false,
-			array $facebookResize = []
-		) {
-			parent::__construct(
-				$phpFiles,
-				$destinationFileName,
-				$folders,
-				$allowedExtensions,
-				$ratio,
-				$convertToNextGen,
-				$resize,
-				$facebookResize
-			);
-		}
-
-		public function UploadToOriginal(): array {
+		public function upload(): array {
 			$this->buildFiles();
 			$retArr = [];
 
 			$i = 1;
 			foreach ($this->getFiles() as $file) {
 			   try {
-				 $retArr[] = $this->uploadFileToOriginal($file, $i);
+				 $retArr[] = $this->uploadFile($file, $i);
 				$i++;
 			   } catch (Throwable $t) {
 					$retArr[] = [
@@ -55,37 +31,42 @@
 			return $retArr;
 		}
 
-		private function uploadFileToOriginal(File $file, int $i = 1): array {
+		private function uploadFile(File $file, int $i = 1): array {
 			$file->validateFile($this->allowedExtensions);
 			$file->setUploadPath($this->uploadPath . '/' . $this->folders . '/original');
-			$uploadResponse = $this->uploadToServer($file, $i);
-
-			$this->queue [] = $uploadResponse['uploadedFile'];
-
-			return $uploadResponse;
+			return $this->uploadToServer($file, $i);
 		}
 
-		public function ProcessImages(): array {
+		public function processImages(array $filesPath = []): array {
 			$retArr = [];
-			foreach ($this->queue as $file) {
+
+			foreach ($filesPath as $filePath) {
 				try {
-					$retArr[] = $this->processImage($file);
+					$retArr[] = $this->processImage($filePath);
 				} catch (Throwable $t) {
 					$retArr[] = [
 						'status' => Code::ERROR,
 						'message' => $t->getMessage(),
-						'fileName' => $file->getName(),
-						'elemName' => $file->getElemName(),
+						'filePath' => $filePath,
 					];
 				}
 			}
+
 			return $retArr;
 		}
 
 		private function processImage(string $filePath): void {
+			[
+				'basename' => $basename,
+				'filename' => $filename,
+				'dirname' => $dirname
+			] = pathinfo($filePath);
+
+			$mainImagePath = Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders . '/') . $basename;
+
 			//copy to root
-			copy($filePath, $this->uploadPath . '/' . $this->folders . '/' . pathinfo($filePath, PATHINFO_BASENAME));
-			$mainImagePath = $this->uploadPath . '/' . $this->folders . '/' . pathinfo($filePath, PATHINFO_BASENAME);
+			copy($filePath, $mainImagePath);
+
 			//Check if we need to change ratio
 			if ($this->ratio != 0) {
 				try {
@@ -96,7 +77,9 @@
 						true
 					);
 					$ratio->save();
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+					var_dump($t);
+				}
 			}
 
 			//Check if we need to resize
@@ -104,8 +87,8 @@
 				try {
 					foreach (Image::getArray() as $_image) {
 						$destination = Helper::TextReplace($_image['path'], [
-							'{path}' => pathinfo($mainImagePath, PATHINFO_DIRNAME)
-						]) . pathinfo($filePath, PATHINFO_BASENAME);
+							'{path}' => $dirname
+						]) . $basename;
 						$resize = new Resize(
 							$mainImagePath,
 							$destination,
@@ -115,15 +98,17 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+					var_dump($t);
+				}
 			}
 
 			if (count($this->facebookResize) > 0) {
 				try {
-					foreach ($this->facebookResize as $key => $value) {
+					foreach ($this->facebookResize as $value) {
 						$fbPath = Helper::TextReplace($value['path'], [
-							'{path}' => pathinfo($mainImagePath, PATHINFO_DIRNAME)
-						]) . pathinfo($filePath, PATHINFO_BASENAME);
+							'{path}' => $dirname
+						]) . $basename;
 
 						$resize = new Resize(
 							$filePath,
@@ -134,7 +119,9 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+					var_dump($t);
+				}
 			}
 
 			//Check if we need to convert to next gen (webp)
@@ -142,16 +129,16 @@
 				try {
 					$convertType = new ConvertType(
 						$mainImagePath,
-						Helper::RemoveMultipleSlashesInUrl(pathinfo($mainImagePath, PATHINFO_DIRNAME) . '/' . pathinfo($mainImagePath, PATHINFO_FILENAME) . '.' . ImagesExtensions::WEBP),
+						Helper::RemoveMultipleSlashesInUrl($dirname . '/' . $filename . '.' . ImagesExtensions::WEBP),
 						ImagesExtensions::WEBP
 					);
 					$convertType->save();
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+					var_dump($t);
+				}
 
 			}
 
 		}
-		//constructor
-		//only uploads to the original folder
-		//processimages (imagePath of orginal) -> copy to root and does all upload work
+
 	}

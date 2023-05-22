@@ -55,7 +55,7 @@
 			parent::__construct($phpFiles);
 		}
 
-		public function SetUploadPath(string $path): void {
+		public function setUploadPath(string $path): void {
 			if (!Helper::StringEndsWith($path, ["/", "\\"])) {
 				$path .= "/";
 			}
@@ -130,7 +130,7 @@
 
 				if (count($this->facebookResize) > 0) {
 					try {
-						foreach ($this->facebookResize as $key => $value) {
+						foreach ($this->facebookResize as $value) {
 							$fbPath = Helper::TextReplace($value['path'], [
 								'{path}' => $file->getUploadPath()
 							]) . $uploadResponse['fileName'];
