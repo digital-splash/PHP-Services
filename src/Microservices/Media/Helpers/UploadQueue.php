@@ -86,9 +86,7 @@
 						true
 					);
 					$ratio->save();
-				} catch (Throwable $t) {
-					var_dump($t);
-				}
+				} catch (Throwable $t) {}
 			}
 
 			//Check if we need to resize
@@ -107,9 +105,7 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {
-					var_dump($t);
-				}
+				} catch (Throwable $t) {}
 			}
 
 			if (count($this->facebookResize) > 0) {
@@ -128,9 +124,7 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {
-					var_dump($t);
-				}
+				} catch (Throwable $t) {}
 			}
 
 			//Check if we need to convert to next gen (webp)
@@ -142,9 +136,7 @@
 						ImagesExtensions::WEBP
 					);
 					$convertType->save();
-				} catch (Throwable $t) {
-					var_dump($t);
-				}
+				} catch (Throwable $t) {}
 
 			}
 
