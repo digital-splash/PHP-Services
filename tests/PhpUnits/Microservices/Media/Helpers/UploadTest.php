@@ -1,6 +1,7 @@
 <?php
 	namespace DigitalSplash\Tests\Media\Helpers;
 
+	use DigitalSplash\Media\Helpers\Media;
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Media\Helpers\Upload;
 	use DigitalSplash\Media\Models\ImagesExtensions;
@@ -17,20 +18,38 @@
 			 $filePath = stream_get_meta_data($file)['uri'];
 			 // Simulate the uploaded file using $_FILES superglobal
 			 $_FILES['test_file'] = array(
-				 'name' => 'test.txt',
-				 'type' => 'text/plain',
+				 'name' => 'test.png',
+				 'type' => 'image/png',
 				 'tmp_name' => $filePath,
 				 'error' => 0,
 				 'size' => filesize($filePath)
 			 );
-			 $upload = new Upload();
+
+			 Media::SetUploadDir(__DIR__ . "/../../../../_CommonFiles/Upload");
+
+			 $upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 5, true, true, ['all']);
 			 // Mock the file upload in your method
-			 $result = $upload->uploadToServer();
+			//  $result = $upload->upload();
+			echo '-------------------';
+			echo $_FILES['test_file']['name'];
+			echo '-------------------';
+			echo $_FILES['test_file']['type'];
+			echo '-------------------';
+			echo $_FILES['test_file']['tmp_name'];
+			echo '-------------------';
+			echo $_FILES['test_file']['error'];
+			echo '-------------------';
+			echo $_FILES['test_file']['size'];
+			echo '-------------------';
+
 			 // Assert the result
-			 $this->assertEquals([
-				"status"	=> 1,
-				"message"	=> "File successfully uploaded!",
-				"fileName"	=> 'test.txt'
+			 $this->assertEqualsCanonicalizing([
+				[
+					"status"	=> 1,
+					"message"	=> "File successfully uploaded!",
+					"fileName"	=> 'test.png',
+
+				],
 			], $result);
 		}
 
