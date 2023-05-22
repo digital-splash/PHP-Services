@@ -57,12 +57,21 @@
 
 		private function processImage(string $filePath): void {
 			[
+				'extension' => $extension,
+				'basename' => $basename
+			] = pathinfo($filePath);
+
+			if (!Media::IsImage($extension)) {
+				return;
+			}
+
+			$mainImagePath = Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders . '/') . $basename;
+
+			[
 				'basename' => $basename,
 				'filename' => $filename,
 				'dirname' => $dirname
-			] = pathinfo($filePath);
-
-			$mainImagePath = Helper::RemoveMultipleSlashesInUrl($this->uploadPath . '/' . $this->folders . '/') . $basename;
+			] = pathinfo($mainImagePath);
 
 			//copy to root
 			copy($filePath, $mainImagePath);
