@@ -2,8 +2,8 @@
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\InvalidParamException;
-use DigitalSplash\Exceptions\UploadException;
-use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Interface\IImageModify;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use Intervention\Image\ImageManager;

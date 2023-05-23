@@ -2,6 +2,7 @@
 	namespace DigitalSplash\Tests\Media\Helpers;
 
 	use DigitalSplash\Media\Helpers\Ratio;
+	use Intervention\Image\ImageManager;
 	use PHPUnit\Framework\TestCase;
 
 	class RatioTest extends TestCase {
@@ -58,6 +59,11 @@
 			);
 			$ratio->save();
 			$this->assertFileExists(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.webp");
+			$manager = new ImageManager([
+				'driver' => 'gd'
+			]);
+			$image = $manager->make(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.webp");
+			$this->assertEquals(1.5, $image->width() / $image->height());
 			unlink(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.webp");
 		}
 	}
