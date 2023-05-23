@@ -27,25 +27,51 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source) && Helper::IsNullOrEmpty($this->destination) && Helper::IsNullOrEmpty($this->extension)) {
-				throw new InvalidParamException("source, destination, extension");
+			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || Helper::IsNullOrEmpty($this->extension)) {
+				throw new InvalidParamException($this->buildParamExceptionMessage());
 			}
+
+			$this->validateSourceFileExists();
+			$this->validateDestinationDirectoryExists();
+			$this->validateExtensionAllowed();
+		}
+
+		private function buildParamExceptionMessage(): string {
+			$exceptionMessage = '';
+
 			if (Helper::IsNullOrEmpty($this->source)) {
-				throw new InvalidParamException("source");
+				$exceptionMessage .= 'source';
 			}
+
 			if (Helper::IsNullOrEmpty($this->destination)) {
-				throw new InvalidParamException("destination");
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'destination';
 			}
+
 			if (Helper::IsNullOrEmpty($this->extension)) {
-				throw new InvalidParamException("extension");
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'extension';
 			}
+
+			return $exceptionMessage;
+		}
+
+		private function validateSourceFileExists(): void {
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-			if (!is_dir(pathinfo($this->destination, PATHINFO_DIRNAME))) {
+		}
+
+		private function validateDestinationDirectoryExists(): void {
+			$destinationDirectory = pathinfo($this->destination, PATHINFO_DIRNAME);
+
+			if (!is_dir($destinationDirectory)) {
 				throw new UploadException("Destination directory does not exist!");
 			}
-			if (!in_array($this->extension, $allowedExtensions = ImagesExtensions::getExtensions())) {
+		}
+
+		private function validateExtensionAllowed(): void {
+			$allowedExtensions = ImagesExtensions::getExtensions();
+
+			if (!in_array($this->extension, $allowedExtensions)) {
 				$allowed = implode(", ", $allowedExtensions);
 				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
 			}
