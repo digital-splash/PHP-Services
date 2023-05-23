@@ -17,16 +17,16 @@
 			'mediaPath', 'fileName', 'extension', 'uploadedFile'
 		];
 
-		private array $allowedExtensions;
-		private string $uploadPath;
-		private string $folders;
-		private string $destinationFileName;
-		private float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
-		private bool $convertToNextGen;
+		protected array $allowedExtensions;
+		protected string $uploadPath;
+		protected string $folders;
+		protected string $destinationFileName;
+		protected float $ratio; //ratio. If not equal to 0, then force change the image ratio to the given one
+		protected bool $convertToNextGen;
 
-		private bool $resize;
-		private array $facebookResize;
-		private string $originalPath;
+		protected bool $resize;
+		protected array $facebookResize;
+		protected string $originalPath;
 
 		public function __construct(
 			array $phpFiles = [],
@@ -55,7 +55,7 @@
 			parent::__construct($phpFiles);
 		}
 
-		public function SetUploadPath(string $path): void {
+		public function setUploadPath(string $path): void {
 			if (!Helper::StringEndsWith($path, ["/", "\\"])) {
 				$path .= "/";
 			}
@@ -130,7 +130,7 @@
 
 				if (count($this->facebookResize) > 0) {
 					try {
-						foreach ($this->facebookResize as $key => $value) {
+						foreach ($this->facebookResize as $value) {
 							$fbPath = Helper::TextReplace($value['path'], [
 								'{path}' => $file->getUploadPath()
 							]) . $uploadResponse['fileName'];
@@ -171,7 +171,7 @@
 			return $uploadResponse;
 		}
 
-		private function uploadToServer(File $file, int $i = 1): array {
+		protected function uploadToServer(File $file, int $i = 1): array {
 			Helper::CreateFolderRecursive($file->getUploadPath());
 
 			$destinationFileName = $this->destinationFileName;
