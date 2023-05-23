@@ -2,6 +2,7 @@
 	namespace DigitalSplash\Tests\Media\Helpers;
 
 	use DigitalSplash\Media\Helpers\Resize;
+	use Intervention\Image\ImageManager;
 	use PHPUnit\Framework\TestCase;
 
     class ResizeTest extends TestCase {
@@ -80,6 +81,11 @@
             );
             $resize->save();
             $this->assertFileExists(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/test/user-01-th.webp");
+            $manager = new ImageManager([
+				'driver' => 'gd'
+			]);
+            $image = $manager->make(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/test/user-01-th.webp");
+            $this->assertEquals(100, $image->width());
             unlink(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/test/user-01-th.webp");
         }
     }
