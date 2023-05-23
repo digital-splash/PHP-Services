@@ -33,11 +33,7 @@ use DigitalSplash\Media\Models\ImagesExtensions;
 			$this->extension = strtolower(pathinfo($this->source, PATHINFO_EXTENSION));
 		}
 
-		public function validateParams(): void
-		{
-			if (Helper::IsNullOrEmpty($this->source) && Helper::IsNullOrEmpty($this->ratio)) {
-				throw new InvalidParamException("source, ratio");
-			}
+		public function validateParams(): void {
 			if (Helper::IsNullOrEmpty($this->source)) {
 				throw new InvalidParamException("source");
 			}
