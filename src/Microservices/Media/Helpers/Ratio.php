@@ -35,6 +35,9 @@ use DigitalSplash\Media\Models\ImagesExtensions;
 
 		public function validateParams(): void
 		{
+			if (Helper::IsNullOrEmpty($this->source) && Helper::IsNullOrEmpty($this->ratio)) {
+				throw new InvalidParamException("source, ratio");
+			}
 			if (Helper::IsNullOrEmpty($this->source)) {
 				throw new InvalidParamException("source");
 			}
@@ -95,6 +98,7 @@ use DigitalSplash\Media\Models\ImagesExtensions;
 		}
 
 		public function save(): void {
+			$this->validateParams();
 			$manager = new ImageManager([
 				'driver' => 'gd'
 			]);
