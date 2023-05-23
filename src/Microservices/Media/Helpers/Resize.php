@@ -64,6 +64,7 @@ use DigitalSplash\Helpers\Helper;
 		}
 
 		public function save(): void {
+			$this->validateParams();
 
 			if ($this->ratio != 0) {
 				$changeRatio = new Ratio(
