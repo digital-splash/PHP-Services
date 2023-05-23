@@ -1,7 +1,9 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
+	use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Interface\IImageModify;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use Intervention\Image\ImageManager;
@@ -24,7 +26,20 @@
 			$this->keepSource = $keepSource;
 		}
 
+		public function validateParams(): void {
+			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || Helper::IsNullOrEmpty($this->extension)) {
+				throw new InvalidParamException("Source, destination and extension are required!");
+			}
+			if (!file_exists($this->source)) {
+				throw new UploadException("Source file does not exist!");
+			}
+			if (!in_array($this->extension, ImagesExtensions::getExtensions())) {
+				throw new UploadException("File extension is not supported!");
+			}
+		}
+
 		public function save(): void {
+			$this->validateParams();
 			$allowedExtensions = ImagesExtensions::getExtensions();
 			if (!in_array($this->extension, $allowedExtensions)) {
 				$allowed = implode(", ", $allowedExtensions);
