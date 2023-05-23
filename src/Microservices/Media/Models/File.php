@@ -1,7 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Models;
 
-	use DigitalSplash\Exceptions\UploadException;
+use DigitalSplash\Exceptions\InvalidParamException;
+use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
 
@@ -28,6 +29,47 @@
 			$this->_tmpName = $tmpName;
 			$this->_error = $error;
 			$this->_size = $size;
+		}
+
+		public function validateParams(): void {
+			if (Helper::IsNullOrEmpty($this->_elemName) ||
+				Helper::IsNullOrEmpty($this->_name) ||
+				Helper::IsNullOrEmpty($this->_type) ||
+				Helper::IsNullOrEmpty($this->_tmpName) ||
+				Helper::IsNullOrEmpty($this->_error) ||
+				Helper::IsNullOrEmpty($this->_size)) {
+					throw new InvalidParamException($this->buildParamExceptionMessage());
+				}
+		}
+
+		private function buildParamExceptionMessage(): string {
+			$exceptionMessage = '';
+
+			if (Helper::IsNullOrEmpty($this->_elemName)) {
+				$exceptionMessage .= 'elemName';
+			}
+
+			if (Helper::IsNullOrEmpty($this->_name)) {
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'name';
+			}
+
+			if (Helper::IsNullOrEmpty($this->_type)) {
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'type';
+			}
+
+			if (Helper::IsNullOrEmpty($this->_tmpName)) {
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'tmpName';
+			}
+
+			if (Helper::IsNullOrEmpty($this->_error)) {
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'error';
+			}
+
+			if (Helper::IsNullOrEmpty($this->_size)) {
+				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'size';
+			}
+
+			return $exceptionMessage;
 		}
 
 		public function getElemName(): string {
