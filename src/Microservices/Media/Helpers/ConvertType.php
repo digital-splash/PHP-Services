@@ -27,14 +27,27 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || Helper::IsNullOrEmpty($this->extension)) {
-				throw new InvalidParamException("Source, destination and extension are required!");
+			if (Helper::IsNullOrEmpty($this->source) && Helper::IsNullOrEmpty($this->destination) && Helper::IsNullOrEmpty($this->extension)) {
+				throw new InvalidParamException("source, destination, extension");
+			}
+			if (Helper::IsNullOrEmpty($this->source)) {
+				throw new InvalidParamException("source");
+			}
+			if (Helper::IsNullOrEmpty($this->destination)) {
+				throw new InvalidParamException("destination");
+			}
+			if (Helper::IsNullOrEmpty($this->extension)) {
+				throw new InvalidParamException("extension");
 			}
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-			if (!in_array($this->extension, ImagesExtensions::getExtensions())) {
-				throw new UploadException("File extension is not supported!");
+			if (!is_dir(pathinfo($this->destination, PATHINFO_DIRNAME))) {
+				throw new UploadException("Destination directory does not exist!");
+			}
+			if (!in_array($this->extension, $allowedExtensions = ImagesExtensions::getExtensions())) {
+				$allowed = implode(", ", $allowedExtensions);
+				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
 			}
 		}
 
