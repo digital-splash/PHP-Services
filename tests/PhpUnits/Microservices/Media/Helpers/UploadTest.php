@@ -29,7 +29,7 @@
 
 			 $upload = new Upload($_FILES, 'test-upload', '///UploadFiles/test', [], 5, true, true, ['all']);
 			 // Mock the file upload in your method
-			//  $result = $upload->upload();
+			 $result = $upload->upload();
 			echo '-------------------';
 			echo $_FILES['test_file']['name'];
 			echo '-------------------';
