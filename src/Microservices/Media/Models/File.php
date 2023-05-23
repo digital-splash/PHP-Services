@@ -29,6 +29,7 @@ use DigitalSplash\Exceptions\UploadException;
 			$this->_tmpName = $tmpName;
 			$this->_error = $error;
 			$this->_size = $size;
+			$this->validateParams();
 		}
 
 		public function validateParams(): void {
@@ -36,8 +37,8 @@ use DigitalSplash\Exceptions\UploadException;
 				Helper::IsNullOrEmpty($this->_name) ||
 				Helper::IsNullOrEmpty($this->_type) ||
 				Helper::IsNullOrEmpty($this->_tmpName) ||
-				Helper::IsNullOrEmpty($this->_error) ||
-				Helper::IsNullOrEmpty($this->_size)) {
+				($this->_error < 0) ||
+				($this->_size < 0)) {
 					throw new InvalidParamException($this->buildParamExceptionMessage());
 				}
 		}
@@ -61,11 +62,11 @@ use DigitalSplash\Exceptions\UploadException;
 				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'tmpName';
 			}
 
-			if (Helper::IsNullOrEmpty($this->_error)) {
+			if ($this->_error < 0) {
 				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'error';
 			}
 
-			if (Helper::IsNullOrEmpty($this->_size)) {
+			if ($this->_size < 0) {
 				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'size';
 			}
 
