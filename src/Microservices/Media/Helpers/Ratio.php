@@ -1,9 +1,12 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-	use Intervention\Image\ImageManager;
+use DigitalSplash\Exceptions\InvalidParamException;
+use DigitalSplash\Exceptions\UploadException;
+use Intervention\Image\ImageManager;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Interface\IImageModify;
+use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Ratio implements IImageModify {
 		private string $source;
@@ -28,6 +31,20 @@
 			$this->addCanvas = $addCanvas;
 			$this->canvasColor = $canvasColor;
 			$this->extension = strtolower(pathinfo($this->source, PATHINFO_EXTENSION));
+		}
+
+		public function validateParams(): void
+		{
+			if (Helper::IsNullOrEmpty($this->source)) {
+				throw new InvalidParamException("source");
+			}
+			if (!file_exists($this->source)) {
+				throw new UploadException("Source file does not exist!");
+			}
+			if (!in_array($this->extension, $allowedExtensions = ImagesExtensions::getExtensions())) {
+				$allowed = implode(", ", $allowedExtensions);
+				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
+			}
 		}
 
 		private function canvasColorSetter(): void {
