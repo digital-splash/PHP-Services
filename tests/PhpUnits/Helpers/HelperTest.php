@@ -1242,4 +1242,68 @@
 			);
 		}
 
+		/**
+		 * @dataProvider MissingParamsProvider
+		 */
+		public function testMissingParamsSuccess(array $params, array $required, array $expected): void {
+			$missing = Helper::MissingParams($params, $required);
+			$this->assertEqualsCanonicalizing($expected, $missing);
+		}
+
+		public function MissingParamsProvider(): array {
+			return [
+				'no_missing' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => '',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'expected' => [
+						'missing' => [],
+						'found' => ['first_name', 'last_name', 'age']
+					]
+				],
+				'some_missing' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'expected' => [
+						'missing' => ['last_name'],
+						'found' => ['first_name', 'age']
+					]
+				],
+				'all_missing' => [
+					'params' => [
+						'test_param' => 'Test'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'expected' => [
+						'missing' => ['first_name', 'last_name', 'age'],
+						'found' => []
+					]
+				]
+			];
+		}
+
+		public function testMissingNotEmptyParamsSuccess(): void {
+			$params = [
+				'first_name' => 'Jon',
+				'last_name' => '',
+				'age' => '29'
+			];
+			$required = ['first_name', 'last_name', 'age', 'country'];
+			$expected = [
+				'missing' => ['last_name', 'country'],
+				'found' => ['first_name', 'age']
+			];
+
+			$missing = Helper::MissingNotEmptyParams($params, $required);
+
+			$this->assertEqualsCanonicalizing($expected['missing'], $missing['missing']);
+			$this->assertEqualsCanonicalizing($expected['found'], $missing['found']);
+		}
+
 	}

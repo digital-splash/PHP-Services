@@ -998,4 +998,34 @@
 			return self::StringBeginsWith($string, ["http://", "https://"]);
 		}
 
+		public static function MissingParams(array $params, array $required): array {
+			$paramKeys = array_keys($params);
+			$missing = array_values(array_diff($required, $paramKeys));
+			$found = array_values(array_intersect($required, $paramKeys));
+
+			return [
+				'missing' => $missing,
+				'found' => $found
+			];
+		}
+
+		public static function MissingNotEmptyParams(array $params, array $required): array {
+			[
+				'missing' => $missing,
+				'found' => $found,
+			] = self::MissingParams($params, $required);
+
+			foreach ($found as $index => $foundKey) {
+				if (self::IsNullOrEmpty($params[$foundKey])) {
+					$missing[] = $foundKey;
+					unset($found[$index]);
+				}
+			}
+
+			return [
+				'missing' => array_values($missing),
+				'found' => array_values($found)
+			];
+		}
+
 	}

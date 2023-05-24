@@ -7,6 +7,100 @@
 
 	class FileTest extends TestCase {
 
+
+		public function validateParamsProvider(): array {
+			return [
+				"empty elemName" => [
+					"params" => [
+						'elemName' => '',
+						'name' => 'testName.txt',
+						'type' => 'testType',
+						'tmpName' => 'testTmpName',
+						'error' => 0,
+						'size' => 1000
+					],
+					"expectedException" => "The parameter(s) (elemName) is/are invalid",
+				],
+				"empty name" => [
+					"params" => [
+						'elemName' => 'testElemName',
+						'name' => '',
+						'type' => 'testType',
+						'tmpName' => 'testTmpName',
+						'error' => 0,
+						'size' => 1000
+					],
+					"expectedException" => "The parameter(s) (name) is/are invalid",
+				],
+				"empty type" => [
+					"params" => [
+						'elemName' => 'testElemName',
+						'name' => 'testName.txt',
+						'type' => '',
+						'tmpName' => 'testTmpName',
+						'error' => 0,
+						'size' => 1000
+					],
+					"expectedException" => "The parameter(s) (type) is/are invalid",
+				],
+				"empty tmpName" => [
+					"params" => [
+						'elemName' => 'testElemName',
+						'name' => 'testName.txt',
+						'type' => 'testType',
+						'tmpName' => '',
+						'error' => 0,
+						'size' => 1000
+					],
+					"expectedException" => "The parameter(s) (tmpName) is/are invalid",
+				],
+				"empty error" => [
+					"params" => [
+						'elemName' => 'testElemName',
+						'name' => 'testName.txt',
+						'type' => 'testType',
+						'tmpName' => 'testTmpName',
+						'error' => -111111,
+						'size' => 1000
+					],
+					"expectedException" => "The parameter(s) (error) is/are invalid",
+				],
+				"empty size" => [
+					"params" => [
+						'elemName' => 'testElemName',
+						'name' => 'testName.txt',
+						'type' => 'testType',
+						'tmpName' => 'testTmpName',
+						'error' => 0,
+						'size' => -1111
+					],
+					"expectedException" => "The parameter(s) (size) is/are invalid",
+				],
+				"empty params" => [
+					"params" => [
+						'elemName' => '',
+						'name' => '',
+						'type' => '',
+						'tmpName' => '',
+						'error' => -111,
+						'size' => -100000
+					],
+					"expectedException" => "The parameter(s) (elemName, name, type, tmpName, error, size) is/are invalid",
+				],
+			];
+		}
+
+		/**
+		 * @dataProvider validateParamsProvider
+		 * @param array $params
+		 * @param string $exception
+         */
+		public function testValidateParams(array $params, string $exception): void {
+			$this->expectExceptionMessage($exception);
+
+			new File(...$params);
+		}
+
 		public function testGetters(): void {
 			$elemName = "testElemName";
 			$name = "testName";
