@@ -4,7 +4,8 @@
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
-	use DigitalSplash\Media\Models\Image;
+use DigitalSplash\Media\Models\DocumentsExtensions;
+use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Media {
@@ -148,11 +149,16 @@
 			return $url;
 		}
 
-		/**
-		 * Check if the extension is an image
-		 */
+		public static function IsExtension(string $extension, array $allowedExtensions): bool {
+			return in_array($extension, $allowedExtensions);
+		}
+
 		public static function IsImage(string $extension): bool {
-			return in_array($extension, ImagesExtensions::getExtensions());
+			return self::IsExtension($extension, ImagesExtensions::getExtensions());
+		}
+
+		public static function IsDocument(string $extension): bool {
+			return self::IsExtension($extension, DocumentsExtensions::getExtensions());
 		}
 
 	}
