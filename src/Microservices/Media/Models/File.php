@@ -29,48 +29,6 @@
 			$this->_tmpName = $tmpName;
 			$this->_error = $error;
 			$this->_size = $size;
-			$this->validateParams();
-		}
-
-		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->_elemName) ||
-				Helper::IsNullOrEmpty($this->_name) ||
-				Helper::IsNullOrEmpty($this->_type) ||
-				Helper::IsNullOrEmpty($this->_tmpName) ||
-				($this->_error < 0) ||
-				($this->_size < 0)) {
-					throw new InvalidParamException($this->buildParamExceptionMessage());
-				}
-		}
-
-		private function buildParamExceptionMessage(): string {
-			$exceptionMessage = '';
-
-			if (Helper::IsNullOrEmpty($this->_elemName)) {
-				$exceptionMessage .= 'elemName';
-			}
-
-			if (Helper::IsNullOrEmpty($this->_name)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'name';
-			}
-
-			if (Helper::IsNullOrEmpty($this->_type)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'type';
-			}
-
-			if (Helper::IsNullOrEmpty($this->_tmpName)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'tmpName';
-			}
-
-			if ($this->_error < 0) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'error';
-			}
-
-			if ($this->_size < 0) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'size';
-			}
-
-			return $exceptionMessage;
 		}
 
 		public function getElemName(): string {
