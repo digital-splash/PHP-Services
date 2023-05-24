@@ -32,29 +32,25 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || $this->width <= 0) {
-				throw new InvalidParamException($this->buildParamExceptionMessage());
+			$validate = Helper::MissingNotEmptyParams([
+				'source' => $this->source,
+				'destination' => $this->destination,
+			], [
+				'source',
+				'destination',
+			]);
+
+			if (!Helper::IsNullOrEmpty($validate['missing'])) {
+				$error = Helper::ImplodeArrToStr(', ', $validate['missing']);
+				if ($this->width <= 0) {
+					$error .= (Helper::IsNullOrEmpty($error) ? '' : ', ') . 'width';
+				}
+				throw new InvalidParamException($error);
 			}
-
-			$this->validateSourceFileExists();
-		}
-
-		private function buildParamExceptionMessage(): string {
-			$exceptionMessage = '';
-
-			if (Helper::IsNullOrEmpty($this->source)) {
-				$exceptionMessage .= 'source';
-			}
-
-			if (Helper::IsNullOrEmpty($this->destination)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'destination';
-			}
-
 			if ($this->width <= 0) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'width';
+				throw new InvalidParamException('width');
 			}
-
-			return $exceptionMessage;
+			$this->validateSourceFileExists();
 		}
 
 		private function validateSourceFileExists(): void {
