@@ -27,31 +27,23 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || Helper::IsNullOrEmpty($this->extension)) {
-				throw new InvalidParamException($this->buildParamExceptionMessage());
+			$validate = Helper::MissingNotEmptyParams([
+				'source' => $this->source,
+				'destination' => $this->destination,
+				'extension' => $this->extension,
+			], [
+				'source',
+				'destination',
+				'extension'
+			]);
+
+			if (!Helper::IsNullOrEmpty($validate['missing'])) {
+				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
 
 			$this->validateSourceFileExists();
 			$this->validateDestinationDirectoryExists();
 			$this->validateExtensionAllowed();
-		}
-
-		private function buildParamExceptionMessage(): string {
-			$exceptionMessage = '';
-
-			if (Helper::IsNullOrEmpty($this->source)) {
-				$exceptionMessage .= 'source';
-			}
-
-			if (Helper::IsNullOrEmpty($this->destination)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'destination';
-			}
-
-			if (Helper::IsNullOrEmpty($this->extension)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'extension';
-			}
-
-			return $exceptionMessage;
 		}
 
 		private function validateSourceFileExists(): void {
@@ -60,6 +52,7 @@
 			}
 		}
 
+		//TODO: Remove and Create Directory if not exist in save
 		private function validateDestinationDirectoryExists(): void {
 			$destinationDirectory = pathinfo($this->destination, PATHINFO_DIRNAME);
 
