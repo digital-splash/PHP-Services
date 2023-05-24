@@ -1,8 +1,8 @@
 <?php
 	namespace DigitalSplash\Media\Models;
 
-use DigitalSplash\Exceptions\InvalidParamException;
-use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
 
