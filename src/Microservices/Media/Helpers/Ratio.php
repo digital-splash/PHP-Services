@@ -34,8 +34,23 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source)) {
-				throw new InvalidParamException("source");
+			$validate = Helper::MissingNotEmptyParams([
+				'source' => $this->source,
+				'destination' => $this->destination,
+			], [
+				'source',
+				'destination',
+			]);
+
+			if (!Helper::IsNullOrEmpty($validate['missing'])) {
+				$error = Helper::ImplodeArrToStr(', ', $validate['missing']);
+				if ($this->ratio <= 0) {
+					$error .= (Helper::IsNullOrEmpty($error) ? '' : ', ') . 'ratio';
+				}
+				throw new InvalidParamException($error);
+			}
+			if ($this->ratio <= 0) {
+				throw new InvalidParamException('ratio');
 			}
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
