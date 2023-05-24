@@ -1,12 +1,12 @@
 <?php
 	namespace DigitalSplash\Media\Helpers;
 
-use DigitalSplash\Exceptions\InvalidParamException;
-use DigitalSplash\Exceptions\UploadException;
-use Intervention\Image\ImageManager;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\UploadException;
+	use Intervention\Image\ImageManager;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Interface\IImageModify;
-use DigitalSplash\Media\Models\ImagesExtensions;
+	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Ratio implements IImageModify {
 		private string $source;
