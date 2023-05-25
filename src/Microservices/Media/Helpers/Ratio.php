@@ -34,14 +34,11 @@
 		}
 
 		public function validateParams(): void {
-			if ($this->ratio <= 0) {
-				$this->ratio = '';
-			}
 
 			$validate = Helper::MissingNotEmptyParams([
 				'source' => $this->source,
 				'destination' => $this->destination,
-				'ratio' => $this->ratio,
+				'ratio' => $this->ratio <= 0 ? '' : $this->ratio,
 			], [
 				'source',
 				'destination',

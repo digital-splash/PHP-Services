@@ -52,7 +52,7 @@
 						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.bmp",
 						true
 					],
-					"exception" => "File extension is not allowed! Allowed extensions: jpg, jpeg, png, gif, webp"
+					"exception" => "File extension is not allowed! Allowed extensions: \"jpg, jpeg, png, gif, webp\""
 				],
 			];
 		}

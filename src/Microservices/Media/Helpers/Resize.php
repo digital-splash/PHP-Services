@@ -31,14 +31,10 @@
 		}
 
 		public function validateParams(): void {
-			if ($this->width <= 0) {
-				$this->width = '';
-			}
-
 			$validate = Helper::MissingNotEmptyParams([
 				'source' => $this->source,
 				'destination' => $this->destination,
-				'width' => $this->width,
+				'width' => $this->width <= 0 ? '' : $this->width,
 			], [
 				'source',
 				'destination',
