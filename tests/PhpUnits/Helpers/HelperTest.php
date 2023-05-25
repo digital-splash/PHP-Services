@@ -1108,6 +1108,61 @@
 			);
 		}
 
+		public function testGetAllFoldersSuccess(): void {
+			$dir = str_replace("\PhpUnits\Helpers", "\_CommonFiles\Recursive", __DIR__);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+				],
+				Helper::GetAllFolders($dir, false)
+			);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+					$dir . "/Folder1/Folder1-1",
+					$dir . "/Folder1/Folder1-2",
+					$dir . "/Folder2/Folder2-1",
+					$dir . "/Folder2/Folder2-2",
+					$dir . "/Folder1/Folder1-1/Folder1-1-1",
+				],
+				Helper::GetAllFolders($dir, true)
+			);
+		}
+
+		public function testDeleteFolderAndAllFiles(): void {
+			$dir = str_replace("\PhpUnits\Helpers", "\_CommonFiles\Recursive", __DIR__);
+
+			Helper::CreateFolderRecursive($dir . "/Folder3");
+			Helper::CreateFolderRecursive($dir . "/Folder3/Folder3-1");
+			Helper::CreateFolderRecursive($dir . "/Folder3/Folder3-2");
+			Helper::CreateFolderRecursive($dir . "/Folder3/Folder3-1/Folder3-1-1");
+			Helper::CreateFolderRecursive($dir . "/Folder3/Folder3-1/Folder3-1-2");
+			Helper::CreateFolderRecursive($dir . "/Folder3/Folder3-2/Folder3-2-1");
+			copy(
+				($dir . "/file1.html"),
+				$dir . "/Folder3/Folder3-1/Folder3-1-1/file1.html"
+			);
+			copy(
+				$dir . "/file2.html",
+				$dir . "/Folder3/Folder3-1/Folder3-1-1/file2.html"
+			);
+			copy(
+				$dir . "/file1.html",
+				$dir . "/Folder3/Folder3-1/file1.html"
+			);
+			copy(
+				$dir . "/file2.html",
+				$dir . "/Folder3/Folder3-2/file2.html"
+			);
+			Helper::DeleteFolderAndAllFiles($dir . "/Folder3", true);
+
+			$this->assertDirectoryDoesNotExist($dir . "/Folder3");
+		}
+
 		public function testConvertMultidimentionArrayToSingleDimentionSuccess() {
 			$this->assertEquals([
 				"name.first" => "John",

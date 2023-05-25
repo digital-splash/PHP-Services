@@ -918,7 +918,49 @@
 			return $filesArr;
 		}
 
+		/**
+		 * Get all folders in a path
+		 */
+		public static function GetAllFolders(
+			string $path,
+			bool $recursive=false
+		): array {
+			$foldersArr = [];
 
+			if (is_dir($path)) {
+				$folders = scandir($path);
+
+				foreach ($folders AS $folder) {
+					if (is_dir($path . "/" . $folder) && $folder !== "." && $folder !== "..") {
+						$foldersArr[] = $path . "/" . $folder;
+						if ($recursive) {
+							$foldersArr = array_merge($foldersArr, self::GetAllFolders($path . "/" . $folder, $recursive));
+						}
+					}
+				}
+			}
+			return $foldersArr;
+		}
+
+		/**
+		 * Delete a full path
+		 */
+		public static function DeleteFolderAndAllFiles(
+			string $path,
+			bool $deletePath=false
+		): void {
+			$filesArr = self::GetAllFiles($path, true);
+			$foldersArr = array_reverse(self::GetAllFolders($path, true));
+			foreach ($filesArr AS $file) {
+				self::DeleteFileOrFolder($file);
+			}
+			foreach ($foldersArr AS $folder) {
+				self::DeleteFileOrFolder($folder);
+			}
+			if ($deletePath) {
+				self::DeleteFileOrFolder($path);
+			}
+		}
 		/**
 		 * Converts a multidimentional array to a single dimentional array
 		 */
