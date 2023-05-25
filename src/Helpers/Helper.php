@@ -942,7 +942,25 @@
 			return $foldersArr;
 		}
 
-
+		/**
+		 * Delete a full path
+		 */
+		public static function DeleteFolderAndAllFiles(
+			string $path,
+			bool $deletePath=false
+		): void {
+			$filesArr = self::GetAllFiles($path, true);
+			$foldersArr = array_reverse(self::GetAllFolders($path, true));
+			foreach ($filesArr AS $file) {
+				self::DeleteFileOrFolder($file);
+			}
+			foreach ($foldersArr AS $folder) {
+				self::DeleteFileOrFolder($folder);
+			}
+			if ($deletePath) {
+				self::DeleteFileOrFolder($path);
+			}
+		}
 		/**
 		 * Converts a multidimentional array to a single dimentional array
 		 */
