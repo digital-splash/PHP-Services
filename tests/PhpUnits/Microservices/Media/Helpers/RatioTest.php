@@ -18,6 +18,24 @@
 					],
 					"exception" => "The parameter(s) (source) is/are invalid"
 				],
+				"ratio less than zero" => [
+					"params" => [
+						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.jpg",
+						-1,
+						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.webp",
+						true
+					],
+					"exception" => "The parameter(s) (ratio) is/are invalid"
+				],
+				"empty params" => [
+					"params" => [
+						"",
+						-1,
+						"",
+						true
+					],
+					"exception" => "The parameter(s) (source, destination, ratio) is/are invalid"
+				],
 				"source does not exist" => [
 					"params" => [
 						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-not-exist.jpg",
@@ -34,7 +52,7 @@
 						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.bmp",
 						true
 					],
-					"exception" => "File extension is not allowed! Allowed extensions: jpg, jpeg, png, gif, webp"
+					"exception" => "File extension is not allowed! Allowed extensions: \"jpg, jpeg, png, gif, webp\""
 				],
 			];
 		}

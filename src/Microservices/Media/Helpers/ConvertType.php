@@ -41,33 +41,11 @@
 				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
 
-			$this->validateSourceFileExists();
-			$this->validateDestinationDirectoryExists();
-			$this->validateExtensionAllowed();
-		}
-
-		private function validateSourceFileExists(): void {
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-		}
 
-		//TODO: Remove and Create Directory if not exist in save
-		private function validateDestinationDirectoryExists(): void {
-			$destinationDirectory = pathinfo($this->destination, PATHINFO_DIRNAME);
-
-			if (!is_dir($destinationDirectory)) {
-				throw new UploadException("Destination directory does not exist!");
-			}
-		}
-
-		private function validateExtensionAllowed(): void {
-			$allowedExtensions = ImagesExtensions::getExtensions();
-
-			if (!in_array($this->extension, $allowedExtensions)) {
-				$allowed = implode(", ", $allowedExtensions);
-				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
-			}
+			Media::validateIsImage($this->extension);
 		}
 
 		public function save(): void {
@@ -82,6 +60,7 @@
 				'driver' => 'gd'
 			]);
 			$image = $manager->make($this->source);
+			Helper::CreateFolderRecursive(pathinfo($this->destination, PATHINFO_DIRNAME));
 			$image->encode($this->extension, 90)->save($this->destination);
 
 			if (!$this->keepSource) {

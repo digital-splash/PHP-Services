@@ -14,8 +14,8 @@
 		private string $destination;
 		private bool $addCanvas;
 		private string|null $canvasColor;
-		private int|float $width;
-		private int|float $height;
+		private float $width;
+		private float $height;
 		private string $extension;
 
 		public function __construct(
@@ -23,7 +23,7 @@
 			float $ratio = 0,
 			string $destination = '',
 			bool $addCanvas = false,
-			string $canvasColor = null,
+			string $canvasColor = null
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;
@@ -34,16 +34,26 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source)) {
-				throw new InvalidParamException("source");
+
+			$validate = Helper::MissingNotEmptyParams([
+				'source' => $this->source,
+				'destination' => $this->destination,
+				'ratio' => $this->ratio <= 0 ? '' : $this->ratio,
+			], [
+				'source',
+				'destination',
+				'ratio',
+			]);
+
+			if (!Helper::IsNullOrEmpty($validate['missing'])) {
+				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
+
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-			if (!in_array($this->extension, $allowedExtensions = ImagesExtensions::getExtensions())) {
-				$allowed = implode(", ", $allowedExtensions);
-				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
-			}
+
+			Media::validateIsImage($this->extension);
 		}
 
 		private function canvasColorSetter(): void {

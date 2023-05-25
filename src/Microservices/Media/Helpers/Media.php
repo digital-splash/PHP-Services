@@ -2,10 +2,11 @@
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\Media\InvalidExtensionException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
-use DigitalSplash\Media\Models\DocumentsExtensions;
-use DigitalSplash\Media\Models\Image;
+	use DigitalSplash\Media\Models\DocumentsExtensions;
+	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Media {
@@ -159,6 +160,21 @@ use DigitalSplash\Media\Models\Image;
 
 		public static function IsDocument(string $extension): bool {
 			return self::IsExtension($extension, DocumentsExtensions::getExtensions());
+		}
+
+		public static function validateIsExtension(string $extension, array $allowedExtensions): void {
+			if (!self::IsExtension($extension, $allowedExtensions)) {
+				$allowed = implode(", ", $allowedExtensions);
+				throw new InvalidExtensionException($allowed);
+			}
+		}
+
+		public static function validateIsImage(string $extension): void {
+			self::validateIsExtension($extension, ImagesExtensions::getExtensions());
+		}
+
+		public static function validateIsDocument(string $extension): void {
+			self::validateIsExtension($extension, DocumentsExtensions::getExtensions());
 		}
 
 	}

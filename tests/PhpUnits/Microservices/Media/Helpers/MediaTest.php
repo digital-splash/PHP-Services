@@ -3,10 +3,14 @@
 
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\Media\InvalidExtensionException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Media\Helpers\Media;
+	use DigitalSplash\Media\Models\DocumentsExtensions;
 	use DigitalSplash\Media\Models\Image;
+	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	final class MediaTest extends TestCase {
 		private const MEDIA_ROOT = "https://media.domain.com";
@@ -74,6 +78,69 @@
 				"users/profile/user-01.jpg",
 				Media::GetMediaFullPath("mediafiles/users/profile/user-01.jpg", null, false, false, false)
 			);
+		}
+
+		public function testIsExtension(): void {
+			$this->assertTrue(Media::IsExtension('test', [
+				'test',
+				'test1',
+				'test2'
+			]));
+
+			$this->assertFalse(Media::IsExtension('test', [
+				'test1',
+				'test2'
+			]));
+		}
+
+		public function testIsImage(): void {
+			$this->assertTrue(Media::IsImage(ImagesExtensions::JPG));
+			$this->assertFalse(Media::IsImage('test'));
+		}
+
+		public function testIsDocument(): void {
+			$this->assertTrue(Media::IsDocument(DocumentsExtensions::PDF));
+			$this->assertFalse(Media::IsDocument('test'));
+		}
+
+		public function testValidateIsExtension(): void {
+			Media::validateIsExtension('test', [
+				'test',
+				'test1',
+				'test2'
+			]);
+
+			$this->expectException(InvalidExtensionException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
+				"::params::" => "test1, test2"
+			]));
+
+			Media::validateIsExtension('test', [
+				'test1',
+				'test2'
+			]);
+		}
+
+		public function testValidateIsImage(): void {
+			Media::validateIsImage(ImagesExtensions::JPG);
+
+			$this->expectException(InvalidExtensionException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
+				"::params::" => Helper::ImplodeArrToStr(', ', ImagesExtensions::getExtensions())
+			]));
+
+			Media::validateIsImage('test');
+		}
+
+		public function testValidateIsDocument(): void {
+			Media::validateIsDocument(DocumentsExtensions::PDF);
+
+			$this->expectException(InvalidExtensionException::class);
+			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
+				"::params::" => Helper::ImplodeArrToStr(', ', DocumentsExtensions::getExtensions())
+			]));
+
+			Media::validateIsDocument('test');
 		}
 
 	}

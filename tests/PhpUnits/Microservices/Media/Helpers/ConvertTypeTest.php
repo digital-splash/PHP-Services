@@ -15,7 +15,7 @@
 						"bmp",
 						true
 					],
-					"exception" => "File extension is not allowed! Allowed extensions: jpg, jpeg, png, gif, webp"
+					"exception" => "File extension is not allowed! Allowed extensions: \"jpg, jpeg, png, gif, webp\""
 				],
 				"empty extension" => [
 					"params" => [
@@ -52,15 +52,6 @@
 						true
 					],
 					"exception" => "Source file does not exist!"
-				],
-				"destination does not exist" => [
-					"params" => [
-						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.jpg",
-						__DIR__ . "/../../../../_CommonFiles/Media/users/profile/doesnotexist/user-01-not-exist.webp",
-						"webp",
-						true
-					],
-					"exception" => "Destination directory does not exist!"
 				],
 				"empty params" => [
 					"params" => [

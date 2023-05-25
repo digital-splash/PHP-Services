@@ -91,6 +91,13 @@
 				"fr": "L'objet \"DB Conector\" est nul pour les informations d'identification \"::param::\".",
 				"ar": "الكائن \"DB Conector\" فارغ لأوراق الاعتماد \"::param::\"."
 			}
+		},
+		"media": {
+			"InvalidExtension": {
+				"en": "File extension is not allowed! Allowed extensions: \"::params::\"",
+				"fr": "File extension is not allowed! Allowed extensions: \"::params::\"",
+				"ar": "File extension is not allowed! Allowed extensions: \"::params::\""
+			}
 		}
 	}
 }

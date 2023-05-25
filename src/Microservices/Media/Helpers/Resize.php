@@ -10,7 +10,6 @@
 
 
 	class Resize implements IImageModify {
-
 		private string $source;
 		private string $destination;
 		private int $width;
@@ -32,32 +31,20 @@
 		}
 
 		public function validateParams(): void {
-			if (Helper::IsNullOrEmpty($this->source) || Helper::IsNullOrEmpty($this->destination) || $this->width <= 0) {
-				throw new InvalidParamException($this->buildParamExceptionMessage());
+			$validate = Helper::MissingNotEmptyParams([
+				'source' => $this->source,
+				'destination' => $this->destination,
+				'width' => $this->width <= 0 ? '' : $this->width,
+			], [
+				'source',
+				'destination',
+				'width',
+			]);
+
+			if (!Helper::IsNullOrEmpty($validate['missing'])) {
+				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
 
-			$this->validateSourceFileExists();
-		}
-
-		private function buildParamExceptionMessage(): string {
-			$exceptionMessage = '';
-
-			if (Helper::IsNullOrEmpty($this->source)) {
-				$exceptionMessage .= 'source';
-			}
-
-			if (Helper::IsNullOrEmpty($this->destination)) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'destination';
-			}
-
-			if ($this->width <= 0) {
-				$exceptionMessage .= (Helper::IsNullOrEmpty($exceptionMessage) ? '' : ', ') . 'width';
-			}
-
-			return $exceptionMessage;
-		}
-
-		private function validateSourceFileExists(): void {
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
