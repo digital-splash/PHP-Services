@@ -10,7 +10,6 @@
 
 
 	class Resize implements IImageModify {
-
 		private string $source;
 		private string $destination;
 		private int $width;
@@ -32,28 +31,24 @@
 		}
 
 		public function validateParams(): void {
+			if ($this->width <= 0) {
+				$this->width = '';
+			}
+
 			$validate = Helper::MissingNotEmptyParams([
 				'source' => $this->source,
 				'destination' => $this->destination,
+				'width' => $this->width,
 			], [
 				'source',
 				'destination',
+				'width',
 			]);
 
 			if (!Helper::IsNullOrEmpty($validate['missing'])) {
-				$error = Helper::ImplodeArrToStr(', ', $validate['missing']);
-				if ($this->width <= 0) {
-					$error .= (Helper::IsNullOrEmpty($error) ? '' : ', ') . 'width';
-				}
-				throw new InvalidParamException($error);
+				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
-			if ($this->width <= 0) {
-				throw new InvalidParamException('width');
-			}
-			$this->validateSourceFileExists();
-		}
 
-		private function validateSourceFileExists(): void {
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
