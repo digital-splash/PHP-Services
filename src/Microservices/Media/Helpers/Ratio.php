@@ -34,31 +34,29 @@
 		}
 
 		public function validateParams(): void {
+			if ($this->ratio <= 0) {
+				$this->ratio = '';
+			}
+
 			$validate = Helper::MissingNotEmptyParams([
 				'source' => $this->source,
 				'destination' => $this->destination,
+				'ratio' => $this->ratio,
 			], [
 				'source',
 				'destination',
+				'ratio',
 			]);
 
 			if (!Helper::IsNullOrEmpty($validate['missing'])) {
-				$error = Helper::ImplodeArrToStr(', ', $validate['missing']);
-				if ($this->ratio <= 0) {
-					$error .= (Helper::IsNullOrEmpty($error) ? '' : ', ') . 'ratio';
-				}
-				throw new InvalidParamException($error);
+				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
-			if ($this->ratio <= 0) {
-				throw new InvalidParamException('ratio');
-			}
+
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-			if (!in_array($this->extension, $allowedExtensions = ImagesExtensions::getExtensions())) {
-				$allowed = implode(", ", $allowedExtensions);
-				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
-			}
+
+			Media::validateIsImage($this->extension);
 		}
 
 		private function canvasColorSetter(): void {
