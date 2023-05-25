@@ -65,7 +65,5 @@
 			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/profile");
 			Helper::DeleteFileOrFolder(self::DIR . "/og/fb");
 			Helper::DeleteFileOrFolder(self::DIR . "/og");
-
-			//TODO: Maybe Create a new Function Helper::DeleteFolderAndAllFiles(), that will loop through all the files and folder inside the given folder and deletes them and then delete the fiver folder.
 		}
 	}
