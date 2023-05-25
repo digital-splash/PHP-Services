@@ -1108,6 +1108,31 @@
 			);
 		}
 
+		public function testGetAllFoldersSuccess(): void {
+			$dir = str_replace("\PhpUnits\Helpers", "\_CommonFiles\Recursive", __DIR__);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+				],
+				Helper::GetAllFolders($dir, false)
+			);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+					$dir . "/Folder1/Folder1-1",
+					$dir . "/Folder1/Folder1-2",
+					$dir . "/Folder2/Folder2-1",
+					$dir . "/Folder2/Folder2-2",
+					$dir . "/Folder1/Folder1-1/Folder1-1-1",
+				],
+				Helper::GetAllFolders($dir, true)
+			);
+		}
+
 		public function testConvertMultidimentionArrayToSingleDimentionSuccess() {
 			$this->assertEquals([
 				"name.first" => "John",
