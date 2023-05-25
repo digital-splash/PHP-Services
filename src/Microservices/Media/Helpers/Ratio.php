@@ -14,8 +14,8 @@
 		private string $destination;
 		private bool $addCanvas;
 		private string|null $canvasColor;
-		private int|float $width;
-		private int|float $height;
+		private float $width;
+		private float $height;
 		private string $extension;
 
 		public function __construct(
@@ -23,7 +23,7 @@
 			float $ratio = 0,
 			string $destination = '',
 			bool $addCanvas = false,
-			string $canvasColor = null,
+			string $canvasColor = null
 		) {
 			$this->source = $source;
 			$this->ratio = $ratio;

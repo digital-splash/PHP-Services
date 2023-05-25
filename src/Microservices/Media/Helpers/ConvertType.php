@@ -41,23 +41,11 @@
 				throw new InvalidParamException(Helper::ImplodeArrToStr(', ', $validate['missing']));
 			}
 
-			$this->validateSourceFileExists();
-			$this->validateExtensionAllowed();
-		}
-
-		private function validateSourceFileExists(): void {
 			if (!file_exists($this->source)) {
 				throw new UploadException("Source file does not exist!");
 			}
-		}
 
-		private function validateExtensionAllowed(): void {
-			$allowedExtensions = ImagesExtensions::getExtensions();
-
-			if (!in_array($this->extension, $allowedExtensions)) {
-				$allowed = implode(", ", $allowedExtensions);
-				throw new UploadException("File extension is not allowed! Allowed extensions: $allowed");
-			}
+			Media::validateIsImage($this->extension);
 		}
 
 		public function save(): void {

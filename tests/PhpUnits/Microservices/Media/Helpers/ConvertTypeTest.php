@@ -15,7 +15,7 @@
 						"bmp",
 						true
 					],
-					"exception" => "File extension is not allowed! Allowed extensions: jpg, jpeg, png, gif, webp"
+					"exception" => "File extension is not allowed! Allowed extensions: \"jpg, jpeg, png, gif, webp\""
 				],
 				"empty extension" => [
 					"params" => [
