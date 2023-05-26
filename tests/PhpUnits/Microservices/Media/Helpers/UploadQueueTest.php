@@ -27,43 +27,28 @@
 				self::DIR . "/og/user-01-th.jpg",
 			]);
 
-			$this->assertFileExists(self::DIR . "/og/hd/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/hd/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/hd/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/hd/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/ld/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/ld/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/ld/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/ld/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/th/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/th/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/th/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/th/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/cover/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/cover/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/cover/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/cover/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/post/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/post/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/post/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/post/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/profile/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/profile/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/profile/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/profile/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/user-01-th.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/user-01.webp");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/user-01.webp");
+			$assertions = [
+				self::DIR . "/og/hd/user-01-th.webp",
+				self::DIR . "/og/hd/user-01.webp",
+				self::DIR . "/og/ld/user-01-th.webp",
+				self::DIR . "/og/ld/user-01.webp",
+				self::DIR . "/og/th/user-01-th.webp",
+				self::DIR . "/og/th/user-01.webp",
+				self::DIR . "/og/fb/cover/user-01-th.webp",
+				self::DIR . "/og/fb/cover/user-01.webp",
+				self::DIR . "/og/fb/post/user-01-th.webp",
+				self::DIR . "/og/fb/post/user-01.webp",
+				self::DIR . "/og/fb/profile/user-01-th.webp",
+				self::DIR . "/og/fb/profile/user-01.webp",
+				self::DIR . "/og/user-01-th.webp",
+				self::DIR . "/og/user-01.webp"
+			];
+
+			foreach ($assertions as $assertion) {
+				$this->assertFileExists($assertion);
+			}
 
 			//remove all created directories
-			Helper::DeleteFileOrFolder(self::DIR . "/og/hd");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/ld");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/th");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/cover");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/post");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb/profile");
-			Helper::DeleteFileOrFolder(self::DIR . "/og/fb");
-			Helper::DeleteFileOrFolder(self::DIR . "/og");
+			Helper::DeleteFoldersAndFiles(self::DIR . "/og" , true);
 		}
 	}

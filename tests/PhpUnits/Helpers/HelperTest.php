@@ -1101,11 +1101,94 @@
 					$dir . "/file2.html",
 					$dir . "/Folder1/file1.html",
 					$dir . "/Folder1/file2.html",
+					$dir . "/Folder1/Folder1-1/file.html",
+					$dir . "/Folder1/Folder1-1/Folder1-1-1/file.html",
+					$dir . "/Folder1/Folder1-2/file.html",
 					$dir . "/Folder2/file1.html",
 					$dir . "/Folder2/file2.html",
+					$dir . "/Folder2/Folder2-1/file.html",
+					$dir . "/Folder2/Folder2-2/file.html",
 				],
 				Helper::GetAllFiles($dir, true)
 			);
+		}
+
+		public function testGetAllFoldersSuccess(): void {
+			$dir = str_replace("\PhpUnits\Helpers", "\_CommonFiles\Recursive", __DIR__);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+				],
+				Helper::GetAllFolders($dir, false)
+			);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . "/Folder1",
+					$dir . "/Folder2",
+					$dir . "/Folder1/Folder1-1",
+					$dir . "/Folder1/Folder1-2",
+					$dir . "/Folder2/Folder2-1",
+					$dir . "/Folder2/Folder2-2",
+					$dir . "/Folder1/Folder1-1/Folder1-1-1",
+				],
+				Helper::GetAllFolders($dir, true)
+			);
+		}
+
+		public function testDeleteFoldersAndFilesSuccess(): void {
+			$dir = str_replace("\PhpUnits\Helpers", "\_CommonFiles", __DIR__);
+			$testDir = $dir . "/TestDeleteFoldersAndFiles";
+
+			$folders = [
+				$testDir . "/Folder1",
+				$testDir . "/Folder2",
+				$testDir . "/Folder1/Folder1-1",
+				$testDir . "/Folder1/Folder1-2",
+				$testDir . "/Folder2/Folder2-1"
+			];
+
+			$files = [
+				$testDir . "/file1.html",
+				$testDir . "/file2.html",
+				$testDir . "/Folder1/file.html",
+				$testDir . "/Folder1/Folder1-1/file.html",
+				$testDir . "/Folder1/Folder1-2/file.html",
+				$testDir . "/Folder2/file.html",
+				$testDir . "/Folder2/Folder2-1/file.html"
+			];
+
+			foreach ($folders as $folder) {
+				Helper::CreateFolderRecursive($folder);
+			}
+
+			foreach ($files as $file) {
+				copy(
+					$dir . "/Recursive/file1.html",
+					$file
+				);
+			}
+
+			$allFolders = Helper::GetAllFolders($testDir, true);
+			$allFiles = Helper::GetAllFiles($testDir, true);
+
+			$this->assertEqualsCanonicalizing($folders, $allFolders);
+			$this->assertEqualsCanonicalizing($files, $allFiles);
+
+			Helper::DeleteFoldersAndFiles($testDir, false);
+
+			$allFolders = Helper::GetAllFolders($testDir, true);
+			$allFiles = Helper::GetAllFiles($testDir, true);
+
+			$this->assertEmpty($allFolders);
+			$this->assertEmpty($allFiles);
+			$this->assertDirectoryExists($testDir);
+
+			Helper::DeleteFoldersAndFiles($testDir, true);
+
+			$this->assertDirectoryDoesNotExist($testDir);
 		}
 
 		public function testConvertMultidimentionArrayToSingleDimentionSuccess() {
