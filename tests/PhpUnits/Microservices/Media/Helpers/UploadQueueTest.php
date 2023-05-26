@@ -27,23 +27,28 @@
 				self::DIR . "/og/user-01-th.jpg",
 			]);
 
-			$this->assertFileExists(self::DIR . "/og/hd/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/hd/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/ld/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/ld/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/th/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/th/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/cover/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/cover/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/post/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/post/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/profile/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/fb/profile/user-01.webp");
-			$this->assertFileExists(self::DIR . "/og/user-01-th.webp");
-			$this->assertFileExists(self::DIR . "/og/user-01.webp");
+			$assertions = [
+				self::DIR . "/og/hd/user-01-th.webp",
+				self::DIR . "/og/hd/user-01.webp",
+				self::DIR . "/og/ld/user-01-th.webp",
+				self::DIR . "/og/ld/user-01.webp",
+				self::DIR . "/og/th/user-01-th.webp",
+				self::DIR . "/og/th/user-01.webp",
+				self::DIR . "/og/fb/cover/user-01-th.webp",
+				self::DIR . "/og/fb/cover/user-01.webp",
+				self::DIR . "/og/fb/post/user-01-th.webp",
+				self::DIR . "/og/fb/post/user-01.webp",
+				self::DIR . "/og/fb/profile/user-01-th.webp",
+				self::DIR . "/og/fb/profile/user-01.webp",
+				self::DIR . "/og/user-01-th.webp",
+				self::DIR . "/og/user-01.webp"
+			];
 
-			sleep(10);
+			foreach ($assertions as $assertion) {
+				$this->assertFileExists($assertion);
+			}
+
 			//remove all created directories
-			Helper::DeleteFolderAndAllFiles(self::DIR . "/og" , true);
+			Helper::DeleteFoldersAndFiles(self::DIR . "/og" , true);
 		}
 	}

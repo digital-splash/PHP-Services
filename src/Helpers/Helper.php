@@ -905,13 +905,13 @@
 				$files = scandir($path);
 
 				foreach ($files AS $file) {
-					if (!is_dir($path . "/" . $file)) {
-						$filesArr[] = $path . "/" . $file;
+					$_file = $path . "/" . $file;
+
+					if (!is_dir($_file)) {
+						$filesArr[] = $_file;
 					}
-					else {
-						if ($recursive && $file !== "." && $file !== "..") {
-							$filesArr = array_merge($filesArr, self::GetAllFiles($path . "/" . $file, $recursive));
-						}
+					else if ($recursive && $file !== "." && $file !== "..") {
+						$filesArr = array_merge($filesArr, self::GetAllFiles($_file, $recursive));
 					}
 				}
 			}
@@ -931,10 +931,12 @@
 				$folders = scandir($path);
 
 				foreach ($folders AS $folder) {
-					if (is_dir($path . "/" . $folder) && $folder !== "." && $folder !== "..") {
-						$foldersArr[] = $path . "/" . $folder;
+					$_folder = $path . "/" . $folder;
+
+					if (is_dir($_folder) && $folder !== "." && $folder !== "..") {
+						$foldersArr[] = $_folder;
 						if ($recursive) {
-							$foldersArr = array_merge($foldersArr, self::GetAllFolders($path . "/" . $folder, $recursive));
+							$foldersArr = array_merge($foldersArr, self::GetAllFolders($_folder, true));
 						}
 					}
 				}
@@ -943,14 +945,15 @@
 		}
 
 		/**
-		 * Delete a full path
+		 * Delete all Files and Folders in a given Path. Also Delete the Main Folder is $deletePath is set to true
 		 */
-		public static function DeleteFolderAndAllFiles(
+		public static function DeleteFoldersAndFiles(
 			string $path,
 			bool $deletePath=false
 		): void {
 			$filesArr = self::GetAllFiles($path, true);
 			$foldersArr = array_reverse(self::GetAllFolders($path, true));
+
 			foreach ($filesArr AS $file) {
 				self::DeleteFileOrFolder($file);
 			}
@@ -961,6 +964,7 @@
 				self::DeleteFileOrFolder($path);
 			}
 		}
+
 		/**
 		 * Converts a multidimentional array to a single dimentional array
 		 */
