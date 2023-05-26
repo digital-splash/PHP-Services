@@ -10,10 +10,6 @@
 
 	class PhpMailerManager extends MailerManager {
 
-		public function __construct() {
-			parent::__construct();
-		}
-
 		public function Send() : array {
 			$this->setDefaultValues();
 			$retArr = $this->ValidateBeforeSend();
