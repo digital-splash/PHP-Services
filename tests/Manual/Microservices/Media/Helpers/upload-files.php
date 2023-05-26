@@ -25,7 +25,7 @@
 	// $test2 = new Test($resize);
 	use DigitalSplash\Media\Helpers\Ratio;
 	use DigitalSplash\Media\Helpers\Resize;
-	use DigitalSplash\Media\Interface\IImageModify;
+	use DigitalSplash\Media\Interfaces\IImageModify;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
 	use DigitalSplash\Media\Helpers\Upload;

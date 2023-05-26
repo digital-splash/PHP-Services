@@ -1,5 +1,5 @@
 <?php
-	namespace DigitalSplash\Media\Interface;
+	namespace DigitalSplash\Media\Interfaces;
 
 
 	interface IImageModify {
