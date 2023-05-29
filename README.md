@@ -142,7 +142,21 @@ Packagist Link: [https://packagist.org/packages/dgsplash/php-services](https://p
 
 ### Microservices
 
+- ### Notification
+
+  - Models
+    - EmailConfiguration
+      - setHost(`string $host`)
+      - setPort(`string $port`)
+      - setUsername(`string $username`)
+      - setPassword(`string $password`)
+      - setEncryption(`string $encryption`)
+      - setFromName(`string $from`)
+      - setFromEmail(`string $email`)
+      - setReplyTo(`string $replyTo`)
+
 - #### Language
+
   - Helpers
     - Language
       - SetDefault(`string $var`)
