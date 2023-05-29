@@ -32,6 +32,7 @@
 			string $var
 		): void {
 			self::$USERNAME = $var;
+			self::$FROMEMAIL = $var;
 		}
 		public static function getUsername(): string {
 			return self::$USERNAME;
