@@ -5,7 +5,7 @@
 	use DigitalSplash\Exceptions\UploadException;
 	use Intervention\Image\ImageManager;
 	use DigitalSplash\Helpers\Helper;
-	use DigitalSplash\Media\Interface\IImageModify;
+	use DigitalSplash\Media\Interfaces\IImageModify;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 
 	class Ratio implements IImageModify {
@@ -13,7 +13,7 @@
 		private float $ratio;
 		private string $destination;
 		private bool $addCanvas;
-		private string|null $canvasColor;
+		private ?string $canvasColor;
 		private float $width;
 		private float $height;
 		private string $extension;

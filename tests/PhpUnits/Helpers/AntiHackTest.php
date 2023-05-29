@@ -3,7 +3,7 @@
 
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Helpers\AntiHack;
-use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Helpers\Helper;
 
 	final class AntiHackTest extends TestCase {
 
