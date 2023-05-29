@@ -30,7 +30,7 @@
 				$mail->Port = EmailConfiguration::getPort();
 
 				//Recipients
-				$mail->setFrom('noreply@dgsplash.com', 'Digital Splash');
+				$mail->setFrom(EmailConfiguration::getFromEmail());
 				foreach ($this->model->getTo() as $recepient) {
 					$mail->addAddress($recepient->getEmail(), $recepient->getName());
 				}
@@ -50,10 +50,22 @@
 					';
 
 				$mail->isHTML(true);//Set email format to HTML
-				$mail->Subject = 'Subject ';
-				$mail->Body = $body;
+				$mail->Subject = $this->model->getSubject();
+				$mail->Body = $this->model->getBody();
 				$mail->AltBody = 'This is the body in plain text for non-HTML mail clients\n' . strip_tags($body);
 
+
+				if (!$this->model->getIsProd()) {
+					//replace all emails by the test email and add them to the subject
+					$subject = $mail->Subject;
+					//add all adresses to the subject
+					foreach ($this->model->getTo() as $address) {
+						$subject .= " - " . $address->getEmail();
+					}
+					$mail->Subject = $subject;
+					$mail->clearAddresses();
+					$mail->addAddress($this->model->getTestEmail());
+				}
 				$mail->send();
 				var_dump($mail);
 			} catch (Exception $e) {
