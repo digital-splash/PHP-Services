@@ -3,6 +3,7 @@
 
 	use DigitalSplash\Notification\Interfaces\IEmail;
 	use DigitalSplash\Notification\Models\Email as EmailModel;
+	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
 	use PHPMailer\PHPMailer\SMTP;
 	use PHPMailer\PHPMailer\Exception;
@@ -21,12 +22,12 @@
 				//Server settings
 				$mail->SMTPDebug = SMTP::DEBUG_SERVER;
 				$mail->isSMTP();
-				$mail->Host = 'mail.dgsplash.com';
+				$mail->Host = EmailConfiguration::getHost();
 				$mail->SMTPAuth = true;
-				$mail->Username = 'noreply@dgsplash.com';
-				$mail->Password = '%E;Pw&p4#3gd8i0Y?{';
-				$mail->SMTPSecure = 'ssl';
-				$mail->Port = '465';
+				$mail->Username = EmailConfiguration::getUsername();
+				$mail->Password = EmailConfiguration::getPassword();
+				$mail->SMTPSecure = EmailConfiguration::getEncryption();
+				$mail->Port = EmailConfiguration::getPort();
 
 				//Recipients
 				$mail->setFrom('noreply@dgsplash.com', 'Digital Splash');
