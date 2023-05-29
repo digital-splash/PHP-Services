@@ -3,7 +3,7 @@
 
 	class EmailConfiguration {
 		private static string $HOST;
-		private static string $PORT;
+		private static int $PORT;
 		private static string $USERNAME;
 		private static string $PASSWORD;
 		private static string $ENCRYPTION;
@@ -21,11 +21,11 @@
 		}
 
 		public static function setPort(
-			string $var
+			int $var
 		): void {
 			self::$PORT = $var;
 		}
-		public static function getPort(): string {
+		public static function getPort(): int {
 			return self::$PORT;
 		}
 
