@@ -1,7 +1,7 @@
 <?php
-	namespace DigitalSplash\Notification\Models\Email;
+	namespace DigitalSplash\Notification\Models;
 
-	class Recepient {
+	class Recipient {
 		private string $name;
 		private ?string $email;
 

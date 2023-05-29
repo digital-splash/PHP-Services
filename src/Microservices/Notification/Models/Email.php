@@ -1,22 +1,24 @@
 <?php
-	namespace DigitalSplash\Notification\Models\Email;
+	namespace DigitalSplash\Notification\Models;
+
+	use DigitalSplash\Notification\Models\Recipient;
 
 	class Email {
 		private bool $isProd;
 		private string $testEmail;
 
 		/**
-		 * @var Recepient[]
+		 * @var Recipient[]
 		 */
 		private array $to;
 
 		/**
-		 * @var Recepient[]
+		 * @var Recipient[]
 		 */
 		private array $cc;
 
 		/**
-		 * @var Recepient[]
+		 * @var Recipient[]
 		 */
 		private array $bcc;
 
@@ -35,11 +37,11 @@
 		}
 
 		public function appendTo(string $name, string $email) {
-			$this->to[] = new Recepient($name, $email);
+			$this->to[] = new Recipient($name, $email);
 		}
 
 		/**
-		 * @return Recepient[]
+		 * @return Recipient[]
 		 */
 		public function getTo(): array {
 			return $this->to;

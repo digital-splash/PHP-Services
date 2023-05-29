@@ -2,7 +2,7 @@
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Notification\Interfaces\IEmail;
-	use DigitalSplash\Notification\Models\Email\Email as EmailModel;
+	use DigitalSplash\Notification\Models\Email as EmailModel;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
 	use PHPMailer\PHPMailer\SMTP;
 	use PHPMailer\PHPMailer\Exception;
