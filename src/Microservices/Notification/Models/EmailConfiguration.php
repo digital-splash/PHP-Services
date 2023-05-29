@@ -9,6 +9,7 @@
 		private static string $ENCRYPTION;
 		private static string $FROMNAME;
 		private static string $FROMEMAIL;
+		private static string $REPLYTO;
 
 		public static function setHost(
 			string $host
@@ -72,6 +73,15 @@
 		}
 		public static function getFromEmail(): string {
 			return self::$FROMEMAIL;
+		}
+
+		public static function setReplyTo(
+			string $var
+		): void {
+			self::$REPLYTO = $var;
+		}
+		public static function getReplyTo(): string {
+			return self::$REPLYTO;
 		}
 
 	}
