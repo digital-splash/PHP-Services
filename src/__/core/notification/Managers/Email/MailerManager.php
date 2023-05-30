@@ -25,7 +25,7 @@
 
 		protected $queueName = "";
 		protected $payload = [];
-		
+
 		protected $to = [];
 		protected $cc = [];
 		protected $bcc = [];
@@ -35,9 +35,9 @@
 		protected $attachments = [];
 		protected $mainTemplate = "main.boxed_with_button";
 		protected $template = "";
-		
+
 		protected $defaultUrl = "";
-		
+
 		public function __construct() {
 			$this->SetDefaultUrl(self::TENANT_LINK);
 		}
@@ -48,7 +48,7 @@
 			//     "message" => "Send Email Function Not Defined!"
 			// ];
 		}
-		
+
 		protected function SetDefaultValues() {
 			$this->AppendTemplateData("tenant_name", self::TENANT_NAME);
 			$this->AppendTemplateData("tenant_logo", MediaHelper::GetMediaFullPath(self::TENANT_LOGO));
@@ -68,7 +68,7 @@
 
 			if ($this->user != null) {
 				$fullname = implode(" ", [$this->user->row["first_name"], $this->user->row["last_name"]]);
-				
+
 				if (count($this->to) == 0) {
 					$this->addRecepient($this->user->row["email"], $fullname);
 				}
@@ -95,7 +95,7 @@
 					"message" => "Email Main Template is Required"
 				];
 			}
-			
+
 			if ($this->template == "") {
 				return [
 					"status" => ERROR,
@@ -144,7 +144,7 @@
 
 		protected function FixBody() {
 			$this->body = ViewHelper::GetEmailTemplate($this->mainTemplate, $this->templateData);
-			
+
 			if ($this->template != "") {
 				$emailBody = ViewHelper::GetEmailTemplate($this->template, $this->templateData);
 				$this->body = str_replace("{{email_content}}", $emailBody, $this->body);
@@ -161,11 +161,11 @@
 		public function SetQueueName(string $str) : void {
 			$this->queueName = $str;
 		}
-		
+
 		public function SetPayload(array $payload) : void {
 			$this->payload = $payload;
 		}
-		
+
 		public function SetUser(User $user) {
 			$this->user = $user;
 		}
@@ -216,7 +216,7 @@
 				if ($name == "") {
 					$name = $email;
 				}
-	
+
 				if (!isset($this->to)) {
 					$this->to = [];
 				}
@@ -239,7 +239,7 @@
 				if ($name == "") {
 					$name = $email;
 				}
-	
+
 				if (!isset($this->cc)) {
 					$this->cc = [];
 				}

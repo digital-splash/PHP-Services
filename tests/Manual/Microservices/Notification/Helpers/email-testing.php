@@ -4,16 +4,16 @@
 
 	include_once __DIR__ . '/../../../../../vendor/autoload.php';
 
-	EmailConfiguration::setHost('Put Host Here');
-	EmailConfiguration::setPort(Put Port here);
-	EmailConfiguration::setUsername('Put username here');
-	EmailConfiguration::setPassword('Put password here');
-	EmailConfiguration::setEncryption('Put wncryption here');
-	EmailConfiguration::setFromName('Testing Email');
-
+	EmailConfiguration::setIsProd(false);
+	EmailConfiguration::setHost('mail.dgsplash.com');
+	EmailConfiguration::setPort(465);
+	EmailConfiguration::setEncryption('ssl');
+	EmailConfiguration::setFromName('Digital Splash');
+	EmailConfiguration::setFromEmail('noreply@dgsplash.com');
+	EmailConfiguration::setFromEmailPassword('%E;Pw&p4#3gd8i0Y?{');
+	EmailConfiguration::setTestEmail('testing@dgsplash.com');
 
 	$email = new Email();
-	$email->model->setTestEmail('Put testing email');
 	$email->model->appendTo('Testing Email', 'add a recipient ');
 	$email->model->appendTo('Hadi Darwish', 'add a recipient ');
 	$email->model->setSubject('Testing Email');
