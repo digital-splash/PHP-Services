@@ -2,7 +2,7 @@
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Notification\Interfaces\INotification;
-	use DigitalSplash\Notification\Models\Email\Email as EmailModel;
+	use DigitalSplash\Notification\Models\Email as EmailModel;
 
 	class Email implements INotification {
 		public EmailModel $model;

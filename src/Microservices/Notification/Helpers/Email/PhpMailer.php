@@ -2,7 +2,8 @@
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Notification\Interfaces\IEmail;
-	use DigitalSplash\Notification\Models\Email\Email as EmailModel;
+	use DigitalSplash\Notification\Models\Email as EmailModel;
+	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
 	use PHPMailer\PHPMailer\SMTP;
 	use PHPMailer\PHPMailer\Exception;
@@ -15,21 +16,23 @@
 		}
 
 		public function send(): void {
-			$mail = new MainPHPMailer(true);
-
 			try {
-				//Server settings
-				$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+				$mail = new MainPHPMailer(true);
 				$mail->isSMTP();
-				$mail->Host = 'mail.dgsplash.com';
+				$mail->SMTPDebug = EmailConfiguration::getIsProd() ? SMTP::DEBUG_OFF : SMTP::DEBUG_SERVER;
 				$mail->SMTPAuth = true;
-				$mail->Username = 'noreply@dgsplash.com';
-				$mail->Password = '%E;Pw&p4#3gd8i0Y?{';
-				$mail->SMTPSecure = 'ssl';
-				$mail->Port = '465';
+				$mail->Host = EmailConfiguration::getHost();
+				$mail->Port = EmailConfiguration::getPort();
+				$mail->SMTPSecure = EmailConfiguration::getEncryption();
+				$mail->Username = EmailConfiguration::getFromEmail();
+				$mail->Password = EmailConfiguration::getFromEmailPassword();
 
 				//Recipients
-				$mail->setFrom('noreply@dgsplash.com', 'Digital Splash');
+				$mail->setFrom(
+					EmailConfiguration::getFromEmail(),
+					EmailConfiguration::getFromName()
+				);
+
 				foreach ($this->model->getTo() as $recepient) {
 					$mail->addAddress($recepient->getEmail(), $recepient->getName());
 				}
@@ -49,17 +52,27 @@
 					';
 
 				$mail->isHTML(true);//Set email format to HTML
-				$mail->Subject = 'Subject ';
-				$mail->Body = $body;
+				$mail->Subject = $this->model->getSubject();
+				$mail->Body = $this->model->getBody();
 				$mail->AltBody = 'This is the body in plain text for non-HTML mail clients\n' . strip_tags($body);
 
-				$mail->send();
-				var_dump($mail);
+
+				// if (!EmailConfiguration::getIsProd()) {
+				// 	//replace all emails by the test email and add them to the subject
+				// 	$subject = $mail->Subject;
+				// 	//add all adresses to the subject
+				// 	foreach ($this->model->getTo() as $address) {
+				// 		$subject .= " - " . $address->getEmail();
+				// 	}
+				// 	$mail->Subject = $subject;
+				// 	$mail->clearAddresses();
+				// 	$mail->addAddress($this->model->getTestEmail());
+				// }
+				// $mail->send();
+				// var_dump($mail);
 			} catch (Exception $e) {
-				var_dump($mail);
-				echo "<hr />";
-				var_dump($e);
-				// echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+				//TODO: Create Notification Exceptions, and call it from here...
+				//throw new PhpMailerException($e->getMessage());
 			}
 		}
 	}
