@@ -1,6 +1,8 @@
 <?php
 	namespace DigitalSplash\Notification\Models;
 
+	use DigitalSplash\Exceptions\Notification\EmptyRecipientException;
+	use DigitalSplash\Exceptions\Notification\PhpMailerException;
 	use DigitalSplash\Notification\Models\Recipient;
 
 	class Email {
@@ -125,6 +127,44 @@
 				'path' => $path,
 				'name' => $name
 			];
+		}
+
+		public function fixForNonProduction(): void {
+			if (!EmailConfiguration::getIsProd()) {
+				$replaced = [];
+
+				if (!empty($this->getTo())) {
+					$to = '';
+					foreach ($this->getTo() as $toRes) {
+						$to .= $toRes->getEmail() . ';';
+					}
+					$replaced[] = "TO:" . $to;
+					$this->clearTo();
+					$this->appendTo('Test', 'testing@dgsplash.com');
+				}
+
+				if (!empty($this->getCc())) {
+					$cc = '';
+					foreach ($this->getCc() as $ccRes) {
+						$cc .= $ccRes->getEmail() . ';';
+					}
+					$replaced[] = "CC:" . $cc;
+					$this->clearCC();
+				}
+
+				if (!empty($this->getBcc())) {
+					$bcc = '';
+					foreach ($this->getBcc() as $bccRes) {
+						$bcc .= $bccRes->getEmail() . ';';
+					}
+					$replaced[] = "BCC:" . $bcc;
+					$this->clearBCC();
+				}
+
+				if (!empty($replaced)) {
+					$this->subject .= " [Replaced " . implode(" - ", $replaced) . "]";
+				}
+			}
 		}
 
 	}
