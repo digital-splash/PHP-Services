@@ -1,6 +1,7 @@
 <?php
 	namespace DigitalSplash\Notification\Helpers\Email;
 
+	use DigitalSplash\Exceptions\Notification\PhpMailerException;
 	use DigitalSplash\Notification\Interfaces\IEmail;
 	use DigitalSplash\Notification\Models\Email as EmailModel;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
@@ -17,6 +18,8 @@
 
 		public function send(): void {
 			try {
+				$this->model->validateBeforeSend();
+				$this->model->fixForNonProduction();
 				$mail = new MainPHPMailer(true);
 				$mail->isSMTP();
 				$mail->SMTPDebug = EmailConfiguration::getIsProd() ? SMTP::DEBUG_OFF : SMTP::DEBUG_SERVER;
@@ -33,15 +36,22 @@
 					EmailConfiguration::getFromName()
 				);
 
-				foreach ($this->model->getTo() as $recepient) {
-					$mail->addAddress($recepient->getEmail(), $recepient->getName());
+				foreach ($this->model->getTo() as $recipient) {
+					$mail->addAddress($recipient->getEmail(), $recipient->getName());
 				}
 				// $mail->addReplyTo('hadidarwish@dgsplash.com', 'Information');
-				// $mail->addCC('hadi.darwish.03@gmail.com');
-				// $mail->addBCC('hadidarwish222@gmail.com');
+				foreach ($this->model->getCC() as $cc) {
+					$mail->addCC($cc->getEmail(), $cc->getName());
+				}
+
+				foreach ($this->model->getCC() as $cc) {
+					$mail->addBCC($cc->getEmail(), $cc->getName());
+				}
 
 				//Attachments
-				// $mail->addAttachment( __DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.jpg",'new.jpg');//Add attachments
+				foreach ($this->model->getAttachments() as $attachment) {
+					$mail->addAttachment($attachment['path'], $attachment['name']);//Add attachments
+				}
 				// $mail->addAttachment('/tmp/image.jpg', 'new.jpg');//Optional name
 
 				//Content
@@ -68,11 +78,12 @@
 				// 	$mail->clearAddresses();
 				// 	$mail->addAddress($this->model->getTestEmail());
 				// }
-				// $mail->send();
-				// var_dump($mail);
+				$mail->send();
+				var_dump($mail);
 			} catch (Exception $e) {
+				var_dump($e);
 				//TODO: Create Notification Exceptions, and call it from here...
-				//throw new PhpMailerException($e->getMessage());
+				throw new PhpMailerException($e->getMessage());
 			}
 		}
 	}
