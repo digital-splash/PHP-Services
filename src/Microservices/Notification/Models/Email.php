@@ -167,4 +167,14 @@
 			}
 		}
 
+		public function validateBeforeSend(): void {
+			if (empty($this->getTo())) {
+				throw new EmptyRecipientException();
+			}
+
+			if (empty($this->getSubject())) {
+				throw new PhpMailerException("Subject is empty");
+			}
+		}
+
 	}
