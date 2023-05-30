@@ -14,11 +14,12 @@
 	EmailConfiguration::setTestEmail('testing@dgsplash.com');
 
 	$email = new Email();
-	$email->model->appendTo('Testing Email', 'add a recipient ');
-	$email->model->appendTo('Hadi Darwish', 'add a recipient ');
+	$email->model->appendTo('Testing Email', 'hadidarwish999@gmail.com');
+	$email->model->appendTo('Hadi Darwish', 'hadidarwish222@gmail.com');
 	$email->model->setSubject('Testing Email');
 	$email->model->setBody('This is a test email');
-	$email->model->appendCC('Testing Email','add cc');
-	$email->model->appendBCC('Hadi Darwish','add bcc');
+	$email->model->appendCC('Hadi','hadidarwish999@gmail.com');
+	$email->model->appendBCC('Hadi Darwish','hadidarwish222@gmail.com');
+	$email->model->appendToAttachment(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.jpg", 'test.jpg');
 
 	$email->send();
