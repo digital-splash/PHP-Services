@@ -4,5 +4,5 @@
 
 	interface INotification {
 
-		public function send(): void;
+		public function send(): array;
 	}

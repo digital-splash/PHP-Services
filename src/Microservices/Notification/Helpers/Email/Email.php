@@ -1,18 +1,32 @@
 <?php
 	namespace DigitalSplash\Notification\Helpers\Email;
 
+	use DigitalSplash\Models\Status;
 	use DigitalSplash\Notification\Interfaces\INotification;
-	use DigitalSplash\Notification\Models\Email as EmailModel;
+	use DigitalSplash\Notification\Models\Notification as NotificationModel;
+	use Throwable;
 
 	class Email implements INotification {
-		public EmailModel $model;
+		public NotificationModel $model;
 
 		public function __construct() {
-			$this->model = new EmailModel();
+			$this->model = new NotificationModel();
 		}
 
-		public function send(): void {
-			$this->sendPhpMailer();
+		public function send(): array {
+			$returnArray = [
+				'status' => Status::ERROR
+			];
+
+			try {
+				$this->sendPhpMailer();
+
+				$returnArray['status'] = Status::SUCCESS;
+			} catch (Throwable $t) {
+				$returnArray['message'] = $t->getMessage();
+			}
+
+			return $returnArray;
 		}
 
 		public function sendPhpMailer(): void {

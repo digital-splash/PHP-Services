@@ -1,25 +1,29 @@
 <?php
 	namespace DigitalSplash\Notification\Helpers\Email;
 
+	use DigitalSplash\Exceptions\Notification\PhpMailerException;
 	use DigitalSplash\Notification\Interfaces\IEmail;
-	use DigitalSplash\Notification\Models\Email as EmailModel;
+	use DigitalSplash\Notification\Models\Notification as NotificationModel;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
 	use PHPMailer\PHPMailer\SMTP;
 	use PHPMailer\PHPMailer\Exception;
 
 	class PhpMailer implements IEmail {
-		public EmailModel $model;
+		public NotificationModel $model;
 
 		public function __construct() {
-			$this->model = new EmailModel();
+			$this->model = new NotificationModel();
 		}
 
 		public function send(): void {
 			try {
+				$this->model->validate();
+				$this->model->fixForNonProduction();
+
 				$mail = new MainPHPMailer(true);
 				$mail->isSMTP();
-				$mail->SMTPDebug = EmailConfiguration::getIsProd() ? SMTP::DEBUG_OFF : SMTP::DEBUG_SERVER;
+				$mail->SMTPDebug = SMTP::DEBUG_OFF;
 				$mail->SMTPAuth = true;
 				$mail->Host = EmailConfiguration::getHost();
 				$mail->Port = EmailConfiguration::getPort();
@@ -27,52 +31,35 @@
 				$mail->Username = EmailConfiguration::getFromEmail();
 				$mail->Password = EmailConfiguration::getFromEmailPassword();
 
-				//Recipients
 				$mail->setFrom(
 					EmailConfiguration::getFromEmail(),
 					EmailConfiguration::getFromName()
 				);
 
-				foreach ($this->model->getTo() as $recepient) {
-					$mail->addAddress($recepient->getEmail(), $recepient->getName());
+				foreach ($this->model->getTo() as $recipient) {
+					$mail->addAddress($recipient->getEmail(), $recipient->getName());
 				}
-				// $mail->addReplyTo('hadidarwish@dgsplash.com', 'Information');
-				// $mail->addCC('hadi.darwish.03@gmail.com');
-				// $mail->addBCC('hadidarwish222@gmail.com');
+				foreach ($this->model->getCC() as $cc) {
+					$mail->addCC($cc->getEmail(), $cc->getName());
+				}
+				foreach ($this->model->getBCC() as $bcc) {
+					$mail->addBCC($bcc->getEmail(), $bcc->getName());
+				}
+				foreach ($this->model->getReplyTo() as $replyTo) {
+					$mail->addReplyTo($replyTo->getEmail(), $replyTo->getName());
+				}
 
-				//Attachments
-				// $mail->addAttachment( __DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.jpg",'new.jpg');//Add attachments
-				// $mail->addAttachment('/tmp/image.jpg', 'new.jpg');//Optional name
-
-				//Content
-				$body = '
-					<h1>Test</h1>
-					<p>Test</p>
-					This is the HTML message body <b>in bold!</b>
-					';
+				foreach ($this->model->email->getAttachments() as $attachment) {
+					$mail->addAttachment($attachment['path'], $attachment['name']);
+				}
 
 				$mail->isHTML(true);//Set email format to HTML
-				$mail->Subject = $this->model->getSubject();
-				$mail->Body = $this->model->getBody();
-				$mail->AltBody = 'This is the body in plain text for non-HTML mail clients\n' . strip_tags($body);
-
-
-				// if (!EmailConfiguration::getIsProd()) {
-				// 	//replace all emails by the test email and add them to the subject
-				// 	$subject = $mail->Subject;
-				// 	//add all adresses to the subject
-				// 	foreach ($this->model->getTo() as $address) {
-				// 		$subject .= " - " . $address->getEmail();
-				// 	}
-				// 	$mail->Subject = $subject;
-				// 	$mail->clearAddresses();
-				// 	$mail->addAddress($this->model->getTestEmail());
-				// }
-				// $mail->send();
-				// var_dump($mail);
+				$mail->Subject = $this->model->email->getSubject();
+				$mail->Body = $this->model->email->getBody();
+				$mail->AltBody = 'This is the body in plain text for non-HTML mail clients\n' . strip_tags($mail->Body);
+				$mail->send();
 			} catch (Exception $e) {
-				//TODO: Create Notification Exceptions, and call it from here...
-				//throw new PhpMailerException($e->getMessage());
+				throw new PhpMailerException($e->getMessage());
 			}
 		}
 	}

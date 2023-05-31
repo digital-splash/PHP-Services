@@ -595,7 +595,6 @@
 			string $dir,
 			string $permission="0777"
 		): bool {
-			// var_dump($dir);
 			if (!is_dir($dir)) {
 				mkdir($dir, $permission, true);
 				return true;
