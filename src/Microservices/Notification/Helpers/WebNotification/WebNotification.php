@@ -1,5 +1,5 @@
 <?php
-	namespace DigitalSplash\Notification\Helpers;
+	namespace DigitalSplash\Notification\Helpers\WebNotification;
 
 	use DigitalSplash\Notification\Interfaces\INotification;
 
@@ -7,5 +7,7 @@
 
 		public function __construct() {}
 
-		public function send(): void {}
+		public function send(): array {
+			return [];
+		}
 	}
