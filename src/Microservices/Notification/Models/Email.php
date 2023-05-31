@@ -1,8 +1,7 @@
 <?php
 	namespace DigitalSplash\Notification\Models;
 
-	use DigitalSplash\Exceptions\Notification\EmptyRecipientException;
-	use DigitalSplash\Exceptions\Notification\PhpMailerException;
+	use DigitalSplash\Exceptions\Notification\EmptyValueException;
 	use DigitalSplash\Notification\Models\Recipient;
 
 	class Email {
@@ -169,11 +168,11 @@
 
 		public function validateBeforeSend(): void {
 			if (empty($this->getTo())) {
-				throw new EmptyRecipientException();
+				throw new EmptyValueException('Recepient');
 			}
 
 			if (empty($this->getSubject())) {
-				throw new PhpMailerException("Subject is empty");
+				throw new EmptyValueException("Subject");
 			}
 		}
 

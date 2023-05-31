@@ -20,6 +20,11 @@
 			"fr": "Le ou les paramètres (::params::) ne doivent pas être vides ",
 			"ar": "يجب ألا تكون المعلمات (::params::) فارغة"
 		},
+		"EmptyValue": {
+			"en": "The value of (::params::) should not be Empty",
+			"fr": "The value of (::params::) should not be Empty",
+			"ar": "The value of (::params::) should not be Empty"
+		},
 		"NotNumericParam": {
 			"en": "The parameter(s) (::params::) should be Numeric",
 			"fr": "Le ou les paramètres (::params::) doivent être numériques ",
@@ -97,6 +102,13 @@
 				"en": "File extension is not allowed! Allowed extensions: \"::params::\"",
 				"fr": "File extension is not allowed! Allowed extensions: \"::params::\"",
 				"ar": "File extension is not allowed! Allowed extensions: \"::params::\""
+			}
+		},
+		"notification": {
+			"PhpMailer": {
+				"en": "PhpMailer Error [::params::]",
+				"fr": "PhpMailer Error [::params::]",
+				"ar": "PhpMailer Error [::params::]"
 			}
 		}
 	}

@@ -3,6 +3,6 @@
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
-	class PhpMailerException extends BaseParameterException {
-		protected $message = "exception.notification.PhpMailer";
+	class EmptyValueException extends BaseParameterException {
+		protected $message = "exception.EmptyValue";
 	}
