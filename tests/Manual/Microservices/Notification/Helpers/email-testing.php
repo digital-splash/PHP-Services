@@ -26,13 +26,21 @@
 	$notification->model->appendToAttachment(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.jpg", 'user-01-th.jpg');
 	$notification->model->appendToAttachment(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.webp", 'user-01.webp');
 	$notification->model->setSubject('Testing Email');
-	$template = new Template([
-		'{{tenant_name}}'
-	]);
+	$template = new Template(
+		[
+			'{{full_name}}' => 'Hadi Darwish',
+			'{{tenant_name}}' => 'Digital Splash',
+			'{{url}}' => 'dgsplash.com',
+			'{{tenant_main_color}}' => '#0000ff',
+			'{{button_text}}' => 'Test button',
+			'{{tenant_year}}' => '2023',
+			'{{tenant_logo}}' => 'https://dgsplash.com/assets/images/logo-bg.jpg'
+		],
+		'Main/boxed_with_button',
+		'TestEmail'
+	);
 	$notification->model->email->setBody(
-		$template->getContent('TestEmail', [
-			'{{tenant_name}}' => 'Hadi Darwish'
-		])
+		$template->getContent()
 	);
 
 	$notificationResponse = $notification->send();
