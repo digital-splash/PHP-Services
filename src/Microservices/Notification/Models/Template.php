@@ -48,5 +48,13 @@
 			$this->templateContentPath = $templateContentPath;
 		}
 
-		
+		public function getContent(): string {
+			$email_content = Helper::getContentFromFile($this->templateContentPath, $this->keys);
+			$this->appendKey(
+				'{{email_content}}',
+				$email_content
+			);
+			echo $this->templatePath;
+			return Helper::getContentFromFile($this->templatePath, $this->keys);
+		}
 	}
