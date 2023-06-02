@@ -54,8 +54,10 @@
                               font-stretch: normal;
                             "
                           >
-                            Email Content Test
-                            <p style="font-size: 10pt">Digital Splash Team</p>
+                            <p>
+                              This is a Test Email sent from {{tenant_name}}
+                            </p>
+                            <p style="font-size: 10pt">{{tenant_name}} Team</p>
                           </td>
                         </tr>
                       </tbody>
@@ -102,7 +104,8 @@
                               <tbody>
                                 <tr>
                                   <td style="color: #6e6d6d; font-size: 10px">
-                                    &copy; Copyright Digital Splash 2023
+                                    &copy; Copyright {{tenant_name}}
+                                    {{tenant_year}}
                                     <br />
                                   </td>
                                 </tr>
@@ -129,7 +132,7 @@
                                       data-imagetype="AttachmentByCid"
                                       naturalheight="42"
                                       naturalwidth="198"
-                                      alt="Digital Splash"
+                                      alt="{{tenant_name}}"
                                       style="
                                         display: block;
                                         outline: none;
@@ -138,7 +141,7 @@
                                         width: 130px;
                                       "
                                       crossorigin="anonymous"
-                                      src="__DIR__ . '../../../../_CommonFiles/Media/users/profile/user-01.jpg'"
+                                      src="{{tenant_logo}}"
                                     />
                                   </td>
                                 </tr>
