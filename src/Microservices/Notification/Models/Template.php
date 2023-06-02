@@ -13,11 +13,13 @@
 		public function __construct(
 			array $keys,
 			string $templatePath,
-			string $templateContentPath
+			string $templateContentPath = ''
 			) {
 			$this->keys = $keys;
 			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templatePath . '.html');
-			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
+			if ($templateContentPath !== '') {
+				$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
+			}
 		}
 
 		public function getKeys(): array {
@@ -37,7 +39,7 @@
 		}
 
 		public function setTemplatePath(string $templatePath): void {
-			$this->templatePath = $templatePath;
+			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templatePath . '.html');;
 		}
 
 		public function getTemplateContentPath(): string {
@@ -45,15 +47,18 @@
 		}
 
 		public function setTemplateContentPath(string $templateContentPath): void {
-			$this->templateContentPath = $templateContentPath;
+			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
 		}
 
 		public function getContent(): string {
-			$email_content = Helper::getContentFromFile($this->templateContentPath, $this->keys);
-			$this->appendKey(
-				'{{email_content}}',
-				$email_content
-			);
+			$email_content = '';
+			if ($this->templateContentPath !== '') {
+				$email_content = Helper::getContentFromFile($this->templateContentPath, $this->keys);
+				$this->appendKey(
+					'{{email_content}}',
+					$email_content
+				);
+			}
 			echo $this->templatePath;
 			return Helper::getContentFromFile($this->templatePath, $this->keys);
 		}
