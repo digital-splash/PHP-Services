@@ -14,6 +14,20 @@
 	EmailConfiguration::setFromEmailPassword('%E;Pw&p4#3gd8i0Y?{');
 	EmailConfiguration::setTestEmail('testing@dgsplash.com');
 
+	$template = new Template(
+		[
+			'full_name' => 'Hadi Darwish',
+			'tenant_name' => 'Digital Splash',
+			'url' => 'dgsplash.com',
+			'tenant_main_color' => '#0000ff',
+			'button_text' => 'Test button',
+			'tenant_year' => '2023',
+			'tenant_logo' => 'https://dgsplash.com/assets/images/logo-bg.jpg'
+		],
+		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON,
+		'TestEmail'
+	);
+
 	$notification = new Notification();
 
 	$notification->setSendEmail(true);
@@ -26,23 +40,9 @@
 	$notification->model->appendToAttachment(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01-th.jpg", 'user-01-th.jpg');
 	$notification->model->appendToAttachment(__DIR__ . "/../../../../_CommonFiles/Media/users/profile/user-01.webp", 'user-01.webp');
 	$notification->model->setSubject('Testing Email');
-	$template = new Template(
-		[
-			'{{full_name}}' => 'Hadi Darwish',
-			'{{tenant_name}}' => 'Digital Splash',
-			'{{url}}' => 'dgsplash.com',
-			'{{tenant_main_color}}' => '#0000ff',
-			'{{button_text}}' => 'Test button',
-			'{{tenant_year}}' => '2023',
-			'{{tenant_logo}}' => 'https://dgsplash.com/assets/images/logo-bg.jpg'
-		],
-		'Main/boxed_with_button',
-		'TestEmail'
-	);
 	$notification->model->email->setBody(
 		$template->getContent()
 	);
 
 	$notificationResponse = $notification->send();
-
 	var_dump($notificationResponse);

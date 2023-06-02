@@ -8,10 +8,6 @@
 		private string $body;
 		private array $attachments;
 
-		// private $templateData = [];
-		// private $mainTemplate = "main.boxed_with_button";
-		// private $template = "";
-
 		public function __construct() {
 			$this->subject = '';
 			$this->body = '';
@@ -27,6 +23,7 @@
 		}
 
 		public function setBody(string $body): void {
+			echo $body;
 			$this->body = $body;
 		}
 
@@ -60,6 +57,10 @@
 		public function validate(): void {
 			if (empty($this->getSubject())) {
 				throw new EmptyValueException("Subject");
+			}
+
+			if (empty($this->getBody())) {
+				throw new EmptyValueException("Body");
 			}
 		}
 

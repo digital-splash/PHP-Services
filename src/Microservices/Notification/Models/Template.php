@@ -4,34 +4,37 @@
 	use DigitalSplash\Helpers\Helper;
 
 	class Template {
+		const MAIN_TEMPLATE_BOXED = 'boxed';
+		const MAIN_TEMPLATE_BOXED_WITH_BUTTON = 'boxed_with_button';
+
 		const TEMPLATE_PATH = __DIR__ . '/../Templates/Email/';
 
-		private $keys = [];
+		private $replaceArray = [];
 		private $templatePath = '';
 		private $templateContentPath = '';
 
 		public function __construct(
-			array $keys,
+			array $replaceArray,
 			string $templatePath,
 			string $templateContentPath = ''
-			) {
-			$this->keys = $keys;
-			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templatePath . '.html');
+		) {
+			$this->replaceArray = $replaceArray;
+			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . 'Main/' . $templatePath . '.html');
 			if ($templateContentPath !== '') {
 				$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
 			}
 		}
 
-		public function getKeys(): array {
-			return $this->keys;
+		public function getReplaceArray(): array {
+			return $this->replaceArray;
 		}
 
-		public function setKeys(array $keys): void {
-			$this->keys = $keys;
+		public function setReplaceArray(array $replaceArray): void {
+			$this->replaceArray = $replaceArray;
 		}
 
-		public function appendKey(string $key, string $value): void {
-			$this->keys[$key] = $value;
+		public function appendToReplaceArray(string $key, string $value): void {
+			$this->replaceArray[$key] = $value;
 		}
 
 		public function getTemplatePath(): string {
@@ -51,15 +54,23 @@
 		}
 
 		public function getContent(): string {
-			$email_content = '';
-			if ($this->templateContentPath !== '') {
-				$email_content = Helper::getContentFromFile($this->templateContentPath, $this->keys);
-				$this->appendKey(
+			$this->fixReplaceArray();
+
+			if (!Helper::IsNullOrEmpty($this->templateContentPath)) {
+				$this->appendToReplaceArray(
 					'{{email_content}}',
-					$email_content
+					Helper::getContentFromFile($this->templateContentPath, $this->replaceArray)
 				);
 			}
-			echo $this->templatePath;
-			return Helper::getContentFromFile($this->templatePath, $this->keys);
+
+			return Helper::getContentFromFile($this->templatePath, $this->replaceArray);
+		}
+
+		private function fixReplaceArray(): void {
+			$newReplaceArray = [];
+			foreach ($this->replaceArray as $key => $value) {
+				$newReplaceArray['{{' . $key . '}}'] = $value;
+			}
+			$this->setReplaceArray($newReplaceArray);
 		}
 	}
