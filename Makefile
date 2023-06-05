@@ -1,17 +1,12 @@
-# .PHONY: start stop bash logs status jasmine phpunit clean
-
-# MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-# PWD := $(dir $(MAKEPATH))
-
 TTY_PARAM := $(shell tty > /dev/null && echo "" || echo "-T")
 WINPTY := $(shell command -v winpty && echo "winpty " ||  echo "")
 
 start: stop
 	docker-compose up -d
-	# $(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "composer install --no-plugins --no-scripts --no-interaction"
+	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "composer install --no-plugins --no-scripts --no-interaction"
 
-# install:
-# 	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-app bash -c "composer install --no-plugins --no-scripts --no-interaction"
+install:
+	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "composer install --no-plugins --no-scripts --no-interaction"
 
 stop:
 	docker-compose down
@@ -29,7 +24,7 @@ status:
 	docker-compose ps
 
 phpunit:
-	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "cd /var/www/html && phpunit"
+	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "cd /var/www/html && composer run phpunit"
 
-# composer:
-# 	$(WINPTY)docker-compose exec $(TTY_PARAM) soci-app bash -c "composer dump-autoload"
+composer:
+	$(WINPTY)docker-compose exec $(TTY_PARAM) php-services-base bash -c "composer dump-autoload"
