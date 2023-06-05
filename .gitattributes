@@ -1,4 +1,13 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+.htaccess export-ignore
+.htaccess_local export-ignore
+bootstrap-compose.sh export-ignore
+composer.lock export-ignore
+docker-compose.yml export-ignore
+
+/.guthub export-ignore
+/dockerfiles export-ignore
 /src/__ export-ignore
 /tests export-ignore
 /utils export-ignore
-README.md export-ignore
