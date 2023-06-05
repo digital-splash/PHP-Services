@@ -75,7 +75,7 @@ use DigitalSplash\Notification\Interfaces\IEmail;
 			if (Helper::IsNullOrEmpty(EmailConfiguration::getHost())) {
 				throw new PhpMailerException('SMTP host is not set');
 			}
-			if (Helper::IsNullOrEmpty(EmailConfiguration::getPort())) {
+			if (EmailConfiguration::getPort() <= 0) {
 				throw new PhpMailerException('SMTP port is not set');
 			}
 			if (Helper::IsNullOrEmpty(EmailConfiguration::getEncryption())) {
