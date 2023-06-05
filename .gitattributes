@@ -2,11 +2,11 @@
 .gitignore export-ignore
 .htaccess export-ignore
 .htaccess_local export-ignore
-bootstrap-compose.sh export-ignore
 composer.lock export-ignore
 docker-compose.yml export-ignore
+Makefile export-ignore
 
-/.guthub export-ignore
+/.github export-ignore
 /dockerfiles export-ignore
 /src/__ export-ignore
 /tests export-ignore
