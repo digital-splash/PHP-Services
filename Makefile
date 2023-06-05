@@ -38,7 +38,7 @@ status:
 phpunit:
 	docker-compose exec $(BASE_IMAGE_NAME) bash -c "cd /var/www/html && composer run phpunit"
 
-phpunit:
+composer-install:
 	docker-compose exec $(BASE_IMAGE_NAME) bash -c "composer install --no-plugins --no-scripts --no-interaction"
 
 composer-dump:
