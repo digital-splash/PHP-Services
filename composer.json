@@ -21,7 +21,7 @@
     },
 	"minimum-stability": "stable",
 	"require": {
-	  "php": ">=7.4.0",
+	  "php": ">=8.0",
 		"intervention/image": "^2.7",
 		"phpmailer/phpmailer": "^6.8"
 	},
