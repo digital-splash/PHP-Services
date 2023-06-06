@@ -1,38 +1,55 @@
 <?php
-
-use DigitalSplash\Exceptions\ConfigurationNotFoundException;
-use DigitalSplash\Exceptions\InvalidConfigurationException;
-use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Exceptions\ConfigurationNotFoundException;
+	use DigitalSplash\Exceptions\InvalidConfigurationException;
+	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 
-	$dir = __DIR__;
-	$prevDir = '';
-	while (!file_exists($dir . '/dgsplash.phpservices.env.json')) {
-		$prevDir = $dir;
-		$dir = dirname($dir);
-		if ($dir === $prevDir) {
-			throw new ConfigurationNotFoundException();
+	class EnvConfig {
+		private static array $config = [];
+
+		public static function init(): void {
+			self::getConfigFromFile();
+			self::setConfig();
+		}
+
+		private static function getConfigFromFile(): void {
+			$dir = __DIR__;
+			$prevDir = '';
+			while (!file_exists($dir . '/dgsplash.phpservices.env.json')) {
+				$prevDir = $dir;
+				$dir = dirname($dir);
+				if ($dir === $prevDir) {
+					throw new ConfigurationNotFoundException();
+				}
+			}
+
+			self::$config = Helper::GetJsonContentFromFileAsArray(
+				$dir . '/dgsplash.phpservices.env.json'
+			);
+
+			if (Helper::IsNullOrEmpty(self::$config)) {
+				throw new InvalidConfigurationException();
+			}
+
+		}
+
+		private static function setConfig(): void {
+			EmailConfiguration::setIsProd(self::$config['environment'] === 'production');
+
+			self::emailConfig();
+		}
+
+		private static function emailConfig(): void {
+			$config = self::$config['mail'] ?: [];
+
+			EmailConfiguration::setHost($config['host'] ?: '');
+			EmailConfiguration::setPort($config['port'] ?: 0);
+			EmailConfiguration::setEncryption($config['encryption'] ?: '');
+			EmailConfiguration::setFromName($config['from']['name'] ?: '');
+			EmailConfiguration::setFromEmail($config['from']['email'] ?: '');
+			EmailConfiguration::setFromEmailPassword($config['from']['password'] ?: '');
+			EmailConfiguration::setTestEmail($config['test_email'] ?: '');
 		}
 	}
 
-	$config = Helper::GetJsonContentFromFileAsArray(
-		$dir . '/dgsplash.phpservices.env.json'
-	);
-
-	if (Helper::IsNullOrEmpty($config)) {
-		throw new InvalidConfigurationException();
-	}
-
-	// Set the environment
-	EmailConfiguration::setFromName($config['mail']['username']);
-	EmailConfiguration::setFromEmail($config['mail']['email']);
-	EmailConfiguration::setFromEmailPassword($config['mail']['password']);
-	EmailConfiguration::setHost($config['mail']['host']);
-	EmailConfiguration::setPort($config['mail']['port']);
-	EmailConfiguration::setEncryption($config['mail']['encryption']);
-	EmailConfiguration::setTestEmail($config['mail']['test_email']);
-	EmailConfiguration::setIsProd($config['environment']);
-
-	// Load the configuration file
-	require_once $dir . '/dgsplash.phpservices.env.json';
-
+	EnvConfig::init();
