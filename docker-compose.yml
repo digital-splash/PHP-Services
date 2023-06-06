@@ -1,0 +1,14 @@
+# Use root/example user/password credentials
+version: "3.7"
+
+services:
+  php-services-base:
+    # platform: linux/x86_64
+    image: php-services-base
+    container_name: php-services-base
+    volumes:
+      - .:/var/www/html/
+    ports:
+      - "80:80"
+    stdin_open: true
+    tty: true
