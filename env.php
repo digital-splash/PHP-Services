@@ -1,10 +1,11 @@
 <?php
-	use DigitalSplash\Exceptions\ConfigurationNotFoundException;
-	use DigitalSplash\Exceptions\InvalidConfigurationException;
+	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
+	use DigitalSplash\Exceptions\Configuration\InvalidConfigurationException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 
 	class EnvConfig {
+
 		private static array $config = [];
 
 		public static function init(): void {
