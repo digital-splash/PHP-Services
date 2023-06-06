@@ -1,18 +1,8 @@
 <?php
 	use DigitalSplash\Notification\Helpers\Notification;
-	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use DigitalSplash\Notification\Models\Template;
 
 	include_once __DIR__ . '/../../../../../vendor/autoload.php';
-
-	// EmailConfiguration::setIsProd(false);
-	// EmailConfiguration::setHost('mail.dgsplash.com');
-	// EmailConfiguration::setPort(465);
-	// EmailConfiguration::setEncryption('ssl');
-	// EmailConfiguration::setFromName('Digital Splash');
-	// EmailConfiguration::setFromEmail('noreply@dgsplash.com');
-	// EmailConfiguration::setFromEmailPassword('%E;Pw&p4#3gd8i0Y?{');
-	// EmailConfiguration::setTestEmail('testing@dgsplash.com');
 
 	$template = new Template(
 		[
