@@ -32,6 +32,9 @@
 		"psr-4": {
 			"DigitalSplash\\": "src"
 		},
+		"files": [
+			"./env.php"
+		],
 		"classmap": [
             ""
         ]

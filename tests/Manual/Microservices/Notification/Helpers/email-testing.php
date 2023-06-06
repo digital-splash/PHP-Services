@@ -4,7 +4,6 @@
 	use DigitalSplash\Notification\Models\Template;
 
 	include_once __DIR__ . '/../../../../../vendor/autoload.php';
-	include_once __DIR__ . '/../../../../../env.php';
 
 	// EmailConfiguration::setIsProd(false);
 	// EmailConfiguration::setHost('mail.dgsplash.com');
