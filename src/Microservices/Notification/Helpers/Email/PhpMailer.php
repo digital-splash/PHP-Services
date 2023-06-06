@@ -2,7 +2,8 @@
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Exceptions\Notification\PhpMailerException;
-	use DigitalSplash\Notification\Interfaces\IEmail;
+use DigitalSplash\Helpers\Helper;
+use DigitalSplash\Notification\Interfaces\IEmail;
 	use DigitalSplash\Notification\Models\Notification as NotificationModel;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
@@ -18,6 +19,7 @@
 
 		public function send(): void {
 			try {
+				self::validateCredentials();
 				$this->model->validate();
 				$this->model->fixForNonProduction();
 
@@ -60,6 +62,24 @@
 				$mail->send();
 			} catch (Exception $e) {
 				throw new PhpMailerException($e->getMessage());
+			}
+		}
+
+		private function validateCredentials(): void {
+			if (Helper::IsNullOrEmpty(EmailConfiguration::getFromEmail())) {
+				throw new PhpMailerException('From email is not set');
+			}
+			if (Helper::IsNullOrEmpty(EmailConfiguration::getFromEmailPassword())) {
+				throw new PhpMailerException('From email password is not set');
+			}
+			if (Helper::IsNullOrEmpty(EmailConfiguration::getHost())) {
+				throw new PhpMailerException('SMTP host is not set');
+			}
+			if (EmailConfiguration::getPort() <= 0) {
+				throw new PhpMailerException('SMTP port is not set');
+			}
+			if (Helper::IsNullOrEmpty(EmailConfiguration::getEncryption())) {
+				throw new PhpMailerException('SMTP encryption is not set');
 			}
 		}
 	}
