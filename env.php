@@ -2,6 +2,7 @@
 	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
 	use DigitalSplash\Exceptions\Configuration\InvalidConfigurationException;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Models\Tenant;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 
 	class EnvConfig {
@@ -38,6 +39,7 @@
 			EmailConfiguration::setIsProd(self::$config['environment'] === 'production');
 
 			self::emailConfig();
+			self::tenantConfig();
 		}
 
 		private static function emailConfig(): void {
@@ -50,6 +52,16 @@
 			EmailConfiguration::setFromEmail($config['from']['email'] ?: '');
 			EmailConfiguration::setFromEmailPassword($config['from']['password'] ?: '');
 			EmailConfiguration::setTestEmail($config['test_email'] ?: '');
+		}
+
+		private static function tenantConfig(): void {
+			$config = self::$config['tenant'] ?: [];
+
+			Tenant::setName($config['name'] ?: '');
+			Tenant::setDomain($config['domain'] ?: '');
+			Tenant::setPrimaryColor($config['primary_color'] ?: '');
+			Tenant::setYear($config['year'] ?: '');
+			Tenant::setLogo($config['logo'] ?: '');
 		}
 	}
 
