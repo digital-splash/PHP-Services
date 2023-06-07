@@ -1,20 +1,18 @@
 <?php
+
+	use DigitalSplash\Models\Tenant;
 	use DigitalSplash\Notification\Helpers\Notification;
 	use DigitalSplash\Notification\Models\Template;
 
 	include_once __DIR__ . '/../../../../../vendor/autoload.php';
 
+
 	$template = new Template(
 		[
 			'full_name' => 'Hadi Darwish',
-			'tenant_name' => 'Digital Splash',
-			'url' => 'dgsplash.com',
-			'tenant_main_color' => '#0000ff',
 			'button_text' => 'Test button',
-			'tenant_year' => '2023',
-			'tenant_logo' => 'https://dgsplash.com/assets/images/logo-bg.jpg'
 		],
-		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON,
+		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY,
 		'TestEmail'
 	);
 
