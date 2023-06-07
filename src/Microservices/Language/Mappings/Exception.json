@@ -90,16 +90,6 @@
       "fr": "Argument non valide \"::argument::\" ayant la valeur \"::value::\".",
       "ar": "وسيطة غير صالحة \"::الوسيطة::\" لها القيمة \"::value::\"."
     },
-    "ConfigurationNotFound": {
-      "en": "Configuration not found",
-      "fr": "Configuration introuvable",
-      "ar": "لم يتم العثور على التكوين"
-    },
-    "InvalidConfiguration": {
-      "en": "Invalid configuration",
-      "fr": "Configuration invalide",
-      "ar": "تكوين غير صالح"
-    },
     "database": {
       "InvalidConnector": {
         "en": "\"DB Conector\" object is null for Credentials \"::param::\".",
@@ -119,6 +109,18 @@
         "en": "PhpMailer Error [::params::]",
         "fr": "PhpMailer Error [::params::]",
         "ar": "PhpMailer Error [::params::]"
+      }
+    },
+    "Configuration": {
+      "NotFound": {
+        "en": "Configuration not found",
+        "fr": "Configuration introuvable",
+        "ar": "لم يتم العثور على التكوين"
+      },
+      "Invalid": {
+        "en": "Invalid configuration",
+        "fr": "Configuration invalide",
+        "ar": "تكوين غير صالح"
       }
     }
   }

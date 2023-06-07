@@ -1,8 +1,8 @@
 <?php
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Configuration;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class ConfigurationNotFoundException extends BaseException {
-		protected $message = "exception.ConfigurationNotFound";
+		protected $message = "exception.Configuration.NotFound";
 	}
