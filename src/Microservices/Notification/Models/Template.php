@@ -1,13 +1,17 @@
 <?php
 	namespace DigitalSplash\Notification\Models;
 
+	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
 	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Models\Tenant;
 
 	class Template {
-		const MAIN_TEMPLATE_BOXED = 'boxed';
-		const MAIN_TEMPLATE_BOXED_WITH_BUTTON = 'boxed_with_button';
+		const MAIN_TEMPLATE_BOXED_DEFAULT_KEY = 'boxed';
+		const MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY = 'boxed_with_button';
 
-		const TEMPLATE_PATH = __DIR__ . '/../Templates/Email/';
+		// const TEMPLATE_PATH = __DIR__ . '/../Templates/Email/';
+		private static $TEMPLATE_PATH;
+		private static $TEMPLATE_MAIN_PATH;
 
 		private $replaceArray = [];
 		private $templatePath = '';
@@ -19,10 +23,68 @@
 			string $templateContentPath = ''
 		) {
 			$this->replaceArray = $replaceArray;
-			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . 'Main/' . $templatePath . '.html');
+			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . 'Main/' . $templatePath . '.html');
 			if ($templateContentPath !== '') {
-				$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
+				$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templateContentPath . '.html');
 			}
+		}
+
+		public static function getTemplateSrcPath(): string {
+			return self::$TEMPLATE_PATH;
+		}
+
+		public static function setTemplateSrcPath($path): void {
+			if (Helper::IsNullOrEmpty($path)) {
+				$dir = __DIR__;
+				$prevDir = '';
+				while (Helper::IsNullOrEmpty($path)) {
+					$folders = Helper::GetAllFolders($dir);
+					$files = Helper::GetAllFolders($dir);
+					if (in_array('src', $folders) && in_array('README.md', $files)) {
+						$path = $dir;
+					} else {
+						$prevDir = $dir;
+						$dir = dirname($dir);
+					}
+
+					if ($dir === $prevDir) {
+						throw new ConfigurationNotFoundException();
+					}
+				}
+
+				$path .= '/src/Microservices/Notification/Templates/Email/';
+			}
+
+			self::$TEMPLATE_PATH = $path;
+		}
+
+		public static function getTemplateMainSrcPath(): string {
+			return self::$TEMPLATE_MAIN_PATH;
+		}
+
+		public static function setTemplateMainSrcPath($path): void {
+			if (Helper::IsNullOrEmpty($path)) {
+				$dir = __DIR__;
+				$prevDir = '';
+				while (Helper::IsNullOrEmpty($path)) {
+					$folders = Helper::GetAllFolders($dir);
+					$files = Helper::GetAllFolders($dir);
+					if (in_array('src', $folders) && in_array('README.md', $files)) {
+						$path = $dir;
+					} else {
+						$prevDir = $dir;
+						$dir = dirname($dir);
+					}
+
+					if ($dir === $prevDir) {
+						throw new ConfigurationNotFoundException();
+					}
+				}
+
+				$path .= '/src/Microservices/Notification/Templates/Email/Main/';
+			}
+
+			self::$TEMPLATE_MAIN_PATH = $path;
 		}
 
 		public function getReplaceArray(): array {
@@ -30,7 +92,13 @@
 		}
 
 		public function setReplaceArray(array $replaceArray): void {
-			$this->replaceArray = $replaceArray;
+			$this->replaceArray = array_merge([
+				'tenant_name' => Tenant::getName(),
+				'url' => Tenant::getDomain(),
+				'tenant_main_color' => Tenant::getPrimaryColor(),
+				'tenant_year' => Tenant::getYear(),
+				'tenant_logo' => Tenant::getLogo()
+			], $replaceArray);
 		}
 
 		public function appendToReplaceArray(string $key, string $value): void {
@@ -42,7 +110,7 @@
 		}
 
 		public function setTemplatePath(string $templatePath): void {
-			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templatePath . '.html');;
+			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templatePath . '.html');;
 		}
 
 		public function getTemplateContentPath(): string {
@@ -50,7 +118,7 @@
 		}
 
 		public function setTemplateContentPath(string $templateContentPath): void {
-			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::TEMPLATE_PATH . $templateContentPath . '.html');
+			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templateContentPath . '.html');
 		}
 
 		public function getContent(): string {
