@@ -9,8 +9,8 @@
 		private static array $config = [];
 
 		public static function init(): void {
-			self::getConfigFromFile();
 			self::setConfig();
+			self::getConfigFromFile();
 		}
 
 		private static function getConfigFromFile(): void {
