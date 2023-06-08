@@ -2,7 +2,8 @@
 	namespace DigitalSplash\Notification\Models;
 
 	use DigitalSplash\Exceptions\Notification\EmptyValueException;
-	use DigitalSplash\Notification\Models\Recipient;
+use DigitalSplash\Models\Tenant;
+use DigitalSplash\Notification\Models\Recipient;
 
 	class Notification {
 
@@ -111,7 +112,7 @@
 		}
 
 		public function fixForNonProduction(): void {
-			if (!EmailConfiguration::getIsProd()) {
+			if (!Tenant::isProd()) {
 				$replaced = [];
 
 				if (!empty($this->getTo())) {

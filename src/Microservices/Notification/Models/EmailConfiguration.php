@@ -2,93 +2,82 @@
 	namespace DigitalSplash\Notification\Models;
 
 	class EmailConfiguration {
-		private static bool $IS_PROD = false;
-		private static string $HOST = '';
-		private static int $PORT = 0;
-		private static string $ENCRYPTION = '';
-		private static string $FROM_NAME = '';
-		private static string $FROM_EMAIL = '';
-		private static string $FROM_EMAIL_PASSWORD = '';
-		private static string $TEST_EMAIL = '';
-
-		public static function setIsProd(
-			bool $var
-		): void {
-			self::$IS_PROD = $var;
-		}
-
-		public static function getIsProd(): bool {
-			return self::$IS_PROD;
-		}
+		private static string $host = '';
+		private static int $port = 0;
+		private static string $encryption = '';
+		private static string $fromName = '';
+		private static string $fromEmail = '';
+		private static string $fromEmailPassword = '';
+		private static string $testEmail = '';
 
 		public static function setHost(
 			string $host
 		): void {
-			self::$HOST = $host;
+			self::$host = $host;
 		}
 
 		public static function getHost(): string {
-			return self::$HOST;
+			return self::$host;
 		}
 
 		public static function setPort(
 			int $var
 		): void {
-			self::$PORT = $var;
+			self::$port = $var;
 		}
 
 		public static function getPort(): int {
-			return self::$PORT;
+			return self::$port;
 		}
 
 		public static function setEncryption(
 			string $var
 		): void {
-			self::$ENCRYPTION = $var;
+			self::$encryption = $var;
 		}
 
 		public static function getEncryption(): string {
-			return self::$ENCRYPTION;
+			return self::$encryption;
 		}
 
 		public static function setFromName(
 			string $var
 		): void {
-			self::$FROM_NAME = $var;
+			self::$fromName = $var;
 		}
 
 		public static function getFromName(): string {
-			return self::$FROM_NAME;
+			return self::$fromName;
 		}
 
 		public static function setFromEmail(
 			string $var
 		): void {
-			self::$FROM_EMAIL = $var;
+			self::$fromEmail = $var;
 		}
 
 		public static function getFromEmail(): string {
-			return self::$FROM_EMAIL;
+			return self::$fromEmail;
 		}
 
 		public static function setFromEmailPassword(
 			string $var
 		): void {
-			self::$FROM_EMAIL_PASSWORD = $var;
+			self::$fromEmailPassword = $var;
 		}
 
 		public static function getFromEmailPassword(): string {
-			return self::$FROM_EMAIL_PASSWORD;
+			return self::$fromEmailPassword;
 		}
 
 		public static function setTestEmail(
 			string $var
 		): void {
-			self::$TEST_EMAIL = $var;
+			self::$testEmail = $var;
 		}
 
 		public static function getTestEmail(): string {
-			return self::$TEST_EMAIL;
+			return self::$testEmail;
 		}
 
 	}

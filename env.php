@@ -36,10 +36,21 @@
 		}
 
 		private static function setConfig(): void {
-			EmailConfiguration::setIsProd(self::$config['environment'] === 'production');
-
-			self::emailConfig();
 			self::tenantConfig();
+			self::emailConfig();
+		}
+
+		private static function tenantConfig(): void {
+			$config = self::$config['tenant'] ?: [];
+
+			Tenant::setEnvironment(self::$config['environment'] ?: 'local');
+
+			Tenant::setName($config['name'] ?: '');
+			Tenant::setDomain($config['domain'] ?: '');
+			Tenant::setYear($config['year'] ?: '');
+			Tenant::setLogo($config['logo'] ?: '');
+			Tenant::setPrimaryColor($config['primary_color'] ?: '');
+			Tenant::setSecondaryColor($config['secondary_color'] ?: '');
 		}
 
 		private static function emailConfig(): void {
@@ -52,17 +63,10 @@
 			EmailConfiguration::setFromEmail($config['from']['email'] ?: '');
 			EmailConfiguration::setFromEmailPassword($config['from']['password'] ?: '');
 			EmailConfiguration::setTestEmail($config['test_email'] ?: '');
+
+			//TODO: template...
 		}
 
-		private static function tenantConfig(): void {
-			$config = self::$config['tenant'] ?: [];
-
-			Tenant::setName($config['name'] ?: '');
-			Tenant::setDomain($config['domain'] ?: '');
-			Tenant::setPrimaryColor($config['primary_color'] ?: '');
-			Tenant::setYear($config['year'] ?: '');
-			Tenant::setLogo($config['logo'] ?: '');
-		}
 	}
 
 	EnvConfig::init();

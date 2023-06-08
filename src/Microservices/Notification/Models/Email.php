@@ -2,6 +2,7 @@
 	namespace DigitalSplash\Notification\Models;
 
 	use DigitalSplash\Exceptions\Notification\EmptyValueException;
+use DigitalSplash\Models\Tenant;
 
 	class Email {
 		private string $subject;
@@ -47,7 +48,7 @@
 		}
 
 		public function fixForNonProduction(array $replaced): void {
-			if (!EmailConfiguration::getIsProd()) {
+			if (!Tenant::isProd()) {
 				if (!empty($replaced)) {
 					$this->subject .= " [Replaced " . implode(" - ", $replaced) . "]";
 				}
