@@ -2,7 +2,7 @@
 	namespace DigitalSplash\Notification\Models;
 
 	use DigitalSplash\Exceptions\Notification\EmptyValueException;
-use DigitalSplash\Models\Tenant;
+	use DigitalSplash\Models\Tenant;
 
 	class Email {
 		private string $subject;

@@ -2,8 +2,8 @@
 	namespace DigitalSplash\Notification\Models;
 
 	use DigitalSplash\Exceptions\Notification\EmptyValueException;
-use DigitalSplash\Models\Tenant;
-use DigitalSplash\Notification\Models\Recipient;
+	use DigitalSplash\Models\Tenant;
+	use DigitalSplash\Notification\Models\Recipient;
 
 	class Notification {
 
