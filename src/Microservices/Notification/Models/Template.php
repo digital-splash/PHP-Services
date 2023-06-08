@@ -103,7 +103,7 @@
 		}
 
 		public function setTemplateContentFullPath(string $templateKey): void {
-			$this->templateContentFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateContentFullPath . '/' . $templateKey . '.html');
+			$this->templateContentFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateSrcPath . '/' . $templateKey . '.html');
 		}
 
 		public static function getDefaultReplaceArray(): array {
@@ -146,8 +146,9 @@
 			$prevDir = '';
 			while (Helper::IsNullOrEmpty($path)) {
 				$folders = Helper::GetAllFolders($dir);
-				$files = Helper::GetAllFolders($dir);
-				if (in_array('src', $folders) && in_array('README.md', $files)) {
+				$files = Helper::GetAllFiles($dir);
+
+				if (in_array($dir . '/src', $folders) && in_array($dir . '/README.md', $files)) {
 					$path = $dir;
 				} else {
 					$prevDir = $dir;
@@ -158,7 +159,7 @@
 					throw new ConfigurationNotFoundException();
 				}
 			}
-			$path .= '/src/Microservices/Notification/Templates/Email/';
+			$path .= '/src/Microservices/Notification/Templates/Email/' . $post;
 
 			return $path;
 		}

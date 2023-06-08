@@ -1,6 +1,4 @@
 <?php
-
-	use DigitalSplash\Models\Tenant;
 	use DigitalSplash\Notification\Helpers\Notification;
 	use DigitalSplash\Notification\Models\Template;
 
@@ -13,7 +11,7 @@
 			'button_text' => 'Test button',
 			'url' => 'https://google.com'
 		],
-		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY,
+		true,
 		'TestEmail'
 	);
 
