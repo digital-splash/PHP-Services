@@ -2,8 +2,8 @@
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Exceptions\Notification\PhpMailerException;
-use DigitalSplash\Helpers\Helper;
-use DigitalSplash\Notification\Interfaces\IEmail;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\Notification\Interfaces\IEmail;
 	use DigitalSplash\Notification\Models\Notification as NotificationModel;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;

@@ -16,7 +16,7 @@
 						'full_name' => 'Hadi Darwish',
 						'tenant_name' => 'Digital Splash',
 						'url' => 'dgsplash.com',
-						'tenant_main_color' => '#0000ff',
+						'tenant_primary_color' => '#0000ff',
 						'button_text' => 'Test button',
 						'tenant_year' => '2023',
 						'tenant_logo' => "https://dgsplash.com/assets/images/logo-bg.jpg"

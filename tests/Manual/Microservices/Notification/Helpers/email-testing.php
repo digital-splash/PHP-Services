@@ -4,17 +4,14 @@
 
 	include_once __DIR__ . '/../../../../../vendor/autoload.php';
 
+
 	$template = new Template(
 		[
 			'full_name' => 'Hadi Darwish',
-			'tenant_name' => 'Digital Splash',
-			'url' => 'dgsplash.com',
-			'tenant_main_color' => '#0000ff',
 			'button_text' => 'Test button',
-			'tenant_year' => '2023',
-			'tenant_logo' => 'https://dgsplash.com/assets/images/logo-bg.jpg'
+			'url' => 'https://google.com'
 		],
-		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON,
+		true,
 		'TestEmail'
 	);
 
