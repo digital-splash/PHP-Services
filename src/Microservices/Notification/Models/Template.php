@@ -92,13 +92,7 @@
 		}
 
 		public function setReplaceArray(array $replaceArray): void {
-			$this->replaceArray = array_merge([
-				'tenant_name' => Tenant::getName(),
-				'url' => Tenant::getDomain(),
-				'tenant_main_color' => Tenant::getPrimaryColor(),
-				'tenant_year' => Tenant::getYear(),
-				'tenant_logo' => Tenant::getLogo()
-			], $replaceArray);
+			$this->replaceArray = $replaceArray;
 		}
 
 		public function appendToReplaceArray(string $key, string $value): void {
@@ -121,6 +115,16 @@
 			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templateContentPath . '.html');
 		}
 
+		public static function getDefaultReplaceArray(): array {
+			return [
+				'tenant_name' => Tenant::getName(),
+				'tenant_year' => Tenant::getYear(),
+				'tenant_logo' => Tenant::getLogo(),
+				'tenant_primary_color' => Tenant::getPrimaryColor(),
+				'tenant_secondary_color' => Tenant::getSecondaryColor(),
+			];
+		}
+
 		public function getContent(): string {
 			$this->fixReplaceArray();
 
@@ -135,6 +139,8 @@
 		}
 
 		private function fixReplaceArray(): void {
+			$this->replaceArray = array_merge($this->replaceArray, self::getDefaultReplaceArray());
+
 			$newReplaceArray = [];
 			foreach ($this->replaceArray as $key => $value) {
 				$newReplaceArray['{{' . $key . '}}'] = $value;
