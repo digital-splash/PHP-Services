@@ -9,82 +9,73 @@
 		const MAIN_TEMPLATE_BOXED_DEFAULT_KEY = 'boxed';
 		const MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY = 'boxed_with_button';
 
-		// const TEMPLATE_PATH = __DIR__ . '/../Templates/Email/';
-		private static $TEMPLATE_PATH;
-		private static $TEMPLATE_MAIN_PATH;
+		private static $templateSrcPath;
+		private static $templateMainSrcPath;
+		private static $templateMainNoButtonKey;
+		private static $templateMainWithButtonKey;
 
 		private $replaceArray = [];
-		private $templatePath = '';
-		private $templateContentPath = '';
+		private $templateMainFullPath = '';
+		private $templateContentFullPath = '';
 
 		public function __construct(
 			array $replaceArray,
-			string $templatePath,
-			string $templateContentPath = ''
+			bool $withButton = false,
+			string $contentTemplateKey = ''
 		) {
+			$mainTemplateKey = $withButton ? self::getTemplateMainWithButtonKey() : self::getTemplateMainNoButtonKey();
+
 			$this->replaceArray = $replaceArray;
-			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . 'Main/' . $templatePath . '.html');
-			if ($templateContentPath !== '') {
-				$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templateContentPath . '.html');
+			$this->setTemplateMainFullPath($mainTemplateKey);
+			if (!Helper::IsNullOrEmpty($contentTemplateKey)) {
+				$this->setTemplateContentFullPath($contentTemplateKey);
 			}
 		}
 
 		public static function getTemplateSrcPath(): string {
-			return self::$TEMPLATE_PATH;
+			return self::$templateSrcPath;
 		}
 
-		public static function setTemplateSrcPath($path): void {
+		public static function setTemplateSrcPath(string $path): void {
 			if (Helper::IsNullOrEmpty($path)) {
-				$dir = __DIR__;
-				$prevDir = '';
-				while (Helper::IsNullOrEmpty($path)) {
-					$folders = Helper::GetAllFolders($dir);
-					$files = Helper::GetAllFolders($dir);
-					if (in_array('src', $folders) && in_array('README.md', $files)) {
-						$path = $dir;
-					} else {
-						$prevDir = $dir;
-						$dir = dirname($dir);
-					}
-
-					if ($dir === $prevDir) {
-						throw new ConfigurationNotFoundException();
-					}
-				}
-
-				$path .= '/src/Microservices/Notification/Templates/Email/';
+				$path = self::getRootPath();
 			}
-
-			self::$TEMPLATE_PATH = $path;
+			self::$templateSrcPath = $path;
 		}
 
 		public static function getTemplateMainSrcPath(): string {
-			return self::$TEMPLATE_MAIN_PATH;
+			return self::$templateMainSrcPath;
 		}
 
-		public static function setTemplateMainSrcPath($path): void {
+		public static function setTemplateMainSrcPath(string $path): void {
 			if (Helper::IsNullOrEmpty($path)) {
-				$dir = __DIR__;
-				$prevDir = '';
-				while (Helper::IsNullOrEmpty($path)) {
-					$folders = Helper::GetAllFolders($dir);
-					$files = Helper::GetAllFolders($dir);
-					if (in_array('src', $folders) && in_array('README.md', $files)) {
-						$path = $dir;
-					} else {
-						$prevDir = $dir;
-						$dir = dirname($dir);
-					}
+				$path = self::getRootPath('Main/');
+			}
+			self::$templateMainSrcPath = $path;
+		}
 
-					if ($dir === $prevDir) {
-						throw new ConfigurationNotFoundException();
-					}
-				}
+		public static function getTemplateMainNoButtonKey(): string {
+			return self::$templateMainNoButtonKey;
+		}
 
-				$path .= '/src/Microservices/Notification/Templates/Email/Main/';
+		public static function setTemplateMainNoButtonKey(string $key): void {
+			if (Helper::IsNullOrEmpty($key)) {
+				$key = self::MAIN_TEMPLATE_BOXED_DEFAULT_KEY;
 			}
 
-			self::$TEMPLATE_MAIN_PATH = $path;
+			self::$templateMainNoButtonKey = $key;
+		}
+
+		public static function getTemplateMainWithButtonKey(): string {
+			return self::$templateMainWithButtonKey;
+		}
+
+		public static function setTemplateMainWithButtonKey(string $key): void {
+			if (Helper::IsNullOrEmpty($key)) {
+				$key = self::MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY;
+			}
+
+			self::$templateMainWithButtonKey = $key;
 		}
 
 		public function getReplaceArray(): array {
@@ -99,20 +90,20 @@
 			$this->replaceArray[$key] = $value;
 		}
 
-		public function getTemplatePath(): string {
-			return $this->templatePath;
+		public function getTemplateMainFullPath(): string {
+			return $this->templateMainFullPath;
 		}
 
-		public function setTemplatePath(string $templatePath): void {
-			$this->templatePath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templatePath . '.html');;
+		public function setTemplateMainFullPath(string $templateKey): void {
+			$this->templateMainFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateMainSrcPath . '/' . $templateKey . '.html');
 		}
 
-		public function getTemplateContentPath(): string {
-			return $this->templateContentPath;
+		public function getTemplateContentFullPath(): string {
+			return $this->templateContentFullPath;
 		}
 
-		public function setTemplateContentPath(string $templateContentPath): void {
-			$this->templateContentPath = Helper::RemoveMultipleSlashesInUrl(self::$TEMPLATE_PATH . $templateContentPath . '.html');
+		public function setTemplateContentFullPath(string $templateKey): void {
+			$this->templateContentFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateContentFullPath . '/' . $templateKey . '.html');
 		}
 
 		public static function getDefaultReplaceArray(): array {
@@ -128,14 +119,14 @@
 		public function getContent(): string {
 			$this->fixReplaceArray();
 
-			if (!Helper::IsNullOrEmpty($this->templateContentPath)) {
+			if (!Helper::IsNullOrEmpty($this->getTemplateContentFullPath())) {
 				$this->appendToReplaceArray(
 					'{{email_content}}',
-					Helper::getContentFromFile($this->templateContentPath, $this->replaceArray)
+					Helper::getContentFromFile($this->getTemplateContentFullPath(), $this->replaceArray)
 				);
 			}
 
-			return Helper::getContentFromFile($this->templatePath, $this->replaceArray);
+			return Helper::getContentFromFile($this->getTemplateMainFullPath(), $this->replaceArray);
 		}
 
 		private function fixReplaceArray(): void {
@@ -147,4 +138,29 @@
 			}
 			$this->setReplaceArray($newReplaceArray);
 		}
+
+		private static function getRootPath(string $post = ''): string {
+			$path = '';
+
+			$dir = __DIR__;
+			$prevDir = '';
+			while (Helper::IsNullOrEmpty($path)) {
+				$folders = Helper::GetAllFolders($dir);
+				$files = Helper::GetAllFolders($dir);
+				if (in_array('src', $folders) && in_array('README.md', $files)) {
+					$path = $dir;
+				} else {
+					$prevDir = $dir;
+					$dir = dirname($dir);
+				}
+
+				if ($dir === $prevDir) {
+					throw new ConfigurationNotFoundException();
+				}
+			}
+			$path .= '/src/Microservices/Notification/Templates/Email/';
+
+			return $path;
+		}
+
 	}

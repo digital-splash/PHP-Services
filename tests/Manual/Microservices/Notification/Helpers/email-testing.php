@@ -11,6 +11,7 @@
 		[
 			'full_name' => 'Hadi Darwish',
 			'button_text' => 'Test button',
+			'url' => 'https://google.com'
 		],
 		Template::MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY,
 		'TestEmail'
