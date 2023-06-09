@@ -20,13 +20,10 @@
 
 		public function __construct(
 			array $replaceArray,
-			bool $withButton = false,
 			string $contentTemplateKey = ''
 		) {
-			$mainTemplateKey = $withButton ? self::getTemplateMainWithButtonKey() : self::getTemplateMainNoButtonKey();
 
 			$this->replaceArray = $replaceArray;
-			$this->setTemplateMainFullPath($mainTemplateKey);
 			if (!Helper::IsNullOrEmpty($contentTemplateKey)) {
 				$this->setTemplateContentFullPath($contentTemplateKey);
 			}

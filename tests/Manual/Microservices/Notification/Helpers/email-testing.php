@@ -15,7 +15,6 @@
 			'button_text' => 'Test button',
 			'url' => 'https://google.com'
 		],
-		true,
 		'TestEmail'
 	);
 
