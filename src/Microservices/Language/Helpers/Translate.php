@@ -24,7 +24,7 @@
 		 * Add all the default translations (Read from Mappings and add them to self::$VALS)
 		 */
 		public static function AddDefaults(): void {
-			$dir = __DIR__ . "\..\Mappings";
+			$dir = __DIR__ . "/../Mappings";
 			$filesArr = Helper::GetAllFiles($dir);
 
 			foreach ($filesArr AS $filePath) {
