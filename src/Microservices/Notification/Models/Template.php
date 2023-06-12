@@ -172,39 +172,4 @@
 
 			return $path;
 		}
-
-
-
-		// public static function getTemplateMainFullPathByTemplateKey(string $templateKey): string {
-		// 	return Helper::RemoveMultipleSlashesInUrl(self::getTemplateMainSrcPath() . '/' . $templateKey . '.html');
-		// }
-
-		// private function getHtmlFromContentTemplate(): string {
-		// 	return Helper::getContentFromFile($this->getTemplateContentFullPath(), $this->replaceArray);
-		// }
-
-		// private function getHtmlFromMainTemplate(): string {
-		// 	return Helper::getContentFromFile($this->getTemplateMainFullPath(), $this->replaceArray);
-		// }
-
-		// private function getFullEmailHtml(): string {
-		// 	$this->fixReplaceArray();
-
-		// 	$html = $this->getHtmlFromContentTemplate();
-		// 	$html = str_replace('{{email_content}}', $html, $this->getHtmlFromMainTemplate());
-
-		// 	return $html;
-		// }
-
-		// public function getFullEmailHtmlBoxedWithButton(): string {
-		// 	$this->setTemplateMainFullPath(self::getTemplateMainWithButtonKey());
-
-		// 	return $this->getFullEmailHtml();
-		// }
-
-		// public function getFullEmailHtmlBoxed(): string {
-		// 	$this->setTemplateMainFullPath(self::getTemplateMainNoButtonKey());
-
-		// 	return $this->getFullEmailHtml();
-		// }
 	}
