@@ -4,7 +4,6 @@
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Models\Tenant;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
-	use DigitalSplash\Notification\Models\Template;
 
 	class EnvConfig {
 
@@ -64,11 +63,6 @@
 			EmailConfiguration::setFromEmail($config['from']['email'] ?? '');
 			EmailConfiguration::setFromEmailPassword($config['from']['password'] ?? '');
 			EmailConfiguration::setTestEmail($config['test_email'] ?? '');
-
-			Template::setTemplateMainSrcPath($config['template']['main']['path'] ?? '');
-			Template::setTemplateMainNoButtonKey($config['template']['main']['no_button'] ?? '');
-			Template::setTemplateMainWithButtonKey($config['template']['main']['with_button'] ?? '');
-			Template::setTemplateSrcPath($config['template']['path'] ?? '');
 		}
 
 	}

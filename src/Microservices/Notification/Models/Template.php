@@ -9,53 +9,61 @@
 		const MAIN_TEMPLATE_BOXED_DEFAULT_KEY = 'boxed';
 		const MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY = 'boxed_with_button';
 
-		private static $templateSrcPath;
-		private static $templateMainSrcPath;
-		private static $templateMainNoButtonKey;
-		private static $templateMainWithButtonKey;
+		private static string $templateSrcPath;
+		private static string $templateMainSrcPath;
+		private static string $templateMainNoButtonKey;
+		private static string $templateMainWithButtonKey;
 
-		private $replaceArray = [];
-		private $templateMainFullPath = '';
-		private $templateContentFullPath = '';
+		private array $replaceArray = [];
+		private string $templateMainFullPath = '';
+		private string $templateContentFullPath = '';
 
 		public function __construct(
 			array $replaceArray,
+			bool $withButton = false,
 			string $contentTemplateKey = ''
 		) {
+			self::setTemplateMainSrcPath('');
+			self::setTemplateMainNoButtonKey('');
+			self::setTemplateMainWithButtonKey('');
+			self::setTemplateSrcPath('');
 
-			$this->replaceArray = $replaceArray;
+			$mainTemplateKey = $withButton ? self::getTemplateMainWithButtonKey() : self::getTemplateMainNoButtonKey();
+
+			$this->setReplaceArray($replaceArray);
+			$this->setTemplateMainFullPath($mainTemplateKey);
 			if (!Helper::IsNullOrEmpty($contentTemplateKey)) {
 				$this->setTemplateContentFullPath($contentTemplateKey);
 			}
 		}
 
-		public static function getTemplateSrcPath(): string {
+		private static function getTemplateSrcPath(): string {
 			return self::$templateSrcPath;
 		}
 
-		public static function setTemplateSrcPath(string $path): void {
+		private static function setTemplateSrcPath(string $path): void {
 			if (Helper::IsNullOrEmpty($path)) {
 				$path = self::getRootPath();
 			}
 			self::$templateSrcPath = $path;
 		}
 
-		public static function getTemplateMainSrcPath(): string {
+		private static function getTemplateMainSrcPath(): string {
 			return self::$templateMainSrcPath;
 		}
 
-		public static function setTemplateMainSrcPath(string $path): void {
+		private static function setTemplateMainSrcPath(string $path): void {
 			if (Helper::IsNullOrEmpty($path)) {
 				$path = self::getRootPath('Main/');
 			}
 			self::$templateMainSrcPath = $path;
 		}
 
-		public static function getTemplateMainNoButtonKey(): string {
+		private static function getTemplateMainNoButtonKey(): string {
 			return self::$templateMainNoButtonKey;
 		}
 
-		public static function setTemplateMainNoButtonKey(string $key): void {
+		private static function setTemplateMainNoButtonKey(string $key): void {
 			if (Helper::IsNullOrEmpty($key)) {
 				$key = self::MAIN_TEMPLATE_BOXED_DEFAULT_KEY;
 			}
@@ -63,11 +71,11 @@
 			self::$templateMainNoButtonKey = $key;
 		}
 
-		public static function getTemplateMainWithButtonKey(): string {
+		private static function getTemplateMainWithButtonKey(): string {
 			return self::$templateMainWithButtonKey;
 		}
 
-		public static function setTemplateMainWithButtonKey(string $key): void {
+		private static function setTemplateMainWithButtonKey(string $key): void {
 			if (Helper::IsNullOrEmpty($key)) {
 				$key = self::MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY;
 			}
@@ -87,20 +95,24 @@
 			$this->replaceArray[$key] = $value;
 		}
 
-		public function getTemplateMainFullPath(): string {
+		public function setMainTemplateContent(string $value): void {
+			$this->appendToReplaceArray('email_content', $value);
+		}
+
+		private function getTemplateMainFullPath(): string {
 			return $this->templateMainFullPath;
 		}
 
-		public function setTemplateMainFullPath(string $templateKey): void {
-			$this->templateMainFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateMainSrcPath . '/' . $templateKey . '.html');
+		private function setTemplateMainFullPath(string $templateKey): void {
+			$this->templateMainFullPath = Helper::RemoveMultipleSlashesInUrl(self::getTemplateMainSrcPath() . '/' . $templateKey . '.html');
 		}
 
-		public function getTemplateContentFullPath(): string {
+		private function getTemplateContentFullPath(): string {
 			return $this->templateContentFullPath;
 		}
 
-		public function setTemplateContentFullPath(string $templateKey): void {
-			$this->templateContentFullPath = Helper::RemoveMultipleSlashesInUrl(self::$templateSrcPath . '/' . $templateKey . '.html');
+		private function setTemplateContentFullPath(string $templateKey): void {
+			$this->templateContentFullPath = Helper::RemoveMultipleSlashesInUrl(self::getTemplateSrcPath() . '/' . $templateKey . '.html');
 		}
 
 		public static function getDefaultReplaceArray(): array {
@@ -161,36 +173,38 @@
 			return $path;
 		}
 
-		public static function getTemplateMainFullPathByTemplateKey(string $templateKey): string {
-			return Helper::RemoveMultipleSlashesInUrl(self::getTemplateMainSrcPath() . '/' . $templateKey . '.html');
-		}
 
-		private function getHtmlFromContentTemplate(): string {
-			return Helper::getContentFromFile($this->getTemplateContentFullPath(), $this->replaceArray);
-		}
 
-		private function getHtmlFromMainTemplate(): string {
-			return Helper::getContentFromFile($this->getTemplateMainFullPath(), $this->replaceArray);
-		}
+		// public static function getTemplateMainFullPathByTemplateKey(string $templateKey): string {
+		// 	return Helper::RemoveMultipleSlashesInUrl(self::getTemplateMainSrcPath() . '/' . $templateKey . '.html');
+		// }
 
-		private function getFullEmailHtml(): string {
-			$this->fixReplaceArray();
+		// private function getHtmlFromContentTemplate(): string {
+		// 	return Helper::getContentFromFile($this->getTemplateContentFullPath(), $this->replaceArray);
+		// }
 
-			$html = $this->getHtmlFromContentTemplate();
-			$html = str_replace('{{email_content}}', $html, $this->getHtmlFromMainTemplate());
+		// private function getHtmlFromMainTemplate(): string {
+		// 	return Helper::getContentFromFile($this->getTemplateMainFullPath(), $this->replaceArray);
+		// }
 
-			return $html;
-		}
+		// private function getFullEmailHtml(): string {
+		// 	$this->fixReplaceArray();
 
-		public function getFullEmailHtmlBoxedWithButton(): string {
-			$this->setTemplateMainFullPath(self::getTemplateMainWithButtonKey());
+		// 	$html = $this->getHtmlFromContentTemplate();
+		// 	$html = str_replace('{{email_content}}', $html, $this->getHtmlFromMainTemplate());
 
-			return $this->getFullEmailHtml();
-		}
+		// 	return $html;
+		// }
 
-		public function getFullEmailHtmlBoxed(): string {
-			$this->setTemplateMainFullPath(self::getTemplateMainNoButtonKey());
+		// public function getFullEmailHtmlBoxedWithButton(): string {
+		// 	$this->setTemplateMainFullPath(self::getTemplateMainWithButtonKey());
 
-			return $this->getFullEmailHtml();
-		}
+		// 	return $this->getFullEmailHtml();
+		// }
+
+		// public function getFullEmailHtmlBoxed(): string {
+		// 	$this->setTemplateMainFullPath(self::getTemplateMainNoButtonKey());
+
+		// 	return $this->getFullEmailHtml();
+		// }
 	}
