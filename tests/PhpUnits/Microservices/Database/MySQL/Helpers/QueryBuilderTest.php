@@ -619,186 +619,186 @@
 		}
 
 
-		public function testUpdateBulkSuccess(): void
-		{
-			$db = 'db';
-			$table = 'table';
-			$data = [
-				[
-					'filter' => [
-						'id' => [
-							'value' => 1,
-							'type' => 'int'
-						],
-						'key' => [
-							'value' => 'user_1',
-							'type' => 'string'
-						]
-					],
-					'values' => [
-						'name' => [
-							'value' => 'User 01',
-							'type' => 'string'
-						],
-						'age' => [
-							'value' => 10,
-							'type' => 'int'
-						]
-					]
-				],
-				[
-					'filter' => [
-						'id' => 2,
-						'key' => 'user_2'
-					],
-					'values' => [
-						'name' => 'User 02'
-					]
-				],
-				[
-					'filter' => [
-						'id' => 3,
-						'key' => 'user_3'
-					],
-					'values' => [
-						'age' => 30
-					]
-				],
-				[
-					'filter' => [
-						'key' => 'user_3'
-					],
-					'values' => [
-						'name' => 'User 03'
-					]
-				],
-				[
-					'filter' => [
-						'id' => 2
-					],
-					'values' => [
-						'age' => 20
-					]
-				],
-			];
+ public function testUpdateBulkSuccess(): void
+    {
+        $db = 'db';
+        $table = 'table';
+        $data = [
+            [
+                'filter' => [
+                    'id' => [
+                        'value' => 1,
+                        'type' => 'int'
+                    ],
+                    'key' => [
+                        'value' => 'user_1',
+                        'type' => 'string'
+                    ]
+                ],
+                'values' => [
+                    'name' => [
+                        'value' => 'User 01',
+                        'type' => 'string'
+                    ],
+                    'age' => [
+                        'value' => 10,
+                        'type' => 'int'
+                    ]
+                ]
+            ],
+            [
+                'filter' => [
+                    'id' => 2,
+                    'key' => 'user_2'
+                ],
+                'values' => [
+                    'name' => 'User 02'
+                ]
+            ],
+            [
+                'filter' => [
+                    'id' => 3,
+                    'key' => 'user_3'
+                ],
+                'values' => [
+                    'age' => 30
+                ]
+            ],
+            [
+                'filter' => [
+                    'key' => 'user_3'
+                ],
+                'values' => [
+                    'name' => 'User 03'
+                ]
+            ],
+            [
+                'filter' => [
+                    'id' => 2
+                ],
+                'values' => [
+                    'age' => 20
+                ]
+            ],
+        ];
 
-			$queryBuilder = new QueryBuilder($db, $table);
-			$queryBuilder->data->setData($data);
-			[
-				'sql' => $sql,
-				'binds' => $binds
-			] = $queryBuilder->update_bulk();
+        $queryBuilder = new QueryBuilder($db, $table);
+        $queryBuilder->data->setData($data);
+        [
+            'sql' => $sql,
+            'binds' => $binds
+        ] = $queryBuilder->update_bulk();
 
-			$expectedSql = "UPDATE `db`.`table` SET CASE WHEN `id` = :filter_1 AND `key` = :filter_2 THEN :bind_1 WHEN `id` = :filter_3 AND `key` = :filter_4 THEN :bind_2 WHEN `id` = :filter_5 AND `key` = :filter_6 THEN :bind_3 WHEN `key` = :filter_7 THEN :bind_4 WHEN `id` = :filter_8 THEN :bind_5 END, CASE WHEN `id` = :filter_9 AND `key` = :filter_10 THEN :bind_6 WHEN `id` = :filter_11 AND `key` = :filter_12 THEN :bind_7 WHEN `id` = :filter_13 AND `key` = :filter_14 THEN :bind_8 WHEN `key` = :filter_15 THEN :bind_9 WHEN `id` = :filter_16 THEN :bind_10 END";
-			$expectedBinds = [
-				':filter_1' => [
-					'value' => 1,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_2' => [
-					'value' => 'user_1',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_1' => [
-					'value' => 'User 01',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_3' => [
-					'value' => 2,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_4' => [
-					'value' => 'user_2',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_2' => [
-					'value' => 'User 02',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_5' => [
-					'value' => 3,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_6' => [
-					'value' => 'user_3',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_3' => [
-					'value' => 30,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_7' => [
-					'value' => 'user_3',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_4' => [
-					'value' => 'User 03',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_8' => [
-					'value' => 2,
-					'type' => PDO::PARAM_INT
-				],
-				':bind_5' => [
-					'value' => 20,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_9' => [
-					'value' => 1,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_10' => [
-					'value' => 'user_1',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_6' => [
-					'value' => 'User 01',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_11' => [
-					'value' => 2,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_12' => [
-					'value' => 'user_2',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_7' => [
-					'value' => 'User 02',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_13' => [
-					'value' => 3,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_14' => [
-					'value' => 'user_3',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_8' => [
-					'value' => 30,
-					'type' => PDO::PARAM_INT
-				],
-				':filter_15' => [
-					'value' => 'user_3',
-					'type' => PDO::PARAM_STR
-				],
-				':bind_9' => [
-					'value' => 'User 03',
-					'type' => PDO::PARAM_STR
-				],
-				':filter_16' => [
-					'value' => 2,
-					'type' => PDO::PARAM_INT
-				],
-				':bind_10' => [
-					'value' => 20,
-					'type' => PDO::PARAM_INT
-				],
-			];
-	
-			$this->assertEquals($expectedSql, $sql);
-			$this->assertEqualsCanonicalizing($expectedBinds, $binds);
-		}
+        $expectedSql = "UPDATE `db`.`table` SET CASE WHEN `id` = :filter_1 AND `key` = :filter_2 THEN :bind_1 WHEN `id` = :filter_3 AND `key` = :filter_4 THEN :bind_2 WHEN `id` = :filter_5 AND `key` = :filter_6 THEN :bind_3 WHEN `key` = :filter_7 THEN :bind_4 WHEN `id` = :filter_8 THEN :bind_5 END, CASE WHEN `id` = :filter_9 AND `key` = :filter_10 THEN :bind_6 WHEN `id` = :filter_11 AND `key` = :filter_12 THEN :bind_7 WHEN `id` = :filter_13 AND `key` = :filter_14 THEN :bind_8 WHEN `key` = :filter_15 THEN :bind_9 WHEN `id` = :filter_16 THEN :bind_10 END";
+        $expectedBinds = [
+            ':filter_1' => [
+                'value' => 1,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_2' => [
+                'value' => 'user_1',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_1' => [
+                'value' => 'User 01',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_3' => [
+                'value' => 2,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_4' => [
+                'value' => 'user_2',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_2' => [
+                'value' => 'User 02',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_5' => [
+                'value' => 3,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_6' => [
+                'value' => 'user_3',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_3' => [
+                'value' => 30,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_7' => [
+                'value' => 'user_3',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_4' => [
+                'value' => 'User 03',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_8' => [
+                'value' => 2,
+                'type' => PDO::PARAM_INT
+            ],
+            ':bind_5' => [
+                'value' => 20,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_9' => [
+                'value' => 1,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_10' => [
+                'value' => 'user_1',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_6' => [
+                'value' => 'User 01',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_11' => [
+                'value' => 2,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_12' => [
+                'value' => 'user_2',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_7' => [
+                'value' => 'User 02',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_13' => [
+                'value' => 3,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_14' => [
+                'value' => 'user_3',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_8' => [
+                'value' => 30,
+                'type' => PDO::PARAM_INT
+            ],
+            ':filter_15' => [
+                'value' => 'user_3',
+                'type' => PDO::PARAM_STR
+            ],
+            ':bind_9' => [
+                'value' => 'User 03',
+                'type' => PDO::PARAM_STR
+            ],
+            ':filter_16' => [
+                'value' => 2,
+                'type' => PDO::PARAM_INT
+            ],
+            ':bind_10' => [
+                'value' => 20,
+                'type' => PDO::PARAM_INT
+            ],
+        ];
+
+        $this->assertEquals($expectedSql, $sql);
+        $this->assertEqualsCanonicalizing($expectedBinds, $binds);
+    }
 
 	}
