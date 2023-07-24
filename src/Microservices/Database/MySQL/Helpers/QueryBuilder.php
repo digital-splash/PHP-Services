@@ -34,7 +34,7 @@
 
 		public function __construct(
 			string $database,
-			string $table
+			string $table,
 		) {
 			if (Helper::IsNullOrEmpty($database)) {
 				throw new NotEmptyParamException('database');
@@ -169,56 +169,57 @@
 			];
 		}
 
-		private function update_bulk(): array {
-			// $updates = [];
-			// $cases = [];
-			// $r = 1;
-			// foreach ($this->data->getData() AS $row) {
-			// 	foreach ($row AS [
-			// 		'filter' => $filter,
-			// 		'values' => $values
-			// 	]) {
-			// 		//TODO: Implement IN () in WHERE statment cz now we will have `id` = 1 AND `id` = 2 instead of `id` IN (1, 2)
-			// 		foreach ($filter AS $column => $value) {
-			// 			$this->where->appendToArray($column, $value);
-			// 		}
+		public function update_bulk(): array {
+			if (Helper::IsNullOrEmpty($this->data->getData())) {
+				throw new NotEmptyParamException('data');
+			}
 
-			// 		foreach ($values AS $column => $value) {
-			// 			if (!array_key_exists($column, $cases)) {
-			// 				$cases[$column] = [];
-			// 			}
+			$sqlCaseStatements = [];
+			$bindValues = [];
+			$bindIndex = 1;
 
-			// 			$caseWhere = [];
-			// 			foreach ($filter AS $column => $value) {
-			// 				$caseWhereBindKey = ':' $column
-			// 				$caseWhere[] =
-			// 			}
+			foreach ($this->data->getData() as $updateData) {
+				$filter = $updateData['filter'];
+				$values = $updateData['values'];
 
-			// 		}
+				$caseStatements = [];
+				foreach ($values as $column => $updateValue) {
+					$bind_key = ':bind_' . $bindIndex;
+					$bindValues[$bind_key] = [
+						'value' => $updateValue['value'],
+						'type' => self::GetPDOTypeFromValue($updateValue['value']),
+					];
 
-			// // 		$bind_key = ':' . $column . "_" . $r;
-			// // 		$this->binds->appendToBinds($bind_key, [
-			// // 			'value' => $value,
-			// // 			'type' => self::GetPDOTypeFromValue($value)
-			// // 		]);
+					$caseStatements[] = "WHEN {$column} = :filter_{$bindIndex} THEN {$bind_key}";
+					$bindIndex++;
+				}
 
-			// // 		$updates[] = "`{$column}` = $bind_key";
-			// 	}
+				$where = new Where();
+				foreach ($filter as $column => $filterValue) {
+					$where->appendToArray($column, $filterValue['value']);
+				}
+				$where->generateStringStatement();
 
-			// 	$r++;
-			// }
-			// // $updateStr = ''; //Helper::ImplodeArrToStr(', ', $updates);
+				$sqlCaseStatements[] = implode(' ', $caseStatements);
 
-			// // $this->where->generateStringStatement();
+				// Append the WHERE clause binds to the main binds array
+				$bindValues = array_merge($bindValues, $where->binds->getBinds());
+			}
 
-			// // $sql = Helper::ImplodeArrToStr(' ', [
-			// // 	"UPDATE `{$this->database}`.`{$this->table}` SET {$updateStr}",
-			// // 	$this->where->getFinalString()
-			// // ]);
+			$sqlCase = [];
+			foreach ($sqlCaseStatements as $index => $caseStatement) {
+				$sqlCase[] = "CASE {$caseStatement} END";
+			}
 
-			// // $this->sql->setValue($sql);
-			// // $this->sql->generateStringStatement();
-			// // $this->binds->setBinds($this->where->binds->getBinds());
+			$sql = "UPDATE `{$this->database}`.`{$this->table}` SET ";
+			foreach ($sqlCase as $index => $case) {
+				$sql .= ($index > 0 ? ', ' : '') . $case;
+			}
+			$sql .= " " . $where->getFinalString();
+
+			$this->sql->setValue($sql);
+			$this->sql->generateStringStatement();
+			$this->binds->setBinds($bindValues);
 
 			return [
 				self::SQL => $this->sql->getFinalString(),
