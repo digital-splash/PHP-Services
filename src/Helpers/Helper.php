@@ -1073,4 +1073,20 @@
 			];
 		}
 
+		public static function missing_params(array $input = [], array $required = []): array | bool {
+			$input_keys = array_keys($input);
+			$missing_params = array_values(array_diff($required, $input_keys));
+			$found_params = array_values(array_intersect($required, $input_keys));
+
+			if (count($missing_params) > 0) {
+				return [
+					'status' => 'error',
+					'missing' => $missing_params,
+					'found' => $found_params,
+					'error' => "Missing parameters: `" . implode('`, `', $missing_params) . "`"
+				];
+			}
+			return false;
+		}
+
 	}

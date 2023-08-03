@@ -13,6 +13,8 @@
 		public const FORBIDDEN		= 403;
 		public const NOTFOUND		= 404;
 		public const NOTALLOWED		= 405;
+		public const UNPROCESSABLE	= 422;
+		public const TOOMANYREQUESTS= 429;
 		public const INTERNALERROR	= 500;
 		public const UNAVAILABLE 	= 503;
 	}

@@ -1389,4 +1389,17 @@
 			$this->assertEqualsCanonicalizing($expected['found'], $missing['found']);
 		}
 
+		public function testMissingParams(): void {
+			$input = ['name' => 'John', 'age' => 30];
+			$required = ['name', 'email'];
+
+			$result = Helper::missing_params($input, $required);
+
+			$this->assertIsArray($result);
+			$this->assertEquals('error', $result['status']);
+			$this->assertEquals(['email'], $result['missing']);
+			$this->assertEquals(['name'], $result['found']);
+			$this->assertEquals("Missing parameters: `email`", $result['error']);
+		}
+
 	}
