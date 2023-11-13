@@ -7,7 +7,10 @@
 	class InvalidRequestMethodException extends BaseException {
 		protected $message = "Invalid Request Method";
 
-		public function __construct() {
-			parent::__construct($this->message, [], HttpCode::NOTALLOWED);
+		public function __construct(
+			int $code = 0,
+			int $subcode = 0,
+		) {
+			parent::__construct($this->message, [], $code, $subcode, HttpCode::NOTALLOWED);
 		}
 	}

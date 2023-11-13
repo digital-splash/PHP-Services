@@ -8,9 +8,12 @@
 		protected $message = "Missing Parameter(s): ::params::";
 
 		public function __construct(
-			array $params
+			array $params,
+			int $code = 0,
+			int $subcode = 0,
+			int $responseCode = HttpCode::NOTFOUND
 		) {
 			$paramsStr = "`" . implode('`, `', $params) . "`";
-			parent::__construct($paramsStr, [], HttpCode::UNPROCESSABLE);
+			parent::__construct($paramsStr, $code, $subcode, $responseCode);
 		}
 	}
