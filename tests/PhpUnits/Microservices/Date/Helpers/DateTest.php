@@ -30,23 +30,17 @@
 			);
 		}
 
-		public function testRenderDateThrowError_01(): void {
-			$this->expectException(NotEmptyParamException::class);
-			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date"
-			]));
-			Date::RenderDate(null);
-		}
-
-		public function testRenderDateThrowError_02(): void {
-			$this->expectException(NotEmptyParamException::class);
-			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date"
-			]));
-			Date::RenderDate("");
-		}
-
 		public function testRenderDateSuccess(): void {
+			$this->assertEquals(
+				'',
+				Date::RenderDate(null)
+			);
+
+			$this->assertEquals(
+				'',
+				Date::RenderDate('')
+			);
+
 			$this->assertEquals(
 				"2022-01-07",
 				Date::RenderDate("2022-01-07")

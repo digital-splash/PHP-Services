@@ -37,7 +37,8 @@
 			bool $isStr=false
 		): string {
 			if (Helper::IsNullOrEmpty($date)) {
-				throw new NotEmptyParamException("date");
+				return '';
+				// throw new NotEmptyParamException("date");
 			}
 
 			if (Helper::IsNullOrEmpty($lang)) {
