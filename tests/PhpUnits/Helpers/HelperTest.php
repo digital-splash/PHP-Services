@@ -4,8 +4,8 @@
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\InvalidParamException;
-use DigitalSplash\Exceptions\MissingParamsException;
-use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\MissingParamsException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
 	use DigitalSplash\Language\Models\Lang;
