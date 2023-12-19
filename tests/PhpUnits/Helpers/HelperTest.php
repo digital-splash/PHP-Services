@@ -4,7 +4,8 @@
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+use DigitalSplash\Exceptions\MissingParamsException;
+use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
 	use DigitalSplash\Language\Models\Lang;
@@ -1387,6 +1388,52 @@
 
 			$this->assertEqualsCanonicalizing($expected['missing'], $missing['missing']);
 			$this->assertEqualsCanonicalizing($expected['found'], $missing['found']);
+		}
+
+		/**
+		 * @dataProvider missingNotEmptyParamsThrowsSuccessProvider
+		 */
+		public function testMissingNotEmptyParamsThrowsSuccess(
+			array $params,
+			array $required,
+			string $exception,
+			string $exceptionMessage,
+		): void {
+			if (!empty($exception)) {
+				$this->expectException($exception);
+				$this->expectExceptionMessage($exceptionMessage);
+			}
+
+			Helper::MissingNotEmptyParamsThrows($params, $required);
+
+			if (empty($exception)) {
+				$this->assertTrue(true);
+			}
+		}
+
+		public function missingNotEmptyParamsThrowsSuccessProvider(): array {
+			return [
+				'throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => '',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age', 'country'],
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `country`, `last_name`'
+				],
+				'not_throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => 'Doe',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'exception' => '',
+					'exceptionMessage' => ''
+				]
+			];
 		}
 
 	}

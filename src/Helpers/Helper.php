@@ -3,6 +3,7 @@
 
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\MissingParamsException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
@@ -1071,6 +1072,16 @@
 				'missing' => array_values($missing),
 				'found' => array_values($found)
 			];
+		}
+
+		public static function MissingNotEmptyParamsThrows(array $params, array $required): void {
+			[
+				'missing' => $missingParams
+			] = Helper::MissingNotEmptyParams($params, $required);
+
+			if (!empty($missingParams)) {
+				throw new MissingParamsException($missingParams);
+			}
 		}
 
 	}
