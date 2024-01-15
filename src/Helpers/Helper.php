@@ -138,6 +138,16 @@
 
 
 		/**
+		 * Check if a string is Encrypted
+		 */
+		public static function IsEncrypted(
+			string $string
+		): bool {
+			return preg_match('/[0-9a-f]{64}/i', $string);
+		}
+
+
+		/**
 		 * Generate a Random String
 		 */
 		public static function GenerateRandomKey(
