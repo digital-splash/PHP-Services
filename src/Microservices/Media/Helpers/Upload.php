@@ -174,6 +174,13 @@
 		protected function uploadToServer(File $file, int $i = 1): array {
 			Helper::CreateFolderRecursive($file->getUploadPath());
 
+			if (!is_dir($file->getUploadPath())) {
+				throw new UploadException('Path is not a valid Directory');
+			}
+			if (!is_writable($file->getUploadPath())) {
+				throw new UploadException('Directory is non-wtirable');
+			}
+
 			$destinationFileName = $this->destinationFileName;
 			if (Helper::IsNullOrEmpty($destinationFileName)) {
 				$destinationFileName = time() . '-' . rand(1000, 9999);
