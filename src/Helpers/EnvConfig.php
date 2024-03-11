@@ -43,7 +43,7 @@
 			self::tenantConfig();
 			self::emailConfig();
 			self::apiNinjasConfig();
-			self::setAppConfig();
+			self::setCacheConfig();
 		}
 
 		private static function tenantConfig(): void {
@@ -78,11 +78,11 @@
 			ApiNinjas::setApiUrl($config['url'] ?? '');
 		}
 
-		private static function setAppConfig(): void {
+		private static function setCacheConfig(): void {
 			$config = self::$config['app'] ?? [];
 
-			ServerCache::setCacheFolderName($config['cache_folder_name'] ?? '');
-			ServerCache::setRootFolder($config['root_src'] ?? '');
+			ServerCache::setRootFolder(constant($config['root_src_const_name']) ?? '');
+			ServerCache::setCacheFolderName($config['folder_name'] ?? '');
 		}
 
 	}

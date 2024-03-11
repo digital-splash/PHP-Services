@@ -13,7 +13,7 @@
 		private static $cacheFileName;
 
 		public static function setRootFolder(string $rootFolder): void {
-			self::$RootFolder = constant($rootFolder);
+			self::$RootFolder = $rootFolder;
 		}
 
 		public static function setCacheFolderName(string $cacheFolderName): void {
