@@ -1,5 +1,4 @@
-# Use root/example user/password credentials
-version: "3.7"
+version: '3.8'
 
 services:
   php-services-base:
@@ -8,9 +7,39 @@ services:
     container_name: php-services-base
     volumes:
       - .:/var/www/html/
-    extra_hosts:
-      - host.docker.internal:host-gateway
     ports:
       - "80:80"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     stdin_open: true
     tty: true
+    depends_on:
+      - php-services-database
+    networks:
+      - php-services-network
+
+  php-services-database:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: php-services-database
+    command: mysqld --sql_mode=""
+    environment:
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - ./dockerfiles/base-mysql/init-main-db.sh:/docker-entrypoint-initdb.d/init-main-db.sh:delegated
+      - ./dockerfiles/base-mysql/_db_main_structure.sql:/docker-entrypoint-initdb.d/_db_main_structure.sql:delegated
+      - ./db:/docker-entrypoint-initdb.d/db
+      - php-services-mysql-volume:/var/lib/mysql:delegated
+    ports:
+      - 3306:3306
+    networks:
+      - php-services-network
+
+networks:
+  php-services-network:
+    driver: bridge
+
+volumes:
+  php-services-mysql-volume:
+    name: php-services-mysql-data
