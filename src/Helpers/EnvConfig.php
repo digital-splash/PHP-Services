@@ -81,7 +81,8 @@
 		private static function setCacheConfig(): void {
 			$config = self::$config['app'] ?? [];
 
-			ServerCache::setRootFolder(constant($config['root_src_const_name']) ?? '');
+			$rootFolder = !empty($config['root_src_const_name']) ? constant($config['root_src_const_name']) : '';
+			ServerCache::setRootFolder($rootFolder);
 			ServerCache::setCacheFolderName($config['folder_name'] ?? '');
 		}
 
