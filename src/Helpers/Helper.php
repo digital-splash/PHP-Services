@@ -378,14 +378,15 @@
 		 * Generates a Class Name from the Given String
 		 */
 		public static function GenerateClassNameFromString(
-			string $str
+			string $str,
+			array $separators = ['-']
 		): string {
 			return str_replace(
 				" ",
 				"",
 				ucwords(
 					str_replace(
-						"-",
+						$separators,
 						" ",
 						$str
 					)
