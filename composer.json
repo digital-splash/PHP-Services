@@ -19,7 +19,6 @@
   "config": {
     "preferred-install": "dist"
   },
-  "minimum-stability": "stable",
   "repositories": [
     {
       "type": "composer",
@@ -34,8 +33,6 @@
     "intervention/image": "^2.7",
     "phpmailer/phpmailer": "^6.8",
     "illuminate/database": "^8.83",
-    "mavinoo/laravel-batch": "^2.3",
-    "hadi-darwish/laravel-batch": "dev-master",
     "curl/curl": "^2.5",
     "nesbot/carbon": "^2.71"
   },

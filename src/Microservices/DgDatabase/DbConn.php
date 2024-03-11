@@ -5,7 +5,7 @@
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use Exception;
-	use Hadi\Batch\Batch;
+	use DigitalSplash\LaravelBatch\Batch;
 	use Illuminate\Database\Capsule\Manager as CapsuleManager;
 	use Illuminate\Database\Query\Builder;
 	use Illuminate\Database\Eloquent\Model as EloquentModel;
