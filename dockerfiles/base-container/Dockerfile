@@ -2,7 +2,29 @@ FROM php:8.1-apache
 RUN apt-get clean && \
 	apt-get update && \
 	apt-get install -y --no-install-recommends \
-		git
+	# Install Other Extensions
+	git \
+	curl \
+	make \
+	cmake \
+	unzip \
+	zlib1g-dev \
+	libpng-dev
+
+# Install Docker PHP Extensions
+RUN apt-get clean && \
+  apt-get update && \
+  apt-get install -y \
+	libjpeg-dev \
+	libzip-dev \
+	zip && \
+  docker-php-ext-configure \
+	gd --with-jpeg && \
+  docker-php-ext-install \
+	pdo_mysql \
+	gd \
+	mysqli \
+	zip
 
 # Install xdebug
 RUN pecl install -o -f xdebug-3.2.1 \
