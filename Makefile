@@ -24,7 +24,6 @@ build-nocache:
 
 start: stop
 	docker-compose up -d
-	make composer-install
 
 stop:
 	docker-compose down
