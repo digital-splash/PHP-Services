@@ -25,7 +25,7 @@
 				$prevDir = $dir;
 				$dir = dirname($dir);
 				if ($dir === $prevDir) {
-					throw new ConfigurationNotFoundException();
+					throw new ConfigurationNotFoundException('Configuration file "dgsplash.phpservices.env.json" not found!');
 				}
 			}
 
