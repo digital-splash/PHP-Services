@@ -2,8 +2,8 @@
 	namespace DigitalSplash\ServerCache;
 
 	class ServerCache {
-		private static string $RootFolder = '';
-		private static string $CacheFolderName = "cache";
+		private static string $ROOT_FOLDER = '';
+		private static string $CACHE_FOLDER_NAME = "cache";
 
 		private static $name;
 		private static $version;
@@ -13,11 +13,11 @@
 		private static $cacheFileName;
 
 		public static function setRootFolder(string $rootFolder): void {
-			self::$RootFolder = $rootFolder;
+			self::$ROOT_FOLDER = $rootFolder;
 		}
 
 		public static function setCacheFolderName(string $cacheFolderName): void {
-			self::$CacheFolderName = $cacheFolderName;
+			self::$CACHE_FOLDER_NAME = $cacheFolderName;
 		}
 
 		public static function SaveCache(
@@ -75,11 +75,11 @@
 
 		private static function SetFoldersAndFiles(): void {
 			if (self::$version) {
-				self::$cacheFolderName = self::$RootFolder . self::$CacheFolderName;
-				self::$versionFolderName = self::$RootFolder . self::$CacheFolderName . "/" . self::$version;
+				self::$cacheFolderName = self::$ROOT_FOLDER . self::$CACHE_FOLDER_NAME;
+				self::$versionFolderName = self::$ROOT_FOLDER . self::$CACHE_FOLDER_NAME . "/" . self::$version;
 
 				if (self::$name) {
-					self::$cacheFileName = self::$RootFolder . self::$CacheFolderName . "/" . self::$version . "/" . self::$name . ".txt";
+					self::$cacheFileName = self::$ROOT_FOLDER . self::$CACHE_FOLDER_NAME . "/" . self::$version . "/" . self::$name . ".txt";
 				}
 			}
 		}

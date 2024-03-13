@@ -16,12 +16,29 @@
 	use Throwable;
 
 	class DbConn extends EloquentModel {
+		private static string $PHPUNIT_TEST_SUITE = '';
+		private static string $MYSQL_DB_MAIN = '';
+		private static string $MYSQL_DB_LOGS = '';
+		private static string $MYSQL_DB_MAIN_TEST = '';
+		private static string $MYSQL_DB_LOGS_TEST = '';
+		private static string $MYSQL_DB_HOST = '';
+		private static string $MYSQL_DB_USER = '';
+		private static string $MYSQL_DB_PASS = '';
+
 		const CHUNK_SIZE = 500;
 
 		protected static ?CapsuleManager $capsule = null;
 		protected static string $connectionName = '';
 		protected static string $driverName = '';
-		protected string $deleteString = 'DeletedDate';
+		protected string $deleteString = 'Deleted';
+		protected string $deleteDateString = 'DeletedDate';
+		protected string $updatedByString = 'UpdatedBy';
+		protected string $lastUpdatedString = 'LastUpdated';
+		protected string $updatedTypeString = 'UpdatedType';
+		protected string $createdByString = 'CreatedBy';
+		protected string $createdOnString = 'CreatedOn';
+		protected string $createdTypeString = 'CreatedType';
+		protected string $displayOrderString = 'DisplayOrder';
 
 		protected static int $defaultFilterDeleted = 0;
 		protected array $apiExcludedColumns = [];
@@ -84,6 +101,38 @@
 					$this->exists = true;
 				}
 			}
+		}
+
+		public static function setPhpUnitTestSuite(string $phpUnitTestSuite): void {
+			self::$PHPUNIT_TEST_SUITE = $phpUnitTestSuite;
+		}
+
+		public static function setMysqlDbMain(string $mysqlDbMain): void {
+			self::$MYSQL_DB_MAIN = $mysqlDbMain;
+		}
+
+		public static function setMysqlDbLogs(string $mysqlDbLogs): void {
+			self::$MYSQL_DB_LOGS = $mysqlDbLogs;
+		}
+
+		public static function setMysqlDbMainTest(string $mysqlDbMainTest): void {
+			self::$MYSQL_DB_MAIN_TEST = $mysqlDbMainTest;
+		}
+
+		public static function setMysqlDbLogsTest(string $mysqlDbLogsTest): void {
+			self::$MYSQL_DB_LOGS_TEST = $mysqlDbLogsTest;
+		}
+
+		public static function setMysqlDbHost(string $mysqlDbHost): void {
+			self::$MYSQL_DB_HOST = $mysqlDbHost;
+		}
+
+		public static function setMysqlDbUser(string $mysqlDbUser): void {
+			self::$MYSQL_DB_USER = $mysqlDbUser;
+		}
+
+		public static function setMysqlDbPass(string $mysqlDbPass): void {
+			self::$MYSQL_DB_PASS = $mysqlDbPass;
 		}
 
 		public static function clearCachedObject(): void {
@@ -246,6 +295,7 @@
 			$this->filterDeleted = -1;
 		}
 
+		//Start of static methods
 		public function getDeleteString(): string {
 			return $this->deleteString;
 		}
@@ -253,6 +303,71 @@
 		public function setDeleteString(string $deleteString): void {
 			$this->deleteString = $deleteString;
 		}
+
+		public function getDeleteDateString(): string {
+			return $this->deleteDateString;
+		}
+
+		public function setDeleteDateString(string $deleteDateString): void {
+			$this->deleteDateString = $deleteDateString;
+		}
+
+		public function getUpdatedByString(): string {
+			return $this->updatedByString;
+		}
+
+		public function setUpdatedByString(string $updatedByString): void {
+			$this->updatedByString = $updatedByString;
+		}
+
+		public function getLastUpdatedString(): string {
+			return $this->lastUpdatedString;
+		}
+
+		public function setLastUpdatedString(string $lastUpdatedString): void {
+			$this->lastUpdatedString = $lastUpdatedString;
+		}
+
+		public function getUpdatedTypeString(): string {
+			return $this->updatedTypeString;
+		}
+
+		public function setUpdatedTypeString(string $updatedTypeString): void {
+			$this->updatedTypeString = $updatedTypeString;
+		}
+
+		public function getCreatedByString(): string {
+			return $this->createdByString;
+		}
+
+		public function setCreatedByString(string $createdByString): void {
+			$this->createdByString = $createdByString;
+		}
+
+		public function getCreatedOnString(): string {
+			return $this->createdOnString;
+		}
+
+		public function setCreatedOnString(string $createdOnString): void {
+			$this->createdOnString = $createdOnString;
+		}
+
+		public function getCreatedTypeString(): string {
+			return $this->createdTypeString;
+		}
+
+		public function setCreatedTypeString(string $createdTypeString): void {
+			$this->createdTypeString = $createdTypeString;
+		}
+
+		public function getDisplayOrderString(): string {
+			return $this->displayOrderString;
+		}
+
+		public function setDisplayOrderString(string $displayOrderString): void {
+			$this->displayOrderString = $displayOrderString;
+		}
+		// End of static methods
 
 		private static function initCapsule(): void {
 			if (!Helper::IsNullOrEmpty(self::$capsule)) {
@@ -266,13 +381,13 @@
 			 */
 
 			//BEGIN: Main DB
-			$databaseMain = PHPUNIT_TEST_SUITE ? MYSQL_DB_MAIN_TEST : MYSQL_DB_MAIN;
+			$databaseMain = self::$PHPUNIT_TEST_SUITE ? self::$MYSQL_DB_MAIN_TEST : self::$MYSQL_DB_MAIN;
 			$capsule->addConnection([
 				'driver' => 'mysql',
-				'host' => MYSQL_DB_HOST,
+				'host' => self::$MYSQL_DB_HOST,
 				'database' => $databaseMain,
-				'username' => MYSQL_DB_USER,
-				'password' => MYSQL_DB_PASS,
+				'username' => self::$MYSQL_DB_USER,
+				'password' => self::$MYSQL_DB_PASS,
 				'charset' => 'utf8',
 				'collation' => 'utf8_general_ci',
 				// 'timezone' => 'Europe/London' //Asia/Beirut
@@ -280,13 +395,13 @@
 			//END: Main DB
 
 			//BEGIN: Logs DB
-			$databaseLogs = PHPUNIT_TEST_SUITE ? MYSQL_DB_LOGS_TEST : MYSQL_DB_LOGS;
+			$databaseLogs = self::$PHPUNIT_TEST_SUITE ? self::$MYSQL_DB_LOGS_TEST : self::$MYSQL_DB_LOGS;
 			$capsule->addConnection([
 				'driver' => 'mysql',
-				'host' => MYSQL_DB_HOST,
+				'host' => self::$MYSQL_DB_HOST,
 				'database' => $databaseLogs,
-				'username' => MYSQL_DB_USER,
-				'password' => MYSQL_DB_PASS,
+				'username' => self::$MYSQL_DB_USER,
+				'password' => self::$MYSQL_DB_PASS,
 				'charset' => 'utf8',
 				'collation' => 'utf8_general_ci',
 			], 'logs');
@@ -336,40 +451,40 @@
 				}
 
 				if (!$this->isNew()) {
-					$hasUpdatedBy = in_array('UpdatedBy', $columns);
+					$hasUpdatedBy = in_array($this->updatedByString, $columns);
 					// if ($hasUpdatedBy && LoggedUser::getUserId()) {
-					// 	$this->UpdatedBy = LoggedUser::getUserId();
+					// 	$this->{$this->updatedByString} = LoggedUser::getUserId();
 					// }
 
-					$hasLastUpdated = in_array('LastUpdated', $columns);
+					$hasLastUpdated = in_array($this->lastUpdatedString, $columns);
 					// if ($hasLastUpdated) {
-					// 	$this->LastUpdated = date(DateFormat::DATETIME_SAVE);
+					// 	$this->{$this->lastUpdatedString} = date(DateFormat::DATETIME_SAVE);
 					// }
 
-					$hasUpdatedType = in_array('UpdatedType', $columns);
+					$hasUpdatedType = in_array($this->updatedTypeString, $columns);
 					// if ($hasUpdatedType && LoggedUser::getUserType()) {
-					// 	$this->UpdatedType = LoggedUser::getUserType();
+					// 	$this->{$this->updatedTypeString} = LoggedUser::getUserType();
 					// }
 				} else {
-					$hasCreatedBy = in_array('CreatedBy', $columns);
+					$hasCreatedBy = in_array($this->createdByString, $columns);
 					// if ($hasCreatedBy && LoggedUser::getUserId()) {
-					// 	$this->CreatedBy = LoggedUser::getUserId();
+					// 	$this->{$this->createdByString} = LoggedUser::getUserId();
 					// }
 
-					$hasCreatedOn = in_array('CreatedOn', $columns);
+					$hasCreatedOn = in_array($this->createdOnString, $columns);
 					if ($hasCreatedOn) {
-						$this->CreatedOn = date(DateFormat::DATETIME_SAVE);
+						$this->{$this->createdOnString} = date(DateFormat::DATETIME_SAVE);
 					}
 
-					$hasCreatedType = in_array('CreatedType', $columns);
+					$hasCreatedType = in_array($this->createdTypeString, $columns);
 					// if ($hasCreatedType && LoggedUser::getUserType()) {
-					// 	$this->CreatedType = LoggedUser::getUserType();
+					// 	$this->{$this->createdTypeString} = LoggedUser::getUserType();
 					// }
 
-					$hasDisplayOrder = in_array('DisplayOrder', $columns);
-					if ($hasDisplayOrder && $this->DisplayOrder === null) {
+					$hasDisplayOrder = in_array($this->displayOrderString, $columns);
+					if ($hasDisplayOrder && $this->{$this->displayOrderString} === null) {
 						$class = get_called_class();
-						$this->DisplayOrder = $class::getNewDisplayOrder($this->attributes);
+						$this->{$this->displayOrderString} = $class::getNewDisplayOrder($this->attributes);
 					}
 				}
 
@@ -399,31 +514,31 @@
 
 			try {
 				$displayOrder = false;
-				$hasDisplayOrder = in_array('DisplayOrder', $columns);
-				$hasCreatedBy = in_array('CreatedBy', $columns);
-				$hasCreatedOn = in_array('CreatedOn', $columns);
-				$hasCreatedType = in_array('CreatedType', $columns);
+				$hasDisplayOrder = in_array(self::$displayOrderString, $columns);
+				$hasCreatedBy = in_array(self::$createdByString, $columns);
+				$hasCreatedOn = in_array(self::$createdOnString, $columns);
+				$hasCreatedType = in_array(self::$createdTypeString, $columns);
 				if ($hasCreatedBy || $hasCreatedOn || $hasCreatedType || $hasDisplayOrder) {
 					$class = get_called_class();
 					$values = array_map(function($value) use ($hasCreatedBy, $hasCreatedOn, $hasCreatedType, $hasDisplayOrder, $displayOrder, $class) {
 						if (is_array($value)) {
 							// if ($hasCreatedBy && LoggedUser::getUserId()) {
-							// 	$value['CreatedBy'] = LoggedUser::getUserId();
+							// 	$value[self::$createdByString] = LoggedUser::getUserId();
 							// }
 							if ($hasCreatedOn) {
-								$value['CreatedOn'] = date(DateFormat::DATETIME_SAVE);
+								$value[self::$createdOnString] = date(DateFormat::DATETIME_SAVE);
 							}
 							// if ($hasCreatedType && LoggedUser::getUserType()) {
-							// 	$value['CreatedType'] = LoggedUser::getUserType();
+							// 	$value[self::$createdTypeString] = LoggedUser::getUserType();
 							// }
-							if ($hasDisplayOrder && !isset($value['DisplayOrder'])) {
+							if ($hasDisplayOrder && !isset($value[self::$displayOrderString])) {
 								if ($displayOrder === false) {
 									$displayOrder = $class::getNewDisplayOrder($value);
 								} else {
 									$displayOrder++;
 								}
 
-								$value['DisplayOrder'] = $displayOrder;
+								$value[self::$displayOrderString] = $displayOrder;
 							}
 						}
 						return $value;
@@ -464,20 +579,20 @@
 
 			$columns = $object->getFillable();
 			try {
-				$hasUpdatedBy = in_array('UpdatedBy', $columns);
-				$hasLastUpdated = in_array('LastUpdated', $columns);
-				$hasUpdatedType = in_array('UpdatedType', $columns);
+				$hasUpdatedBy = in_array(self::$updatedByString, $columns);
+				$hasLastUpdated = in_array(self::$lastUpdatedString, $columns);
+				$hasUpdatedType = in_array(self::$updatedTypeString, $columns);
 				if ($hasUpdatedBy || $hasLastUpdated || $hasUpdatedType) {
 					$values = array_map(function($value) use ($hasUpdatedBy, $hasLastUpdated, $hasUpdatedType) {
 						if (is_array($value)) {
 							// if ($hasUpdatedBy && LoggedUser::getUserId()) {
-							// 	$value['UpdatedBy'] = LoggedUser::getUserId();
+							// 	$value[self::$updatedByString] = LoggedUser::getUserId();
 							// }
 							if ($hasLastUpdated) {
-								$value['LastUpdated'] = date(DateFormat::DATETIME_SAVE);
+								$value[self::$lastUpdatedString] = date(DateFormat::DATETIME_SAVE);
 							}
 							// if ($hasUpdatedType && LoggedUser::getUserType()) {
-							// 	$value['UpdatedType'] = LoggedUser::getUserType();
+							// 	$value[self::$updatedTypeString] = LoggedUser::getUserType();
 							// }
 						}
 						return $value;
@@ -679,7 +794,7 @@
 
 			$query->update([
 				'Deleted' => 1,
-				$object->getDeleteString() => $now
+				$object->getDeleteDateString() => $now
 			]);
 		}
 
@@ -887,42 +1002,42 @@
 			return $uniqueKey;
 		}
 
-		public static function getColumnNamesOfLanguages(string $prefix, array $langs = []): array {
-			if (empty($langs)) {
-				$langs = explode(',', ACTIVE_LANGS);
-			}
-			$values = [];
-			foreach ($langs as $lang) {
-				$values[] = $prefix . ucfirst(strtolower($lang));
-			}
+		// public static function getColumnNamesOfLanguages(string $prefix, array $langs = []): array {
+		// 	if (empty($langs)) {
+		// 		$langs = explode(',', ACTIVE_LANGS);
+		// 	}
+		// 	$values = [];
+		// 	foreach ($langs as $lang) {
+		// 		$values[] = $prefix . ucfirst(strtolower($lang));
+		// 	}
 
-			return $values;
-		}
+		// 	return $values;
+		// }
 
-		public function getValuesOfLanguages(string $prefix, array $langs = []): array {
-			$columns = self::getColumnNamesOfLanguages($prefix, $langs);
-			$values = [];
-			foreach ($columns as $column) {
-				$values[$column] = $this->{$column};
-			}
+		// public function getValuesOfLanguages(string $prefix, array $langs = []): array {
+		// 	$columns = self::getColumnNamesOfLanguages($prefix, $langs);
+		// 	$values = [];
+		// 	foreach ($columns as $column) {
+		// 		$values[$column] = $this->{$column};
+		// 	}
 
-			return $values;
-		}
+		// 	return $values;
+		// }
 
-		public static function getColumnNameOfActiveLanguage(string $prefix): string {
-			$activeLangs = explode(',', ACTIVE_LANGS);
-			$websiteLang = WEBSITE_LANG;
-			if (!in_array($websiteLang, $activeLangs)) {
-				$websiteLang = DEFAULT_LANG;
-			}
+		// public static function getColumnNameOfActiveLanguage(string $prefix): string {
+		// 	$activeLangs = explode(',', ACTIVE_LANGS);
+		// 	$websiteLang = WEBSITE_LANG;
+		// 	if (!in_array($websiteLang, $activeLangs)) {
+		// 		$websiteLang = DEFAULT_LANG;
+		// 	}
 
-			return $prefix . ucfirst($websiteLang);
-		}
+		// 	return $prefix . ucfirst($websiteLang);
+		// }
 
-		public function getValueOfActiveLanguage(string $prefix): string {
-			$columnName = self::getColumnNameOfActiveLanguage($prefix);
-			return $this->{$columnName};
-		}
+		// public function getValueOfActiveLanguage(string $prefix): string {
+		// 	$columnName = self::getColumnNameOfActiveLanguage($prefix);
+		// 	return $this->{$columnName};
+		// }
 
 		public function unsetApiColumns(array $row): array {
 			foreach ($this->apiExcludedColumns as $col) {

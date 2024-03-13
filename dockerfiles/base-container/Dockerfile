@@ -17,9 +17,10 @@ RUN apt-get clean && \
   apt-get install -y \
 	libjpeg-dev \
 	libzip-dev \
+	libwebp-dev \
 	zip && \
   docker-php-ext-configure \
-	gd --with-jpeg && \
+	gd --with-jpeg --with-webp && \
   docker-php-ext-install \
 	pdo_mysql \
 	gd \
