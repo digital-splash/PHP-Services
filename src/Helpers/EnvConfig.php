@@ -2,6 +2,7 @@
 	namespace DigitalSplash\Helpers;
 
 	use DigitalSplash\ApiNinjas\ApiNinjas;
+	use DigitalSplash\Database\DbConn;
 	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
 	use DigitalSplash\Exceptions\Configuration\InvalidConfigurationException;
 	use DigitalSplash\Helpers\Helper;
@@ -44,6 +45,8 @@
 			self::emailConfig();
 			self::apiNinjasConfig();
 			self::setCacheConfig();
+			self::environmentConfig();
+			self::databaseConfig();
 		}
 
 		private static function tenantConfig(): void {
@@ -79,11 +82,60 @@
 		}
 
 		private static function setCacheConfig(): void {
-			$config = self::$config['app'] ?? [];
+			$config = self::$config['cache'] ?? [];
 
 			$rootFolder = !empty($config['root_src_const_name']) ? constant($config['root_src_const_name']) : '';
 			ServerCache::setRootFolder($rootFolder);
 			ServerCache::setCacheFolderName($config['folder_name'] ?? '');
 		}
 
+		private static function environmentConfig(): void {
+					$isLocal = false;
+					$isDemo = false;
+					$isTest = false;
+					$isProd = false;
+
+					switch (Tenant::getEnvironment()) {
+						case 'live':
+						case 'prod':
+							$isProd = true;
+						break;
+
+						case 'test':
+							$isTest = true;
+						break;
+
+						case 'demo':
+							$isDemo = true;
+						break;
+
+						default:
+							$isLocal = true;
+						break;
+					}
+
+					// define('IS_LOCAL', $isLocal);
+					// define('IS_TEST', $isTest);
+					// define('IS_DEMO', $isDemo);
+					// define('IS_PROD', $isProd);
+
+					if (!defined('PHPUNIT_TEST_SUITE')) {
+						DbConn::setPhpUnitTestSuite(0);
+					} else {
+						DbConn::setPhpUnitTestSuite(1);
+					}
+				}
+
+		private static function databaseConfig(): void {
+			$database = self::$config['database'] ?? [];
+			$mysql = $database['mysql'] ?? [];
+
+			DbConn::setMysqlDbHost($mysql['host'] ?? '');
+			DbConn::setMysqlDbUser($mysql['username'] ?? '');
+			DbConn::setMysqlDbPass($mysql['password'] ?? '');
+			DbConn::setMysqlDbMain($mysql['main_database'] ?? '');
+			DbConn::setMysqlDbLogs($mysql['logs_database'] ?? '');
+			DbConn::setMysqlDbMainTest($mysql['test_main_database'] ?? '');
+			DbConn::setMysqlDbLogsTest($mysql['test_logs_database'] ?? '');
+		}
 	}
