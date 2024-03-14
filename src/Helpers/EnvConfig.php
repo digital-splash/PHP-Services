@@ -90,41 +90,12 @@
 		}
 
 		private static function environmentConfig(): void {
-					$isLocal = false;
-					$isDemo = false;
-					$isTest = false;
-					$isProd = false;
-
-					switch (Tenant::getEnvironment()) {
-						case 'live':
-						case 'prod':
-							$isProd = true;
-						break;
-
-						case 'test':
-							$isTest = true;
-						break;
-
-						case 'demo':
-							$isDemo = true;
-						break;
-
-						default:
-							$isLocal = true;
-						break;
-					}
-
-					// define('IS_LOCAL', $isLocal);
-					// define('IS_TEST', $isTest);
-					// define('IS_DEMO', $isDemo);
-					// define('IS_PROD', $isProd);
-
-					if (!defined('PHPUNIT_TEST_SUITE')) {
-						DbConn::setPhpUnitTestSuite(0);
-					} else {
-						DbConn::setPhpUnitTestSuite(1);
-					}
-				}
+			if (!defined('PHPUNIT_TEST_SUITE')) {
+				DbConn::setPhpUnitTestSuite(0);
+			} else {
+				DbConn::setPhpUnitTestSuite(1);
+			}
+		}
 
 		private static function databaseConfig(): void {
 			$database = self::$config['database'] ?? [];
