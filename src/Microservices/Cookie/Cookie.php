@@ -17,7 +17,9 @@
 		public function __construct(string $name = '') {
 			$this->withSession = false;
 
-			$this->prefix = strtolower(Tenant::getName());
+			$this->prefix = str_replace([
+				' '
+			], '_', strtolower(Tenant::getName()));
 			$this->time = time() + (60 * 60 * 24 * 30); //30 Days
 			$this->path = '/';
 			$this->domain = '.' . DOMAIN;
@@ -27,9 +29,6 @@
 
 			if (IS_LOCAL_ENV) {
 				$this->prefix .= '_local';
-			}
-			else if (IS_DEMO) {
-				$this->prefix .= '_demo';
 			}
 			else if (IS_TEST_ENV) {
 				$this->prefix .= '_test';

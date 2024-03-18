@@ -2,6 +2,10 @@ FROM php:8.1-apache
 RUN apt-get clean && \
 	apt-get update && \
 	apt-get install -y --no-install-recommends \
+	# Install Database Clients
+	mariadb-server-core \
+	mariadb-server \
+	mariadb-client \
 	# Install Other Extensions
 	git \
 	curl \

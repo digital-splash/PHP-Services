@@ -514,31 +514,31 @@
 
 			try {
 				$displayOrder = false;
-				$hasDisplayOrder = in_array(self::$displayOrderString, $columns);
-				$hasCreatedBy = in_array(self::$createdByString, $columns);
-				$hasCreatedOn = in_array(self::$createdOnString, $columns);
-				$hasCreatedType = in_array(self::$createdTypeString, $columns);
+				$hasDisplayOrder = in_array($object->getDisplayOrderString(), $columns);
+				$hasCreatedBy = in_array($object->getCreatedByString(), $columns);
+				$hasCreatedOn = in_array($object->getCreatedOnString(), $columns);
+				$hasCreatedType = in_array($object->getCreatedTypeString(), $columns);
 				if ($hasCreatedBy || $hasCreatedOn || $hasCreatedType || $hasDisplayOrder) {
 					$class = get_called_class();
-					$values = array_map(function($value) use ($hasCreatedBy, $hasCreatedOn, $hasCreatedType, $hasDisplayOrder, $displayOrder, $class) {
+					$values = array_map(function($value) use ($hasCreatedBy, $hasCreatedOn, $hasCreatedType, $hasDisplayOrder, $displayOrder, $class, $object) {
 						if (is_array($value)) {
 							// if ($hasCreatedBy && LoggedUser::getUserId()) {
-							// 	$value[self::$createdByString] = LoggedUser::getUserId();
+							// 	$value[$object->getCreatedByString()] = LoggedUser::getUserId();
 							// }
 							if ($hasCreatedOn) {
-								$value[self::$createdOnString] = date(DateFormat::DATETIME_SAVE);
+								$value[$object->getCreatedOnString()] = date(DateFormat::DATETIME_SAVE);
 							}
 							// if ($hasCreatedType && LoggedUser::getUserType()) {
-							// 	$value[self::$createdTypeString] = LoggedUser::getUserType();
+							// 	$value[$object->getCreatedTypeString()] = LoggedUser::getUserType();
 							// }
-							if ($hasDisplayOrder && !isset($value[self::$displayOrderString])) {
+							if ($hasDisplayOrder && !isset($value[$object->getDisplayOrderString()])) {
 								if ($displayOrder === false) {
 									$displayOrder = $class::getNewDisplayOrder($value);
 								} else {
 									$displayOrder++;
 								}
 
-								$value[self::$displayOrderString] = $displayOrder;
+								$value[$object->getDisplayOrderString()] = $displayOrder;
 							}
 						}
 						return $value;
@@ -579,20 +579,20 @@
 
 			$columns = $object->getFillable();
 			try {
-				$hasUpdatedBy = in_array(self::$updatedByString, $columns);
-				$hasLastUpdated = in_array(self::$lastUpdatedString, $columns);
-				$hasUpdatedType = in_array(self::$updatedTypeString, $columns);
+				$hasUpdatedBy = in_array($object->getUpdatedByString(), $columns);
+				$hasLastUpdated = in_array($object->getLastUpdatedString(), $columns);
+				$hasUpdatedType = in_array($object->getUpdatedTypeString(), $columns);
 				if ($hasUpdatedBy || $hasLastUpdated || $hasUpdatedType) {
-					$values = array_map(function($value) use ($hasUpdatedBy, $hasLastUpdated, $hasUpdatedType) {
+					$values = array_map(function($value) use ($hasUpdatedBy, $hasLastUpdated, $hasUpdatedType, $object) {
 						if (is_array($value)) {
 							// if ($hasUpdatedBy && LoggedUser::getUserId()) {
-							// 	$value[self::$updatedByString] = LoggedUser::getUserId();
+							// 	$value[$object->getUpdatedByString()] = LoggedUser::getUserId();
 							// }
 							if ($hasLastUpdated) {
-								$value[self::$lastUpdatedString] = date(DateFormat::DATETIME_SAVE);
+								$value[$object->getLastUpdatedString()] = date(DateFormat::DATETIME_SAVE);
 							}
 							// if ($hasUpdatedType && LoggedUser::getUserType()) {
-							// 	$value[self::$updatedTypeString] = LoggedUser::getUserType();
+							// 	$value[$object->getUpdatedTypeString()] = LoggedUser::getUserType();
 							// }
 						}
 						return $value;
@@ -623,16 +623,16 @@
 			$query->select($this->fields);
 
 			// Add condition
-			if (in_array('Deleted', $columns) && in_array($this->filterDeleted, [0, 1])) {
+			if (in_array($this->deleteString, $columns) && in_array($this->filterDeleted, [0, 1])) {
 				/**
 				 * @param Condition $condition
 				 */
 				$hasDeletedCondition = array_filter($this->conditions, function($condition) {
-					return $condition->getColumn() === 'Deleted' || $condition->getColumn() === $this->table . '.Deleted';
+					return $condition->getColumn() === $this->deleteString || $condition->getColumn() === $this->table . '.' . $this->deleteString;
 				});
 
 				if (empty($hasDeletedCondition)) {
-					$this->addCondition(new Condition($this->table . '.Deleted', $this->filterDeleted));
+					$this->addCondition(new Condition($this->table . '.' . $this->deleteString, $this->filterDeleted));
 				}
 			}
 
@@ -757,8 +757,8 @@
 		public function softDelete(): void {
 			$now = date(DateFormat::DATETIME_SAVE);
 			$this->find($this->row[$this->primaryKey])->update([
-				'Deleted' => 1,
-				'DeletedDate' => $now
+				$this->deleteString => 1,
+				$this->deleteDateString => $now
 			]);
 		}
 
@@ -793,15 +793,15 @@
 			$now = date(DateFormat::DATETIME_SAVE);
 
 			$query->update([
-				'Deleted' => 1,
+				$object->getDeleteString() => 1,
 				$object->getDeleteDateString() => $now
 			]);
 		}
 
 		public function restore(): void {
 			$this->find($this->row[$this->primaryKey])->update([
-				'Deleted' => 0,
-				'DeletedDate' => null
+				$this->deleteString => 0,
+				$this->deleteDateString => null
 			]);
 		}
 
@@ -825,8 +825,8 @@
 			}
 
 			$query->update([
-				'Deleted' => 0,
-				'DeletedDate' => null
+				$object->getDeleteString() => 0,
+				$object->getDeleteDateString() => null
 			]);
 		}
 
@@ -1052,7 +1052,7 @@
 
 		protected function getMaxDisplayOrder(): int {
 			$this->setFields([
-				$this->getCapsule()::raw('MAX(DisplayOrder) AS MaxDisplayOrder')
+				$this->getCapsule()::raw('MAX(' . $this->displayOrderString . ') AS MaxDisplayOrder')
 			]);
 			$this->selectFromDB();
 
