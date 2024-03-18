@@ -1,6 +1,7 @@
 <?php
 	namespace DigitalSplash\Tests\Media\Helpers;
 
+	use DigitalSplash\Media\Helpers\Media;
 	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Media\Helpers\Upload;
 	use DigitalSplash\Media\Models\ImagesExtensions;
@@ -23,9 +24,10 @@
 				 'error' => 0,
 				 'size' => filesize($filePath)
 			 );
+			 Media::SetUploadDir(self::UPLOAD_DIR);
 			 $upload = new Upload();
 			 // Mock the file upload in your method
-			 $result = $upload->uploadToServer();
+			 $result = $upload->upload();
 			 // Assert the result
 			 $this->assertEquals([
 				"status"	=> 1,
