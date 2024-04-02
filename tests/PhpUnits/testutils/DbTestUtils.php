@@ -25,15 +25,13 @@
 		): string {
 			$id = 0;
 
-			try {
-				/**
-				 * @var DbConn
-				 */
-				$obj = new $class();
-				$row = $obj->save($data);
-				$id = $row[$obj->getKeyName()];
-				unset($obj);
-			} catch (Exception $e) {}
+			/**
+			 * @var DbConn
+			 */
+			$obj = new $class();
+			$row = $obj->save($data);
+			$id = $row[$obj->getKeyName()];
+			unset($obj);
 
 			return $id;
 		}

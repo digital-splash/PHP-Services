@@ -653,6 +653,14 @@
 								$condition->getValue(),
 								$condition->getBoolean()
 							);
+						} else if ($condition->getOperator() == 'NOT IN') {
+							$query->whereNotIn(
+								$condition->getColumn(),
+								$condition->getValue(),
+								$condition->getBoolean()
+							);
+						} elseif ($condition->getOperator() == 'findInSet') {
+							$query->whereRaw("FIND_IN_SET(?, $col)", $condition->getValue());
 						} else {
 							$query->where(
 								$condition->getColumn(),
