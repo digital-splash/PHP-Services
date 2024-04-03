@@ -277,7 +277,7 @@
 
 				switch ($type) {
 					case "meta":
-						$html[] = "<meta " . Helper::GererateKeyValueStringFromArray($metaSubArray) . ">";
+						$html[] = "<meta " . Helper::GenerateKeyValueStringFromArray($metaSubArray) . ">";
 						break;
 
 					case "comment":

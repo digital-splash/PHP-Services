@@ -52,7 +52,7 @@
 			$data = $payment->FillFormData($type, $typeId);
 			$data["signature"] = self::GenerateSignature($data, self::SIGNATURE_PASSPHRASE);
 
-			$style = Helper::GererateKeyValueStringFromArray([
+			$style = Helper::GenerateKeyValueStringFromArray([
 				"display" => "none",
 				"opacity" => "0",
 				"position" => "absolute",

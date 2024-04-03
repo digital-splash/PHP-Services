@@ -549,7 +549,7 @@
 		/**
 		 * Generate Key Value String from Array
 		 */
-		public static function GererateKeyValueStringFromArray(
+		public static function GenerateKeyValueStringFromArray(
 			?array $params,
 			string $keyPrefix="",
 			string $keyValueJoin="=",

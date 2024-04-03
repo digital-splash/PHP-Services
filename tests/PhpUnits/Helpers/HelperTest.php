@@ -680,20 +680,20 @@
 			);
 		}
 
-		public function testGererateKeyValueStringFromArraySuccess() {
+		public function testGenerateKeyValueStringFromArraySuccess() {
 			$this->assertEquals(
 				"",
-				Helper::GererateKeyValueStringFromArray(null)
+				Helper::GenerateKeyValueStringFromArray(null)
 			);
 
 			$this->assertEquals(
 				"",
-				Helper::GererateKeyValueStringFromArray([])
+				Helper::GenerateKeyValueStringFromArray([])
 			);
 
 			$this->assertEquals(
 				'type="text" name="test-input" id="test-input" placeholder="Test Input"',
-				Helper::GererateKeyValueStringFromArray([
+				Helper::GenerateKeyValueStringFromArray([
 					"type" => "text",
 					"name" => "test-input",
 					"id" => "test-input",
@@ -703,7 +703,7 @@
 
 			$this->assertEquals(
 				'pre_type="text" pre_name="test-input" pre_id="test-input" pre_placeholder="Test Input"',
-				Helper::GererateKeyValueStringFromArray([
+				Helper::GenerateKeyValueStringFromArray([
 					"type" => "text",
 					"name" => "test-input",
 					"id" => "test-input",
@@ -713,7 +713,7 @@
 
 			$this->assertEquals(
 				'type:"text" name:"test-input" id:"test-input" placeholder:"Test Input"',
-				Helper::GererateKeyValueStringFromArray([
+				Helper::GenerateKeyValueStringFromArray([
 					"type" => "text",
 					"name" => "test-input",
 					"id" => "test-input",
@@ -723,7 +723,7 @@
 
 			$this->assertEquals(
 				'type=-text- name=-test-input- id=-test-input- placeholder=-Test Input-',
-				Helper::GererateKeyValueStringFromArray([
+				Helper::GenerateKeyValueStringFromArray([
 					"type" => "text",
 					"name" => "test-input",
 					"id" => "test-input",
@@ -733,7 +733,7 @@
 
 			$this->assertEquals(
 				'type="text"_join_name="test-input"_join_id="test-input"_join_placeholder="Test Input"',
-				Helper::GererateKeyValueStringFromArray([
+				Helper::GenerateKeyValueStringFromArray([
 					"type" => "text",
 					"name" => "test-input",
 					"id" => "test-input",

@@ -258,7 +258,7 @@
 						}
 						$params["class"] .= " {$class}";
 					}
-					$paramsStr = Helper::GererateKeyValueStringFromArray($params);
+					$paramsStr = Helper::GenerateKeyValueStringFromArray($params);
 					$rowStr[] = "<th {$paramsStr}'>{$content}</th>";
 				}
 				$rows[] = "<tr>" . implode("", $rowStr) . "<tr>";
@@ -286,7 +286,7 @@
 						}
 						$params["class"] .= " {$class}";
 					}
-					$paramsStr = Helper::GererateKeyValueStringFromArray($params);
+					$paramsStr = Helper::GenerateKeyValueStringFromArray($params);
 					$rowStr[] = "<td {$paramsStr}'>{$content}</td>";
 				}
 
@@ -322,7 +322,7 @@
 						}
 						$params["class"] .= " {$class}";
 					}
-					$paramsStr = Helper::GererateKeyValueStringFromArray($params);
+					$paramsStr = Helper::GenerateKeyValueStringFromArray($params);
 					$rowStr[] = "<th {$paramsStr}'>{$content}</th>";
 				}
 				$rows[] = "<tr>" . implode("", $rowStr) . "<tr>";
@@ -418,7 +418,7 @@
 				if ($class != "") {
 					$params["class"] .= " {$class}";
 				}
-				$paramsStr = Helper::GererateKeyValueStringFromArray($params);
+				$paramsStr = Helper::GenerateKeyValueStringFromArray($params);
 
 				if ($icon != "") {
 					$title .= "<i class='{$icon}'></i>";

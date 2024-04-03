@@ -12,7 +12,7 @@
 
 		public function __construct($id=0) {
 			parent::__construct();
-			
+
 			$this->_table	= "product";
 			$this->_key		= "id";
 
@@ -67,7 +67,7 @@
 				case "onsale":
 					$condition .= " AND (`e`.`discount_percentage` > 0 OR `e`.`discount_amount` > 0)";
 					break;
-				
+
 				case "recommended":
 				case "popular":
 					break;
@@ -91,7 +91,7 @@
 
 		public function isForUser(int $userId=0) : bool {
 			return true;
-			
+
 			// $store = new Store($this->row["store_id"]);
 			// return $store->row["user_id"] == $userId;
 		}
@@ -99,28 +99,28 @@
 
 		public static function CanSave(array $product=[]) : bool {
 			$archived = $product["archived"] ?? 0;
-			
+
 			return $archived == 0;
 		}
 
 		public static function CanActivate(array $product=[]) : bool {
 			$productId	= $product["id"] ?? 0;
 			$archived	= $product["archived"] ?? 0;
-			
+
 			return $productId > 0 && $archived == 0;
 		}
 
 		public static function CanArchive(array $product=[]) : bool {
 			$productId	= $product["id"] ?? 0;
 			$archived	= $product["archived"] ?? 0;
-			
+
 			return $productId > 0 && $archived == 0;
 		}
 
 		public static function CanUnarchive(array $product=[]) : bool {
 			$productId	= $product["id"] ?? 0;
 			$archived	= $product["archived"] ?? 0;
-			
+
 			return $productId > 0 && $archived == 1;
 		}
 
@@ -128,7 +128,7 @@
 			$productId	= $product["id"] ?? 0;
 			$active		= $product["active"] ?? 0;
 			$archived	= $product["archived"] ?? 0;
-			
+
 			return false; //$productId > 0 && $archived == 1 && $active == 0;
 		}
 
@@ -137,7 +137,7 @@
 			$archived	= $product["archived"] ?? 0;
 			$active		= $product["active"] ?? 0;
 			$ordersNb	= 0;
-			
+
 			return $productId > 0 && $archived == 1 && $active == 0 && $ordersNb == 0;
 		}
 
@@ -163,7 +163,7 @@
 				if ($categoryIdsStr != "") {
 					$categoriesCacheArr = ServerCacheGetter::ProductCategories();
 					$categoryIdsArr = explode(",", $categoryIdsStr);
-	
+
 					foreach ($categoryIdsArr AS $categoryId) {
 						$_categoryArr = $categoriesCacheArr[$categoryId] ?? [];
 
@@ -176,12 +176,12 @@
 				$row["categories_nice"] = $categoriesNice;
 				$row["categories"] = $categoriesArr;
 			}
-			
+
 			if (!isset($row["discount_final"])) {
 				$discountFinal = 0;
 				$discountMinPrice = 0;
 				$discountMaxPrice = 0;
-				
+
 				$sellPrice = Helper::ConvertToDec($row["sell_price"] ?? 0);
 				$minSellPrice = Helper::ConvertToDec($row["min_sell_price"] ?? 0);
 				$maxSellPrice = Helper::ConvertToDec($row["max_sell_price"] ?? 0);
@@ -221,13 +221,13 @@
 				$discountArr["sell_price_after_discount"] = Helper::ConvertToDec($sellPrice, 2, true, CURRENCY_SIGN);
 				$discountArr["min_sell_price_after_discount"] = Helper::ConvertToDec($minSellPrice, 2, true, CURRENCY_SIGN);
 				$discountArr["max_sell_price_after_discount"] = Helper::ConvertToDec($maxSellPrice, 2, true, CURRENCY_SIGN);
-				
+
 				$discountArr["sell_price"] = Helper::ConvertToDec($sellPrice);
 				$discountArr["min_sell_price"] = Helper::ConvertToDec($minSellPrice);
 				$discountArr["max_sell_price"] = Helper::ConvertToDec($maxSellPrice);
 				$discountArr["discount_percentage"] = Helper::ConvertToDec($discountPercentage);
 				$discountArr["discount_final"] = Helper::ConvertToDec($discountFinal);
-				
+
 				$row = array_merge($row, $discountArr);
 			}
 
@@ -238,7 +238,7 @@
 				if ($haveDiscount) {
 					$min = $row["min_sell_price_before_discount"];
 					$max = $row["max_sell_price_before_discount"];
-				
+
 					$cls = "jsDiscountPrice";
 					if ($min === $max) {
 						$title = $min;
@@ -269,19 +269,19 @@
 					"data-defaultpricepreview" => $title,
 					"data-defaultprice" => $row["min_sell_price"] ?? Helper::ConvertToDec(str_replace(CURRENCY_SIGN, "", $min)),
 				];
-				$sellPriceNiceAfterDiscount = '<ins ' . Helper::GererateKeyValueStringFromArray($data) . '>' . $title . '</ins>';
+				$sellPriceNiceAfterDiscount = '<ins ' . Helper::GenerateKeyValueStringFromArray($data) . '>' . $title . '</ins>';
 
 				$niceArr = [];
 				$niceArr["sell_price_nice_before_discount"] = $sellPriceNiceBeforeDiscount;
 				$niceArr["sell_price_nice_after_discount"] = $sellPriceNiceAfterDiscount;
 				$niceArr["sell_price_nice"] = $sellPriceNiceAfterDiscount;
-				
+
 				$row = array_merge($row, $niceArr);
 			}
 
 			if (!isset($row["discount_nice"])) {
 				$discountNice = "";
-				
+
 				$discountPercentage = $row["discount_percentage"] ?? 0;
 				$discountAmount = $row["discount_amount"] ?? 0;
 
@@ -302,7 +302,7 @@
 					$options->loadByProduct($productId, [
 						"function" => "_groupByCategoryId"
 					]);
-	
+
 					$row["options"] = $options->list;
 				}
 			}
@@ -316,7 +316,7 @@
 				foreach ($row["options"] AS $_opt) {
 					$_optRetail = Helper::ConvertToDec($_opt["additional_retail"] ?? 0);
 					$_optPrice = Helper::ConvertToDec($_opt["additional_sell"] ?? 0);
-					
+
 					if ($_optPrice > 0) {
 						$row["cart_item_price_before_discount"] += $_optPrice;
 						if ($discountPercentage > 0) {
@@ -335,13 +335,13 @@
 				$row["cart_item_price_nice"] .= '<del>' . Helper::ConvertToDec($row["cart_item_price_before_discount"], 2, true, CURRENCY_SIGN) . '</del>';
 			}
 			$row["cart_item_price_nice"] .= '<ins>' . Helper::ConvertToDec($row["cart_item_price_after_discount"], 2, true, CURRENCY_SIGN) . '</ins>';
-			
+
 			$quantity = Helper::ConvertToInt($row["quantity"] ?? 0);
 			if ($quantity > 0) {
 				$row["cart_total_price_before_discount"] = $row["cart_item_price_before_discount"] * $quantity;
 				$row["cart_total_price_after_discount"] = $row["cart_item_price_after_discount"] * $quantity;
 				$row["final_retail_price"] = $row["final_retail_price"] * $quantity;
-				
+
 				$row["cart_total_price_nice"] = '';
 				if ($haveDiscount) {
 					$row["cart_total_price_nice"] .= '<del>' . Helper::ConvertToDec($row["cart_total_price_before_discount"], 2, true, CURRENCY_SIGN) . '</del>';
@@ -351,5 +351,5 @@
 
 			return $row;
 		}
-		
+
 	}
