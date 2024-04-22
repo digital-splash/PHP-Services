@@ -1060,7 +1060,7 @@
 
 		protected function getMaxDisplayOrder(): int {
 			$this->setFields([
-				$this->getCapsule()::raw('MAX(' . $this->displayOrderString . ') AS MaxDisplayOrder')
+				$this->getCapsule()::raw('MAX(`' . $this->displayOrderString . '`) AS `MaxDisplayOrder`')
 			]);
 			$this->selectFromDB();
 
