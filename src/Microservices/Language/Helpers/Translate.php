@@ -167,7 +167,9 @@
 			$type = strtolower(str_replace(".json", "", $lastPath));
 
 			self::$VALS = array_merge(self::$VALS, Helper::ConvertMultidimentionArrayToSingleDimention($fileArr));
-			self::$VALS_WITHOUT_TYPE = array_merge(self::$VALS_WITHOUT_TYPE, Helper::ConvertMultidimentionArrayToSingleDimention($fileArr[$type]));
+
+			$singleDimentionalVals = Helper::ConvertMultidimentionArrayToSingleDimention(is_array($fileArr[$type]) ? $fileArr[$type] : $fileArr);
+			self::$VALS_WITHOUT_TYPE = array_merge(self::$VALS_WITHOUT_TYPE, $singleDimentionalVals);
 		}
 
 	}
