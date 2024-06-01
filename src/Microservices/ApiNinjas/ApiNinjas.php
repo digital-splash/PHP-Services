@@ -55,6 +55,10 @@
 				$rsp = json_decode($rsp, true);
 			}
 
+			if (!is_array($rsp)) {
+				$rsp = [];
+			}
+
 			return $rsp;
 		}
 
