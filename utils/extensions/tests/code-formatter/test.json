@@ -3,7 +3,7 @@
 	"last_name": "Doe",
 	"address": {
 		"country": "USA",
-		"state": "FL",
+			"state": "FL",
 		"city": "Miami",
 		"address": "Maimi Downtown"
 	}

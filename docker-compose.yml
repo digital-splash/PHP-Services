@@ -1,8 +1,5 @@
-version: '3.8'
-
 services:
   php-services-base:
-    # platform: linux/x86_64
     image: php-services-base
     container_name: php-services-base
     volumes:

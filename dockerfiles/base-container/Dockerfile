@@ -1,4 +1,7 @@
+# Use the official PHP Apache image
 FROM php:8.1-apache
+
+# Install Main Extensions
 RUN apt-get clean && \
 	apt-get update && \
 	apt-get install -y --no-install-recommends \
@@ -32,8 +35,7 @@ RUN apt-get clean && \
 	zip
 
 # Install xdebug
-RUN pecl install -o -f xdebug-3.2.1 \
-    && docker-php-ext-enable xdebug
+RUN pecl install -o -f xdebug-3.2.1 \ && docker-php-ext-enable xdebug
 
 # Copy php.ini
 COPY ./php.ini /usr/local/etc/php/
