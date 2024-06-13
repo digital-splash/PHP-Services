@@ -39,7 +39,7 @@
 			}
 		}
 
-		public function setTime(int $time) {
+		public function SetTime(int $time) {
 			$this->time = $time;
 		}
 
