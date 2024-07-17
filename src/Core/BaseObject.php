@@ -2,9 +2,9 @@
 	namespace DigitalSplash\Core;
 
 	use DigitalSplash\Exceptions\ClassPropertyNotFound;
+	use DigitalSplash\Exceptions\InvalidTypeException;
+	use DigitalSplash\Helpers\TypeHelper;
 	use ReflectionClass;
-	use ReflectionType;
-	use ReflectionNamedType;
 
 	class BaseObject {
 
@@ -34,16 +34,16 @@
 				throw new ClassPropertyNotFound($name, $reflectionClass::class);
 			}
 
-			$property = $reflectionClass->getProperty($name);
-			$propertyType = $property->getType();
-			// if ($propertyType && $this->validateType($value, $propertyType)) {
-			// 	if ($property->isPrivate()) {
-			// 		$property->setAccessible(true);
-			// 	}
-			// 	$property->setValue($this, $value);
-			// } else {
+			$propertyType = TypeHelper::getClassPropertyType($reflectionClass::class, $name);
+			if (!TypeHelper::IsOfType($value, $propertyType)) {
+				throw new InvalidTypeException($name, $propertyType, $value);
+			}
 
-			// }
+			$property = $reflectionClass->getProperty($name);
+			if ($property->isPrivate()) {
+				$property->setAccessible(true);
+			}
+			$property->setValue($this, $value);
 		}
 
 	}
