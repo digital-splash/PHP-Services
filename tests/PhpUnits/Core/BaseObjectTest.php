@@ -64,32 +64,50 @@
 			];
 		}
 
-		public function testSetSuccess(): void {
+		/**
+		 * @dataProvider setSuccessProvider
+		 */
+		public function testSetSuccess(
+			string $param,
+			$oldValue,
+			$newValue
+		): void {
 			$obj = new TestClass1();
 
-			$this->assertEquals(1, $obj->get('int'));
-			$this->assertEquals(1.01, $obj->get('float'));
-			$this->assertEquals('This is a string', $obj->get('string'));
-			$this->assertEquals(true, $obj->get('bool'));
-			$this->assertEqualsCanonicalizing(new TestClass2(), $obj->get('obj2'));
+			$this->assertEquals($oldValue, $obj->get($param));
+			$obj->set($param, $newValue);
+			$this->assertEquals($newValue, $obj->get($param));
 		}
 
-		// public function testSetSuccess(): void {
-		// 	$dto = new TestDTO(1, 'name', [], new TestClass1(1, 'name'));
-
-		// 	$dto->set('id', 2);
-		// 	$dto->set('name', 'name2');
-		// 	$dto->set('testDTOs', [
-		// 		new TestDTO1(1, 'name'),
-		// 		new TestDTO1(2, 'name2'),]);
-		// 	$dto->set('testClass1', new TestClass1(2, 'name2'));
-
-		// 	$this->assertEquals(2, $dto->get('id'));
-		// 	$this->assertEquals('name2', $dto->get('name'));
-		// 	$this->assertEquals( 1, $dto->get('testDTOs')[0]->get('id'));
-		// 	$this->assertEquals(new TestClass1(2, 'name2'), $dto->get('testClass1'));
-		// }
-
+		public function setSuccessProvider(): array {
+			return [
+				'int' => [
+					'param' => 'int',
+					'oldValue' => 1,
+					'newValue' => 2,
+				],
+				'float' => [
+					'param' => 'float',
+					'oldValue' => 1.01,
+					'newValue' => 23.15,
+				],
+				'string' => [
+					'param' => 'string',
+					'oldValue' => 'This is a string',
+					'newValue' => 'This is a new string',
+				],
+				'bool' => [
+					'param' => 'bool',
+					'oldValue' => true,
+					'newValue' => false,
+				],
+				'obj2' => [
+					'param' => 'obj2',
+					'oldValue' => new TestClass2(),
+					'newValue' => new TestClass2(),
+				],
+			];
+		}
 	}
 
 	class TestClass1 extends BaseObject {

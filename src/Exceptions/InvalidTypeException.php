@@ -10,7 +10,7 @@
 		public function __construct(
 			string $propertyName,
 			string $expectedType,
-			string $givenValue,
+			$givenValue,
 			int $code = 0,
 			int $subcode = 0,
 			int $responseCode = HttpCode::NOTFOUND
@@ -18,7 +18,7 @@
 			parent::__construct($this->message, [
 				"::propertyName::" => $propertyName,
 				"::expectedType::" => $expectedType,
-				"::givenValue::" => $givenValue,
+				"::givenType::" => gettype($givenValue),
 			], $code, $subcode, $responseCode);
 		}
 	}

@@ -96,9 +96,9 @@
       "ar": "Property \"::property::\" not found in class \"::class::\"."
     },
     "InvalidType": {
-      "en": "Invalid value \"::givenValue::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
-      "fr": "Invalid value \"::givenValue::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
-      "ar": "Invalid value \"::givenValue::\" for property \"::propertyName::\". Expected type is \"::expectedType::\"."
+      "en": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
+      "fr": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
+      "ar": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\"."
     },
     "database": {
       "InvalidConnector": {
