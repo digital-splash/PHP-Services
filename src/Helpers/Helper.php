@@ -126,6 +126,7 @@
 			return empty($value);
 		}
 
+
 		/**
 		 * Encrypt a String
 		 */
