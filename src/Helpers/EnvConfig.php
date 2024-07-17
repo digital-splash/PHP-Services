@@ -84,7 +84,15 @@
 		private static function setCacheConfig(): void {
 			$config = self::$config['cache'] ?? [];
 
-			$rootFolder = !empty($config['root_src_const_name']) ? constant($config['root_src_const_name']) : '';
+			$rootFolder = '';
+			if (!Helper::IsNullOrEmpty($config['root_src'])) {
+				$rootFolder = $config['root_src'];
+			}
+			if (!Helper::IsNullOrEmpty($config['root_src_const_name']) && defined($config['root_src_const_name'])) {
+				$rootFolder = constant($config['root_src_const_name']);
+			}
+
+			// $rootFolder = !empty($config['root_src_const_name']) ? constant($config['root_src_const_name']) : '';
 			ServerCache::setRootFolder($rootFolder);
 			ServerCache::setCacheFolderName($config['folder_name'] ?? '');
 		}
