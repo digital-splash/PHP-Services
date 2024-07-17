@@ -85,10 +85,10 @@
 			$config = self::$config['cache'] ?? [];
 
 			$rootFolder = '';
-			if (!Helper::IsNullOrEmpty($config['root_src'])) {
+			if (!Helper::IsNullOrEmpty($config['root_src'] ?? '')) {
 				$rootFolder = $config['root_src'];
 			}
-			if (!Helper::IsNullOrEmpty($config['root_src_const_name']) && defined($config['root_src_const_name'])) {
+			if (!Helper::IsNullOrEmpty($config['root_src_const_name'] ?? '') && defined($config['root_src_const_name'])) {
 				$rootFolder = constant($config['root_src_const_name']);
 			}
 
