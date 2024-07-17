@@ -933,7 +933,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",
@@ -1439,4 +1439,108 @@
 			];
 		}
 
+		/**
+		 * @dataProvider getClassPropertyTypeSuccessProvider
+		 */
+		public function testgetClassPropertyTypeSuccess(
+			string $className,
+			string $propertyName,
+			string $expected
+		): void {
+			$propType = Helper::getClassPropertyType($className, $propertyName);
+			$this->assertEquals($expected, $propType);
+		}
+
+		public function getClassPropertyTypeSuccessProvider(): array {
+			return [
+				'not_a_class' => [
+					'className' => 'test',
+					'propertyName' => 'int',
+					'expected' => ''
+				],
+				'class_does_not_have_property' => [
+					'className' => TestClass1::class,
+					'propertyName' => 'test',
+					'expected' => ''
+				],
+				'success_type_int' => [
+					'className' => TestClass1::class,
+					'propertyName' => 'int',
+					'expected' => 'int'
+				],
+				'success_type_string' => [
+					'className' => TestClass1::class,
+					'propertyName' => 'string',
+					'expected' => 'string'
+				],
+				'success_type_array' => [
+					'className' => TestClass1::class,
+					'propertyName' => 'array',
+					'expected' => 'array'
+				],
+				'success_type_class' => [
+					'className' => TestClass1::class,
+					'propertyName' => 'obj2',
+					'expected' => TestClass2::class
+				],
+			];
+		}
+
+		/**
+		 * @dataProvider isOfTypeSuccessProvider
+		 */
+		public function testIsOfTypeSuccess(
+			string $value,
+			$type,
+			bool $expected
+		): void {
+			$isOfType = Helper::isOfType($value, $type);
+			$this->assertEquals($expected, $isOfType);
+		}
+
+		public function isOfTypeSuccessProvider(): array {
+			$reflectionTypeInt = Helper::getClassPropertyType(TestClass1::class, 'int');
+			// $arrayType = $this->getPropertyType(TestDTO1::class, 'dummyArrayProperty');
+			// $floatType = $this->getPropertyType(TestDTO1::class, 'dummyFloatProperty');
+			// $stringType = $this->getPropertyType(TestDTO1::class, 'dummyStringProperty');
+			// $boolType = $this->getPropertyType(TestDTO1::class, 'dummyBoolProperty');
+			// $testDTO1Type = $this->getPropertyType(TestDTO1::class, 'dummyTestDTO1ObjectProperty');
+			// $testClass1Type = $this->getPropertyType(TestDTO1::class, 'dummyTestClass1ObjectProperty');
+			// $testDTO1ArrayType = $this->getPropertyType(TestDTO1::class, 'dummyTestDTO1ArrayProperty');
+
+			return [
+				'instance_of_reflection_builtin' => [
+					'value' => 'int',
+					'type' => $reflectionTypeInt,
+					'expected' => true
+				]
+			];
+		}
+
+	}
+
+	class TestClass1 {
+		private int $int;
+		private float $float;
+		private string $string;
+		private bool $bool;
+		private array $array;
+		private TestClass2 $obj2;
+		private TestClass3 $obj3;
+	}
+
+	class TestClass2 {
+		private int $int;
+		private float $float;
+		private string $string;
+		private bool $bool;
+		private array $array;
+	}
+
+	class TestClass3 {
+		private int $int;
+		private float $float;
+		private string $string;
+		private bool $bool;
+		private array $array;
 	}

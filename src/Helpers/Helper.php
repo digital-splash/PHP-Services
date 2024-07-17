@@ -9,6 +9,11 @@
 	use DigitalSplash\Models\HttpCode;
 	use DigitalSplash\Language\Models\Lang;
 	use DigitalSplash\Models\Status;
+use ReflectionClass;
+use ReflectionNamedType;
+	use ReflectionProperty;
+	use ReflectionType;
+use Throwable;
 
 	class Helper {
 
@@ -124,6 +129,76 @@
 			$value
 		): bool {
 			return empty($value);
+		}
+
+		public static function getClassPropertyType(
+			string $className,
+			string $propertyName
+		): ?ReflectionType {
+			try {
+				$reflectionClass = new ReflectionClass($className);
+				if (!$reflectionClass->hasProperty($propertyName)) {
+					return null;
+				}
+			} catch (Throwable $th) {
+				return null;
+			}
+
+			$property = $reflectionClass->getProperty($propertyName);
+			return $property->getType();
+		}
+
+		/**
+		 * Checks if the given value is of the given type
+		 * @param ReflectionType $type
+		 */
+		public static function IsOfType($value, $type): bool {
+			if ($type instanceof ReflectionNamedType) {
+				$expectedType = $type->getName();
+
+				// Handle non-built-in types (Custom Classes)
+				if (!$type->isBuiltin()) {
+					return $value instanceof $expectedType;
+				}
+
+				return self::IsOfType($value, $expectedType);
+			}
+
+			if ($type === 'array') {
+				if (!is_array($value)) {
+					return false;
+				}
+
+				// if (empty($value)) return true;
+				// $firstElement = reset($value);
+				// $elementType = is_object($firstElement) ? get_class($firstElement) : gettype($firstElement);
+				// foreach ($value as $item) {
+				// 	if (!(is_object($item) && $item instanceof $elementType)) {
+				// 		return false;
+				// 	}
+				// }
+				return true;
+			}
+
+			// Handle built-in types (int, float, string, bool)
+			switch ($type) {
+				case 'int':
+					return is_int($value);
+
+				case 'float':
+					return is_float($value);
+
+				case 'string':
+					return is_string($value);
+
+				case 'bool':
+					return is_bool($value);
+
+				default:
+					return false;
+			}
+
+			return false;
 		}
 
 

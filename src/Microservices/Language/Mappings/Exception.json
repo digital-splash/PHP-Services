@@ -90,6 +90,11 @@
       "fr": "Argument non valide \"::argument::\" ayant la valeur \"::value::\".",
       "ar": "وسيطة غير صالحة \"::الوسيطة::\" لها القيمة \"::value::\"."
     },
+    "ClassPropertyNotFound": {
+      "en": "Property \"::property::\" not found in class \"::class::\".",
+      "fr": "Property \"::property::\" not found in class \"::class::\".",
+      "ar": "Property \"::property::\" not found in class \"::class::\"."
+    },
     "database": {
       "InvalidConnector": {
         "en": "\"DB Conector\" object is null for Credentials \"::param::\".",
