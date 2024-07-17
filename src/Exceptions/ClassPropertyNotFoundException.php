@@ -4,7 +4,7 @@
 	use DigitalSplash\Exceptions\Base\BaseException;
 	use DigitalSplash\Models\HttpCode;
 
-	final class ClassPropertyNotFound extends BaseException {
+	final class ClassPropertyNotFoundException extends BaseException {
 		protected $message = "exception.ClassPropertyNotFound";
 
 		public function __construct(
