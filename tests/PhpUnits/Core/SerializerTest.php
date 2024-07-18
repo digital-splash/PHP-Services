@@ -23,19 +23,52 @@
 		}
 
 		public function testToArraySuccess(): void {
+			$obj = new SerializerTestClass1();
+			$arr = $obj->toArray();
+
+			$this->assertEquals($obj->get('int'), $arr['int']);
+
+			$this->assertEqualsCanonicalizing(($obj->get('obj2'))->toArray(), $arr['obj2']);
+			$this->assertEquals(($obj->get('obj2'))->get('string'), $arr['obj2']['string']);
+		}
+
+		public function testJsonSerializeSuccess(): void {
+			$obj = new SerializerTestClass1();
+
+			$toArrJson = json_encode($obj->toArray());
+			$objectJson = json_encode($obj);
+			$this->assertEqualsCanonicalizing($toArrJson, $objectJson);
+
+			$toArrJson2 = json_encode($obj->get('obj2')->toArray());
+			$objectJson2 = json_encode($obj->get('obj2'));
+			$this->assertEqualsCanonicalizing($toArrJson2, $objectJson2);
+		}
+
+		public function testDeserializeMultiple(): void {
 			$arr = [
-				'int' => 125,
-				'string' => 'This is the Array Deserialize Test',
-				'bool' => false
+				[
+					'int' => 125,
+					'string' => 'This is the Array Deserialize Test 1',
+					'bool' => false
+				],
+				[
+					'int' => 265,
+					'string' => 'This is the Array Deserialize Test 2'
+				]
 			];
 
-			$obj = SerializerTestClass1::arrayDeserialize($arr);
+			$objects = SerializerTestClass1::deserializeMultiple($arr);
 
-			$this->assertInstanceOf(SerializerTestClass1::class, $obj);
-			foreach ($arr as $k => $v) {
-				$this->assertEquals($v, $obj->get($k));
+			foreach ($objects as $k => $object) {
+				$this->assertInstanceOf(SerializerTestClass1::class, $object);
+
+				$this->assertEquals(1.01, $object->get('float'));
+				foreach ($arr[$k] as $k2 => $v2) {
+					$this->assertEquals($v2, $object->get($k2));
+				}
+
 			}
-			$this->assertEquals(1.01, $obj->get('float'));
+
 		}
 
 	}
@@ -70,7 +103,7 @@
 
 		/**
 		 * @param array $arr
-		 * @return static
+		 * @return self
 		 */
 		public static function arrayDeserialize(array $arr): self {
 			return new self(
@@ -95,7 +128,7 @@
 				'bool' => $this->bool,
 				'array' => $this->array,
 				'object' => $this->object,
-				'obj2' => $this->obj2,
+				'obj2' => $this->obj2->toArray(),
 			];
 		}
 	}

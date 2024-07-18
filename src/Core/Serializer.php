@@ -3,7 +3,7 @@
 
 	use JsonSerializable;
 
-	abstract class Serializer {
+	abstract class Serializer implements JsonSerializable {
 
 		/**
 		 * @param array $arr
@@ -12,13 +12,13 @@
 		abstract public static function arrayDeserialize(array $arr): self;
 		abstract public function toArray(): array;
 
-		// public function jsonSerialize() {
-		// 	return $this->toArray();
-		// }
+		public function jsonSerialize() {
+			return $this->toArray();
+		}
 
 		/**
 		 * @param array $arr
-		 * @return self[]
+		 * @return static[]
 		 */
 		public static function deserializeMultiple(array $arr): array {
 			$ret = [];
