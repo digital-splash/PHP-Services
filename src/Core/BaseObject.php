@@ -6,7 +6,7 @@
 	use DigitalSplash\Helpers\TypeHelper;
 	use ReflectionClass;
 
-	class BaseObject {
+	abstract class BaseObject extends Serializer {
 
 		/**
 		 * Magic Getter Method
