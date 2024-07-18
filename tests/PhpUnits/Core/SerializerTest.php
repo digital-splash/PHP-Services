@@ -13,9 +13,9 @@
 				'bool' => false
 			];
 
-			$obj = TestClass1::arrayDeserialize($arr);
+			$obj = SerializerTestClass1::arrayDeserialize($arr);
 
-			$this->assertInstanceOf(TestClass1::class, $obj);
+			$this->assertInstanceOf(SerializerTestClass1::class, $obj);
 			foreach ($arr as $k => $v) {
 				$this->assertEquals($v, $obj->get($k));
 			}
@@ -29,9 +29,9 @@
 				'bool' => false
 			];
 
-			$obj = TestClass1::arrayDeserialize($arr);
+			$obj = SerializerTestClass1::arrayDeserialize($arr);
 
-			$this->assertInstanceOf(TestClass1::class, $obj);
+			$this->assertInstanceOf(SerializerTestClass1::class, $obj);
 			foreach ($arr as $k => $v) {
 				$this->assertEquals($v, $obj->get($k));
 			}
@@ -40,14 +40,14 @@
 
 	}
 
-	class TestClass1 extends BaseObject {
+	class SerializerTestClass1 extends BaseObject {
 		private int $int;
 		private float $float;
 		private string $string;
 		private bool $bool;
 		private array $array;
 		private object $object;
-		private TestClass2 $obj2;
+		private SerializerTestClass2 $obj2;
 
 		public function __construct(
 			$int = 1,
@@ -65,7 +65,7 @@
 			$this->bool = $bool;
 			$this->array = $array;
 			$this->object = json_decode(json_encode($this->array));
-			$this->obj2 = new TestClass2();
+			$this->obj2 = new SerializerTestClass2();
 		}
 
 		/**
@@ -83,7 +83,7 @@
 					'last_name' => 'Doe',
 				],
 				$arr['object'] ?? null,
-				$arr['obj2'] ?? new TestClass2()
+				$arr['obj2'] ?? new SerializerTestClass2()
 			);
 		}
 
@@ -100,7 +100,7 @@
 		}
 	}
 
-	class TestClass2 extends BaseObject {
+	class SerializerTestClass2 extends BaseObject {
 		private int $int;
 		private float $float;
 		private string $string;

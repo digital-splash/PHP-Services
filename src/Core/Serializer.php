@@ -3,7 +3,7 @@
 
 	use JsonSerializable;
 
-	abstract class Serializer implements JsonSerializable {
+	abstract class Serializer {
 
 		/**
 		 * @param array $arr
@@ -12,9 +12,9 @@
 		abstract public static function arrayDeserialize(array $arr): self;
 		abstract public function toArray(): array;
 
-		public function jsonSerialize() {
-			return $this->toArray();
-		}
+		// public function jsonSerialize() {
+		// 	return $this->toArray();
+		// }
 
 		/**
 		 * @param array $arr

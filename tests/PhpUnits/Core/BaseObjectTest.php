@@ -11,12 +11,12 @@
 		public function testGetPropertyNotFoundThrows(): void {
 			$this->expectException(ClassPropertyNotFoundException::class);
 
-			$obj = new TestClass1();
+			$obj = new BaseObjectTestClass();
 			$obj->get('invalid');
 		}
 
 		public function testGetSuccess(): void {
-			$obj = new TestClass1();
+			$obj = new BaseObjectTestClass();
 
 			$this->assertEquals(1, $obj->get('int'));
 			$this->assertEquals(1.01, $obj->get('float'));
@@ -35,7 +35,7 @@
 		): void {
 			$this->expectException($exception);
 
-			$obj = new TestClass1();
+			$obj = new BaseObjectTestClass();
 			$obj->set($propertyName, $value);
 		}
 
@@ -72,7 +72,7 @@
 			$oldValue,
 			$newValue
 		): void {
-			$obj = new TestClass1();
+			$obj = new BaseObjectTestClass();
 
 			$this->assertEquals($oldValue, $obj->get($param));
 			$obj->set($param, $newValue);
@@ -110,7 +110,7 @@
 		}
 	}
 
-	class TestClass1 extends BaseObject {
+	class BaseObjectTestClass extends BaseObject {
 		private int $int;
 		private float $float;
 		private string $string;
@@ -131,6 +131,14 @@
 			$this->object = json_decode(json_encode($this->array));
 			$this->obj2 = new TestClass2();
 		}
+
+		public static function arrayDeserialize(array $arr): self {
+			return new self();
+		}
+
+		public function toArray(): array {
+			return [];
+		}
 	}
 
 	class TestClass2 extends BaseObject {
@@ -149,5 +157,13 @@
 				'first_name' => 'John',
 				'last_name' => 'Doe',
 			];
+		}
+
+		public static function arrayDeserialize(array $arr): self {
+			return new self();
+		}
+
+		public function toArray(): array {
+			return [];
 		}
 	}

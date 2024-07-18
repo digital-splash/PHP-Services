@@ -26,49 +26,49 @@
 					'expected' => null
 				],
 				'class_does_not_have_property' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'test',
 					'expected' => null
 				],
 				'success_type_int' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'int',
 					'expected' => TypeHelper::TYPE_INT
 				],
 				'success_type_float' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'float',
 					'expected' => TypeHelper::TYPE_FLOAT
 				],
 				'success_type_string' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'string',
 					'expected' => TypeHelper::TYPE_STRING
 				],
 				'success_type_bool' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'bool',
 					'expected' => TypeHelper::TYPE_BOOL
 				],
 				'success_type_array' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'array',
 					'expected' => TypeHelper::TYPE_ARRAY
 				],
 				'success_type_object' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'object',
 					'expected' => TypeHelper::TYPE_OBJECT
 				],
 				'success_type_class_1' => [
-					'className' => TestClass1::class,
+					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'obj2',
-					'expected' => TestClass2::class
+					'expected' => TypeHelperTestClass2::class
 				],
 				'success_type_class_2' => [
-					'className' => TestClass2::class,
+					'className' => TypeHelperTestClass2::class,
 					'propertyName' => 'obj3',
-					'expected' => TestClass3::class
+					'expected' => TypeHelperTestClass3::class
 				],
 			];
 		}
@@ -99,7 +99,7 @@
 				'last_name' => 'Doe',
 			];
 			$valueObject = json_decode(json_encode($valueArray));
-			$valueClass1 = new TestClass1();
+			$valueClass1 = new TypeHelperTestClass1();
 			$valueClass2 = $valueClass1->obj2;
 			$valueClass3 = $valueClass2->obj3;
 
@@ -322,15 +322,15 @@
 
 	}
 
-	class TestClass1 {
+	class TypeHelperTestClass1 {
 		public int $int;
 		public float $float;
 		public string $string;
 		public bool $bool;
 		public array $array;
 		public object $object;
-		public TestClass2 $obj2;
-		public TestClass3 $obj3;
+		public TypeHelperTestClass2 $obj2;
+		public TypeHelperTestClass3 $obj3;
 
 		public function __construct() {
 			$this->int = 1;
@@ -342,18 +342,18 @@
 				'last_name' => 'Doe',
 			];
 			$this->object = json_decode(json_encode($this->array));
-			$this->obj2 = new TestClass2();
-			$this->obj3 = new TestClass3();
+			$this->obj2 = new TypeHelperTestClass2();
+			$this->obj3 = new TypeHelperTestClass3();
 		}
 	}
 
-	class TestClass2 {
+	class TypeHelperTestClass2 {
 		public int $int;
 		public float $float;
 		public string $string;
 		public bool $bool;
 		public array $array;
-		public TestClass3 $obj3;
+		public TypeHelperTestClass3 $obj3;
 
 		public function __construct() {
 			$this->int = 1;
@@ -364,11 +364,11 @@
 				'first_name' => 'John',
 				'last_name' => 'Doe',
 			];
-			$this->obj3 = new TestClass3();
+			$this->obj3 = new TypeHelperTestClass3();
 		}
 	}
 
-	class TestClass3 {
+	class TypeHelperTestClass3 {
 		public int $int;
 		public float $float;
 		public string $string;
