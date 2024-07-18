@@ -3,5 +3,5 @@
 
 	abstract class BaseDTO extends BaseObject {
 
-		abstract protected function validate(): void;
+		abstract public function validate(): void;
 	}
