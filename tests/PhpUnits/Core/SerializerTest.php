@@ -82,42 +82,17 @@
 		private object $object;
 		private SerializerTestClass2 $obj2;
 
-		public function __construct(
-			$int = 1,
-			$float = 1.01,
-			$string = 'This is a string',
-			$bool = true,
-			$array = [
+		public function __construct(?array $arr = null) {
+			$this->int = $arr['int'] ?? 1;
+			$this->float = $arr['float'] ?? 1.01;
+			$this->string = $arr['string'] ?? 'This is a string';
+			$this->bool = $arr['bool'] ?? true;
+			$this->array = $arr['array'] ?? [
 				'first_name' => 'John',
 				'last_name' => 'Doe',
-			]
-		) {
-			$this->int = $int;
-			$this->float = $float;
-			$this->string = $string;
-			$this->bool = $bool;
-			$this->array = $array;
+			];
 			$this->object = json_decode(json_encode($this->array));
 			$this->obj2 = new SerializerTestClass2();
-		}
-
-		/**
-		 * @param array $arr
-		 * @return self
-		 */
-		public static function arrayDeserialize(array $arr): self {
-			return new self(
-				$arr['int'] ?? 1,
-				$arr['float'] ?? 1.01,
-				$arr['string'] ?? 'This is a string',
-				$arr['bool'] ?? true,
-				$arr['array'] ?? [
-					'first_name' => 'John',
-					'last_name' => 'Doe',
-				],
-				$arr['object'] ?? null,
-				$arr['obj2'] ?? new SerializerTestClass2()
-			);
 		}
 
 		public function toArray(): array {
@@ -141,39 +116,16 @@
 		private array $array;
 		private object $object;
 
-		public function __construct(
-			$int = 1,
-			$float = 1.01,
-			$string = 'This is a string',
-			$bool = true,
-			$array = [
+		public function __construct(?array $arr = null) {
+			$this->int = $arr['int'] ?? 1;
+			$this->float = $arr['float'] ?? 1.01;
+			$this->string = $arr['string'] ?? 'This is a string';
+			$this->bool = $arr['bool'] ?? true;
+			$this->array = $arr['array'] ?? [
 				'first_name' => 'John',
 				'last_name' => 'Doe',
-			]
-		) {
-			$this->int = $int;
-			$this->float = $float;
-			$this->string = $string;
-			$this->bool = $bool;
-			$this->array = $array;
+			];
 			$this->object = json_decode(json_encode($this->array));
-		}
-
-		/**
-		 * @param array $arr
-		 * @return static
-		 */
-		public static function arrayDeserialize(array $arr): self {
-			return new self(
-				$arr['int'] ?? 1,
-				$arr['float'] ?? 1.01,
-				$arr['string'] ?? 'This is a string',
-				$arr['bool'] ?? true,
-				$arr['array'] ?? [
-					'first_name' => 'John',
-					'last_name' => 'Doe',
-				]
-			);
 		}
 
 		public function toArray(): array {

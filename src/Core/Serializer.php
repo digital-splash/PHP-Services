@@ -5,15 +5,18 @@
 
 	abstract class Serializer implements JsonSerializable {
 
-		/**
-		 * @param array $arr
-		 * @return static
-		 */
-		abstract public static function arrayDeserialize(array $arr): self;
 		abstract public function toArray(): array;
 
 		public function jsonSerialize() {
 			return $this->toArray();
+		}
+
+		/**
+		 * @param array $arr
+		 * @return static
+		 */
+		public static function arrayDeserialize(array $arr): static {
+			return new static($arr);
 		}
 
 		/**

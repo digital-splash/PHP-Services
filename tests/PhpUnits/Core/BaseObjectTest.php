@@ -132,10 +132,6 @@
 			$this->obj2 = new TestClass2();
 		}
 
-		public static function arrayDeserialize(array $arr): self {
-			return new self();
-		}
-
 		public function toArray(): array {
 			return [];
 		}
@@ -157,10 +153,6 @@
 				'first_name' => 'John',
 				'last_name' => 'Doe',
 			];
-		}
-
-		public static function arrayDeserialize(array $arr): self {
-			return new self();
 		}
 
 		public function toArray(): array {
