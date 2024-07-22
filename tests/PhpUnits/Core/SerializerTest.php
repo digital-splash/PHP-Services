@@ -1,10 +1,32 @@
 <?php
 	namespace DigitalSplash\Tests\Core;
 
-	use DigitalSplash\Core\BaseObject;
+	use DigitalSplash\Core\Serializer;
 	use PHPUnit\Framework\TestCase;
 
 	class SerializerTest extends TestCase {
+
+		public function testToArraySuccess(): void {
+			$obj = new SerializerTestClass1();
+			$arr = $obj->toArray();
+
+			$this->assertEquals($obj->int, $arr['int']);
+
+			$this->assertEqualsCanonicalizing($obj->obj2->toArray(), $arr['obj2']);
+			$this->assertEquals(($obj->obj2)->string, $arr['obj2']['string']);
+		}
+
+		public function testJsonSerializeSuccess(): void {
+			$obj = new SerializerTestClass1();
+
+			$toArrJson = json_encode($obj->toArray());
+			$objectJson = json_encode($obj);
+			$this->assertEqualsCanonicalizing($toArrJson, $objectJson);
+
+			$toArrJson2 = json_encode($obj->obj2->toArray());
+			$objectJson2 = json_encode($obj->obj2);
+			$this->assertEqualsCanonicalizing($toArrJson2, $objectJson2);
+		}
 
 		public function testArrayDeserializeSuccess(): void {
 			$arr = [
@@ -17,31 +39,9 @@
 
 			$this->assertInstanceOf(SerializerTestClass1::class, $obj);
 			foreach ($arr as $k => $v) {
-				$this->assertEquals($v, $obj->get($k));
+				$this->assertEquals($v, $obj->$k);
 			}
-			$this->assertEquals(1.01, $obj->get('float'));
-		}
-
-		public function testToArraySuccess(): void {
-			$obj = new SerializerTestClass1();
-			$arr = $obj->toArray();
-
-			$this->assertEquals($obj->get('int'), $arr['int']);
-
-			$this->assertEqualsCanonicalizing(($obj->get('obj2'))->toArray(), $arr['obj2']);
-			$this->assertEquals(($obj->get('obj2'))->get('string'), $arr['obj2']['string']);
-		}
-
-		public function testJsonSerializeSuccess(): void {
-			$obj = new SerializerTestClass1();
-
-			$toArrJson = json_encode($obj->toArray());
-			$objectJson = json_encode($obj);
-			$this->assertEqualsCanonicalizing($toArrJson, $objectJson);
-
-			$toArrJson2 = json_encode($obj->get('obj2')->toArray());
-			$objectJson2 = json_encode($obj->get('obj2'));
-			$this->assertEqualsCanonicalizing($toArrJson2, $objectJson2);
+			$this->assertEquals(1.01, $obj->float);
 		}
 
 		public function testDeserializeMultiple(): void {
@@ -62,9 +62,9 @@
 			foreach ($objects as $k => $object) {
 				$this->assertInstanceOf(SerializerTestClass1::class, $object);
 
-				$this->assertEquals(1.01, $object->get('float'));
+				$this->assertEquals(1.01, $object->float);
 				foreach ($arr[$k] as $k2 => $v2) {
-					$this->assertEquals($v2, $object->get($k2));
+					$this->assertEquals($v2, $object->$k2);
 				}
 
 			}
@@ -73,14 +73,14 @@
 
 	}
 
-	class SerializerTestClass1 extends BaseObject {
-		private int $int;
-		private float $float;
-		private string $string;
-		private bool $bool;
-		private array $array;
-		private object $object;
-		private SerializerTestClass2 $obj2;
+	class SerializerTestClass1 extends Serializer {
+		public int $int;
+		public float $float;
+		public string $string;
+		public bool $bool;
+		public array $array;
+		public object $object;
+		public SerializerTestClass2 $obj2;
 
 		public function __construct(?array $arr = null) {
 			$this->int = $arr['int'] ?? 1;
@@ -108,13 +108,13 @@
 		}
 	}
 
-	class SerializerTestClass2 extends BaseObject {
-		private int $int;
-		private float $float;
-		private string $string;
-		private bool $bool;
-		private array $array;
-		private object $object;
+	class SerializerTestClass2 extends Serializer {
+		public int $int;
+		public float $float;
+		public string $string;
+		public bool $bool;
+		public array $array;
+		public object $object;
 
 		public function __construct(?array $arr = null) {
 			$this->int = $arr['int'] ?? 1;
