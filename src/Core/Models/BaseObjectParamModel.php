@@ -11,7 +11,7 @@
 		public function __construct(
 			$defaultValue,
 			string $type,
-			bool $required,
+			bool $required = true,
 			bool $inArray = true,
 			bool $nullable = false
 		) {
