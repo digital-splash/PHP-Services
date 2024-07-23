@@ -1066,6 +1066,16 @@
 			];
 		}
 
+		public static function MissingParamsThrows(array $params, array $required): void {
+			[
+				'missing' => $missingParams
+			] = Helper::MissingParams($params, $required);
+
+			if (!empty($missingParams)) {
+				throw new MissingParamsException($missingParams);
+			}
+		}
+
 		public static function MissingNotEmptyParams(array $params, array $required): array {
 			[
 				'missing' => $missing,

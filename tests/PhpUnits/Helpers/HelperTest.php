@@ -1375,6 +1375,52 @@
 			];
 		}
 
+		/**
+		 * @dataProvider missingParamsThrowsSuccessProvider
+		 */
+		public function testMissingParamsThrowsSuccess(
+			array $params,
+			array $required,
+			string $exception,
+			string $exceptionMessage,
+		): void {
+			if (!empty($exception)) {
+				$this->expectException($exception);
+				$this->expectExceptionMessage($exceptionMessage);
+			}
+
+			Helper::MissingParamsThrows($params, $required);
+
+			if (empty($exception)) {
+				$this->assertTrue(true);
+			}
+		}
+
+		public function missingParamsThrowsSuccessProvider(): array {
+			return [
+				'throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => '',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age', 'country'],
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `country`'
+				],
+				'not_throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => 'Doe',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'exception' => '',
+					'exceptionMessage' => ''
+				]
+			];
+		}
+
 		public function testMissingNotEmptyParamsSuccess(): void {
 			$params = [
 				'first_name' => 'Jon',
@@ -1420,7 +1466,7 @@
 					'params' => [
 						'first_name' => 'Jon',
 						'last_name' => '',
-						'age' => '29'
+						'age' => '29',
 					],
 					'required' => ['first_name', 'last_name', 'age', 'country'],
 					'exception' => MissingParamsException::class,

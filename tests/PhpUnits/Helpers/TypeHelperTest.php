@@ -33,7 +33,7 @@
 				'success_type_int' => [
 					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'int',
-					'expected' => TypeHelper::TYPE_INT
+					'expected' => 'int'
 				],
 				'success_type_float' => [
 					'className' => TypeHelperTestClass1::class,
@@ -48,7 +48,7 @@
 				'success_type_bool' => [
 					'className' => TypeHelperTestClass1::class,
 					'propertyName' => 'bool',
-					'expected' => TypeHelper::TYPE_BOOL
+					'expected' => 'bool'
 				],
 				'success_type_array' => [
 					'className' => TypeHelperTestClass1::class,
@@ -320,6 +320,59 @@
 			return $providerArr;
 		}
 
+		/**
+		 * @dataProvider isOfTypeNullSuccessProvider
+		 */
+		public function testIsOfTypeNullSuccess(
+			$value,
+			$type,
+			?bool $nullable,
+			bool $expected
+		): void {
+			$isOfType = TypeHelper::isOfType($value, $type, $nullable);
+			$this->assertEquals($expected, $isOfType);
+		}
+
+		public function isOfTypeNullSuccessProvider(): array {
+			$class = new TypeHelperTestClass4([]);
+			$valueClassString = TypeHelper::getClassPropertyType($class::class, 'string');
+			$valueClassBool = TypeHelper::getClassPropertyType($class::class, 'bool');
+			$valueClassArray = TypeHelper::getClassPropertyType($class::class, 'array');
+
+			return [
+				'int_nullable' => [
+					'value' => null,
+					'type' => TypeHelper::TYPE_INT,
+					'nullable' => true,
+					'expected' => true
+				],
+				'int_not_nullable' => [
+					'value' => null,
+					'type' => TypeHelper::TYPE_INT,
+					'nullable' => false,
+					'expected' => false
+				],
+				'class_string' => [
+					'value' => null,
+					'type' => $valueClassString,
+					'nullable' => null,
+					'expected' => true
+				],
+				'class_bool' => [
+					'value' => null,
+					'type' => $valueClassBool,
+					'nullable' => null,
+					'expected' => true
+				],
+				'class_array' => [
+					'value' => null,
+					'type' => $valueClassArray,
+					'nullable' => null,
+					'expected' => false
+				],
+			];
+		}
+
 	}
 
 	class TypeHelperTestClass1 {
@@ -384,5 +437,17 @@
 				'first_name' => 'John',
 				'last_name' => 'Doe',
 			];
+		}
+	}
+
+	class TypeHelperTestClass4 {
+		public ?string $string;
+		public ?bool $bool;
+		public array $array;
+
+		public function __construct(array $arr) {
+			$this->string = $arr['string'] ?? null;
+			$this->bool = $arr['bool'] ?? null;
+			$this->array = $arr['array'] ?? [];
 		}
 	}

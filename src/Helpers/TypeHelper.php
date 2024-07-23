@@ -38,9 +38,6 @@
 
 			$property = $reflectionClass->getProperty($propertyName);
 			$type = $property->getType();
-			if (array_key_exists($type->getName(), self::$typeMap)) {
-				$type = self::$typeMap[$type->getName()];
-			}
 
 			return $type;
 		}
@@ -50,7 +47,8 @@
 		 */
 		public static function IsOfType(
 			$value,
-			$type
+			$type,
+			?bool $nullable = null
 		): bool {
 			if ($type instanceof ReflectionNamedType) {
 				$expectedType = $type->getName();
@@ -60,7 +58,11 @@
 					return $value instanceof $expectedType;
 				}
 
-				return self::IsOfType($value, $expectedType);
+				$nullable = $type->allowsNull();
+				if (array_key_exists($expectedType, self::$typeMap)) {
+					$expectedType = self::$typeMap[$expectedType];
+				}
+				return self::IsOfType($value, $expectedType, $nullable);
 			}
 
 			// if ($type === 'array') {
@@ -78,6 +80,10 @@
 			// 	// }
 			// 	return true;
 			// }
+
+			if ($nullable && is_null($value)) {
+				return true;
+			}
 
 			// Handle built-in types (int, float, string, bool)
 			switch ($type) {
