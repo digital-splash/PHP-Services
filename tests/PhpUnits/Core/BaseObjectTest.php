@@ -2,27 +2,227 @@
 	namespace DigitalSplash\Tests\Core;
 
 	use DigitalSplash\Core\BaseObject;
+	use DigitalSplash\Core\Models\BaseObjectParamModel;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
+	use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\InvalidTypeException;
+	use DigitalSplash\Exceptions\MissingParamsException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\TypeHelper;
 	use PHPUnit\Framework\TestCase;
 
 	class BaseObjectTest extends TestCase {
 
+		/**
+		 * @dataProvider constructThrowsProvider
+		 */
+		public function testConstructThrows(
+			string $exception,
+			string $exceptionMessage,
+			string $class,
+			array $arr
+		): void {
+			$this->expectException($exception);
+			$this->expectExceptionMessage($exceptionMessage);
+
+			new $class($arr);
+		}
+
+		public function constructThrowsProvider(): array {
+			return [
+				'invalid_param' => [
+					'exception' => InvalidParamException::class,
+					'exceptionMessage' => 'The parameter(s) (test) is/are invalid',
+					'class' => BaseObjectTestInvalidParamClass::class,
+					'arr' => [],
+				],
+				'not_empty_param' => [
+					'exception' => NotEmptyParamException::class,
+					'exceptionMessage' => 'The parameter(s) (float) should not be Empty',
+					'class' => BaseObjectTestNotEmptyParamClass::class,
+					'arr' => [],
+				],
+				'invalid_type' => [
+					'exception' => InvalidTypeException::class,
+					'exceptionMessage' => 'Invalid type "string" for property "float". Expected type is "float".',
+					'class' => BaseObjectTestClass1::class,
+					'arr' => [
+						'float' => 'This is a string'
+					],
+				],
+				'invalid_type_2' => [
+					'exception' => InvalidTypeException::class,
+					'exceptionMessage' => 'Invalid type "string" for property "obj2". Expected type is "' . BaseObjectTestClass2::class . '".',
+					'class' => BaseObjectTestClass1::class,
+					'arr' => [
+						'obj2' => 'This is a string'
+					],
+				],
+			];
+		}
+
+		/**
+		 * @dataProvider validateThrowsProvider
+		 */
+		public function testValidateThrows(
+			string $exception,
+			string $exceptionMessage,
+			string $class,
+			array $arr
+		): void {
+			$this->expectException($exception);
+			$this->expectExceptionMessage($exceptionMessage);
+
+			new $class($arr);
+		}
+
+		public function validateThrowsProvider(): array {
+			return [
+				'one_param' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `float`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 1,
+						'string' => '',
+						'bool' => true,
+						'array' => []
+					],
+				],
+				'three_params' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `float`, `string`, `array`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 1,
+						'string' => null,
+						'bool' => true,
+					],
+				],
+			];
+		}
+
+		/**
+		 * @dataProvider toArraySuccessProvider
+		 */
+		public function testToArraySuccess(
+			string $class,
+			array $arr,
+			array $expected
+		): void {
+			/**
+			 * @var BaseObject
+			 */
+			$obj = new $class($arr);
+			$actual = $obj->toArray();
+
+			$this->assertEqualsCanonicalizing($expected, $actual);
+		}
+
+		public function toArraySuccessProvider(): array {
+			return [
+				'test_class1' => [
+					'class' => BaseObjectTestClass1::class,
+					'arr' => [],
+					'expected' => [
+						'int' => 1,
+						'float' => 1.01,
+						'string' => 'This is a string',
+						'bool' => true,
+						'array' => [
+							'first_name' => 'John',
+							'last_name' => 'Doe',
+						],
+						'object' => json_decode(json_encode([
+							'first_name' => 'John',
+							'last_name' => 'Doe',
+						])),
+						'obj2' => [
+							'int' => 1,
+							'float' => 1.01,
+							'string' => 'This is a string',
+							'bool' => true,
+							'array' => [
+								'first_name' => 'John',
+								'last_name' => 'Doe',
+							],
+						]
+					]
+				],
+				'test_class2' => [
+					'class' => BaseObjectTestClass2::class,
+					'arr' => [],
+					'expected' => [
+						'int' => 1,
+						'float' => 1.01,
+						'string' => 'This is a string',
+						'bool' => true,
+						'array' => [
+							'first_name' => 'John',
+							'last_name' => 'Doe',
+						]
+					]
+				],
+				'test_class3' => [
+					'class' => BaseObjectTestClass3::class,
+					'arr' => [],
+					'expected' => [
+						'int' => 1,
+						'float' => 1.01,
+						'string' => 'This is a string',
+						'bool' => true,
+						'array' => [
+							'first_name' => 'John',
+							'last_name' => 'Doe',
+						],
+						'object' => json_decode(json_encode([
+							'first_name' => 'John',
+							'last_name' => 'Doe',
+						])),
+						'obj2' => [
+							'int' => 1,
+							'float' => 1.01,
+							'string' => 'This is a string',
+							'bool' => true,
+							'array' => [
+								'first_name' => 'John',
+								'last_name' => 'Doe',
+							],
+							'object' => json_decode(json_encode([
+								'first_name' => 'John',
+								'last_name' => 'Doe',
+							])),
+							'obj2' => [
+								'int' => 1,
+								'float' => 1.01,
+								'string' => 'This is a string',
+								'bool' => true,
+								'array' => [
+									'first_name' => 'John',
+									'last_name' => 'Doe',
+								],
+							]
+						]
+					]
+				],
+			];
+		}
+
 		public function testGetPropertyNotFoundThrows(): void {
 			$this->expectException(ClassPropertyNotFoundException::class);
 
-			$obj = new BaseObjectTestClass();
+			$obj = new BaseObjectTestClass1();
 			$obj->get('invalid');
 		}
 
 		public function testGetSuccess(): void {
-			$obj = new BaseObjectTestClass();
+			$obj = new BaseObjectTestClass1();
 
 			$this->assertEquals(1, $obj->get('int'));
 			$this->assertEquals(1.01, $obj->get('float'));
 			$this->assertEquals('This is a string', $obj->get('string'));
 			$this->assertEquals(true, $obj->get('bool'));
-			$this->assertEqualsCanonicalizing(new TestClass2(), $obj->get('obj2'));
+			$this->assertEqualsCanonicalizing(new BaseObjectTestClass2(), $obj->get('obj2'));
 		}
 
 		/**
@@ -35,7 +235,7 @@
 		): void {
 			$this->expectException($exception);
 
-			$obj = new BaseObjectTestClass();
+			$obj = new BaseObjectTestClass1();
 			$obj->set($propertyName, $value);
 		}
 
@@ -72,7 +272,7 @@
 			$oldValue,
 			$newValue
 		): void {
-			$obj = new BaseObjectTestClass();
+			$obj = new BaseObjectTestClass1();
 
 			$this->assertEquals($oldValue, $obj->get($param));
 			$obj->set($param, $newValue);
@@ -103,59 +303,355 @@
 				],
 				'obj2' => [
 					'param' => 'obj2',
-					'oldValue' => new TestClass2(),
-					'newValue' => new TestClass2(),
+					'oldValue' => new BaseObjectTestClass2(),
+					'newValue' => new BaseObjectTestClass2(),
 				],
 			];
 		}
+
 	}
 
-	class BaseObjectTestClass extends BaseObject {
-		private int $int;
-		private float $float;
-		private string $string;
-		private bool $bool;
-		private array $array;
-		private object $object;
-		private TestClass2 $obj2;
+	class BaseObjectTestClass1 extends BaseObject {
+		protected ?int $int;
+		protected ?float $float;
+		protected ?string $string;
+		protected ?bool $bool;
+		protected ?array $array;
+		protected ?object $object;
+		protected ?BaseObjectTestClass2 $obj2;
 
-		public function __construct() {
-			$this->int = 1;
-			$this->float = 1.01;
-			$this->string = 'This is a string';
-			$this->bool = true;
-			$this->array = [
-				'first_name' => 'John',
-				'last_name' => 'Doe',
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'float' => new BaseObjectParamModel(
+					1.01,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					false
+				),
+				'string' => new BaseObjectParamModel(
+					'This is a string',
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'bool' => new BaseObjectParamModel(
+					true,
+					TypeHelper::TYPE_BOOL,
+					true,
+					true,
+					false
+				),
+				'array' => new BaseObjectParamModel(
+					[
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					],
+					TypeHelper::TYPE_ARRAY,
+					true,
+					true,
+					false
+				),
+				'object' => new BaseObjectParamModel(
+					json_decode(json_encode([
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					])),
+					TypeHelper::TYPE_OBJECT,
+					true,
+					true,
+					false
+				),
+				'obj2' => new BaseObjectParamModel(
+					new BaseObjectTestClass2(),
+					BaseObjectTestClass2::class,
+					true,
+					true,
+					false
+				),
 			];
-			$this->object = json_decode(json_encode($this->array));
-			$this->obj2 = new TestClass2();
-		}
-
-		public function toArray(): array {
-			return [];
 		}
 	}
 
-	class TestClass2 extends BaseObject {
-		private int $int;
-		private float $float;
-		private string $string;
-		private bool $bool;
-		private array $array;
+	class BaseObjectTestClass2 extends BaseObject {
+		protected int $int;
+		protected float $float;
+		protected string $string;
+		protected bool $bool;
+		protected array $array;
 
-		public function __construct() {
-			$this->int = 1;
-			$this->float = 1.01;
-			$this->string = 'This is a string';
-			$this->bool = true;
-			$this->array = [
-				'first_name' => 'John',
-				'last_name' => 'Doe',
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'float' => new BaseObjectParamModel(
+					1.01,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					false
+				),
+				'string' => new BaseObjectParamModel(
+					'This is a string',
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'bool' => new BaseObjectParamModel(
+					true,
+					TypeHelper::TYPE_BOOL,
+					true,
+					true,
+					false
+				),
+				'array' => new BaseObjectParamModel(
+					[
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					],
+					TypeHelper::TYPE_ARRAY,
+					true,
+					true,
+					false
+				),
+			];
+		}
+	}
+
+	class BaseObjectTestClass3 extends BaseObject {
+		protected ?int $int;
+		protected ?float $float;
+		protected ?string $string;
+		protected ?bool $bool;
+		protected ?array $array;
+		protected ?object $object;
+		protected ?BaseObjectTestClass1 $obj2;
+
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'float' => new BaseObjectParamModel(
+					1.01,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					false
+				),
+				'string' => new BaseObjectParamModel(
+					'This is a string',
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'bool' => new BaseObjectParamModel(
+					true,
+					TypeHelper::TYPE_BOOL,
+					true,
+					true,
+					false
+				),
+				'array' => new BaseObjectParamModel(
+					[
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					],
+					TypeHelper::TYPE_ARRAY,
+					true,
+					true,
+					false
+				),
+				'object' => new BaseObjectParamModel(
+					json_decode(json_encode([
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					])),
+					TypeHelper::TYPE_OBJECT,
+					true,
+					true,
+					false
+				),
+				'obj2' => new BaseObjectParamModel(
+					new BaseObjectTestClass1(),
+					BaseObjectTestClass1::class,
+					true,
+					true,
+					false
+				),
+			];
+		}
+	}
+
+	class BaseObjectTestNullableClass extends BaseObjectTestClass1 {
+
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_INT,
+					true,
+					true,
+					true
+				),
+				'float' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					true
+				),
+				'string' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					true
+				),
+				'bool' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_BOOL,
+					true,
+					true,
+					true
+				),
+				'array' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_ARRAY,
+					true,
+					true,
+					true
+				),
 			];
 		}
 
-		public function toArray(): array {
-			return [];
+	}
+
+	class BaseObjectTestInvalidParamClass extends BaseObjectTestClass1 {
+
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_INT,
+					true,
+					true,
+					false
+				),
+				'test' => new BaseObjectParamModel(
+					1.01,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					false
+				),
+			];
 		}
+
+	}
+
+	class BaseObjectTestNotEmptyParamClass extends BaseObjectTestClass1 {
+
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_INT,
+					true,
+					true,
+					false
+				),
+				'float' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					false
+				),
+			];
+		}
+
+	}
+
+	class BaseObjectTestToArrayClass extends BaseObjectTestClass1 {
+
+		protected function setParams(): void {
+			$this->PARAMS = [
+				'int' => new BaseObjectParamModel(
+					1,
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'float' => new BaseObjectParamModel(
+					1.01,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					false,
+					false
+				),
+				'string' => new BaseObjectParamModel(
+					'This is a string',
+					TypeHelper::TYPE_STRING,
+					true,
+					true,
+					false
+				),
+				'bool' => new BaseObjectParamModel(
+					true,
+					TypeHelper::TYPE_BOOL,
+					true,
+					true,
+					false
+				),
+				'array' => new BaseObjectParamModel(
+					[
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					],
+					TypeHelper::TYPE_ARRAY,
+					true,
+					true,
+					false
+				),
+				'object' => new BaseObjectParamModel(
+					json_decode(json_encode([
+						'first_name' => 'John',
+						'last_name' => 'Doe',
+					])),
+					TypeHelper::TYPE_OBJECT,
+					true,
+					false,
+					false
+				),
+				'obj2' => new BaseObjectParamModel(
+					new BaseObjectTestClass2(),
+					BaseObjectTestClass2::class,
+					true,
+					false,
+					false
+				),
+			];
+		}
+
 	}
