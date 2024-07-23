@@ -933,7 +933,7 @@
 
 		public function testGetHtmlContentFromFileWithReplaceSuccess() {
 			$this->assertEquals(
-				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\r\n<h2>Replaced Text 01</h2>\r\n<h3>Replaced Text 02</h3>",
+				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
 				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
 					"::replace_1::" => "Replaced Text 01",
 					"::replace_2::" => "Replaced Text 02",
@@ -1375,6 +1375,52 @@
 			];
 		}
 
+		/**
+		 * @dataProvider missingParamsThrowsSuccessProvider
+		 */
+		public function testMissingParamsThrowsSuccess(
+			array $params,
+			array $required,
+			string $exception,
+			string $exceptionMessage,
+		): void {
+			if (!empty($exception)) {
+				$this->expectException($exception);
+				$this->expectExceptionMessage($exceptionMessage);
+			}
+
+			Helper::MissingParamsThrows($params, $required);
+
+			if (empty($exception)) {
+				$this->assertTrue(true);
+			}
+		}
+
+		public function missingParamsThrowsSuccessProvider(): array {
+			return [
+				'throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => '',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age', 'country'],
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `country`'
+				],
+				'not_throws' => [
+					'params' => [
+						'first_name' => 'Jon',
+						'last_name' => 'Doe',
+						'age' => '29'
+					],
+					'required' => ['first_name', 'last_name', 'age'],
+					'exception' => '',
+					'exceptionMessage' => ''
+				]
+			];
+		}
+
 		public function testMissingNotEmptyParamsSuccess(): void {
 			$params = [
 				'first_name' => 'Jon',
@@ -1420,7 +1466,7 @@
 					'params' => [
 						'first_name' => 'Jon',
 						'last_name' => '',
-						'age' => '29'
+						'age' => '29',
 					],
 					'required' => ['first_name', 'last_name', 'age', 'country'],
 					'exception' => MissingParamsException::class,

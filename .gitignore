@@ -1,7 +1,6 @@
 vendor
 .vscode
 .prettierrc
-composer.lock
 
 dgsplash.*.json
 !dgsplash.phpservices.env.example.json

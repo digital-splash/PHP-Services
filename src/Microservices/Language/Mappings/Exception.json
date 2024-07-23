@@ -90,6 +90,16 @@
       "fr": "Argument non valide \"::argument::\" ayant la valeur \"::value::\".",
       "ar": "وسيطة غير صالحة \"::الوسيطة::\" لها القيمة \"::value::\"."
     },
+    "ClassPropertyNotFound": {
+      "en": "Property \"::property::\" not found in class \"::class::\".",
+      "fr": "Property \"::property::\" not found in class \"::class::\".",
+      "ar": "Property \"::property::\" not found in class \"::class::\"."
+    },
+    "InvalidType": {
+      "en": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
+      "fr": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\".",
+      "ar": "Invalid type \"::givenType::\" for property \"::propertyName::\". Expected type is \"::expectedType::\"."
+    },
     "database": {
       "InvalidConnector": {
         "en": "\"DB Conector\" object is null for Credentials \"::param::\".",
