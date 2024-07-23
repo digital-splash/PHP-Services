@@ -17,10 +17,13 @@
 		 */
 		protected $PARAMS;
 
-		abstract protected function setParams(): void;
+		/**
+		 * @return BaseObjectParamModel[]
+		 */
+		abstract protected function getParams();
 
 		public function __construct(array $arr = []) {
-			static::setParams();
+			$this->PARAMS = $this->getParams();
 
 			foreach ($this->PARAMS as $param => $paramModel) {
 				if (!property_exists(static::class, $param)) {

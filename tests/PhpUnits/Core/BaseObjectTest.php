@@ -320,8 +320,8 @@
 		protected ?object $object;
 		protected ?BaseObjectTestClass2 $obj2;
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_STRING,
@@ -388,8 +388,8 @@
 		protected bool $bool;
 		protected array $array;
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_STRING,
@@ -441,8 +441,8 @@
 		protected ?object $object;
 		protected ?BaseObjectTestClass1 $obj2;
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_STRING,
@@ -504,8 +504,8 @@
 
 	class BaseObjectTestNullableClass extends BaseObjectTestClass1 {
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_INT,
@@ -548,8 +548,8 @@
 
 	class BaseObjectTestInvalidParamClass extends BaseObjectTestClass1 {
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_INT,
@@ -571,8 +571,8 @@
 
 	class BaseObjectTestNotEmptyParamClass extends BaseObjectTestClass1 {
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_INT,
@@ -594,8 +594,8 @@
 
 	class BaseObjectTestToArrayClass extends BaseObjectTestClass1 {
 
-		protected function setParams(): void {
-			$this->PARAMS = [
+		protected function getParams() {
+			return [
 				'int' => new BaseObjectParamModel(
 					1,
 					TypeHelper::TYPE_STRING,
