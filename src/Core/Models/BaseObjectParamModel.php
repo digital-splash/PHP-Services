@@ -12,8 +12,8 @@
 			$defaultValue,
 			string $type,
 			bool $required,
-			bool $inArray,
-			bool $nullable
+			bool $inArray = true,
+			bool $nullable = false
 		) {
 			$this->defaultValue = $defaultValue;
 			$this->type = $type;
