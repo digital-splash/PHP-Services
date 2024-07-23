@@ -7,19 +7,22 @@
 		private bool $required;
 		private bool $inArray;
 		private bool $nullable;
+		private string $validationRule;
 
 		public function __construct(
 			$defaultValue,
 			string $type,
 			bool $required = true,
 			bool $inArray = true,
-			bool $nullable = false
+			bool $nullable = false,
+			string $validationRule = BaseObjectValidationTypeEnum::NOT_EMPTY
 		) {
 			$this->defaultValue = $defaultValue;
 			$this->type = $type;
 			$this->required = $required;
 			$this->inArray = $inArray;
 			$this->nullable = $nullable;
+			$this->validationRule = $validationRule;
 		}
 
 		public function getDefaultValue() {
@@ -40,6 +43,10 @@
 
 		public function isNullable(): bool {
 			return $this->nullable;
+		}
+
+		public function getValidationRule(): string {
+			return $this->validationRule;
 		}
 
 	}

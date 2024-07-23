@@ -3,8 +3,10 @@
 
 	use DigitalSplash\Core\BaseObject;
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
+	use DigitalSplash\Core\Models\BaseObjectValidationTypeEnum;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
-	use DigitalSplash\Exceptions\InvalidParamException;
+use DigitalSplash\Exceptions\InvalidArgumentException;
+use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\InvalidTypeException;
 	use DigitalSplash\Exceptions\MissingParamsException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
@@ -78,26 +80,106 @@
 
 		public function validateThrowsProvider(): array {
 			return [
-				'one_param' => [
+				'invalid_validation_rule' => [
+					'exception' => InvalidArgumentException::class,
+					'exceptionMessage' => 'Invalid argument "validationRule" having the value "TestValidationRule". Allowed value(s): "' . implode(', ', BaseObjectValidationTypeEnum::ALLOWED) . '"',
+					'class' => BaseObjectTestInvalidValidationRuleClass::class,
+					'arr' => []
+				],
+				'missing_one_param' => [
 					'exception' => MissingParamsException::class,
 					'exceptionMessage' => 'Missing Parameter(s): `float`',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 1,
-						'string' => '',
+						'string' => 'This is a string',
 						'bool' => true,
-						'array' => []
-					],
+						'array' => [
+							'This is an array'
+						]
+					]
 				],
-				'three_params' => [
+				'missing_two_params' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `float`, `string`, `array`',
+					'exceptionMessage' => 'Missing Parameter(s): `float`, `bool`',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 1,
-						'string' => null,
+						'string' => 'This is a string',
+						'array' => [
+							'This is an array'
+						]
+					]
+				],
+				'not_empty_one_param' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 0,
+						'float' => 0,
+						'string' => 'This is a string',
 						'bool' => true,
-					],
+						'array' => [
+							'This is an array'
+						]
+					]
+				],
+				'not_empty_two_param' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 0,
+						'float' => 0,
+						'string' => '',
+						'bool' => true,
+						'array' => [
+							'This is an array'
+						]
+					]
+				],
+				'not_empty_three_param' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 0,
+						'float' => 0,
+						'string' => '',
+						'bool' => true,
+						'array' => []
+					]
+				],
+				'mix_and_match_1' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `bool`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 0,
+						'float' => 0,
+						'string' => '',
+						'bool' => null,
+						'array' => []
+					]
+				],
+				'mix_and_match_2' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => [
+						'int' => 0,
+						'float' => null,
+						'string' => '',
+						'bool' => null,
+						'array' => []
+					]
+				],
+				'mix_and_match_3' => [
+					'exception' => MissingParamsException::class,
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`',
+					'class' => BaseObjectTestNullableClass::class,
+					'arr' => []
 				],
 			];
 		}
@@ -502,6 +584,31 @@
 		}
 	}
 
+	class BaseObjectTestInvalidValidationRuleClass extends BaseObjectTestClass1 {
+
+		protected function getParams() {
+			return [
+				'int' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_INT,
+					true,
+					true,
+					true,
+					BaseObjectValidationTypeEnum::NOT_EMPTY
+				),
+				'float' => new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_FLOAT,
+					true,
+					true,
+					true,
+					'TestValidationRule'
+				),
+			];
+		}
+
+	}
+
 	class BaseObjectTestNullableClass extends BaseObjectTestClass1 {
 
 		protected function getParams() {
@@ -511,35 +618,40 @@
 					TypeHelper::TYPE_INT,
 					true,
 					true,
-					true
+					true,
+					BaseObjectValidationTypeEnum::NOT_EMPTY
 				),
 				'float' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_FLOAT,
 					true,
 					true,
-					true
+					true,
+					BaseObjectValidationTypeEnum::MISSING
 				),
 				'string' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_STRING,
 					true,
 					true,
-					true
+					true,
+					BaseObjectValidationTypeEnum::NOT_EMPTY
 				),
 				'bool' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_BOOL,
 					true,
 					true,
-					true
+					true,
+					BaseObjectValidationTypeEnum::MISSING
 				),
 				'array' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_ARRAY,
 					true,
 					true,
-					true
+					true,
+					BaseObjectValidationTypeEnum::NOT_EMPTY
 				),
 			];
 		}

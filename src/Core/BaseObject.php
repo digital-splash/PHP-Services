@@ -2,10 +2,13 @@
 	namespace DigitalSplash\Core;
 
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
+	use DigitalSplash\Core\Models\BaseObjectValidationTypeEnum;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
-	use DigitalSplash\Exceptions\InvalidParamException;
+use DigitalSplash\Exceptions\InvalidArgumentException;
+use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\InvalidTypeException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+use DigitalSplash\Exceptions\MissingParamsException;
+use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\TypeHelper;
 	use ReflectionClass;
@@ -22,7 +25,9 @@
 		 */
 		abstract protected function getParams();
 
-		public function __construct(array $arr = []) {
+		public function __construct(
+			array $arr = []
+		) {
 			$this->PARAMS = $this->getParams();
 
 			foreach ($this->PARAMS as $param => $paramModel) {
@@ -55,18 +60,52 @@
 			$params = [];
 
 			foreach ($this->PARAMS as $param => $paramModel) {
-				if ($paramModel->isRequired()) {
-					$value = $this->get($param);
+				if (!$paramModel->isRequired()) {
+					continue;
+				}
 
-					$required[] = $param;
-					if (!is_null($value)) {
-						$params[$param] = $this->get($param);
-					}
+				$validationRule = $paramModel->getValidationRule();
+				if (!in_array($validationRule, BaseObjectValidationTypeEnum::ALLOWED)) {
+					throw new InvalidArgumentException('validationRule', $validationRule, implode(', ', BaseObjectValidationTypeEnum::ALLOWED));
+				}
+
+				$value = $this->get($param);
+
+				$required[$validationRule][] = $param;
+				if (
+					$validationRule === BaseObjectValidationTypeEnum::NOT_EMPTY
+					|| (
+						$validationRule === BaseObjectValidationTypeEnum::MISSING
+						&& !is_null($value)
+					)
+				) {
+					$params[$validationRule][$param] = $this->get($param);
 				}
 			}
 
-			if (!Helper::IsNullOrEmpty($params)) {
-				Helper::MissingParamsThrows($params, $required);
+			$allMissing = [];
+			foreach ($required as $validationRule => $_required) {
+				$_params = $params[$validationRule] ?? [];
+
+				switch ($validationRule) {
+					case BaseObjectValidationTypeEnum::MISSING:
+						[
+							'missing' => $missingParams
+						] = Helper::MissingParams($_params, $_required);
+						$allMissing = array_merge($allMissing, $missingParams);
+						break;
+
+					case BaseObjectValidationTypeEnum::NOT_EMPTY:
+						[
+							'missing' => $missingParams
+						] = Helper::MissingNotEmptyParams($_params, $_required);
+						$allMissing = array_merge($allMissing, $missingParams);
+						break;
+				}
+			}
+
+			if (!empty($allMissing)) {
+				throw new MissingParamsException($allMissing);
 			}
 		}
 

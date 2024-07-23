@@ -92,7 +92,7 @@
 
 				case TypeHelper::TYPE_FLOAT:
 				case TypeHelper::TYPE_DOUBLE:
-					return gettype($value) === 'double';
+					return gettype($value) === 'double' || gettype($value) === 'integer';
 
 				case 'numeric':
 					return
