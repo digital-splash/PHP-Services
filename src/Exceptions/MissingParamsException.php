@@ -5,7 +5,7 @@
 	use DigitalSplash\Models\HttpCode;
 
 	class MissingParamsException extends BaseParameterException {
-		protected $message = "Missing Parameter(s): ::params::";
+		protected $message = "Missing Parameter(s): ::params::.";
 
 		public function __construct(
 			array $params,

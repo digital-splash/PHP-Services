@@ -5,8 +5,8 @@
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
 	use DigitalSplash\Core\Models\BaseObjectValidationTypeEnum;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
-use DigitalSplash\Exceptions\InvalidArgumentException;
-use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\InvalidArgumentException;
+	use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\InvalidTypeException;
 	use DigitalSplash\Exceptions\MissingParamsException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
@@ -88,7 +88,7 @@ use DigitalSplash\Exceptions\InvalidParamException;
 				],
 				'missing_one_param' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `float`',
+					'exceptionMessage' => 'Missing Parameter(s): `float`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 1,
@@ -96,24 +96,28 @@ use DigitalSplash\Exceptions\InvalidParamException;
 						'bool' => true,
 						'array' => [
 							'This is an array'
-						]
+						],
+						'object' => json_decode(json_encode([
+							'key' => 'value'
+						])),
 					]
 				],
 				'missing_two_params' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `float`, `bool`',
+					'exceptionMessage' => 'Missing Parameter(s): `float`, `bool`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 1,
 						'string' => 'This is a string',
 						'array' => [
 							'This is an array'
-						]
+						],
+						'object' => null,
 					]
 				],
 				'not_empty_one_param' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 0,
@@ -122,12 +126,13 @@ use DigitalSplash\Exceptions\InvalidParamException;
 						'bool' => true,
 						'array' => [
 							'This is an array'
-						]
+						],
+						'object' => null,
 					]
 				],
 				'not_empty_two_param' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 0,
@@ -136,48 +141,52 @@ use DigitalSplash\Exceptions\InvalidParamException;
 						'bool' => true,
 						'array' => [
 							'This is an array'
-						]
+						],
+						'object' => null,
 					]
 				],
 				'not_empty_three_param' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 0,
 						'float' => 0,
 						'string' => '',
 						'bool' => true,
-						'array' => []
-					]
+						'array' => [],
+						'object' => null,
+					],
 				],
 				'mix_and_match_1' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `bool`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `bool`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 0,
 						'float' => 0,
 						'string' => '',
 						'bool' => null,
-						'array' => []
+						'array' => [],
+						'object' => null,
 					]
 				],
 				'mix_and_match_2' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => [
 						'int' => 0,
 						'float' => null,
 						'string' => '',
 						'bool' => null,
-						'array' => []
+						'array' => [],
+						'object' => null,
 					]
 				],
 				'mix_and_match_3' => [
 					'exception' => MissingParamsException::class,
-					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`',
+					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`.',
 					'class' => BaseObjectTestNullableClass::class,
 					'arr' => []
 				],
@@ -652,6 +661,20 @@ use DigitalSplash\Exceptions\InvalidParamException;
 					true,
 					true,
 					BaseObjectValidationTypeEnum::NOT_EMPTY
+				),
+				'object' =>  new BaseObjectParamModel(
+					null,
+					TypeHelper::TYPE_OBJECT,
+					false,
+					true,
+					true,
+				),
+				'obj2' => new BaseObjectParamModel(
+					null,
+					BaseObjectTestClass2::class,
+					false,
+					true,
+					true,
 				),
 			];
 		}

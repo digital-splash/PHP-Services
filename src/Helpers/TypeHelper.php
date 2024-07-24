@@ -52,13 +52,16 @@
 		): bool {
 			if ($type instanceof ReflectionNamedType) {
 				$expectedType = $type->getName();
+				$nullable = $type->allowsNull();
 
 				// Handle non-built-in types (Custom Classes)
 				if (!$type->isBuiltin()) {
+					if (is_null($value) && $nullable) {
+						return true;
+					}
 					return $value instanceof $expectedType;
 				}
 
-				$nullable = $type->allowsNull();
 				if (array_key_exists($expectedType, self::$typeMap)) {
 					$expectedType = self::$typeMap[$expectedType];
 				}

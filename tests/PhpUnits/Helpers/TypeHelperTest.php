@@ -146,12 +146,12 @@
 				],
 				TypeHelper::TYPE_FLOAT => [
 					'success' => [
+						$valueInt,
 						$valueFloat,
 						$valueDouble
 					],
 					'fail' => [
 						$valueBool,
-						$valueInt,
 						$valueNumeric1,
 						$valueNumeric2,
 						$valueNumeric3,
@@ -165,12 +165,12 @@
 				],
 				TypeHelper::TYPE_DOUBLE => [
 					'success' => [
+						$valueInt,
 						$valueFloat,
 						$valueDouble
 					],
 					'fail' => [
 						$valueBool,
-						$valueInt,
 						$valueNumeric1,
 						$valueNumeric2,
 						$valueNumeric3,
@@ -338,6 +338,7 @@
 			$valueClassString = TypeHelper::getClassPropertyType($class::class, 'string');
 			$valueClassBool = TypeHelper::getClassPropertyType($class::class, 'bool');
 			$valueClassArray = TypeHelper::getClassPropertyType($class::class, 'array');
+			$valueClassReflection = TypeHelper::getClassPropertyType($class::class, 'class1');
 
 			return [
 				'int_nullable' => [
@@ -369,6 +370,12 @@
 					'type' => $valueClassArray,
 					'nullable' => null,
 					'expected' => false
+				],
+				'reflection_class' => [
+					'value' => null,
+					'type' => $valueClassReflection,
+					'nullable' => null,
+					'expected' => true
 				],
 			];
 		}
@@ -444,10 +451,12 @@
 		public ?string $string;
 		public ?bool $bool;
 		public array $array;
+		public ?TypeHelperTestClass1 $class1;
 
 		public function __construct(array $arr) {
 			$this->string = $arr['string'] ?? null;
 			$this->bool = $arr['bool'] ?? null;
 			$this->array = $arr['array'] ?? [];
+			$this->class1 = $arr['class1'] ?? null;
 		}
 	}
