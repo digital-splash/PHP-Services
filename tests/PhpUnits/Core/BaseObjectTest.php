@@ -415,7 +415,7 @@
 			return [
 				'int' => new BaseObjectParamModel(
 					1,
-					TypeHelper::TYPE_STRING,
+					TypeHelper::TYPE_INT,
 					true,
 					true,
 					false
