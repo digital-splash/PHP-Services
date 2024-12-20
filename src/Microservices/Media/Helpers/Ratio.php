@@ -114,10 +114,10 @@
 
 			if ($this->addCanvas) {
 				$this->calculateDimensionsWithCanvas($width, $height);
-				$image->resizeCanvas($this->width, $this->height, 'center', false, $this->canvasColor);
+				$image->resizeCanvas((int) $this->width, (int) $this->height, 'center', false, $this->canvasColor);
 			} else {
 				$this->calculateDimensionsWithoutCanvas($width, $height);
-				$image->resize($this->width, $this->height);
+				$image->resize((int) $this->width, (int) $this->height);
 			}
 
 			Helper::CreateFolderRecursive(pathinfo($this->destination, PATHINFO_DIRNAME));
