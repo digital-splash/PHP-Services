@@ -11,27 +11,43 @@
 	use DigitalSplash\Notification\Models\EmailConfiguration;
 
 	class EnvConfig {
-
 		private static array $config = [];
 
 		public static function init(): void {
 			self::getConfigFromFile();
 			self::setConfig();
+
+			Settings::init();
+		}
+
+		public static function getByKey(string $key) {
+			$keyArr = explode('.', $key);
+
+			$config = self::$config;
+			foreach ($keyArr as $k) {
+				$config = $config[$k] ?? [];
+			}
+
+			if (Helper::IsNullOrEmpty($config)) {
+				$config = '';
+			}
+
+			return $config;
 		}
 
 		private static function getConfigFromFile(): void {
 			$dir = __DIR__;
-			$prevDir = '';
-			while (!file_exists($dir . '/dgsplash.phpservices.env.json')) {
+
+			while (!file_exists($dir . '/env.json')) {
 				$prevDir = $dir;
 				$dir = dirname($dir);
 				if ($dir === $prevDir) {
-					throw new ConfigurationNotFoundException('Configuration file "dgsplash.phpservices.env.json" not found!');
+					throw new ConfigurationNotFoundException('Configuration file "env.json" not found!');
 				}
 			}
 
 			self::$config = Helper::GetJsonContentFromFileAsArray(
-				$dir . '/dgsplash.phpservices.env.json'
+				$dir . '/env.json'
 			);
 
 			if (Helper::IsNullOrEmpty(self::$config)) {
@@ -52,7 +68,7 @@
 		private static function tenantConfig(): void {
 			$config = self::$config['tenant'] ?? [];
 
-			Tenant::setEnvironment(self::$config['environment'] ?? 'local');
+			Tenant::setEnvironment(self::$config['env'] ?? Tenant::ENV_LOCAL);
 
 			Tenant::setName($config['name'] ?? '');
 			Tenant::setDomain($config['domain'] ?? '');
@@ -68,7 +84,7 @@
 			EmailConfiguration::setHost($config['host'] ?? '');
 			EmailConfiguration::setPort($config['port'] ?? 0);
 			EmailConfiguration::setEncryption($config['encryption'] ?? '');
-			EmailConfiguration::setFromName($config['from']['name'] ?? '');
+			EmailConfiguration::setFromName($config['from']['name'] ?? Tenant::getName() ?? '');
 			EmailConfiguration::setFromEmail($config['from']['email'] ?? '');
 			EmailConfiguration::setFromEmailPassword($config['from']['password'] ?? '');
 			EmailConfiguration::setTestEmail($config['test_email'] ?? '');
@@ -99,6 +115,8 @@
 
 		private static function environmentConfig(): void {
 			if (!defined('PHPUNIT_TEST_SUITE')) {
+				define('PHPUNIT_TEST_SUITE', 0);
+
 				DbConn::setPhpUnitTestSuite(0);
 			} else {
 				DbConn::setPhpUnitTestSuite(1);
@@ -117,4 +135,5 @@
 			DbConn::setMysqlDbMainTest($mysql['test_main_database'] ?? '');
 			DbConn::setMysqlDbLogsTest($mysql['test_logs_database'] ?? '');
 		}
+
 	}
