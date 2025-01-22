@@ -1,6 +1,7 @@
-vendor
 .vscode
+vendor
 .prettierrc
 
-dgsplash.*.json
-!dgsplash.phpservices.env.example.json
+env.json
+env.*.json
+!env.example.json
