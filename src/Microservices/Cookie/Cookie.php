@@ -1,6 +1,7 @@
 <?php
 	namespace DigitalSplash\Cookie;
 
+	use DigitalSplash\Helpers\Settings;
 	use DigitalSplash\Models\Tenant;
 
 	class Cookie {
@@ -22,15 +23,14 @@
 			], '_', strtolower(Tenant::getName()));
 			$this->time = time() + (60 * 60 * 24 * 30); //30 Days
 			$this->path = '/';
-			$this->domain = '.' . DOMAIN;
+			$this->domain = '.' . Tenant::getDomain();
 			$this->secure = true;
 
 			$this->cookieName = '';
 
-			if (IS_LOCAL_ENV) {
+			if (Settings::$isLocalEnv) {
 				$this->prefix .= '_local';
-			}
-			else if (IS_TEST_ENV) {
+			} elseif (Settings::$isTestEnv) {
 				$this->prefix .= '_test';
 			}
 
