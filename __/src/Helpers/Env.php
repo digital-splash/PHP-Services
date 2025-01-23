@@ -1,23 +1,23 @@
 <?php
+
 	namespace DigitalSplash\Helpers;
 
 	use DigitalSplash\ApiNinjas\ApiNinjas;
 	use DigitalSplash\Database\DbConn;
 	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
 	use DigitalSplash\Exceptions\Configuration\InvalidConfigurationException;
-	use DigitalSplash\Helpers\Helper;
-	use DigitalSplash\ServerCache\ServerCache;
 	use DigitalSplash\Models\Tenant;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
+	use DigitalSplash\ServerCache\ServerCache;
 
-	class EnvConfig {
+	class Env {
 		private static array $config = [];
 
 		public static function init(): void {
-			self::getConfigFromFile();
-			self::setConfig();
-
-			Settings::init();
+//			self::getConfigFromFile();
+//			self::setConfig();
+//
+//			Settings::init();
 		}
 
 		public static function getByKey(string $key) {
@@ -135,5 +135,4 @@
 			DbConn::setMysqlDbMainTest($mysql['test_main_database'] ?? '');
 			DbConn::setMysqlDbLogsTest($mysql['test_logs_database'] ?? '');
 		}
-
 	}

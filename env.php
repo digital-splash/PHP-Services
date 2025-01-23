@@ -1,4 +1,5 @@
 <?php
-	use DigitalSplash\Helpers\EnvConfig;
 
-	EnvConfig::init();
+	//	use DigitalSplash\Helpers\EnvConfig;
+	//
+	//	EnvConfig::init();

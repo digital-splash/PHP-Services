@@ -1,21 +1,18 @@
 <?php
+
 	namespace DigitalSplash\Renders;
 
 	use DigitalSplash\Helpers\Helper;
 
 	class Tabs {
 		protected const CONTENT_DIR = __DIR__ . "/ContentGenerator/Tabs/";
-
 		protected string $id;
 		protected string $class;
-
 		protected string $activeTab;
 		protected array $tabs;
 		protected int $tabsCount;
-
 		protected string $primaryColor;
 		protected string $secondaryColor;
-
 		protected static bool $styleIncluded = false;
 		protected static bool $scriptIncluded = false;
 
@@ -46,21 +43,19 @@
 
 			$topTabs = "";
 			$tabsContents = "";
-			foreach ($this->tabs AS $key => [
-				"title" => $title,
-				"content" => $content
-			]) {
+			foreach ($this->tabs as $key => ["title" => $title,
+			         "content" => $content]) {
 				$tabClass = ($this->activeTab === $key) || (Helper::IsNullOrEmpty($this->activeTab) && $this->tabsCount == 0) ? "active" : "";
 
 				$topTabs .= Helper::GetContentFromFile(self::CONTENT_DIR . "TopTab.html", [
 					"::class::" => $tabClass,
 					"::key::" => $key,
-					"::title::" => $title
+					"::title::" => $title,
 				]);
 				$tabsContents .= Helper::GetContentFromFile(self::CONTENT_DIR . "TabContent.html", [
 					"::class::" => $tabClass,
 					"::key::" => $key,
-					"::content::" => $content
+					"::content::" => $content,
 				]);
 
 				$this->tabsCount++;
@@ -74,9 +69,9 @@
 			if (self::$styleIncluded === false) {
 				self::$styleIncluded = true;
 				$pre .= "<style>" . Helper::GetContentFromFile(self::CONTENT_DIR . "styles.css", [
-					"'{primaryColor}'" => $this->primaryColor,
-					"'{secondaryColor}'" => $this->secondaryColor,
-				]) . "</style>";
+						"'{primaryColor}'" => $this->primaryColor,
+						"'{secondaryColor}'" => $this->secondaryColor,
+					]) . "</style>";
 			}
 			if (self::$scriptIncluded === false) {
 				self::$scriptIncluded = true;
@@ -84,10 +79,10 @@
 			}
 
 			$html = Helper::GetContentFromFile(self::CONTENT_DIR . "Main.html", [
-				"::id::" =>  $this->id,
-				"::class::" =>  $this->class,
+				"::id::" => $this->id,
+				"::class::" => $this->class,
 				"::topTabs::" => $topTabs,
-				"::tabsContents::" => $tabsContents
+				"::tabsContents::" => $tabsContents,
 			]);
 
 			return $pre . $html;
@@ -96,7 +91,7 @@
 		public function AddTab(string $key, string $title, string $content): void {
 			$this->tabs[$key] = [
 				"title" => $title,
-				"content" => $content
+				"content" => $content,
 			];
 		}
 

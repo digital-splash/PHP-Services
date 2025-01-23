@@ -1,4 +1,5 @@
 <?php
+
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Renders\Table;
 
@@ -47,6 +48,6 @@
 		$tables[$i] = $table;
 	}
 
-	foreach ($tables AS $table) {
+	foreach ($tables as $table) {
 		echo $table->Render();
 	}

@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Helpers;
 
 	use DigitalSplash\Exceptions\FileNotFoundException;
@@ -6,11 +7,10 @@
 
 	class ServerCache {
 		protected static ?string $version = null;
-
 		protected static ?string $cacheFolder = null;
 		protected static ?string $versionFolder = null;
 
-		public static function Get(string $name, bool $asArray=false) {
+		public static function Get(string $name, bool $asArray = false) {
 			$cacheFileName = self::GetCacheFileName($name);
 
 			if (!file_exists($cacheFileName)) {
@@ -73,5 +73,4 @@
 				Helper::CreateFolderRecursive(self::$versionFolder);
 			}
 		}
-
 	}

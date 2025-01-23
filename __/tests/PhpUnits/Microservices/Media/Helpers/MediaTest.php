@@ -1,7 +1,7 @@
 <?php
+
 	namespace DigitalSplash\Tests\Media\Helpers;
 
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\Media\InvalidExtensionException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
@@ -11,6 +11,7 @@
 	use DigitalSplash\Media\Models\DocumentsExtensions;
 	use DigitalSplash\Media\Models\Image;
 	use DigitalSplash\Media\Models\ImagesExtensions;
+	use PHPUnit\Framework\TestCase;
 
 	final class MediaTest extends TestCase {
 		private const MEDIA_ROOT = "https://media.domain.com";
@@ -27,7 +28,7 @@
 		public function testGetMediaFullPathThrowNotEmptyError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "path"
+				"::params::" => "path",
 			]));
 			Media::GetMediaFullPath("");
 		}
@@ -35,7 +36,7 @@
 		public function testGetMediaFullPathThrowNotEmptyError_02(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "path"
+				"::params::" => "path",
 			]));
 			Media::GetMediaFullPath(null);
 		}
@@ -43,7 +44,7 @@
 		public function testGetMediaFullPathThrowFileNotFoundError(): void {
 			$this->expectException(FileNotFoundException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.FileNotFound", null, [
-				"::params::" => self::MEDIA_ROOT . "/users/profile/invalid-user-01.jpg"
+				"::params::" => self::MEDIA_ROOT . "/users/profile/invalid-user-01.jpg",
 			]));
 			Media::GetMediaFullPath("mediafiles/users/profile/invalid-user-01.jpg");
 		}
@@ -84,12 +85,12 @@
 			$this->assertTrue(Media::IsExtension('test', [
 				'test',
 				'test1',
-				'test2'
+				'test2',
 			]));
 
 			$this->assertFalse(Media::IsExtension('test', [
 				'test1',
-				'test2'
+				'test2',
 			]));
 		}
 
@@ -107,17 +108,17 @@
 			Media::validateIsExtension('test', [
 				'test',
 				'test1',
-				'test2'
+				'test2',
 			]);
 
 			$this->expectException(InvalidExtensionException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
-				"::params::" => "test1, test2"
+				"::params::" => "test1, test2",
 			]));
 
 			Media::validateIsExtension('test', [
 				'test1',
-				'test2'
+				'test2',
 			]);
 		}
 
@@ -126,7 +127,7 @@
 
 			$this->expectException(InvalidExtensionException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
-				"::params::" => Helper::ImplodeArrToStr(', ', ImagesExtensions::getExtensions())
+				"::params::" => Helper::ImplodeArrToStr(', ', ImagesExtensions::getExtensions()),
 			]));
 
 			Media::validateIsImage('test');
@@ -137,10 +138,9 @@
 
 			$this->expectException(InvalidExtensionException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.media.InvalidExtension", null, [
-				"::params::" => Helper::ImplodeArrToStr(', ', DocumentsExtensions::getExtensions())
+				"::params::" => Helper::ImplodeArrToStr(', ', DocumentsExtensions::getExtensions()),
 			]));
 
 			Media::validateIsDocument('test');
 		}
-
 	}

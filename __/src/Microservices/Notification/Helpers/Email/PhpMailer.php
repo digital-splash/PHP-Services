@@ -1,14 +1,15 @@
 <?php
+
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Exceptions\Notification\PhpMailerException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Notification\Interfaces\IEmail;
-	use DigitalSplash\Notification\Models\Notification as NotificationModel;
 	use DigitalSplash\Notification\Models\EmailConfiguration;
+	use DigitalSplash\Notification\Models\Notification as NotificationModel;
+	use PHPMailer\PHPMailer\Exception;
 	use PHPMailer\PHPMailer\PHPMailer as MainPHPMailer;
 	use PHPMailer\PHPMailer\SMTP;
-	use PHPMailer\PHPMailer\Exception;
 
 	class PhpMailer implements IEmail {
 		public NotificationModel $model;

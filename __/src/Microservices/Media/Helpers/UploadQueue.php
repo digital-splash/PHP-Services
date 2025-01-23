@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Helpers\Helper;
@@ -9,24 +10,23 @@
 	use Throwable;
 
 	class UploadQueue extends Upload {
-
 		public function upload(): array {
 			$this->buildFiles();
 			$retArr = [];
 
 			$i = 1;
 			foreach ($this->getFiles() as $file) {
-			   try {
-				 $retArr[] = $this->uploadFile($file, $i);
-				$i++;
-			   } catch (Throwable $t) {
+				try {
+					$retArr[] = $this->uploadFile($file, $i);
+					$i++;
+				} catch (Throwable $t) {
 					$retArr[] = [
 						'status' => Code::ERROR,
 						'message' => $t->getMessage(),
 						'fileName' => $file->getName(),
 						'elemName' => $file->getElemName(),
 					];
-			   }
+				}
 			}
 			return $retArr;
 		}
@@ -58,7 +58,7 @@
 		private function processImage(string $filePath): void {
 			[
 				'extension' => $extension,
-				'basename' => $basename
+				'basename' => $basename,
 			] = pathinfo($filePath);
 
 			if (!Media::IsImage($extension)) {
@@ -70,7 +70,7 @@
 			[
 				'basename' => $basename,
 				'filename' => $filename,
-				'dirname' => $dirname
+				'dirname' => $dirname,
 			] = pathinfo($mainImagePath);
 
 			//copy to root
@@ -86,7 +86,8 @@
 						true
 					);
 					$ratio->save();
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+				}
 			}
 
 			//Check if we need to resize
@@ -94,8 +95,8 @@
 				try {
 					foreach (Image::getArray() as $_image) {
 						$destination = Helper::TextReplace($_image['path'], [
-							'{path}' => $dirname
-						]) . $basename;
+								'{path}' => $dirname,
+							]) . $basename;
 						$resize = new Resize(
 							$mainImagePath,
 							$destination,
@@ -105,15 +106,16 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+				}
 			}
 
 			if (count($this->facebookResize) > 0) {
 				try {
 					foreach ($this->facebookResize as $value) {
 						$fbPath = Helper::TextReplace($value['path'], [
-							'{path}' => $dirname
-						]) . $basename;
+								'{path}' => $dirname,
+							]) . $basename;
 
 						$resize = new Resize(
 							$filePath,
@@ -124,7 +126,8 @@
 						);
 						$resize->save();
 					}
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+				}
 			}
 
 			//Check if we need to convert to next gen (webp)
@@ -136,10 +139,10 @@
 						ImagesExtensions::WEBP
 					);
 					$convertType->save();
-				} catch (Throwable $t) {}
+				} catch (Throwable $t) {
+				}
 
 			}
 
 		}
-
 	}

@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Notification\Models;
 
 	use DigitalSplash\Exceptions\Configuration\ConfigurationNotFoundException;
@@ -8,19 +9,17 @@
 	class Template {
 		const MAIN_TEMPLATE_BOXED_DEFAULT_KEY = 'boxed';
 		const MAIN_TEMPLATE_BOXED_WITH_BUTTON_DEFAULT_KEY = 'boxed_with_button';
-
 		private static string $templateSrcPath;
 		private static string $templateMainSrcPath;
 		private static string $templateMainNoButtonKey;
 		private static string $templateMainWithButtonKey;
-
 		private array $replaceArray = [];
 		private string $templateMainFullPath = '';
 		private string $templateContentFullPath = '';
 
 		public function __construct(
-			array $replaceArray,
-			bool $withButton = false,
+			array  $replaceArray,
+			bool   $withButton = false,
 			string $contentTemplateKey = ''
 		) {
 			self::setTemplateMainSrcPath('');

@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Tests\Notification\Models;
 
 	use DigitalSplash\Helpers\Helper;
@@ -6,7 +7,6 @@
 	use PHPUnit\Framework\TestCase;
 
 	class TemplateTest extends TestCase {
-
 		public function templateSuccessProvider(): array {
 			return [
 				'Main/boxed_with_button' => [
@@ -19,8 +19,8 @@
 						'tenant_primary_color' => '#0000ff',
 						'button_text' => 'Test button',
 						'tenant_year' => '2023',
-						'tenant_logo' => "https://dgsplash.com/assets/images/logo-bg.jpg"
-					]
+						'tenant_logo' => "https://dgsplash.com/assets/images/logo-bg.jpg",
+					],
 				],
 				'Main/boxed' => [
 					'path' => 'boxed',
@@ -29,8 +29,8 @@
 						'full_name' => 'Hadi Darwish',
 						'tenant_name' => 'Digital Splash',
 						'tenant_year' => '2023',
-						'tenant_logo' => "https://dgsplash.com/assets/images/logo-bg.jpg"
-					]
+						'tenant_logo' => "https://dgsplash.com/assets/images/logo-bg.jpg",
+					],
 				],
 			];
 		}

@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
@@ -9,12 +10,12 @@
 		protected $message = "exception.InvalidArgument";
 
 		public function __construct(
-			string $argument,
-			string $value,
-			?string $allowed=null,
-			int $code = 0,
-			int $subcode = 0,
-			int $responseCode = HttpCode::NOTFOUND
+			string  $argument,
+			string  $value,
+			?string $allowed = null,
+			int     $code = 0,
+			int     $subcode = 0,
+			int     $responseCode = HttpCode::NOTFOUND
 		) {
 			if (!Helper::IsNullOrEmpty($allowed)) {
 				$this->message = "exception.InvalidArgumentWithAllowed";

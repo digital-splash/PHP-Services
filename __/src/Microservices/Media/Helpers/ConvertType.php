@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\InvalidParamException;
@@ -18,7 +19,7 @@
 			string $source,
 			string $destination,
 			string $extension,
-			bool $keepSource = false
+			bool   $keepSource = false
 		) {
 			$this->source = $source;
 			$this->destination = $destination;
@@ -34,7 +35,7 @@
 			], [
 				'source',
 				'destination',
-				'extension'
+				'extension',
 			]);
 
 			if (!Helper::IsNullOrEmpty($validate['missing'])) {
@@ -57,7 +58,7 @@
 			}
 
 			$manager = new ImageManager([
-				'driver' => 'gd'
+				'driver' => 'gd',
 			]);
 			$image = $manager->make($this->source);
 			Helper::CreateFolderRecursive(pathinfo($this->destination, PATHINFO_DIRNAME));

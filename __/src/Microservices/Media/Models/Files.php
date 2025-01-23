@@ -1,10 +1,10 @@
 <?php
+
 	namespace DigitalSplash\Media\Models;
 
 	use DigitalSplash\Helpers\Helper;
 
 	class Files {
-
 		/**
 		 * @var File[] $_files
 		 */
@@ -31,7 +31,7 @@
 			/**
 			 * @pvar File $file
 			 */
-			foreach ($this->_files AS $file) {
+			foreach ($this->_files as $file) {
 				$array[$file->getElemName()] = $file->toArray();
 			}
 
@@ -61,7 +61,7 @@
 				'type' => $type,
 				'tmp_name' => $tmp_name,
 				'error' => $error,
-				'size' => $size
+				'size' => $size,
 			] = $elemFiles;
 
 			if (is_string($name)) {
@@ -77,7 +77,7 @@
 						'type' => $type[$i],
 						'tmp_name' => $tmp_name[$i],
 						'error' => $error[$i],
-						'size' => $size[$i]
+						'size' => $size[$i],
 					];
 					$files = array_merge(
 						$files,
@@ -88,5 +88,4 @@
 
 			return $files;
 		}
-
 	}

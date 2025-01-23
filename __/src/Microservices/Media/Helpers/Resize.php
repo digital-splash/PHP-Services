@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\InvalidParamException;
@@ -7,7 +8,6 @@
 	use DigitalSplash\Media\Interfaces\IImageModify;
 	use DigitalSplash\Media\Models\ImagesExtensions;
 	use Intervention\Image\ImageManager;
-
 
 	class Resize implements IImageModify {
 		private string $source;
@@ -19,9 +19,9 @@
 		public function __construct(
 			string $source,
 			string $destination,
-			int $width,
-			float $ratio = 0,
-			bool $convertToNextGen = false
+			int    $width,
+			float  $ratio = 0,
+			bool   $convertToNextGen = false
 		) {
 			$this->source = $source;
 			$this->destination = $destination;
@@ -64,11 +64,11 @@
 			}
 
 			$manager = new ImageManager([
-				'driver' => 'gd'
+				'driver' => 'gd',
 			]);
 
 			$image = $manager->make($this->source);
-			$image->resize($this->width, null, function ($constraint) {
+			$image->resize($this->width, null, function($constraint) {
 				$constraint->aspectRatio();
 			});
 

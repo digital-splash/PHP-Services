@@ -1,19 +1,19 @@
 <?php
+
 	namespace DigitalSplash\Tests\Helpers;
 
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Helpers\AntiHack;
 	use DigitalSplash\Helpers\Helper;
+	use PHPUnit\Framework\TestCase;
 
 	final class AntiHackTest extends TestCase {
-
 		public function testCheckSimpleArraySuccess() {
 			$_GET = [
 				"key" => "SELECT * FROM `users`",
 				"limit" => '100',
 				"offset" => '50',
 				"page" => '1',
-				"category" => "Software Engineer"
+				"category" => "Software Engineer",
 			];
 
 			$_GET = AntiHack::Check($_GET);
@@ -23,7 +23,7 @@
 				"limit" => '100',
 				"offset" => '50',
 				"page" => '1',
-				"category" => "Software Engineer"
+				"category" => "Software Engineer",
 			];
 
 			$this->assertEqualsCanonicalizing($expected, $_GET);
@@ -41,8 +41,8 @@
 					"sub" => [
 						"key" => "SELECT * FROM `users`",
 						"category" => "Software Engineer",
-					]
-				]
+					],
+				],
 			];
 
 			$_GET = AntiHack::Check($_GET);
@@ -58,8 +58,8 @@
 					"sub" => [
 						"key" => "_select_ * _from_ `users`",
 						"category" => "Software Engineer",
-					]
-				]
+					],
+				],
 			];
 
 			$this->assertEqualsCanonicalizing($expected, $_GET);
@@ -71,11 +71,11 @@
 				"limit" => '100',
 				"offset" => '50',
 				"page" => '1',
-				"category" => "Software Engineer"
+				"category" => "Software Engineer",
 			];
 
 			$_GET = AntiHack::Check($_GET, [
-				'query'
+				'query',
 			]);
 
 			$expected = [
@@ -83,10 +83,9 @@
 				"limit" => '100',
 				"offset" => '50',
 				"page" => '1',
-				"category" => "Software Engineer"
+				"category" => "Software Engineer",
 			];
 
 			$this->assertEqualsCanonicalizing($expected, $_GET);
 		}
-
 	}

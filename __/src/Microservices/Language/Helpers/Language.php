@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Language\Helpers;
 
 	use DigitalSplash\Helpers\Helper;
@@ -8,7 +9,6 @@
 		private static string $default = Lang::EN;
 		private static string $active = Lang::EN;
 		private static array $allowed = [];
-
 
 		public static function Uppercase(
 			string $val
@@ -25,8 +25,8 @@
 		}
 
 		public static function GetFieldKey(
-			string $field,
-			?string $lang=null
+			string  $field,
+			?string $lang = null
 		): string {
 			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = self::GetActive();
@@ -75,5 +75,4 @@
 		public static function ClearAllowed(): void {
 			self::$allowed = [];
 		}
-
 	}

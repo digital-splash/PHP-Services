@@ -1,34 +1,28 @@
 <?php
+
 	namespace DigitalSplash\Renders;
 
 	use DigitalSplash\Helpers\Helper;
 
 	class Table {
 		protected const CONTENT_DIR = __DIR__ . "/ContentGenerator/Table/";
-
 		protected bool $isDataTable;
 		protected bool $addIndexing;
 		protected int $indexingKey;
 		protected array $keysWithoutSort;
-
 		protected string $id;
 		protected string $class;
-
 		protected array $header;
 		protected array $body;
 		protected array $footer;
-
 		protected array $cellButtons;
 		protected array $topButtons;
 		protected array $bottomButtons;
-
 		protected string $topButtonsDefaultClass;
 		protected string $bottomButtonsDefaultClass;
 		protected string $cellButtonsDefaultClass;
-
 		protected string $primaryColor;
 		protected string $secondaryColor;
-
 		protected static bool $styleIncluded = false;
 		protected static bool $scriptIncluded = false;
 
@@ -80,9 +74,9 @@
 			if (self::$styleIncluded === false) {
 				self::$styleIncluded = true;
 				$pre .= "<style>" . Helper::GetContentFromFile(self::CONTENT_DIR . "styles.css", [
-					"'{primaryColor}'" => $this->primaryColor,
-					"'{secondaryColor}'" => $this->secondaryColor,
-				]) . "</style>";
+						"'{primaryColor}'" => $this->primaryColor,
+						"'{secondaryColor}'" => $this->secondaryColor,
+					]) . "</style>";
 			}
 			if (self::$scriptIncluded === false) {
 				self::$scriptIncluded = true;
@@ -90,8 +84,8 @@
 			}
 
 			$html = Helper::GetContentFromFile(self::CONTENT_DIR . "Main.html", [
-				"::id::" =>  $this->id,
-				"::class::" =>  $this->class,
+				"::id::" => $this->id,
+				"::class::" => $this->class,
 				"::thead::" => $header,
 				"::tbody::" => $body,
 				"::tfoot::" => $footer,
@@ -107,9 +101,9 @@
 		public function AddHeader(
 			string $key,
 			string $content,
-			string $width="",
-			string $class="",
-			array $params=[]
+			string $width = "",
+			string $class = "",
+			array  $params = []
 		): void {
 			$this->header[$key][] = [
 				"content" => $content,
@@ -122,8 +116,8 @@
 		public function AddBody(
 			string $key,
 			string $content,
-			string $class="",
-			array $params=[]
+			string $class = "",
+			array  $params = []
 		): void {
 			$this->body[$key][] = [
 				"content" => $content,
@@ -135,8 +129,8 @@
 		public function AddFooter(
 			string $key,
 			string $content,
-			string $class="",
-			array $params=[]
+			string $class = "",
+			array  $params = []
 		): void {
 			$this->footer[$key][] = [
 				"content" => $content,
@@ -148,16 +142,16 @@
 		public function AddCellButton(
 			string $key,
 			string $title,
-			string $icon="",
-			string $link="#",
-			string $class="",
-			array $params=[]
+			string $icon = "",
+			string $link = "#",
+			string $class = "",
+			array  $params = []
 		) {
 			if (!Helper::IsNullOrEmpty($this->cellButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->cellButtonsDefaultClass,
 					" " . $this->cellButtonsDefaultClass . " ",
-					$this->cellButtonsDefaultClass . " "
+					$this->cellButtonsDefaultClass . " ",
 				])) {
 					$class .= " " . $this->cellButtonsDefaultClass;
 				}
@@ -181,16 +175,16 @@
 		public function AddTopButton(
 			string $key,
 			string $title,
-			string $icon="",
-			string $link="#",
-			string $class="",
-			array $params=[]
+			string $icon = "",
+			string $link = "#",
+			string $class = "",
+			array  $params = []
 		): void {
 			if (!Helper::IsNullOrEmpty($this->topButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->topButtonsDefaultClass,
 					" " . $this->topButtonsDefaultClass . " ",
-					$this->topButtonsDefaultClass . " "
+					$this->topButtonsDefaultClass . " ",
 				])) {
 					$class .= " " . $this->topButtonsDefaultClass;
 				}
@@ -207,16 +201,16 @@
 		public function AddBottomButton(
 			string $key,
 			string $title,
-			string $icon="",
-			string $link="#",
-			string $class="",
-			array $params=[]
+			string $icon = "",
+			string $link = "#",
+			string $class = "",
+			array  $params = []
 		): void {
 			if (!Helper::IsNullOrEmpty($this->bottomButtonsDefaultClass)) {
 				if (!Helper::StringHasChar($class, [
 					" " . $this->bottomButtonsDefaultClass,
 					" " . $this->bottomButtonsDefaultClass . " ",
-					$this->bottomButtonsDefaultClass . " "
+					$this->bottomButtonsDefaultClass . " ",
 				])) {
 					$class .= " " . $this->bottomButtonsDefaultClass;
 				}
@@ -237,14 +231,12 @@
 			}
 
 			$rows = [];
-			foreach ($data AS $row) {
+			foreach ($data as $row) {
 				$rowStr = [];
-				foreach ($row AS [
-					"content" => $content,
-					"width" => $width,
-					"class" => $class,
-					"params" => $params
-				]) {
+				foreach ($row as ["content" => $content,
+				         "width" => $width,
+				         "class" => $class,
+				         "params" => $params]) {
 					if ($width != "") {
 						if (!isset($params["style"])) {
 							$params["style"] = "";
@@ -273,13 +265,11 @@
 			}
 
 			$rows = [];
-			foreach ($data AS $i => $row) {
+			foreach ($data as $i => $row) {
 				$rowStr = [];
-				foreach ($row AS [
-					"content" => $content,
-					"class" => $class,
-					"params" => $params
-				]) {
+				foreach ($row as ["content" => $content,
+				         "class" => $class,
+				         "params" => $params]) {
 					if ($class != "") {
 						if (!isset($params["class"])) {
 							$params["class"] = "";
@@ -292,7 +282,7 @@
 
 				if (count($this->cellButtons) > 0) {
 					$rowButtons = [];
-					foreach ($this->cellButtons AS $cellButtons) {
+					foreach ($this->cellButtons as $cellButtons) {
 						$rowButtons[] = $cellButtons[$i];
 					}
 					$rowStr[] = "<td>" . self::RenderCellButtons($rowButtons) . "</td>";
@@ -309,13 +299,11 @@
 			}
 
 			$rows = [];
-			foreach ($data AS $row) {
+			foreach ($data as $row) {
 				$rowStr = [];
-				foreach ($row AS [
-					"content" => $content,
-					"class" => $class,
-					"params" => $params
-				]) {
+				foreach ($row as ["content" => $content,
+				         "class" => $class,
+				         "params" => $params]) {
 					if ($class != "") {
 						if (!isset($params["class"])) {
 							$params["class"] = "";
@@ -387,8 +375,8 @@
 
 		private static function GetArrayFormatted(array $input): array {
 			$output = [];
-			foreach ($input AS $key => $keyCells) {
-				foreach ($keyCells AS $index => $cell) {
+			foreach ($input as $key => $keyCells) {
+				foreach ($keyCells as $index => $cell) {
 					$output[$index][$key] = $cell;
 				}
 			}
@@ -401,13 +389,11 @@
 			}
 
 			$buttons = [];
-			foreach ($data AS [
-				"title" => $title,
-				"icon" => $icon,
-				"link" => $link,
-				"class" => $class,
-				"params" => $params
-			]) {
+			foreach ($data as ["title" => $title,
+			         "icon" => $icon,
+			         "link" => $link,
+			         "class" => $class,
+			         "params" => $params]) {
 				if (!isset($params["class"])) {
 					$params["class"] = "";
 				}
@@ -495,5 +481,4 @@
 		public function GetCellButtonsDefaultClass(): string {
 			return $this->cellButtonsDefaultClass;
 		}
-
 	}

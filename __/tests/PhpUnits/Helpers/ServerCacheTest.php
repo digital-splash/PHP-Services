@@ -1,13 +1,13 @@
 <?php
+
 	namespace DigitalSplash\Tests\Helpers;
 
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\FileNotFoundException;
 	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\ServerCache;
 	use DigitalSplash\Language\Helpers\Translate;
-
+	use PHPUnit\Framework\TestCase;
 
 	class ServerCacheTest extends TestCase {
 		private const CACHE_FOLDER = __DIR__ . "/../../_CommonFiles/Cache/";
@@ -25,7 +25,7 @@
 		public function testSetWithoutCacheFolderFail(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "ServerCache::\$versionFolder"
+				"::params::" => "ServerCache::\$versionFolder",
 			]));
 			ServerCache::Set("test", "This is a test cache!");
 		}
@@ -33,7 +33,7 @@
 		public function testGetWithoutCacheFolderFail(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "ServerCache::\$versionFolder"
+				"::params::" => "ServerCache::\$versionFolder",
 			]));
 			ServerCache::Get("test");
 		}
@@ -52,7 +52,7 @@
 		public function testGetFail() {
 			$this->expectException(FileNotFoundException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.FileNotFound", null, [
-				"::params::" => "cacheFileName"
+				"::params::" => "cacheFileName",
 			]));
 			ServerCache::SetVersion("1.0.0");
 			ServerCache::SetCacheFolder(self::CACHE_FOLDER);
@@ -95,10 +95,9 @@
 
 		private static function DeleteAllGeneratedFiles(): void {
 			$filesToDelete = Helper::GetAllFiles(self::CACHE_FOLDER, true);
-			foreach ($filesToDelete AS $file) {
+			foreach ($filesToDelete as $file) {
 				Helper::DeleteFileOrFolder($file);
 			}
 			Helper::DeleteFileOrFolder(self::CACHE_FOLDER . "/1.0.0");
 		}
-
 	}

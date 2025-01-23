@@ -48,10 +48,10 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"DigitalSplash\\": "tests/"
+			"DigitalSplash\\Tests\\": "tests/PhpUnits"
 		}
 	},
 	"scripts": {
-		"phpunit": "./vendor/bin/phpunit ./tests/PhpUnits"
+		"phpunit": "./vendor/bin/phpunit ./tests/PhpUnits/"
 	}
 }

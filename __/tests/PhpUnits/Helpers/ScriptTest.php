@@ -1,13 +1,11 @@
 <?php
 	namespace DigitalSplash\Tests\Helpers;
 
-
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\Script;
+	use PHPUnit\Framework\TestCase;
 
 	class ScriptTest extends TestCase {
-
 		public function setUp(): void {
 			Script::ClearFiles();
 			Script::ClearScripts();
@@ -59,12 +57,11 @@
 			Script::AddScript("<script src=\"script_3.js\"></script>", "script_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Script/scripts.html");
-            $expected = str_replace("\r\n", "\n", $expected);
+			$expected = str_replace("\r\n", "\n", $expected);
 			$actual = Script::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
 		}
-
 	}
 
 ?>

@@ -1,21 +1,18 @@
 <?php
+
 	namespace DigitalSplash\Renders;
 
 	use DigitalSplash\Helpers\Helper;
 
 	class Accordion {
 		protected const CONTENT_DIR = __DIR__ . "/ContentGenerator/Accordion/";
-
 		protected string $id;
 		protected string $class;
-
 		protected string $activeTab;
 		protected array $tabs;
 		protected int $tabsCount;
-
 		protected string $primaryColor;
 		protected string $secondaryColor;
-
 		protected static bool $styleIncluded = false;
 		protected static bool $scriptIncluded = false;
 
@@ -45,11 +42,9 @@
 			}
 
 			$tabs = "";
-			foreach ($this->tabs AS $key => [
-				"icon" => $icon,
-				"title" => $title,
-				"content" => $content
-			]) {
+			foreach ($this->tabs as $key => ["icon" => $icon,
+			         "title" => $title,
+			         "content" => $content]) {
 				$tabClass = ($this->activeTab === $key) || (Helper::IsNullOrEmpty($this->activeTab) && $this->tabsCount == 0) ? "active" : "";
 
 				$tabs .= Helper::GetContentFromFile(self::CONTENT_DIR . "AccordionElement.html", [
@@ -71,9 +66,9 @@
 			if (self::$styleIncluded === false) {
 				self::$styleIncluded = true;
 				$pre .= "<style>" . Helper::GetContentFromFile(self::CONTENT_DIR . "styles.css", [
-					"'{primaryColor}'" => $this->primaryColor,
-					"'{secondaryColor}'" => $this->secondaryColor,
-				]) . "</style>";
+						"'{primaryColor}'" => $this->primaryColor,
+						"'{secondaryColor}'" => $this->secondaryColor,
+					]) . "</style>";
 			}
 			if (self::$scriptIncluded === false) {
 				self::$scriptIncluded = true;
@@ -81,8 +76,8 @@
 			}
 
 			$html = Helper::GetContentFromFile(self::CONTENT_DIR . "Main.html", [
-				"::id::" =>  $this->id,
-				"::class::" =>  $this->class,
+				"::id::" => $this->id,
+				"::class::" => $this->class,
 				"::accordionElements::" => $tabs,
 			]);
 
@@ -93,7 +88,7 @@
 			$this->tabs[$key] = [
 				"icon" => $icon,
 				"title" => $title,
-				"content" => $content
+				"content" => $content,
 			];
 		}
 

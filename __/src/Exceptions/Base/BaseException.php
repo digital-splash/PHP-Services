@@ -1,10 +1,11 @@
 <?php
+
 	namespace DigitalSplash\Exceptions\Base;
 
-	use Exception;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Models\HttpCode;
+	use Exception;
 
 	class BaseException extends Exception {
 		protected int $responseCode;
@@ -12,10 +13,10 @@
 
 		public function __construct(
 			string $message = "",
-			array $replace = [],
-			int $code = 0,
-			int $subcode = 0,
-			int $responseCode = HttpCode::NOTFOUND
+			array  $replace = [],
+			int    $code = 0,
+			int    $subcode = 0,
+			int    $responseCode = HttpCode::NOTFOUND
 		) {
 			if (!Helper::IsNullOrEmpty($message)) {
 				$this->message = $message;

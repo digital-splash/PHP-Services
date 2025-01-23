@@ -1,19 +1,18 @@
 <?php
+
 	namespace DigitalSplash\Date\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Date\Models\DateFormat;
 	use DigitalSplash\Date\Models\DateFormatType;
 	use DigitalSplash\Date\Models\DateType;
+	use DigitalSplash\Exceptions\InvalidParamException;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Language;
 	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Language\Models\Lang;
 
 	class Date {
-
-
 		/**
 		 * Cleans a date before inserting it to database
 		 */
@@ -26,15 +25,14 @@
 			return "'$val'";
 		}
 
-
 		/**
 		 * Returns selected date format from the given date
 		 */
 		public static function RenderDate(
 			?string $date,
-			string $format=DateFormat::DATE_SAVE,
-			?string $lang="",
-			bool $isStr=false
+			string  $format = DateFormat::DATE_SAVE,
+			?string $lang = "",
+			bool    $isStr = false
 		): string {
 			if (Helper::IsNullOrEmpty($date)) {
 				return '';
@@ -53,26 +51,24 @@
 			return Translate::TranslateString($dateValue, $lang, [], false);
 		}
 
-
 		/**
 		 * Returns selected date format from the given strdate
 		 */
 		public static function RenderDateFromTime(
-			int $dateStr,
-			string $format=DateFormat::DATE_SAVE,
-			?string $lang=""
+			int     $dateStr,
+			string  $format = DateFormat::DATE_SAVE,
+			?string $lang = ""
 		): string {
 			return self::RenderDate($dateStr, $format, $lang, true);
 		}
-
 
 		/**
 		 * Get month name from its number
 		 */
 		public static function GetMonthName(
-			int $month,
-			?string $lang="",
-			string $format="F"
+			int     $month,
+			?string $lang = "",
+			string  $format = "F"
 		): string {
 			if ($month < 1 || $month > 12) {
 				throw new InvalidParamException("month");
@@ -86,22 +82,20 @@
 			return self::RenderDate($date, $format, $lang);
 		}
 
-
 		/**
 		 * Get week day name from its number
 		 */
 		public static function GetWeekDayName(
-			string $weekDay,
-			?string $lang=""
+			string  $weekDay,
+			?string $lang = ""
 		): string {
 			if (Helper::IsNullOrEmpty($lang)) {
 				$lang = Language::GetActive();
 			}
 
-			$date = jddayofweek($weekDay-1, 1);
+			$date = jddayofweek($weekDay - 1, 1);
 			return Translate::Translate($date, $lang, false, [], false);
 		}
-
 
 		/**
 		 * Return Extended Date format depending on date difference
@@ -109,10 +103,10 @@
 		 */
 		public static function RenderDateExtended(
 			?string $date,
-			?string $lang="",
-			bool $withTime=false,
-			string $formatType=DateFormatType::NICE,
-			?string $comparisonDate=null
+			?string $lang = "",
+			bool    $withTime = false,
+			string  $formatType = DateFormatType::NICE,
+			?string $comparisonDate = null
 		): string {
 			if (Helper::IsNullOrEmpty($date)) {
 				throw new NotEmptyParamException("date");
@@ -133,8 +127,7 @@
 
 				$format = $withTime ? $dateTimeFormat : $dateFormat;
 				return self::RenderDate($date, $format, $lang);
-			}
-			else if (self::RenderDate($date, "m") != date("m", $comparisonDateStr) || self::RenderDate($date, "d") != date("d", $comparisonDateStr)) {
+			} else if (self::RenderDate($date, "m") != date("m", $comparisonDateStr) || self::RenderDate($date, "d") != date("d", $comparisonDateStr)) {
 				$timeStamp1 = strtotime($date);
 				$timeStamp2 = $comparisonDateStr;
 
@@ -142,30 +135,27 @@
 				if ($timeStampDiff > 0 && $timeStampDiff <= (60 * 60 * 24)) {
 					$newDate = Translate::Translate("date.yesterday", $lang);
 					if ($withTime) {
-						$newDate .= " " .  Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
+						$newDate .= " " . Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
 					}
 					return $newDate;
-				}
-				else if ($timeStampDiff < 0 && $timeStampDiff >= -(60 * 60 * 24)) {
+				} else if ($timeStampDiff < 0 && $timeStampDiff >= -(60 * 60 * 24)) {
 					$newDate = Translate::Translate("date.tomorrow", $lang);
 					if ($withTime) {
-						$newDate .= " " .  Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
+						$newDate .= " " . Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
 					}
 					return $newDate;
 
-				}
-				else {
+				} else {
 					$dateFormat = self::GetFormatFromType($formatType, DateType::DATE, false);
 					$dateTimeFormat = self::GetFormatFromType($formatType, DateType::DATETIME, false);
 
 					$format = $withTime ? $dateTimeFormat : $dateFormat;
 					return self::RenderDate($date, $format, $lang);
 				}
-			}
-			else {
+			} else {
 				$newDate = Translate::Translate("date.today", $lang);
 				if ($withTime) {
-					$newDate .= " " .  Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
+					$newDate .= " " . Translate::Translate("date.at", $lang) . " " . self::RenderDate($date, DateFormat::TIME_MAIN, $lang);
 				}
 				return $newDate;
 			}
@@ -173,13 +163,12 @@
 			return $date;
 		}
 
-
 		/**
 		 * Get days count between 2 dates
 		 */
 		public static function GetDaysCount(
-			?string $date1=null,
-			?string $date2=null
+			?string $date1 = null,
+			?string $date2 = null
 		): float {
 			if (Helper::IsNullOrEmpty($date1)) {
 				throw new NotEmptyParamException("date1");
@@ -197,16 +186,15 @@
 			return Helper::ConvertToDec($daysStr / $oneDayStr);
 		}
 
-
 		/**
 		 * Get age from the give date
 		 */
 		public static function GetAge(
-			?string $dob=null,
-			?string $lang=null,
-			?string $dateTime=null,
-			bool $getMonths=true,
-			bool $getDays=true
+			?string $dob = null,
+			?string $lang = null,
+			?string $dateTime = null,
+			bool    $getMonths = true,
+			bool    $getDays = true
 		): string {
 			if (Helper::IsNullOrEmpty($dob)) {
 				throw new NotEmptyParamException("dob");
@@ -222,8 +210,8 @@
 
 			$dateDiff = date_diff(date_create($dateTime), date_create($dob));
 
-			$years	= Helper::ConvertToInt($dateDiff->format("%Y"));
-			$months	= Helper::ConvertToInt($dateDiff->format("%M"));
+			$years = Helper::ConvertToInt($dateDiff->format("%Y"));
+			$months = Helper::ConvertToInt($dateDiff->format("%M"));
 			$days = Helper::ConvertToInt($dateDiff->format("%d"));
 
 			$age = Translate::TranslateStringSimple($years, $lang) . " " . ($years == 1 ? Translate::Translate("date.year", $lang) : Translate::Translate("date.years", $lang));
@@ -238,16 +226,15 @@
 			return $age;
 		}
 
-
 		/**
 		 * Get date and time format from the given date type
 		 * $type must be of type (DateFormatType)
 		 * $returnType must be of type (DateType)
 		 */
 		public static function GetFormatFromType(
-			?string $type=DateFormatType::SAVE,
-			?string $returnType=null,
-			bool $withYear=true
+			?string $type = DateFormatType::SAVE,
+			?string $returnType = null,
+			bool    $withYear = true
 		) {
 			$dateFormat = DateFormat::DATE_SAVE;
 			$timeFormat = DateFormat::TIME_SAVE;
@@ -296,6 +283,4 @@
 			}
 			return $arr;
 		}
-
-
 	}

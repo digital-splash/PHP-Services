@@ -1,19 +1,21 @@
 <?php
+
 	namespace DigitalSplash\Database;
 
-	use DigitalSplash\Date\Models\DateFormat;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Helpers\Helper;
-	use Exception;
-	use DigitalSplash\LaravelBatch\Batch;
-	use Illuminate\Database\Capsule\Manager as CapsuleManager;
-	use Illuminate\Database\Query\Builder;
-	use Illuminate\Database\Eloquent\Model as EloquentModel;
 	use DigitalSplash\Database\QueryAttributes\Condition;
 	use DigitalSplash\Database\QueryAttributes\Join;
 	use DigitalSplash\Database\QueryAttributes\Order;
-	// use NutriPro\Handlers\LoggedUser;
+	use DigitalSplash\Date\Models\DateFormat;
+	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Helpers\Helper;
+	use DigitalSplash\LaravelBatch\Batch;
+	use Exception;
+	use Illuminate\Database\Capsule\Manager as CapsuleManager;
+	use Illuminate\Database\Eloquent\Model as EloquentModel;
+	use Illuminate\Database\Query\Builder;
 	use Throwable;
+
+	// use NutriPro\Handlers\LoggedUser;
 
 	class DbConn extends EloquentModel {
 		private static string $PHPUNIT_TEST_SUITE = '';
@@ -24,9 +26,7 @@
 		private static string $MYSQL_DB_HOST = '';
 		private static string $MYSQL_DB_USER = '';
 		private static string $MYSQL_DB_PASS = '';
-
 		const CHUNK_SIZE = 500;
-
 		protected static ?CapsuleManager $capsule = null;
 		protected static string $connectionName = '';
 		protected static string $driverName = '';
@@ -39,35 +39,27 @@
 		protected string $createdOnString = 'CreatedOn';
 		protected string $createdTypeString = 'CreatedType';
 		protected string $displayOrderString = 'DisplayOrder';
-
 		protected static int $defaultFilterDeleted = 0;
 		protected array $apiExcludedColumns = [];
-
-		protected ?Builder $query ;
-
+		protected ?Builder $query;
 		/**
 		 * @var ?self
 		 */
 		protected static $obj = null;
-
 		/**
 		 * @var string[]
 		 */
 		protected array $fields;
-
 		/**
 		 * @var Condition[]
 		 */
 		protected array $conditions;
-
 		/**
 		 * @var Join[]
 		 */
 
 		protected array $join;
-
 		protected string $groupBy;
-
 		/**
 		 * @var Condition[]
 		 */
@@ -78,13 +70,9 @@
 		 */
 
 		protected array $orderBy;
-
 		protected int $limit;
-
 		protected int $offset;
-
 		protected int $filterDeleted;
-
 		public array $data;
 		public array $row;
 		public int $count;
@@ -367,6 +355,7 @@
 		public function setDisplayOrderString(string $displayOrderString): void {
 			$this->displayOrderString = $displayOrderString;
 		}
+
 		// End of static methods
 
 		private static function initCapsule(): void {
@@ -442,7 +431,7 @@
 			try {
 				$columns = $this->getFillable();
 
-				foreach ($data AS $col => $val) {
+				foreach ($data as $col => $val) {
 					$this->$col = $val;
 				}
 
@@ -557,7 +546,7 @@
 		}
 
 		public static function updateBulk(
-			array $values,
+			array   $values,
 			?string $column = null
 		): void {
 			if (Helper::IsNullOrEmpty($values)) {
@@ -571,7 +560,7 @@
 			$object = new $class();
 
 			$column = $column ?? $object->getKeyName();
-			foreach ($values AS $value) {
+			foreach ($values as $value) {
 				if (!isset($value[$column])) {
 					throw new Exception("Column $column is not in one of the values");
 				}
@@ -646,8 +635,7 @@
 							$condition->getBoolean()
 						);
 					} else {
-						if ($condition->getOperator() == 'IN')
-						{
+						if ($condition->getOperator() == 'IN') {
 							$query->whereIn(
 								$condition->getColumn(),
 								$condition->getValue(),
@@ -675,7 +663,7 @@
 
 			// Add join
 			if ($this->join) {
-				foreach($this->join as $join) {
+				foreach ($this->join as $join) {
 					$query->join(
 						$join->getTable(),
 						$join->getFirst(),
@@ -694,7 +682,7 @@
 
 			// Add having
 			if ($this->having) {
-				foreach($this->having as $have) {
+				foreach ($this->having as $have) {
 					$query->having(
 						$have->getColumn(),
 						$have->getOperator(),
@@ -715,7 +703,7 @@
 				if (count($randOrderArr) > 0) {
 					$query->inRandomOrder();
 				} else {
-					foreach($this->orderBy as $order) {
+					foreach ($this->orderBy as $order) {
 						$query->orderBy(
 							$order->getColumn(),
 							$order->getDirection()
@@ -753,7 +741,7 @@
 			$this->data = json_decode(json_encode($results), true);
 			$this->row = end($this->data);
 			$this->count = count($this->data);
-			foreach ($this->row AS $col => $val) {
+			foreach ($this->row as $col => $val) {
 				$this->$col = $val;
 			}
 
@@ -766,7 +754,7 @@
 			$now = date(DateFormat::DATETIME_SAVE);
 			$this->find($this->row[$this->primaryKey])->update([
 				$this->deleteString => 1,
-				$this->deleteDateString => $now
+				$this->deleteDateString => $now,
 			]);
 		}
 
@@ -780,36 +768,35 @@
 			$query = self::$capsule->table($object->table);
 
 			// Add condition
-			foreach($conditions as $condition) {
-				if ($condition->getOperator() == 'IN')
-					{
-						$query->whereIn(
-							$condition->getColumn(),
-							$condition->getValue(),
-							$condition->getBoolean()
-						);
-					} else {
-						$query->where(
-							$condition->getColumn(),
-							$condition->getOperator(),
-							$condition->getValue(),
-							$condition->getBoolean()
-						);
-					}
+			foreach ($conditions as $condition) {
+				if ($condition->getOperator() == 'IN') {
+					$query->whereIn(
+						$condition->getColumn(),
+						$condition->getValue(),
+						$condition->getBoolean()
+					);
+				} else {
+					$query->where(
+						$condition->getColumn(),
+						$condition->getOperator(),
+						$condition->getValue(),
+						$condition->getBoolean()
+					);
+				}
 			}
 
 			$now = date(DateFormat::DATETIME_SAVE);
 
 			$query->update([
 				$object->getDeleteString() => 1,
-				$object->getDeleteDateString() => $now
+				$object->getDeleteDateString() => $now,
 			]);
 		}
 
 		public function restore(): void {
 			$this->find($this->row[$this->primaryKey])->update([
 				$this->deleteString => 0,
-				$this->deleteDateString => null
+				$this->deleteDateString => null,
 			]);
 		}
 
@@ -823,7 +810,7 @@
 			$query = self::$capsule->table($object->table);
 
 			// Add condition
-			foreach($conditions as $condition) {
+			foreach ($conditions as $condition) {
 				$query->where(
 					$condition->getColumn(),
 					$condition->getOperator(),
@@ -834,10 +821,9 @@
 
 			$query->update([
 				$object->getDeleteString() => 0,
-				$object->getDeleteDateString() => null
+				$object->getDeleteDateString() => null,
 			]);
 		}
-
 
 		public function hardDelete(): void {
 			if (count($this->data) > 1) {
@@ -868,8 +854,7 @@
 						$condition->getBoolean()
 					);
 				} else {
-					if ($condition->getOperator() == 'IN')
-					{
+					if ($condition->getOperator() == 'IN') {
 						$query->whereIn(
 							$condition->getColumn(),
 							$condition->getValue(),
@@ -907,7 +892,7 @@
 			return $this->selectFromDB();
 		}
 
-		public static function getMaxId(): int{
+		public static function getMaxId(): int {
 			$class = get_called_class();
 			$object = (new $class);
 
@@ -917,7 +902,7 @@
 		/**
 		 * Get row of the Max Id
 		 */
-		public static function getMaxRow(): array{
+		public static function getMaxRow(): array {
 			$id = self::getMaxId();
 
 			$class = get_called_class();
@@ -927,7 +912,7 @@
 			return $data[0];
 		}
 
-		public function getCountAll(): int{
+		public function getCountAll(): int {
 			$object = clone $this;
 
 			return $object->getQuery()->selectRaw('COUNT(*) AS `count`')->get()->toArray()[0]->count;
@@ -944,7 +929,7 @@
 			$this->data = json_decode(json_encode($results), true);
 			$this->row = end($this->data);
 			$this->count = count($this->data);
-			foreach ($this->row AS $col => $val) {
+			foreach ($this->row as $col => $val) {
 				$this->$col = $val;
 			}
 
@@ -964,8 +949,8 @@
 
 		/**
 		 * array $values = [
-		 * 	'column1' => 'value1',
-		 * 	'column2' => 'value2',......]
+		 *    'column1' => 'value1',
+		 *    'column2' => 'value2',......]
 		 */
 		public function checkAvailabilityFromArray(
 			array $values
@@ -1060,7 +1045,7 @@
 
 		protected function getMaxDisplayOrder(): int {
 			$this->setFields([
-				$this->getCapsule()::raw('MAX(`' . $this->displayOrderString . '`) AS `MaxDisplayOrder`')
+				$this->getCapsule()::raw('MAX(`' . $this->displayOrderString . '`) AS `MaxDisplayOrder`'),
 			]);
 			$this->selectFromDB();
 

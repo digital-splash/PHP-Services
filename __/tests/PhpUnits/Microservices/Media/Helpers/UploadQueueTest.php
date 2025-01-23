@@ -1,10 +1,11 @@
 <?php
+
 	namespace DigitalSplash\Tests\Media\Helpers;
 
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Media\Helpers\UploadQueue;
+	use PHPUnit\Framework\TestCase;
 
 	class UploadQueueTest extends TestCase {
 		private const DIR = __DIR__ . "/../../../../_CommonFiles/Media/users/profile";
@@ -42,7 +43,7 @@
 				self::DIR . "/og/fb/profile/user-02-th.webp",
 				self::DIR . "/og/fb/profile/user-02.webp",
 				self::DIR . "/og/user-02-th.webp",
-				self::DIR . "/og/user-02.webp"
+				self::DIR . "/og/user-02.webp",
 			];
 
 			foreach ($assertions as $assertion) {
@@ -50,6 +51,6 @@
 			}
 
 			//remove all created directories
-			Helper::DeleteFoldersAndFiles(self::DIR . "/og" , true);
+			Helper::DeleteFoldersAndFiles(self::DIR . "/og", true);
 		}
 	}

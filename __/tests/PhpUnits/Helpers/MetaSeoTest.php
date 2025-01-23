@@ -1,16 +1,14 @@
 <?php
 	namespace DigitalSplash\Tests\Helpers;
 
-
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\InvalidArgumentException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\MetaSeo;
 	use DigitalSplash\Helpers\Script;
 	use DigitalSplash\Helpers\Style;
+	use PHPUnit\Framework\TestCase;
 
 	class MetaSeoTest extends TestCase {
-
 		public function setUp(): void {
 			MetaSeo::ClearMetaArray();
 			MetaSeo::ClearPreHearArray();
@@ -70,7 +68,7 @@
 			MetaSeo::AddToMetaArray("test", [
 				"type" => "meta",
 				"name" => "test",
-				"content" => "This is a test text"
+				"content" => "This is a test text",
 			]);
 
 			MetaSeo::AddToPreHeadArray("pre_1", "<!-- Here Goes Pre Head Scripts 01 -->");
@@ -90,12 +88,11 @@
 			Script::AddScript("<script src=\"script_2.js\"></script>", "script_2");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/MetaSeo/header.html");
-            $expected = str_replace("\r\n", "\n", $expected);
+			$expected = str_replace("\r\n", "\n", $expected);
 			$actual = MetaSeo::RenderFull();
 
 			$this->assertStringStartsWith($actual, $expected);
 		}
-
 	}
 
 ?>

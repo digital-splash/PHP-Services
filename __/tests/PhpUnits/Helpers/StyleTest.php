@@ -1,13 +1,11 @@
 <?php
 	namespace DigitalSplash\Tests\Helpers;
 
-
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\Style;
+	use PHPUnit\Framework\TestCase;
 
 	class StyleTest extends TestCase {
-
 		public function setUp(): void {
 			Style::ClearFiles();
 			Style::ClearStyles();
@@ -59,12 +57,11 @@
 			Style::AddStyle("<link rel=\"stylesheet\" href=\"style_3.css\">", "style_3");
 
 			$expected = Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/Style/styles.html");
-            $expected = str_replace("\r\n", "\n", $expected);
+			$expected = str_replace("\r\n", "\n", $expected);
 			$actual = Style::GetFilesIncludes() . "\n";
 
 			$this->assertEquals($expected, $actual);
 		}
-
 	}
 
 ?>

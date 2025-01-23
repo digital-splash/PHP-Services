@@ -1,7 +1,7 @@
 <?php
+
 	namespace DigitalSplash\Media\Models;
 
-	use DigitalSplash\Exceptions\InvalidParamException;
 	use DigitalSplash\Exceptions\UploadException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
@@ -20,8 +20,8 @@
 			string $name,
 			string $type,
 			string $tmpName,
-			int $error,
-			int $size
+			int    $error,
+			int    $size
 		) {
 			$this->_elemName = $elemName;
 			$this->_name = $name;
@@ -131,5 +131,4 @@
 					throw new UploadException("Unknown upload error");
 			}
 		}
-
 	}

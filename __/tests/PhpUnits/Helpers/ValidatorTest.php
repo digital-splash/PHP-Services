@@ -1,7 +1,7 @@
 <?php
+
 	namespace DigitalSplash\Tests\Helpers;
 
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Exceptions\InvalidEmailException;
 	use DigitalSplash\Exceptions\InvalidNumberException;
 	use DigitalSplash\Exceptions\InvalidPasswordCharactersException;
@@ -10,32 +10,32 @@
 	use DigitalSplash\Exceptions\InvalidUsernameCharactersException;
 	use DigitalSplash\Exceptions\InvalidUsernameLengthException;
 	use DigitalSplash\Helpers\Helper;
-	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Helpers\Validator;
+	use DigitalSplash\Language\Helpers\Translate;
+	use PHPUnit\Framework\TestCase;
 
 	final class ValidatorTest extends TestCase {
-
 		public function ValidateEmailThrowErrorProvider(): array {
 			return [
 				[
 					InvalidEmailException::class,
 					"exception.InvalidEmail",
-					"Test Email"
+					"Test Email",
 				],
 				[
 					InvalidEmailException::class,
 					"exception.InvalidEmail",
-					"test_email@hotmail"
+					"test_email@hotmail",
 				],
 				[
 					InvalidEmailException::class,
 					"exception.InvalidEmail",
-					"test_email@hotmail.c"
+					"test_email@hotmail.c",
 				],
 				[
 					InvalidEmailException::class,
 					"exception.InvalidEmail",
-					"test_email.com"
+					"test_email.com",
 				],
 			];
 		}
@@ -78,12 +78,12 @@
 				[
 					InvalidPhoneNumberException::class,
 					"exception.InvalidPhoneNumber",
-					"Not a Mobile"
+					"Not a Mobile",
 				],
 				[
 					InvalidPhoneNumberException::class,
 					"exception.InvalidPhoneNumber",
-					"Special Characters !@#$%^&*()_-+="
+					"Special Characters !@#$%^&*()_-+=",
 				],
 			];
 		}
@@ -125,22 +125,22 @@
 				[
 					InvalidNumberException::class,
 					"exception.InvalidNumber",
-					"Not a NUmber"
+					"Not a NUmber",
 				],
 				[
 					InvalidNumberException::class,
 					"exception.InvalidNumber",
-					"Special Characters !@#$%^&*()_-+="
+					"Special Characters !@#$%^&*()_-+=",
 				],
 				[
 					InvalidNumberException::class,
 					"exception.InvalidNumber",
-					"123456789a"
+					"123456789a",
 				],
 				[
 					InvalidNumberException::class,
 					"exception.InvalidNumber",
-					"123456789$"
+					"123456789$",
 				],
 			];
 		}
@@ -174,7 +174,7 @@
 				"|",
 				"%20", // encoded space character
 			];
-			foreach ($acceptedChars AS $char) {
+			foreach ($acceptedChars as $char) {
 				$this->assertEquals(
 					"03333333",
 					Validator::CleanPhoneNumber(" 03{$char}333333 ")
@@ -186,7 +186,7 @@
 				";",
 				"*",
 			];
-			foreach ($nonAcceptedChars AS $char) {
+			foreach ($nonAcceptedChars as $char) {
 				$this->assertEquals(
 					"03{$char}333333",
 					Validator::CleanPhoneNumber(" 03{$char}333333 ")
@@ -247,5 +247,4 @@
 				Validator::ValidatePassword("JohnDoe123$%^")
 			);
 		}
-
 	}

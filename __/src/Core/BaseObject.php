@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Core;
 
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
@@ -90,14 +91,14 @@
 				switch ($validationRule) {
 					case BaseObjectValidationTypeEnum::MISSING:
 						[
-							'missing' => $missingParams
+							'missing' => $missingParams,
 						] = Helper::MissingParams($_params, $_required);
 						$allMissing = array_merge($allMissing, $missingParams);
 						break;
 
 					case BaseObjectValidationTypeEnum::NOT_EMPTY:
 						[
-							'missing' => $missingParams
+							'missing' => $missingParams,
 						] = Helper::MissingNotEmptyParams($_params, $_required);
 						$allMissing = array_merge($allMissing, $missingParams);
 						break;
@@ -126,8 +127,8 @@
 							}
 						}
 
-					} catch (Throwable $th) {}
-
+					} catch (Throwable $th) {
+					}
 
 					$arr[$param] = $value;
 				}
@@ -138,6 +139,7 @@
 
 		/**
 		 * Magic Getter Method
+		 *
 		 * @return mixed
 		 */
 		public function get(string $name) {
@@ -173,5 +175,4 @@
 			}
 			$property->setValue($this, $value);
 		}
-
 	}

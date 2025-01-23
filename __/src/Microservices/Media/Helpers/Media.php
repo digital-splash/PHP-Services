@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Media\Helpers;
 
 	use DigitalSplash\Exceptions\FileNotFoundException;
@@ -63,15 +64,16 @@
 
 		/**
 		 * Adds the root folder to a url, and converts it to a safe, user friendly URL
+		 *
 		 * @param string $path
 		 * @return string
 		 */
 		public static function GetMediaFullPath(
-			?string $path=null,
-			?string $imageCode=null,
-			bool $getNextGen=false,
-			bool $withVersion=true,
-			bool $withDomain=true
+			?string $path = null,
+			?string $imageCode = null,
+			bool    $getNextGen = false,
+			bool    $withVersion = true,
+			bool    $withDomain = true
 		): string {
 			if (Helper::IsNullOrEmpty(self::$UPLOAD_DIR)) {
 				throw new NotEmptyParamException("UPLOAD_DIR");
@@ -102,33 +104,30 @@
 					$imageCodes = [
 						Image::THUMBNAIL_CODE,
 						Image::LOW_DEF_CODE,
-						Image::HIGH_DEF_CODE
+						Image::HIGH_DEF_CODE,
 					];
-				}
-				else if ($imageCode === Image::LOW_DEF_CODE) {
+				} else if ($imageCode === Image::LOW_DEF_CODE) {
 					$imageCodes = [
 						Image::LOW_DEF_CODE,
-						Image::HIGH_DEF_CODE
+						Image::HIGH_DEF_CODE,
 					];
-				}
-				else if ($imageCode === Image::HIGH_DEF_CODE) {
+				} else if ($imageCode === Image::HIGH_DEF_CODE) {
 					$imageCodes = [
-						Image::HIGH_DEF_CODE
+						Image::HIGH_DEF_CODE,
 					];
-				}
-				else {
+				} else {
 					$imageCodes = [$imageCode];
 				}
 
 				$options = [];
-				foreach ($imageCodes AS $imageCode) {
+				foreach ($imageCodes as $imageCode) {
 					$options[] = $dirName . "/" . $fileName . "-" . $imageCode . "." . $extension;
 				}
 			}
 			$options[] = $dirName . "/" . $fileName . "." . $extension;
 
 			$url = "";
-			foreach ($options AS $option) {
+			foreach ($options as $option) {
 				if (file_exists(self::$UPLOAD_DIR . $option)) {
 					$url = self::$MEDIA_ROOT . $option;
 					break;
@@ -176,5 +175,4 @@
 		public static function validateIsDocument(string $extension): void {
 			self::validateIsExtension($extension, DocumentsExtensions::getExtensions());
 		}
-
 	}
