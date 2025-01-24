@@ -3,7 +3,7 @@
 	namespace DigitalSplash\Tests\Helpers;
 
 	use DigitalSplash\Helpers\Helper;
-	use DigitalSplash\Language\Models\Language;
+	use DigitalSplash\Microservices\Language\Models\Language;
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
 	use DigitalSplash\Models\Status;

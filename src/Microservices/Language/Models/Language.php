@@ -1,6 +1,6 @@
 <?php
 
-	namespace DigitalSplash\Language\Models;
+	namespace DigitalSplash\Microservices\Language\Models;
 
 	class Language {
 		public const ALL = 'all';
