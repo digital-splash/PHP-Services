@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
@@ -10,9 +11,9 @@
 		public function __construct(
 			string $property,
 			string $class,
-			int $code = 0,
-			int $subcode = 0,
-			int $responseCode = HttpCode::NOTFOUND
+			int    $code = 0,
+			int    $subcode = 0,
+			int    $responseCode = HttpCode::NOTFOUND
 		) {
 			parent::__construct($this->message, [
 				"::property::" => $property,

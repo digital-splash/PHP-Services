@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Notification\Helpers\Email;
 
 	use DigitalSplash\Models\Status;
@@ -15,7 +16,7 @@
 
 		public function send(): array {
 			$returnArray = [
-				'status' => Status::ERROR
+				'status' => Status::ERROR,
 			];
 
 			try {

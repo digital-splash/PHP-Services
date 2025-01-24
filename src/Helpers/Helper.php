@@ -3,6 +3,9 @@
 	namespace DigitalSplash\Helpers;
 
 	use DigitalSplash\Language\Models\Language;
+	use DigitalSplash\Models\Code;
+	use DigitalSplash\Models\HttpCode;
+	use DigitalSplash\Models\Status;
 
 	class Helper {
 		/**
@@ -498,10 +501,9 @@
 		/**
 		 * Create the given folder
 		 */
-		public static function createFolder(string $dir, string $permission = '0777'): bool {
+		public static function createFolder(string $dir, string $permission = '0777', bool $recursive = true): bool {
 			if (!is_dir($dir)) {
-				mkdir($dir, $permission, true);
-				return true;
+				return mkdir($dir, octdec($permission), $recursive);
 			}
 
 			return false;
@@ -522,165 +524,123 @@
 			return false;
 		}
 
+		/**
+		 * Retrieve YouTube embed id from the video full link
+		 */
+		public static function getYoutubeId(?string $url): string {
+			if (self::isNullOrEmpty($url)) {
+				return '';
+			}
 
-//		/**
-//		 * Create all the unfound folders in a given path
-//		 */
-//		public static function CreateFolderRecursive(
-//			string $dir,
-//			string $permission="0777"
-//		): bool {
-//			if (self::DirExists($dir)) {
-//				return true;
-//			}
-//
-//			$foldersToCreate = [
-//				$dir
-//			];
-//
-//			$i = 1;
-//			while (true === true) {
-//				$newDir = dirname($dir, $i);
-//				if (self::DirExists($newDir, "")) {
-//					break;
-//				}
-//				$foldersToCreate[] = $newDir;
-//				$i++;
-//			}
-//			krsort($foldersToCreate);
-//			foreach ($foldersToCreate AS $folderToCreate) {
-//				self::CreateFolder($folderToCreate, $permission);
-//			}
-//
-//			return true;
-//		}
-//
-//		/**
-//		 * Retreive Youtube embed id from the video full link
-//		 */
-//		public static function GetYoutubeId(
-//			?string $url
-//		): string {
-//			if (self::isNullOrEmpty($url)) {
-//				return "";
-//			}
-//
-//			$pattern =
-//				'%^# Match any youtube URL
-//				(?:https?://)?  # Optional scheme. Either http or https
-//				(?:www\.)?      # Optional www subdomain
-//				(?:             # Group host alternatives
-//				youtu\.be/    # Either youtu.be,
-//				| youtube\.com  # or youtube.com
-//				(?:           # Group path alternatives
-//				/embed/     # Either /embed/
-//				| /v/         # or /v/
-//				| .*v=        # or /watch\?v=
-//				)             # End path alternatives.
-//				)               # End host alternatives.
-//				([\w-]{10,12})  # Allow 10-12 for 11 char youtube id.
-//				($|&).*         # if additional parameters are also in query string after video id.
-//				$%x';
-//
-//			$result = preg_match($pattern, $url, $matches);
-//			if ($result !== false) {
-//				return $matches[1];
-//			}
-//
-//			return "";
-//		}
-//
-//
-//		/**
-//		 * Encrypt a Link
-//		 */
-//		public static function EncryptLink(
-//			?string $link
-//		): string {
-//			if (self::isNullOrEmpty($link)) {
-//				return "";
-//			}
-//			return str_replace("&", "[amp;]", base64_encode($link));
-//		}
-//
-//
-//		/**
-//		 * Dencrypt a Link
-//		 */
-//		public static function DecryptLink(
-//			?string $link
-//		): string {
-//			if (self::isNullOrEmpty($link)) {
-//				return "";
-//			}
-//			return base64_decode(str_replace("[amp;]", "&", $link));
-//		}
-//
-//
-//		/**
-//		 * Get Status Class from the given code
-//		 */
-//		public static function GetStatusClassFromCode(
-//			int $code
-//		): string {
-//			switch ($code) {
-//				case Code::SUCCESS:
-//				case HttpCode::OK:
-//				case HttpCode::CREATED:
-//				case HttpCode::ACCEPTED:
-//					return Status::SUCCESS;
-//
-//				case Code::ERROR:
-//				case HttpCode::BADREQUEST:
-//				case HttpCode::UNAUTHORIZED:
-//				case HttpCode::FORBIDDEN:
-//				case HttpCode::NOTFOUND:
-//				case HttpCode::NOTALLOWED:
-//				case HttpCode::INTERNALERROR:
-//				case HttpCode::UNAVAILABLE:
-//					return Status::ERROR;
-//
-//				case Code::WARNING:
-//					return Status::WARNING;
-//
-//				case Code::INFO:
-//				case Code::COMMON_INFO:
-//				case HttpCode::CONTINUE:
-//				case HttpCode::PROCESSING:
-//					return Status::INFO;
-//
-//				default:
-//					return Status::INFO;
-//			}
-//		}
-//
-//
-//		/**
-//		 * Get content from the given file path
-//		 */
-//		public static function GetContentFromFile(
-//			?string $filePath=null,
-//			?array $replace=null
-//		): string {
-//			if (self::isNullOrEmpty($filePath)) {
-//				throw new NotEmptyParamException('filePath');
-//			}
+			$pattern =
+				'%^# Match any youtube URL
+				(?:https?://)?  # Optional scheme. Either http or https
+				(?:www\.)?      # Optional www subdomain
+				(?:             # Group host alternatives
+				youtu\.be/    # Either youtu.be,
+				| youtube\.com  # or youtube.com
+				(?:           # Group path alternatives
+				/embed/     # Either /embed/
+				| /v/         # or /v/
+				| .*v=        # or /watch\?v=
+				)             # End path alternatives.
+				)               # End host alternatives.
+				([\w-]{10,12})  # Allow 10-12 for 11 char youtube id.
+				($|&).*         # if additional parameters are also in query string after video id.
+				$%x';
+
+			$result = preg_match($pattern, $url, $matches);
+			if (is_array($matches) && !empty($matches) && $result !== false) {
+				return $matches[1];
+			}
+
+			return '';
+		}
+
+		/**
+		 * Encrypts a Link
+		 */
+		public static function encryptLink(?string $link): string {
+			if (self::isNullOrEmpty($link)) {
+				return '';
+			}
+
+			return str_replace('&', '[amp;]', base64_encode($link));
+		}
+
+		/**
+		 * Decrypts a Link
+		 */
+		public static function decryptLink(?string $link): string {
+			if (self::isNullOrEmpty($link)) {
+				return '';
+			}
+
+			return base64_decode(str_replace('[amp;]', '&', $link));
+		}
+
+		/**
+		 * Get Status from the given code
+		 */
+		public static function getStatusFromCode(int $code): string {
+			return match ($code) {
+				Code::SUCCESS,
+				HttpCode::OK,
+				HttpCode::CREATED,
+				HttpCode::ACCEPTED
+				=> Status::SUCCESS,
+
+				Code::ERROR,
+				HttpCode::BADREQUEST,
+				HttpCode::UNAUTHORIZED,
+				HttpCode::FORBIDDEN,
+				HttpCode::NOTFOUND,
+				HttpCode::NOTALLOWED,
+				HttpCode::UNPROCESSABLE,
+				HttpCode::TOOMANYREQUESTS,
+				HttpCode::INTERNALERROR,
+				HttpCode::UNAVAILABLE
+				=> Status::ERROR,
+
+				Code::WARNING
+				=> Status::WARNING,
+
+				Code::INFO,
+				Code::COMMON_INFO,
+				HttpCode::CONTINUE,
+				HttpCode::PROCESSING
+				=> Status::INFO,
+
+				default
+				=> Status::NOT_AVAILABLE,
+			};
+		}
+
+		/**
+		 * Get content from the given file path
+		 */
+		public static function getContentFromFile(?string $filePath = null, ?array $replace = null): string {
+			if (self::isNullOrEmpty($filePath) || !file_exists($filePath)) {
+				return '';
+			}
+
+			//TODO: Throw an exception if the file does not exist
 //			if (!file_exists($filePath)) {
 //				throw new FileNotFoundException('filePath');
 //			}
-//
-//			$content = file_get_contents($filePath);
-//			if (!Helper::($replace)) {
-//				$content = str_replace(
-//					array_keys($replace),
-//					array_values($replace),
-//					$content
-//				);
-//			}
-//			return $content;
-//		}
-//
-//
+
+			$content = file_get_contents($filePath);
+			if (!self::isNullOrEmpty($replace)) {
+				$content = str_replace(
+					array_keys($replace),
+					array_values($replace),
+					$content
+				);
+			}
+			return $content;
+		}
+
+
 //		/**
 //		 * Get JSON content from the given file path
 //		 */

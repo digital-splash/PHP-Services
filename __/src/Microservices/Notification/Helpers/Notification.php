@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Notification\Helpers;
 
 	use DigitalSplash\Models\Status;
@@ -9,7 +10,6 @@
 
 	class Notification implements INotification {
 		public NotificationModel $model;
-
 		private bool $sendEmail;
 		private bool $sendSms;
 		private bool $sendWebNotification;
@@ -50,14 +50,13 @@
 				} catch (Throwable $t) {
 					$emailResponse = [
 						'status' => Status::ERROR,
-						'message' => $t->getMessage()
+						'message' => $t->getMessage(),
 					];
 				}
 			}
 
 			return [
-				'email' => $emailResponse
+				'email' => $emailResponse,
 			];
 		}
-
 	}

@@ -4,11 +4,13 @@
 
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Models\Language;
+	use DigitalSplash\Models\Code;
+	use DigitalSplash\Models\HttpCode;
+	use DigitalSplash\Models\Status;
 	use PHPUnit\Framework\TestCase;
 
 	// Was about 1,450 lines
 	final class HelperTest extends TestCase {
-//		private const UPLOAD_DIR = __DIR__ . '/../../_CommonFiles/Upload/';
 		public function testCleanString(): void {
 			$this->assertEquals('John', Helper::cleanString(' John '));
 			$this->assertEquals('John', Helper::cleanString(' John\\ '));
@@ -465,138 +467,98 @@
 			$this->assertTrue(Helper::folderExists("PhpUnits", dirname(__DIR__, 3), true));
 		}
 
-		public function testCreateFolderSuccess(): void {
-			$this->assertFalse(
-				Helper::folderExists('NewFolder', self::UPLOAD_DIR)
-			);
-			$this->assertTrue(
-				Helper::CreateFolder(self::UPLOAD_DIR . "NewFolder")
-			);
+		public function testCreateFolderDeleteFolder(): void {
+			$this->assertFalse(Helper::folderExists('NewFolder', TEST_UPLOAD_DIR));
+			$this->assertTrue(Helper::createFolder(TEST_UPLOAD_DIR . 'NewFolder'));
+
+			$this->assertFalse(Helper::createFolder(TEST_UPLOAD_DIR . 'NewFolder'));
+			$this->assertTrue(Helper::folderExists('NewFolder', TEST_UPLOAD_DIR));
+			Helper::deleteFileOrFolder(TEST_UPLOAD_DIR . 'NewFolder');
 		}
 
-//		public function testCreateFolderFail(): void {
-//			$this->assertTrue(
-//				Helper::DirExists("NewFolder", self::UPLOAD_DIR)
-//			);
-//			$this->assertFalse(
-//				Helper::CreateFolder(self::UPLOAD_DIR . "NewFolder")
-//			);
-//		}
-//
-//		public function testDeleteFolderSuccess(): void {
-//			$this->assertTrue(
-//				Helper::DirExists("NewFolder", self::UPLOAD_DIR)
-//			);
-//			$this->assertTrue(
-//				Helper::DeleteFileOrFolder(self::UPLOAD_DIR . "NewFolder")
-//			);
-//		}
-//
-//		public function testDeleteFileSuccess(): void {
-//			$newFile = self::UPLOAD_DIR . "unit-test.txt";
-//
-//			$this->assertFalse(
-//				file_exists($newFile)
-//			);
-//			copy(self::UPLOAD_DIR . "test.txt", $newFile);
-//			$this->assertTrue(
-//				file_exists($newFile)
-//			);
-//
-//			$this->assertTrue(
-//				Helper::DeleteFileOrFolder($newFile)
-//			);
-//		}
-//
-//		public function testGetYoutubeIdSuccess() {
-//			$this->assertEquals(
-//				'',
-//				Helper::GetYoutubeId(null)
-//			);
-//
-//			$this->assertEquals(
-//				'',
-//				Helper::GetYoutubeId('')
-//			);
-//
-//			$this->assertEquals(
-//				"IZbN_nmxAGk",
-//				Helper::GetYoutubeId("https://www.youtube.com/embed/IZbN_nmxAGk")
-//			);
-//		}
-//
-//		public function testEncryptLinkSuccess() {
-//			$this->assertEquals(
-//				'',
-//				Helper::EncryptLink(null)
-//			);
-//
-//			$this->assertEquals(
-//				'',
-//				Helper::EncryptLink('')
-//			);
-//
-//			$this->assertEquals(
-//				str_replace("&", "[amp;]", base64_encode("https://john-doe.com/projects?page=2&category=2")),
-//				Helper::EncryptLink("https://john-doe.com/projects?page=2&category=2")
-//			);
-//		}
-//
-//		public function testDecryptLinkSuccess() {
-//			$this->assertEquals(
-//				'',
-//				Helper::DecryptLink(null)
-//			);
-//
-//			$this->assertEquals(
-//				'',
-//				Helper::DecryptLink('')
-//			);
-//
-//			$this->assertEquals(
-//				"https://john-doe.com/projects?page=2&category=2",
-//				Helper::DecryptLink(str_replace("&", "[amp;]", base64_encode("https://john-doe.com/projects?page=2&category=2")))
-//			);
-//		}
-//
-//		public function GetStatusClassFromCodeProvider(): array {
-//			return [
-//				[Code::SUCCESS, Status::SUCCESS],
-//				[HttpCode::OK, Status::SUCCESS],
-//				[HttpCode::CREATED, Status::SUCCESS],
-//				[HttpCode::ACCEPTED, Status::SUCCESS],
-//
-//				[Code::ERROR, Status::ERROR],
-//				[HttpCode::BADREQUEST, Status::ERROR],
-//				[HttpCode::UNAUTHORIZED, Status::ERROR],
-//				[HttpCode::FORBIDDEN, Status::ERROR],
-//				[HttpCode::NOTFOUND, Status::ERROR],
-//				[HttpCode::NOTALLOWED, Status::ERROR],
-//				[HttpCode::INTERNALERROR, Status::ERROR],
-//				[HttpCode::UNAVAILABLE, Status::ERROR],
-//
-//				[Code::WARNING, Status::WARNING],
-//
-//				[Code::INFO, Status::INFO],
-//				[Code::COMMON_INFO, Status::INFO],
-//				[HttpCode::CONTINUE, Status::INFO],
-//				[HttpCode::PROCESSING, Status::INFO],
-//			];
-//		}
-//
-//		/**
-//		 * @dataProvider GetStatusClassFromCodeProvider
-//		 *
-//		 * @param $givenCode int
-//		 * @param $expectedStatus string
-//		 */
-//		public function testGetStatusClassFromCodeSuccess(int $givenCode, string $expectedStatus) {
-//			$this->assertEquals(
-//				$expectedStatus,
-//				Helper::GetStatusClassFromCode($givenCode)
-//			);
-//		}
-//
+		public function testCreateFoldersRecursive(): void {
+			$this->assertFalse(Helper::folderExists('Test1', TEST_UPLOAD_DIR));
+			$this->assertFalse(Helper::folderExists('Test2', TEST_UPLOAD_DIR . 'Test1/'));
+			$this->assertFalse(Helper::folderExists('Test3', TEST_UPLOAD_DIR . 'Test1/Test2/'));
+
+			$this->assertTrue(Helper::createFolder(TEST_UPLOAD_DIR . 'Test1/Test2/Test3'));
+
+			$this->assertTrue(Helper::folderExists('Test1', TEST_UPLOAD_DIR));
+			$this->assertTrue(Helper::folderExists('Test2', TEST_UPLOAD_DIR . 'Test1/'));
+			$this->assertTrue(Helper::folderExists('Test3', TEST_UPLOAD_DIR . 'Test1/Test2/'));
+
+			Helper::deleteFileOrFolder(TEST_UPLOAD_DIR . 'Test1/Test2/Test3');
+			Helper::deleteFileOrFolder(TEST_UPLOAD_DIR . 'Test1/Test2');
+			Helper::deleteFileOrFolder(TEST_UPLOAD_DIR . 'Test1');
+		}
+
+		public function testDeleteFile(): void {
+			$newFile = TEST_UPLOAD_DIR . "unit-test.txt";
+
+			$this->assertFalse(file_exists($newFile));
+			copy(TEST_COMMON_DIR . "test1.txt", $newFile);
+
+			$this->assertTrue(file_exists($newFile));
+			$this->assertTrue(Helper::deleteFileOrFolder($newFile));
+
+			$this->assertFalse(file_exists($newFile));
+		}
+
+		public function testGetYoutubeId(): void {
+			$this->assertEquals('', Helper::getYoutubeId(null));
+			$this->assertEquals('', Helper::getYoutubeId(''));
+			$this->assertEquals('', Helper::GetYoutubeId('https://www.youtube.com/embed/123456789'));
+			$this->assertEquals('IZbN_nmxAGk', Helper::GetYoutubeId('https://www.youtube.com/embed/IZbN_nmxAGk'));
+		}
+
+		public function testEncryptLink(): void {
+			$link = 'https://john-doe.com/projects?page=2&category=2';
+
+			$this->assertEquals('', Helper::encryptLink(null));
+			$this->assertEquals('', Helper::encryptLink(''));
+			$this->assertEquals(str_replace('&', '[amp;]', base64_encode($link)), Helper::encryptLink($link));
+		}
+
+		public function testDecryptLink(): void {
+			$link = 'https://john-doe.com/projects?page=2&category=2';
+
+			$this->assertEquals('', Helper::decryptLink(null));
+			$this->assertEquals('', Helper::decryptLink(''));
+			$this->assertEquals($link, Helper::decryptLink(str_replace('&', '[amp;]', base64_encode($link))));
+		}
+
+		public static function getStatusFromCodeProvider(): array {
+			return [
+				[Code::SUCCESS, Status::SUCCESS],
+				[HttpCode::OK, Status::SUCCESS],
+				[HttpCode::CREATED, Status::SUCCESS],
+				[HttpCode::ACCEPTED, Status::SUCCESS],
+
+				[Code::ERROR, Status::ERROR],
+				[HttpCode::BADREQUEST, Status::ERROR],
+				[HttpCode::UNAUTHORIZED, Status::ERROR],
+				[HttpCode::FORBIDDEN, Status::ERROR],
+				[HttpCode::NOTFOUND, Status::ERROR],
+				[HttpCode::NOTALLOWED, Status::ERROR],
+				[HttpCode::INTERNALERROR, Status::ERROR],
+				[HttpCode::UNAVAILABLE, Status::ERROR],
+
+				[Code::WARNING, Status::WARNING],
+
+				[Code::INFO, Status::INFO],
+				[Code::COMMON_INFO, Status::INFO],
+				[HttpCode::CONTINUE, Status::INFO],
+				[HttpCode::PROCESSING, Status::INFO],
+			];
+		}
+
+		/**
+		 * @dataProvider getStatusFromCodeProvider
+		 */
+		public function testGetStatusFromCode(int $givenCode, string $expectedStatus) {
+			$this->assertEquals($expectedStatus, Helper::getStatusFromCode($givenCode));
+		}
+
 //		public function testGetHtmlContentFromFileThrowError_01(): void {
 //			$this->expectException(NotEmptyParamException::class);
 //			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
