@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions\Configuration;
 
 	use DigitalSplash\Exceptions\Base\BaseException;

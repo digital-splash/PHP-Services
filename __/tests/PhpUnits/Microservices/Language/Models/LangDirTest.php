@@ -1,32 +1,31 @@
 <?php
+
 	namespace DigitalSplash\Tests\Language\Models;
 
-	use PHPUnit\Framework\TestCase;
 	use DigitalSplash\Language\Models\Lang;
-	use DigitalSplash\Language\Models\LangDir;
+	use DigitalSplash\Microservices\Language\Models\Direction;
+	use PHPUnit\Framework\TestCase;
 
 	final class LangDirTest extends TestCase {
-
 		public function testGetDirByLanguageSuccess(): void {
 			$this->assertEquals(
-				LangDir::LTR,
-				LangDir::GetDirByLanguage(Lang::EN)
+				Direction::LTR,
+				Direction::GetDirByLanguage(Lang::EN)
 			);
 
 			$this->assertEquals(
-				LangDir::LTR,
-				LangDir::GetDirByLanguage(Lang::FR)
+				Direction::LTR,
+				Direction::GetDirByLanguage(Lang::FR)
 			);
 
 			$this->assertEquals(
-				LangDir::RTL,
-				LangDir::GetDirByLanguage(Lang::AR)
+				Direction::RTL,
+				Direction::GetDirByLanguage(Lang::AR)
 			);
 
 			$this->assertEquals(
 				"",
-				LangDir::GetDirByLanguage("test")
+				Direction::GetDirByLanguage("test")
 			);
 		}
-
 	}

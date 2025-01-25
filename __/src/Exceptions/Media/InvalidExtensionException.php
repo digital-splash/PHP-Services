@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions\Media;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;

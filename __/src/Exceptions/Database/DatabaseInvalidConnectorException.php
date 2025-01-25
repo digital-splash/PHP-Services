@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions\Database;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;

@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Exceptions\Notification;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
