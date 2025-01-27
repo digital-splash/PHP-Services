@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class InvalidParamException extends BaseParameterException {
-		protected $message = "exception.InvalidParam";
+		protected $message = 'exception.validation.invalidParam';
 	}

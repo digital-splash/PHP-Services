@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class InvalidPhoneNumberException extends BaseException {
-		protected $message = "exception.InvalidPhoneNumber";
+		protected $message = 'exception.validation.invalidPhoneNumber';
 	}

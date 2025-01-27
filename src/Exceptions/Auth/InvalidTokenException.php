@@ -6,7 +6,7 @@
 	use DigitalSplash\Models\HttpCode;
 
 	class InvalidTokenException extends BaseException {
-		protected $message = "Invalid Token!";
+		protected $message = 'exception.api.invalidToken';
 
 		public function __construct() {
 			return parent::__construct($this->message, [], 0, 0, HttpCode::UNAUTHORIZED);

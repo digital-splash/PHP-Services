@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class InvalidPasswordLengthException extends BaseException {
-		protected $message = "exception.InvalidPasswordLength";
+		protected $message = 'exception.validation.invalidPasswordLength';
 	}

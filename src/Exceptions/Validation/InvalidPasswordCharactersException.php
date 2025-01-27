@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class InvalidPasswordCharactersException extends BaseException {
-		protected $message = "exception.InvalidPasswordCharacters";
+		protected $message = 'exception.validation.invalidPasswordCharacters';
 	}

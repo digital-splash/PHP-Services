@@ -6,18 +6,18 @@
 	use DigitalSplash\Models\HttpCode;
 
 	final class ClassPropertyNotFoundException extends BaseException {
-		protected $message = "exception.ClassPropertyNotFound";
+		protected $message = "exception.main.classPropertyNotFound";
 
 		public function __construct(
 			string $property,
 			string $class,
 			int    $code = 0,
-			int    $subcode = 0,
+			int    $subCode = 0,
 			int    $responseCode = HttpCode::NOTFOUND
 		) {
 			parent::__construct($this->message, [
-				"::property::" => $property,
-				"::class::" => $class,
-			], $code, $subcode, $responseCode);
+				'::property::' => $property,
+				'::class::' => $class,
+			], $code, $subCode, $responseCode);
 		}
 	}

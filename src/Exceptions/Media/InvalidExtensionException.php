@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class InvalidExtensionException extends BaseParameterException {
-		protected $message = "exception.media.InvalidExtension";
+		protected $message = 'exception.media.invalidExtension';
 	}

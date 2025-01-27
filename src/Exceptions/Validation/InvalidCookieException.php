@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class InvalidCookieException extends BaseParameterException {
-		protected $message = "exception.InvalidCookie";
+		protected $message = 'exception.validation.invalidCookie';
 	}

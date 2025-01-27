@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	class AlreadyExistException extends BaseParameterException {
-		protected $message = "::params:: Already Exist!";
+		protected $message = 'exception.validation.parameterAlreadyExists';
 	}

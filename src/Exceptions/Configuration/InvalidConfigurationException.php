@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class InvalidConfigurationException extends BaseException {
-		protected $message = "exception.Configuration.Invalid";
+		protected $message = 'exception.configuration.invalid';
 	}

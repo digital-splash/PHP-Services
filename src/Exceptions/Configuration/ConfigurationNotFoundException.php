@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class ConfigurationNotFoundException extends BaseException {
-		protected $message = "exception.Configuration.NotFound";
+		protected $message = 'exception.configuration.notFound';
 	}

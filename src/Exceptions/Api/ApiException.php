@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	class ApiException extends BaseException {
-		protected $message = "Api Exception!";
+		protected $message = 'exception.api.unknown';
 	}

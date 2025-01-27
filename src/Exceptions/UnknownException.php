@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseException;
 
 	final class UnknownException extends BaseException {
-		protected $message = "exception.Unknown";
+		protected $message = 'exception.main.unknown';
 	}

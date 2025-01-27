@@ -1,9 +1,9 @@
 <?php
 
-	namespace DigitalSplash\Exceptions;
+	namespace DigitalSplash\Exceptions\Validation;
 
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class NotEmptyParamException extends BaseParameterException {
-		protected $message = "exception.NotEmptyParam";
+		protected $message = 'exception.validation.notEmptyParam';
 	}

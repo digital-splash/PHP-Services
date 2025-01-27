@@ -5,5 +5,5 @@
 	use DigitalSplash\Exceptions\Base\BaseParameterException;
 
 	final class DatabaseInvalidConnectorException extends BaseParameterException {
-		protected $message = "exception.database.InvalidConnector";
+		protected $message = 'exception.database.invalidConnector';
 	}
