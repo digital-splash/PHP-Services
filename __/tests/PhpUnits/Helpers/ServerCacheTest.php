@@ -2,8 +2,8 @@
 
 	namespace DigitalSplash\Tests\Helpers;
 
-	use DigitalSplash\Exceptions\FileNotFoundException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Media\FileNotFoundException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\ServerCache;
 	use DigitalSplash\Language\Helpers\Translate;

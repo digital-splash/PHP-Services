@@ -2,9 +2,9 @@
 
 	namespace DigitalSplash\Media\Helpers;
 
-	use DigitalSplash\Exceptions\FileNotFoundException;
+	use DigitalSplash\Exceptions\Media\FileNotFoundException;
 	use DigitalSplash\Exceptions\Media\InvalidExtensionException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Models\DocumentsExtensions;
 	use DigitalSplash\Media\Models\Image;

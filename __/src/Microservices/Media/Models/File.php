@@ -2,7 +2,7 @@
 
 	namespace DigitalSplash\Media\Models;
 
-	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Exceptions\Media\UploadException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Helpers\Media;
 

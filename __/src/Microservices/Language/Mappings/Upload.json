@@ -23,7 +23,7 @@
 			},
 			"NoFile": {
 				"en": "Please select a file to upload!",
-				"fr": "Veuillez sélectionner un fichier à télécharger !",
+				"fr": "Veuillez sélectionner un fichier à télécharger!",
 				"ar": "الرجاء تحديد ملف للتحميل!"
 			},
 			"NoTempDir": {
@@ -43,7 +43,7 @@
 			},
 			"FileNotUploaded": {
 				"en": "File is not uploaded!",
-				"fr": "Le fichier n'est pas téléchargé !",
+				"fr": "Le fichier n'est pas téléchargé!",
 				"ar": "لم يتم تحميل الملف!"
 			},
 			"InvalidFormat": {
@@ -53,13 +53,13 @@
 			},
 			"WhileUploading": {
 				"en": "Error while uploading file!",
-				"fr": "Erreur lors du téléchargement du fichier !",
+				"fr": "Erreur lors du téléchargement du fichier!",
 				"ar": "خطأ أثناء تحميل الملف!"
 			}
 		},
 		"Success": {
 			"en": "File successfully uploaded!",
-			"fr": "Fichier téléchargé avec succès !",
+			"fr": "Fichier téléchargé avec succès!",
 			"ar": "تم تحميل الملف بنجاح!"
 		}
 	}

@@ -1,7 +1,7 @@
 <?php
 	namespace DigitalSplash\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidArgumentException;
+	use DigitalSplash\Exceptions\Validation\InvalidArgumentException;
 	use DigitalSplash\Language\Helpers\Language;
 
 	class MetaSeo {

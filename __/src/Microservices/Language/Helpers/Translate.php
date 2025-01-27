@@ -2,7 +2,7 @@
 
 	namespace DigitalSplash\Language\Helpers;
 
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 
 	class Translate {

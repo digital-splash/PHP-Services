@@ -5,11 +5,11 @@
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
 	use DigitalSplash\Core\Models\BaseObjectValidationTypeEnum;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
-	use DigitalSplash\Exceptions\InvalidArgumentException;
-	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\InvalidTypeException;
-	use DigitalSplash\Exceptions\MissingParamsException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\InvalidArgumentException;
+	use DigitalSplash\Exceptions\Validation\InvalidParamException;
+	use DigitalSplash\Exceptions\Validation\InvalidTypeException;
+	use DigitalSplash\Exceptions\Validation\MissingParamsException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\TypeHelper;
 	use ReflectionClass;

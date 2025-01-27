@@ -1,20 +1,20 @@
 <?php
+
 	namespace DigitalSplash\Tests\Core;
 
 	use DigitalSplash\Core\BaseObject;
 	use DigitalSplash\Core\Models\BaseObjectParamModel;
 	use DigitalSplash\Core\Models\BaseObjectValidationTypeEnum;
 	use DigitalSplash\Exceptions\ClassPropertyNotFoundException;
-	use DigitalSplash\Exceptions\InvalidArgumentException;
-	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\InvalidTypeException;
-	use DigitalSplash\Exceptions\MissingParamsException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\InvalidArgumentException;
+	use DigitalSplash\Exceptions\Validation\InvalidParamException;
+	use DigitalSplash\Exceptions\Validation\InvalidTypeException;
+	use DigitalSplash\Exceptions\Validation\MissingParamsException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\TypeHelper;
 	use PHPUnit\Framework\TestCase;
 
 	class BaseObjectTest extends TestCase {
-
 		/**
 		 * @dataProvider constructThrowsProvider
 		 */
@@ -22,7 +22,7 @@
 			string $exception,
 			string $exceptionMessage,
 			string $class,
-			array $arr
+			array  $arr
 		): void {
 			$this->expectException($exception);
 			$this->expectExceptionMessage($exceptionMessage);
@@ -49,7 +49,7 @@
 					'exceptionMessage' => 'Invalid type "string" for property "float". Expected type is "float".',
 					'class' => BaseObjectTestClass1::class,
 					'arr' => [
-						'float' => 'This is a string'
+						'float' => 'This is a string',
 					],
 				],
 				'invalid_type_2' => [
@@ -57,7 +57,7 @@
 					'exceptionMessage' => 'Invalid type "string" for property "obj2". Expected type is "' . BaseObjectTestClass2::class . '".',
 					'class' => BaseObjectTestClass1::class,
 					'arr' => [
-						'obj2' => 'This is a string'
+						'obj2' => 'This is a string',
 					],
 				],
 			];
@@ -70,7 +70,7 @@
 			string $exception,
 			string $exceptionMessage,
 			string $class,
-			array $arr
+			array  $arr
 		): void {
 			$this->expectException($exception);
 			$this->expectExceptionMessage($exceptionMessage);
@@ -84,7 +84,7 @@
 					'exception' => InvalidArgumentException::class,
 					'exceptionMessage' => 'Invalid argument "validationRule" having the value "TestValidationRule". Allowed value(s): "' . implode(', ', BaseObjectValidationTypeEnum::ALLOWED) . '"',
 					'class' => BaseObjectTestInvalidValidationRuleClass::class,
-					'arr' => []
+					'arr' => [],
 				],
 				'missing_one_param' => [
 					'exception' => MissingParamsException::class,
@@ -95,12 +95,12 @@
 						'string' => 'This is a string',
 						'bool' => true,
 						'array' => [
-							'This is an array'
+							'This is an array',
 						],
 						'object' => json_decode(json_encode([
-							'key' => 'value'
+							'key' => 'value',
 						])),
-					]
+					],
 				],
 				'missing_two_params' => [
 					'exception' => MissingParamsException::class,
@@ -110,10 +110,10 @@
 						'int' => 1,
 						'string' => 'This is a string',
 						'array' => [
-							'This is an array'
+							'This is an array',
 						],
 						'object' => null,
-					]
+					],
 				],
 				'not_empty_one_param' => [
 					'exception' => MissingParamsException::class,
@@ -125,10 +125,10 @@
 						'string' => 'This is a string',
 						'bool' => true,
 						'array' => [
-							'This is an array'
+							'This is an array',
 						],
 						'object' => null,
-					]
+					],
 				],
 				'not_empty_two_param' => [
 					'exception' => MissingParamsException::class,
@@ -140,10 +140,10 @@
 						'string' => '',
 						'bool' => true,
 						'array' => [
-							'This is an array'
+							'This is an array',
 						],
 						'object' => null,
-					]
+					],
 				],
 				'not_empty_three_param' => [
 					'exception' => MissingParamsException::class,
@@ -169,7 +169,7 @@
 						'bool' => null,
 						'array' => [],
 						'object' => null,
-					]
+					],
 				],
 				'mix_and_match_2' => [
 					'exception' => MissingParamsException::class,
@@ -182,13 +182,13 @@
 						'bool' => null,
 						'array' => [],
 						'object' => null,
-					]
+					],
 				],
 				'mix_and_match_3' => [
 					'exception' => MissingParamsException::class,
 					'exceptionMessage' => 'Missing Parameter(s): `int`, `string`, `array`, `float`, `bool`.',
 					'class' => BaseObjectTestNullableClass::class,
-					'arr' => []
+					'arr' => [],
 				],
 			];
 		}
@@ -198,8 +198,8 @@
 		 */
 		public function testToArraySuccess(
 			string $class,
-			array $arr,
-			array $expected
+			array  $arr,
+			array  $expected
 		): void {
 			/**
 			 * @var BaseObject
@@ -237,8 +237,8 @@
 								'first_name' => 'John',
 								'last_name' => 'Doe',
 							],
-						]
-					]
+						],
+					],
 				],
 				'test_class2' => [
 					'class' => BaseObjectTestClass2::class,
@@ -251,8 +251,8 @@
 						'array' => [
 							'first_name' => 'John',
 							'last_name' => 'Doe',
-						]
-					]
+						],
+					],
 				],
 				'test_class3' => [
 					'class' => BaseObjectTestClass3::class,
@@ -292,9 +292,9 @@
 									'first_name' => 'John',
 									'last_name' => 'Doe',
 								],
-							]
-						]
-					]
+							],
+						],
+					],
 				],
 			];
 		}
@@ -322,7 +322,7 @@
 		public function testSetThrows(
 			string $exception,
 			string $propertyName,
-			$value
+			       $value
 		): void {
 			$this->expectException($exception);
 
@@ -335,22 +335,22 @@
 				'class_property_not_found' => [
 					'exception' => ClassPropertyNotFoundException::class,
 					'propertyName' => 'invalid',
-					'value' => 'New Value'
+					'value' => 'New Value',
 				],
 				'invalid_type_01' => [
 					'exception' => InvalidTypeException::class,
 					'propertyName' => 'int',
-					'value' => 'New Value'
+					'value' => 'New Value',
 				],
 				'invalid_type_02' => [
 					'exception' => InvalidTypeException::class,
 					'propertyName' => 'string',
-					'value' => 1
+					'value' => 1,
 				],
 				'invalid_type_03' => [
 					'exception' => InvalidTypeException::class,
 					'propertyName' => 'obj2',
-					'value' => []
+					'value' => [],
 				],
 			];
 		}
@@ -360,8 +360,8 @@
 		 */
 		public function testSetSuccess(
 			string $param,
-			$oldValue,
-			$newValue
+			       $oldValue,
+			       $newValue
 		): void {
 			$obj = new BaseObjectTestClass1();
 
@@ -399,7 +399,6 @@
 				],
 			];
 		}
-
 	}
 
 	class BaseObjectTestClass1 extends BaseObject {
@@ -594,7 +593,6 @@
 	}
 
 	class BaseObjectTestInvalidValidationRuleClass extends BaseObjectTestClass1 {
-
 		protected function getParams() {
 			return [
 				'int' => new BaseObjectParamModel(
@@ -615,11 +613,9 @@
 				),
 			];
 		}
-
 	}
 
 	class BaseObjectTestNullableClass extends BaseObjectTestClass1 {
-
 		protected function getParams() {
 			return [
 				'int' => new BaseObjectParamModel(
@@ -662,7 +658,7 @@
 					true,
 					BaseObjectValidationTypeEnum::NOT_EMPTY
 				),
-				'object' =>  new BaseObjectParamModel(
+				'object' => new BaseObjectParamModel(
 					null,
 					TypeHelper::TYPE_OBJECT,
 					false,
@@ -678,11 +674,9 @@
 				),
 			];
 		}
-
 	}
 
 	class BaseObjectTestInvalidParamClass extends BaseObjectTestClass1 {
-
 		protected function getParams() {
 			return [
 				'int' => new BaseObjectParamModel(
@@ -701,11 +695,9 @@
 				),
 			];
 		}
-
 	}
 
 	class BaseObjectTestNotEmptyParamClass extends BaseObjectTestClass1 {
-
 		protected function getParams() {
 			return [
 				'int' => new BaseObjectParamModel(
@@ -724,11 +716,9 @@
 				),
 			];
 		}
-
 	}
 
 	class BaseObjectTestToArrayClass extends BaseObjectTestClass1 {
-
 		protected function getParams() {
 			return [
 				'int' => new BaseObjectParamModel(
@@ -788,5 +778,4 @@
 				),
 			];
 		}
-
 	}

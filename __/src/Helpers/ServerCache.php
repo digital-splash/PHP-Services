@@ -2,8 +2,8 @@
 
 	namespace DigitalSplash\Helpers;
 
-	use DigitalSplash\Exceptions\FileNotFoundException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Media\FileNotFoundException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 
 	class ServerCache {
 		protected static ?string $version = null;

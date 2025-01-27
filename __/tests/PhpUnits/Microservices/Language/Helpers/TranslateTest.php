@@ -1,13 +1,13 @@
 <?php
+
 	namespace DigitalSplash\Tests\Language\Helpers;
 
-	use PHPUnit\Framework\TestCase;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Language\Models\Lang;
+	use PHPUnit\Framework\TestCase;
 
 	final class TranslateTest extends TestCase {
-
 		public function setUp(): void {
 			Translate::clear();
 			parent::setUp();
@@ -44,7 +44,7 @@
 		public function testTranslateThrowError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "key"
+				"::params::" => "key",
 			]));
 			Translate::Translate(null);
 		}
@@ -52,7 +52,7 @@
 		public function testTranslateThrowError_02(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "key"
+				"::params::" => "key",
 			]));
 			Translate::Translate("");
 		}
@@ -86,7 +86,7 @@
 			$this->assertEquals(
 				"John",
 				Translate::Translate("date.year", Lang::EN, false, [
-					"year" => "John"
+					"year" => "John",
 				])
 			);
 
@@ -126,7 +126,7 @@
 		public function testTranslateStringThrowError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "string"
+				"::params::" => "string",
 			]));
 			Translate::TranslateString(null);
 		}
@@ -134,7 +134,7 @@
 		public function testTranslateStringThrowError_02(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "string"
+				"::params::" => "string",
 			]));
 			Translate::TranslateString("");
 		}
@@ -162,5 +162,4 @@
 				Translate::TranslateStringSimple("1992", Lang::AR)
 			);
 		}
-
 	}

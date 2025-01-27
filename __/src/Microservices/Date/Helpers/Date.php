@@ -5,8 +5,8 @@
 	use DigitalSplash\Date\Models\DateFormat;
 	use DigitalSplash\Date\Models\DateFormatType;
 	use DigitalSplash\Date\Models\DateType;
-	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\InvalidParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Language;
 	use DigitalSplash\Language\Helpers\Translate;

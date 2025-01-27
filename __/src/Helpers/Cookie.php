@@ -1,7 +1,8 @@
 <?php
+
 	namespace DigitalSplash\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidCookieException;
+	use DigitalSplash\Exceptions\Validation\InvalidCookieException;
 
 	class Cookie {
 		private static string $prefix = "rm_";
@@ -10,7 +11,6 @@
 		private static string $domain = "";
 		private static bool $secure = false;
 		private static bool $httpOnly = false;
-
 
 		/**
 		 * Set cookie value
@@ -59,8 +59,7 @@
 					time() - 3600
 				);
 				return $cookie;
-			}
-			catch (InvalidCookieException $e) {
+			} catch (InvalidCookieException $e) {
 				throw $e;
 			}
 		}
@@ -79,8 +78,7 @@
 					null,
 					time() - 3600
 				);
-			}
-			catch (InvalidCookieException $e) {
+			} catch (InvalidCookieException $e) {
 				throw $e;
 			}
 		}
@@ -105,7 +103,7 @@
 		}
 
 		public static function SetPrefix(
-			string $prefix=""
+			string $prefix = ""
 		): void {
 			self::$prefix = $prefix;
 		}
@@ -153,5 +151,4 @@
 		public static function GetHttpOnly(): bool {
 			return self::$httpOnly;
 		}
-
 	}

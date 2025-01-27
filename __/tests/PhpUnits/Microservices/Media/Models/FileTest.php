@@ -1,12 +1,12 @@
 <?php
+
 	namespace DigitalSplash\Tests\Media\Models;
 
-	use DigitalSplash\Exceptions\UploadException;
-	use PHPUnit\Framework\TestCase;
+	use DigitalSplash\Exceptions\Media\UploadException;
 	use DigitalSplash\Media\Models\File;
+	use PHPUnit\Framework\TestCase;
 
 	class FileTest extends TestCase {
-
 		public function testGetters(): void {
 			$elemName = "testElemName";
 			$name = "testName";
@@ -173,5 +173,4 @@
 			// 	->method('isFileUploaded');
 			// $fileMock->validateFile();
 		}
-
 	}

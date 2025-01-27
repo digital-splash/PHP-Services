@@ -1,17 +1,16 @@
 <?php
+
 	namespace DigitalSplash\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidEmailException;
-	use DigitalSplash\Exceptions\InvalidNumberException;
-	use DigitalSplash\Exceptions\InvalidPasswordCharactersException;
-	use DigitalSplash\Exceptions\InvalidPasswordLengthException;
-	use DigitalSplash\Exceptions\InvalidPhoneNumberException;
-	use DigitalSplash\Exceptions\InvalidUsernameCharactersException;
-	use DigitalSplash\Exceptions\InvalidUsernameLengthException;
+	use DigitalSplash\Exceptions\Validation\InvalidEmailException;
+	use DigitalSplash\Exceptions\Validation\InvalidNumberException;
+	use DigitalSplash\Exceptions\Validation\InvalidPasswordCharactersException;
+	use DigitalSplash\Exceptions\Validation\InvalidPasswordLengthException;
+	use DigitalSplash\Exceptions\Validation\InvalidPhoneNumberException;
+	use DigitalSplash\Exceptions\Validation\InvalidUsernameCharactersException;
+	use DigitalSplash\Exceptions\Validation\InvalidUsernameLengthException;
 
 	class Validator {
-
-
 		/**
 		 * Check if a valid email address format is given
 		 */
@@ -24,7 +23,6 @@
 			}
 			return true;
 		}
-
 
 		/**
 		 * Check if a valid phone number format is given
@@ -39,7 +37,6 @@
 			return true;
 		}
 
-
 		/**
 		 * Check if a valid mobile format is given
 		 */
@@ -53,7 +50,6 @@
 			return true;
 		}
 
-
 		/**
 		 * Clean a given string to be a valid phone nb
 		 */
@@ -63,17 +59,16 @@
 			if ($str != "") {
 				$str = urldecode($str);
 				$str = trim($str);
-				$str = str_replace(array("-", "/", "\\", ",", ".", "|", " "), "", $str);
+				$str = str_replace(["-", "/", "\\", ",", ".", "|", " "], "", $str);
 			}
 			return $str;
 		}
 
-
 		/**
 		 * Check if a valid username format is give
 		 * Must contain only:
-		 * 	- 6 to 20 Characters
-		 * 	- English Small Letters
+		 *    - 6 to 20 Characters
+		 *    - English Small Letters
 		 *  - English Capital Letters
 		 *  - English Numbers
 		 *  - Dash(-) or Underscore(_)
@@ -91,18 +86,17 @@
 			return true;
 		}
 
-
 		/**
 		 * Check if a valid password format is given
 		 * Must have at least:
-		 * 	1 English Small letter
-		 * 	1 English Capital letter
-		 * 	1 Number
-		 * 	1 Special Character
+		 *    1 English Small letter
+		 *    1 English Capital letter
+		 *    1 Number
+		 *    1 Special Character
 		 */
 		public static function ValidatePassword(
 			string $str,
-			int $length=0
+			int    $length = 0
 		): bool {
 			if ($length == 0) {
 				$length = strlen($str);
@@ -119,5 +113,4 @@
 
 			return true;
 		}
-
 	}

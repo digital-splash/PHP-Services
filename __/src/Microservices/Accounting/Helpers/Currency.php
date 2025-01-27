@@ -3,7 +3,7 @@
 	namespace DigitalSplash\Accounting\Helpers;
 
 	use DigitalSplash\Accounting\Models\CurrencyPosition;
-	use DigitalSplash\Exceptions\NotNumericParamException;
+	use DigitalSplash\Exceptions\Validation\NumericParamException;
 	use DigitalSplash\Helpers\Helper;
 
 	class Currency {
@@ -37,7 +37,7 @@
 			int $decimalPlaces = 2
 		): float {
 			if (!is_numeric($amount)) {
-				throw new NotNumericParamException("amount");
+				throw new NumericParamException("amount");
 			}
 			return Helper::ConvertToDec((ceil($amount / 250) * 250), $decimalPlaces);
 		}

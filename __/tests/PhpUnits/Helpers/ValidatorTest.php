@@ -2,13 +2,13 @@
 
 	namespace DigitalSplash\Tests\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidEmailException;
-	use DigitalSplash\Exceptions\InvalidNumberException;
-	use DigitalSplash\Exceptions\InvalidPasswordCharactersException;
-	use DigitalSplash\Exceptions\InvalidPasswordLengthException;
-	use DigitalSplash\Exceptions\InvalidPhoneNumberException;
-	use DigitalSplash\Exceptions\InvalidUsernameCharactersException;
-	use DigitalSplash\Exceptions\InvalidUsernameLengthException;
+	use DigitalSplash\Exceptions\Validation\InvalidEmailException;
+	use DigitalSplash\Exceptions\Validation\InvalidNumberException;
+	use DigitalSplash\Exceptions\Validation\InvalidPasswordCharactersException;
+	use DigitalSplash\Exceptions\Validation\InvalidPasswordLengthException;
+	use DigitalSplash\Exceptions\Validation\InvalidPhoneNumberException;
+	use DigitalSplash\Exceptions\Validation\InvalidUsernameCharactersException;
+	use DigitalSplash\Exceptions\Validation\InvalidUsernameLengthException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\Validator;
 	use DigitalSplash\Language\Helpers\Translate;

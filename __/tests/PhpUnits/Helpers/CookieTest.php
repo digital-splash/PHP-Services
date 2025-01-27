@@ -1,12 +1,12 @@
 <?php
+
 	namespace DigitalSplash\Tests\Helpers;
 
-	use PHPUnit\Framework\TestCase;
-	use DigitalSplash\Exceptions\InvalidCookieException;
+	use DigitalSplash\Exceptions\Validation\InvalidCookieException;
 	use DigitalSplash\Helpers\Cookie;
+	use PHPUnit\Framework\TestCase;
 
 	final class CookieTest extends TestCase {
-
 		public function testSettersAndGettersSuccess() {
 			$now = time();
 

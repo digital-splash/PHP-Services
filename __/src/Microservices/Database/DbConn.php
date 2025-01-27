@@ -6,7 +6,7 @@
 	use DigitalSplash\Database\QueryAttributes\Join;
 	use DigitalSplash\Database\QueryAttributes\Order;
 	use DigitalSplash\Date\Models\DateFormat;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\LaravelBatch\Batch;
 	use Exception;

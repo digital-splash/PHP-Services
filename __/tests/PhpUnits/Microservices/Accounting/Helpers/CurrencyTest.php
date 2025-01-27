@@ -1,31 +1,31 @@
 <?php
+
 	namespace DigitalSplash\Tests\Accounting\Helpers;
 
-	use PHPUnit\Framework\TestCase;
-	use DigitalSplash\Exceptions\NotNumericParamException;
 	use DigitalSplash\Accounting\Helpers\Currency;
 	use DigitalSplash\Accounting\Models\CurrencyPosition;
+	use DigitalSplash\Exceptions\Validation\NumericParamException;
 	use DigitalSplash\Language\Helpers\Translate;
+	use PHPUnit\Framework\TestCase;
 
 	final class CurrencyTest extends TestCase {
-
 		public function AddCurrencySuccessProvider(): array {
 			return [
 				"UsdPreWithSpace" => [
 					"$ 10",
-					[10, "$", CurrencyPosition::PRE, " "]
+					[10, "$", CurrencyPosition::PRE, " "],
 				],
 				"UsdPreWithoutSpace" => [
 					"$10",
-					[10, "$", CurrencyPosition::PRE, ""]
+					[10, "$", CurrencyPosition::PRE, ""],
 				],
 				"UsdPostWithSpace" => [
 					"10 $",
-					[10, "$", CurrencyPosition::POST, " "]
+					[10, "$", CurrencyPosition::POST, " "],
 				],
 				"UsdPostWithoutSpace" => [
 					"10$",
-					[10, "$", CurrencyPosition::POST, ""]
+					[10, "$", CurrencyPosition::POST, ""],
 				],
 			];
 		}
@@ -35,7 +35,7 @@
 		 */
 		public function testAddCurrencySuccess(
 			string $expected,
-			array $arguments
+			array  $arguments
 		): void {
 			$this->assertEquals(
 				$expected,
@@ -49,9 +49,9 @@
 		}
 
 		public function testGetLbpAmountNonNumericValueFail(): void {
-			$this->expectException(NotNumericParamException::class);
+			$this->expectException(NumericParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotNumericParam", null, [
-				"::params::" => "amount"
+				"::params::" => "amount",
 			]));
 			Currency::GetLbpAmount("John");
 		}
@@ -71,7 +71,7 @@
 		 * @dataProvider GetLbpAmountSuccessProvider
 		 */
 		public function testGetLbpAmountSuccess(
-			int $expected,
+			int   $expected,
 			float $argument
 		): void {
 			$this->assertEquals(
@@ -79,5 +79,4 @@
 				Currency::GetLbpAmount($argument)
 			);
 		}
-
 	}

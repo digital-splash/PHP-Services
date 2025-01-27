@@ -1,7 +1,8 @@
 <?php
+
 	namespace DigitalSplash\Notification\Models;
 
-	use DigitalSplash\Exceptions\Notification\EmptyValueException;
+	use DigitalSplash\Exceptions\Validation\EmptyValueException;
 	use DigitalSplash\Models\Tenant;
 
 	class Email {
@@ -43,7 +44,7 @@
 		public function appendToAttachment(string $path, string $name = null): void {
 			$this->attachments[] = [
 				'path' => $path,
-				'name' => $name
+				'name' => $name,
 			];
 		}
 
@@ -64,5 +65,4 @@
 				throw new EmptyValueException("Body");
 			}
 		}
-
 	}

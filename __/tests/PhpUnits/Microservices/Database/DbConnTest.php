@@ -6,7 +6,7 @@
 	use DigitalSplash\Database\QueryAttributes\Condition;
 	use DigitalSplash\Database\QueryAttributes\Join;
 	use DigitalSplash\Database\QueryAttributes\Order;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Language\Helpers\Translate;
 	use DigitalSplash\Tests\Utils\DbTestUtils;

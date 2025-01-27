@@ -1,18 +1,18 @@
 <?php
+
 	namespace DigitalSplash\Tests\Date\Helpers;
 
-	use PHPUnit\Framework\TestCase;
-	use DigitalSplash\Exceptions\InvalidParamException;
-	use DigitalSplash\Exceptions\NotEmptyParamException;
-	use DigitalSplash\Date\Models\DateFormat;
-	use DigitalSplash\Language\Models\Lang;
 	use DigitalSplash\Date\Helpers\Date;
-	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Date\Models\DateFormat;
 	use DigitalSplash\Date\Models\DateFormatType;
 	use DigitalSplash\Date\Models\DateType;
+	use DigitalSplash\Exceptions\Validation\InvalidParamException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
+	use DigitalSplash\Language\Helpers\Translate;
+	use DigitalSplash\Language\Models\Lang;
+	use PHPUnit\Framework\TestCase;
 
 	final class DateTest extends TestCase {
-
 		public function testCleanDateSuccess(): void {
 			$this->assertEquals(
 				"null",
@@ -102,7 +102,7 @@
 		public function testGetMonthNameThrowError_01(): void {
 			$this->expectException(InvalidParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.InvalidParam", null, [
-				"::params::" => "month"
+				"::params::" => "month",
 			]));
 			Date::GetMonthName(0);
 		}
@@ -110,7 +110,7 @@
 		public function testGetMonthNameThrowError_02(): void {
 			$this->expectException(InvalidParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.InvalidParam", null, [
-				"::params::" => "month"
+				"::params::" => "month",
 			]));
 			Date::GetMonthName(13);
 		}
@@ -178,7 +178,7 @@
 		public function testRenderDateExtendedThrowError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date"
+				"::params::" => "date",
 			]));
 			Date::RenderDateExtended(null);
 		}
@@ -186,7 +186,7 @@
 		public function testRenderDateExtendedThrowError_02(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date"
+				"::params::" => "date",
 			]));
 			Date::RenderDateExtended("");
 		}
@@ -259,7 +259,7 @@
 		public function testGetDaysCountThrowError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date1"
+				"::params::" => "date1",
 			]));
 			Date::GetDaysCount(null, "1992-01-07");
 		}
@@ -267,7 +267,7 @@
 		public function testGetDaysCountThrowError_02(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "date2"
+				"::params::" => "date2",
 			]));
 			Date::GetDaysCount("1992-01-07", null);
 		}
@@ -292,7 +292,7 @@
 		public function testGetAgeThrowError_01(): void {
 			$this->expectException(NotEmptyParamException::class);
 			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-				"::params::" => "dob"
+				"::params::" => "dob",
 			]));
 			Date::GetAge(null);
 		}
@@ -381,5 +381,4 @@
 				Date::GetFormatFromType(DateFormatType::NICE, DateType::DATETIME, false)
 			);
 		}
-
 	}

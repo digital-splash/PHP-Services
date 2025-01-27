@@ -2,7 +2,7 @@
 
 	namespace DigitalSplash\Media\Helpers;
 
-	use DigitalSplash\Exceptions\UploadException;
+	use DigitalSplash\Exceptions\Media\UploadException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Media\Models\FacebookImage;
 	use DigitalSplash\Media\Models\File;

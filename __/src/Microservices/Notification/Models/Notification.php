@@ -1,34 +1,28 @@
 <?php
+
 	namespace DigitalSplash\Notification\Models;
 
-	use DigitalSplash\Exceptions\Notification\EmptyValueException;
+	use DigitalSplash\Exceptions\Validation\EmptyValueException;
 	use DigitalSplash\Models\Tenant;
-	use DigitalSplash\Notification\Models\Recipient;
 
 	class Notification {
-
 		/**
 		 * @var Recipient[]
 		 */
 		private array $to;
-
 		/**
 		 * @var Recipient[]
 		 */
 		private array $cc;
-
 		/**
 		 * @var Recipient[]
 		 */
 		private array $bcc;
-
 		/**
 		 * @var Recipient[]
 		 */
 		private array $replyTo;
-
 		public Email $email;
-
 
 		public function __construct() {
 			$this->to = [];
@@ -155,5 +149,4 @@
 
 			$this->email->validate();
 		}
-
 	}

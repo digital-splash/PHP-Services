@@ -2,7 +2,7 @@
 
 	namespace DigitalSplash\Notification\Helpers\Email;
 
-	use DigitalSplash\Exceptions\Notification\PhpMailerException;
+	use DigitalSplash\Exceptions\Notification\Email\PhpMailerException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Notification\Interfaces\IEmail;
 	use DigitalSplash\Notification\Models\EmailConfiguration;

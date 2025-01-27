@@ -1,7 +1,7 @@
 <?php
 	namespace DigitalSplash\Tests\Helpers;
 
-	use DigitalSplash\Exceptions\InvalidArgumentException;
+	use DigitalSplash\Exceptions\Validation\InvalidArgumentException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Helpers\MetaSeo;
 	use DigitalSplash\Helpers\Script;
