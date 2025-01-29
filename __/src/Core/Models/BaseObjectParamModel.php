@@ -1,4 +1,5 @@
 <?php
+
 	namespace DigitalSplash\Core\Models;
 
 	class BaseObjectParamModel {
@@ -7,7 +8,7 @@
 		private bool $required;
 		private bool $inArray;
 		private bool $nullable;
-		private string $validationRule;
+		private string $Rule;
 
 		public function __construct(
 			$defaultValue,
@@ -48,5 +49,4 @@
 		public function getValidationRule(): string {
 			return $this->validationRule;
 		}
-
 	}

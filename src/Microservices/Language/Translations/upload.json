@@ -1,0 +1,64 @@
+{
+	"error": {
+		"unknown": {
+			"en": "Unknown upload error",
+			"fr": "Erreur de téléchargement inconnue",
+			"ar": "خطأ تحميل غير معروف"
+		},
+		"iniSize": {
+			"en": "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+			"fr": "Le fichier téléchargé dépasse la directive upload_max_filesize dans php.ini",
+			"ar": "يتجاوز الملف الذي تم تحميله التوجيه upload_max_filesize في php.ini"
+		},
+		"formSize": {
+			"en": "The uploaded file is larger than the maximum allowed of ::MaxSizeKb:: Kb.",
+			"fr": "",
+			"ar": ""
+		},
+		"partiallyUploaded": {
+			"en": "The uploaded file was only partially uploaded",
+			"fr": "Le fichier téléchargé n'a été que partiellement téléchargé",
+			"ar": "تم تحميل الملف الذي تم تحميله جزئيًا فقط"
+		},
+		"noFile": {
+			"en": "Please select a file to upload!",
+			"fr": "Veuillez sélectionner un fichier à télécharger!",
+			"ar": "الرجاء تحديد ملف للتحميل!"
+		},
+		"noTempDir": {
+			"en": "Missing a temporary folder",
+			"fr": "Absence d'un dossier temporaire",
+			"ar": "في عداد المفقودين مجلد مؤقت"
+		},
+		"cantWrite": {
+			"en": "Failed to write file to disk",
+			"fr": "Impossible d'écrire le fichier sur le disque",
+			"ar": "فشل في إرسال الملف إلى القرص"
+		},
+		"extension": {
+			"en": "File upload stopped by extension",
+			"fr": "Téléchargement de fichier arrêté par extension",
+			"ar": "توقف تحميل الملف عن طريق الامتداد"
+		},
+		"fileNotUploaded": {
+			"en": "File is not uploaded!",
+			"fr": "Le fichier n'est pas téléchargé!",
+			"ar": "لم يتم تحميل الملف!"
+		},
+		"invalidFormat": {
+			"en": "Invalid file format. Please upload a compatible file format (::allowed::)",
+			"fr": "Format de fichier invalide. Veuillez télécharger un format de fichier compatible (::allowed::)",
+			"ar": "تنسيق ملف غير صالح. يرجى تحميل تنسيق ملف متوافق (::allowed::)"
+		},
+		"whileUploading": {
+			"en": "Error while uploading file!",
+			"fr": "Erreur lors du téléchargement du fichier!",
+			"ar": "خطأ أثناء تحميل الملف!"
+		}
+	},
+	"success": {
+		"en": "File successfully uploaded!",
+		"fr": "Fichier téléchargé avec succès!",
+		"ar": "تم تحميل الملف بنجاح!"
+	}
+}

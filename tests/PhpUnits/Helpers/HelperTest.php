@@ -2,6 +2,8 @@
 
 	namespace DigitalSplash\Tests\Helpers;
 
+	use DigitalSplash\Exceptions\Media\FileNotFoundException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Helpers\Helper;
 	use DigitalSplash\Microservices\Language\Models\Language;
 	use DigitalSplash\Models\Code;
@@ -289,6 +291,14 @@
 				],
 				Helper::explode('o', 'John Matt Doe')
 			);
+
+			$this->assertEquals(
+				[
+					'Test1',
+					'Test2',
+				],
+				Helper::explode('/', '/Test1/Test2/')
+			);
 		}
 
 		public function testImplode(): void {
@@ -461,10 +471,10 @@
 		public function testFolderExists(): void {
 			$this->assertFalse(Helper::folderExists(null));
 			$this->assertFalse(Helper::folderExists(''));
-			$this->assertFalse(Helper::folderExists("Tests", __DIR__ . "/"));
-			$this->assertTrue(Helper::folderExists("PhpUnits", dirname(__DIR__, 2)));
-			$this->assertTrue(Helper::folderExists("src", dirname(__DIR__, 3)));
-			$this->assertTrue(Helper::folderExists("PhpUnits", dirname(__DIR__, 3), true));
+			$this->assertFalse(Helper::folderExists('Tests', __DIR__ . '/'));
+			$this->assertTrue(Helper::folderExists('PhpUnits', dirname(__DIR__, 2)));
+			$this->assertTrue(Helper::folderExists('src', dirname(__DIR__, 3)));
+			$this->assertTrue(Helper::folderExists('PhpUnits', dirname(__DIR__, 3), true));
 		}
 
 		public function testCreateFolderDeleteFolder(): void {
@@ -493,15 +503,66 @@
 		}
 
 		public function testDeleteFile(): void {
-			$newFile = TEST_UPLOAD_DIR . "unit-test.txt";
+			$newFile = TEST_UPLOAD_DIR . 'unit-test.txt';
 
 			$this->assertFalse(file_exists($newFile));
-			copy(TEST_COMMON_DIR . "test1.txt", $newFile);
+			copy(TEST_COMMON_DIR . 'test1.txt', $newFile);
 
 			$this->assertTrue(file_exists($newFile));
 			$this->assertTrue(Helper::deleteFileOrFolder($newFile));
 
 			$this->assertFalse(file_exists($newFile));
+		}
+
+		public function testGetAllFiles(): void {
+			$dir = dirname(__DIR__, 2) . '/_common/recursive';
+
+			$this->assertEqualsCanonicalizing([
+				$dir . '/file1.html',
+				$dir . '/file2.html',
+			], Helper::getAllFiles($dir));
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . '/file1.html',
+					$dir . '/file2.html',
+					$dir . '/folder-1/file1.html',
+					$dir . '/folder-1/file2.html',
+					$dir . '/folder-1/folder-1.1/file.html',
+					$dir . '/folder-1/folder-1.1/folder-1.1.1/file.html',
+					$dir . '/folder-1/folder-1.2/file.html',
+					$dir . '/folder-2/file1.html',
+					$dir . '/folder-2/file2.html',
+					$dir . '/folder-2/folder-2.1/file.html',
+					$dir . '/folder-2/folder-2.2/file.html',
+				],
+				Helper::getAllFiles($dir, true)
+			);
+		}
+
+		public function testGetAllFoldersSuccess(): void {
+			$dir = dirname(__DIR__, 2) . '/_common/recursive';
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . '/folder-1',
+					$dir . '/folder-2',
+				],
+				Helper::getAllFolders($dir)
+			);
+
+			$this->assertEqualsCanonicalizing(
+				[
+					$dir . '/folder-1',
+					$dir . '/folder-2',
+					$dir . '/folder-1/folder-1.1',
+					$dir . '/folder-1/folder-1.2',
+					$dir . '/folder-2/folder-2.1',
+					$dir . '/folder-2/folder-2.2',
+					$dir . '/folder-1/folder-1.1/folder-1.1.1',
+				],
+				Helper::getAllFolders($dir, true)
+			);
 		}
 
 		public function testGetYoutubeId(): void {
@@ -555,95 +616,146 @@
 		/**
 		 * @dataProvider getStatusFromCodeProvider
 		 */
-		public function testGetStatusFromCode(int $givenCode, string $expectedStatus) {
+		public function testGetStatusFromCode(int $givenCode, string $expectedStatus): void {
 			$this->assertEquals($expectedStatus, Helper::getStatusFromCode($givenCode));
 		}
 
-//		public function testGetHtmlContentFromFileThrowError_01(): void {
-//			$this->expectException(NotEmptyParamException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetContentFromFile(null);
-//		}
-//
-//		public function testGetHtmlContentFromFileThrowError_02(): void {
-//			$this->expectException(NotEmptyParamException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetContentFromFile('');
-//		}
-//
-//		public function testGetHtmlContentFromFileThrowError_03(): void {
-//			$this->expectException(FileNotFoundException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.FileNotFound", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/randomfile.html");
-//		}
-//
-//		public function testGetHtmlContentFromFileWithoutReplaceSuccess() {
-//			$this->assertEquals(
-//				"<h1>testGetHtmlContentFromFileWithoutReplaceSuccess</h1>",
-//				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithoutReplaceSuccess.html")
-//			);
-//		}
-//
-//		public function testGetHtmlContentFromFileWithReplaceSuccess() {
-//			$this->assertEquals(
-//				"<h1>testGetHtmlContentFromFileWithReplaceSuccess</h1>\n<h2>Replaced Text 01</h2>\n<h3>Replaced Text 02</h3>",
-//				Helper::GetContentFromFile(__DIR__ . "/../../_CommonFiles/testGetHtmlContentFromFileWithReplaceSuccess.html", [
-//					"::replace_1::" => "Replaced Text 01",
-//					"::replace_2::" => "Replaced Text 02",
-//				])
-//			);
-//		}
-//
-//		public function testGetJsonContentFromFileAsArrayThrowError_01(): void {
-//			$this->expectException(NotEmptyParamException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetJsonContentFromFileAsArray(null);
-//		}
-//
-//		public function testGetJsonContentFromFileAsArrayThrowError_02(): void {
-//			$this->expectException(NotEmptyParamException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.NotEmptyParam", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetJsonContentFromFileAsArray('');
-//		}
-//
-//		public function testGetJsonContentFromFileAsArrayThrowError_03(): void {
-//			$this->expectException(FileNotFoundException::class);
-//			$this->expectExceptionMessage(Translate::TranslateString("exception.FileNotFound", null, [
-//				"::params::" => "filePath",
-//			]));
-//			Helper::GetJsonContentFromFileAsArray(__DIR__ . "/../../_CommonFiles/randomfile.json");
-//		}
-//
-//		public function testGetJsonContentFromFileAsArraySuccess() {
-//			$this->assertEquals(
-//				[
-//					"fullName" => [
-//						"firstName" => "John",
-//						"middleName" => "Matt",
-//						"lastName" => "Doe",
-//					],
-//					"position" => "Senior Software Engineer",
-//					"languages" => [
-//						"Arabic",
-//						"English",
-//						"French",
-//						"Spanish",
-//					],
-//				],
-//				Helper::GetJsonContentFromFileAsArray(__DIR__ . "/../../_CommonFiles/testGetJsonContentFromFileAsArraySuccess.json")
-//			);
-//		}
-//
+		/**
+		 * @dataProvider getContentFromFileEmptyParamThrowsProvider
+		 */
+		public function testGetContentFromFileEmptyParamThrows($filePath): void {
+			$this->expectException(NotEmptyParamException::class);
+			Helper::getContentFromFile($filePath);
+		}
+
+		public static function getContentFromFileEmptyParamThrowsProvider(): array {
+			return [
+				'null' => [
+					'filePath' => null,
+				],
+				'empty' => [
+					'filePath' => '',
+				],
+			];
+		}
+
+		public function testGetContentFromFileNotFoundThrows(): void {
+			$this->expectException(FileNotFoundException::class);
+			Helper::getContentFromFile(__DIR__ . '/random-file.html');
+		}
+
+		public function testGetContentFromFileWithoutReplaceSuccess(): void {
+			$this->assertEquals(
+				'<h1>This is Test File 1</h1>',
+				Helper::getContentFromFile(dirname(__DIR__, 2) . '/_common/test1.html')
+			);
+		}
+
+		public function testGetContentFromFileWithReplaceSuccess(): void {
+			$this->assertEquals(
+				'This was a test file!',
+				Helper::getContentFromFile(dirname(__DIR__, 2) . '/_common/test1.txt', [
+					'This is a test file!' => 'This was a test file!',
+				])
+			);
+		}
+
+		public function testGetJsonContentFromFileAsArraySuccess(): void {
+			$this->assertEquals(
+				[
+					'fullName' => [
+						'firstName' => 'John',
+						'middleName' => 'Matt',
+						'lastName' => 'Doe',
+					],
+					'position' => 'Senior Software Engineer',
+					'languages' => [
+						'Arabic',
+						'English',
+						'French',
+						'Spanish',
+					],
+				],
+				Helper::getJsonContentFromFileAsArray(dirname(__DIR__, 2) . '/_common/test1.json')
+			);
+		}
+
+		public function testConvertMultidimensionalArrayToSingleDimensional(): void {
+			$this->assertEquals([
+				'name.first' => 'John',
+				'name.middle' => 'Matt',
+				'name.last' => 'Doe',
+				'address.building' => 'Bldg',
+				'address.street' => 'Street',
+				'address.region' => 'Region',
+				'address.country' => 'Lebanon',
+				'contact.info.mobile' => '+961111111',
+				'contact.info.email' => 'email@test.com',
+			], Helper::convertMultidimensionalArrayToSingleDimensional([
+				'name' => [
+					'first' => 'John',
+					'middle' => 'Matt',
+					'last' => 'Doe',
+				],
+				'address' => [
+					'building' => 'Bldg',
+					'street' => 'Street',
+					'region' => 'Region',
+					'country' => 'Lebanon',
+				],
+				'contact' => [
+					'info' => [
+						'mobile' => '+961111111',
+						'email' => 'email@test.com',
+					],
+				],
+			]));
+		}
+
+		public function testConvertSingleDimensionalArrayToMultidimensional(): void {
+			$this->assertEquals([
+				'name' => [
+					'first' => 'John',
+					'middle' => 'Matt',
+					'last' => 'Doe',
+				],
+				'address' => [
+					'building' => 'Bldg',
+					'street' => 'Street',
+					'region' => 'Region',
+					'country' => 'Lebanon',
+				],
+				'contact' => [
+					'info' => [
+						'mobile' => '+961111111',
+						'email' => 'email@test.com',
+					],
+				],
+			], Helper::convertSingleDimensionalArrayToMultidimensional([
+				'name.first' => 'John',
+				'name.middle' => 'Matt',
+				'name.last' => 'Doe',
+				'address.building' => 'Bldg',
+				'address.street' => 'Street',
+				'address.region' => 'Region',
+				'address.country' => 'Lebanon',
+				'contact.info.mobile' => '+961111111',
+				'contact.info.email' => 'email@test.com',
+			]));
+		}
+
+		public function testAddPrefixToArrayKeys(): void {
+			$this->assertEquals([
+				'pre_name' => 'John',
+				'pre_middle' => 'Matt',
+				'pre_last' => 'Doe',
+			], Helper::addPrefixToArrayKeys([
+				'name' => 'John',
+				'middle' => 'Matt',
+				'last' => 'Doe',
+			], 'pre_'));
+		}
+
 //		public function testGenerateFullUrlSuccess() {
 //			$this->assertEquals(
 //				"home",
@@ -854,37 +966,7 @@
 //			$this->assertDirectoryDoesNotExist($testDir);
 //		}
 //
-//		public function testConvertMultidimentionArrayToSingleDimentionSuccess() {
-//			$this->assertEquals([
-//				"name.first" => "John",
-//				"name.middle" => "Matt",
-//				"name.last" => "Doe",
-//				"address.building" => "Bldg",
-//				"address.street" => "Street",
-//				"address.region" => "Region",
-//				"address.country" => "Lebanon",
-//				"contact.info.mobile" => "+961111111",
-//				"contact.info.email" => "email@test.com",
-//			], Helper::ConvertMultidimentionArrayToSingleDimention([
-//				"name" => [
-//					"first" => "John",
-//					"middle" => "Matt",
-//					"last" => "Doe",
-//				],
-//				"address" => [
-//					"building" => "Bldg",
-//					"street" => "Street",
-//					"region" => "Region",
-//					"country" => "Lebanon",
-//				],
-//				"contact" => [
-//					"info" => [
-//						"mobile" => "+961111111",
-//						"email" => "email@test.com",
-//					],
-//				],
-//			]));
-//		}
+
 //
 //		public function testAddSchemeIfMissingSuccess() {
 //			$this->assertEquals(

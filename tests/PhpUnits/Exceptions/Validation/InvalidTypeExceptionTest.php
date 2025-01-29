@@ -13,7 +13,7 @@
 				$this->assertNotEquals('exception.validation.invalidType', $e->getMessage());
 				$this->assertStringContainsString('{{PropertyName}}', $e->getMessage());
 				$this->assertStringContainsString('{{ExpectedType}}', $e->getMessage());
-				$this->assertStringContainsString('{{Value}}', $e->getMessage());
+				$this->assertStringContainsString('string', $e->getMessage());
 			}
 		}
 	}

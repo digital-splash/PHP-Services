@@ -1,0 +1,12 @@
+{
+	"notFound": {
+		"en": "Configuration not found",
+		"fr": "Configuration introuvable",
+		"ar": "لم يتم العثور على التكوين"
+	},
+	"invalid": {
+		"en": "Invalid configuration",
+		"fr": "Configuration invalide",
+		"ar": "تكوين غير صالح"
+	}
+}

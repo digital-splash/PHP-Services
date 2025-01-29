@@ -12,7 +12,7 @@
 			int    $subCode = 0,
 			int    $responseCode = HttpCode::NOTFOUND
 		) {
-			$this->message = Translate::get($this->message, null, [
+			$this->message = Translate::get($this->message, [
 				'::params::' => $param,
 			]);
 			parent::__construct('', [], $code, $subCode, $responseCode);

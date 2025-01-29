@@ -1,0 +1,7 @@
+{
+	"phpMailer": {
+		"en": "PhpMailer Error (::params::)",
+		"fr": "Erreur PhpMailer (::params::)",
+		"ar": "خطأ PhpMailer (::params::)"
+	}
+}

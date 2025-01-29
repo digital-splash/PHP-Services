@@ -1,0 +1,12 @@
+{
+	"unknown": {
+		"en": "An unknown API Exception Occurred",
+		"fr": "Une exception API inconnue s'est produite",
+		"ar": "حدث استثناء API غير معروف"
+	},
+	"invalidRequestMethod": {
+		"en": "Invalid Request Method",
+		"fr": "Méthode de requête invalide",
+		"ar": "طريقة الطلب غير صالحة"
+	}
+}

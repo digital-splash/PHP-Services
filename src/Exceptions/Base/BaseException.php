@@ -26,7 +26,7 @@
 			$this->code = $code;
 			$this->subCode = $subCode;
 
-			$this->message = Translate::get($this->message, null, $replace);
+			$this->message = Translate::get($this->message, $replace);
 			// http_response_code($this->responseCode);
 
 			parent::__construct();

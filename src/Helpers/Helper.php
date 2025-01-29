@@ -2,6 +2,8 @@
 
 	namespace DigitalSplash\Helpers;
 
+	use DigitalSplash\Exceptions\Media\FileNotFoundException;
+	use DigitalSplash\Exceptions\Validation\NotEmptyParamException;
 	use DigitalSplash\Microservices\Language\Models\Language;
 	use DigitalSplash\Models\Code;
 	use DigitalSplash\Models\HttpCode;
@@ -371,7 +373,7 @@
 			}
 
 			if (!self::isNullOrEmpty($separator)) {
-				return explode($separator, $string);
+				return array_values(array_filter(explode($separator, $string)));
 			}
 
 			if ($chunkLength > 0) {
@@ -525,6 +527,53 @@
 		}
 
 		/**
+		 * Get all files in a path
+		 */
+		public static function getAllFiles(string $dir, bool $recursive = false): array {
+			$filesArr = [];
+
+			if (is_dir($dir)) {
+				$files = scandir($dir);
+
+				foreach ($files as $fileName) {
+					$filePath = $dir . '/' . $fileName;
+
+					if (!is_dir($filePath)) {
+						$filesArr[] = $filePath;
+					} elseif ($recursive && $fileName !== '.' && $fileName !== '..') {
+						$filesArr = array_merge($filesArr, self::getAllFiles($filePath, $recursive));
+					}
+				}
+			}
+
+			return $filesArr;
+		}
+
+		/**
+		 * Get all folders in a path
+		 */
+		public static function getAllFolders(string $dir, bool $recursive = false): array {
+			$foldersArr = [];
+
+			if (is_dir($dir)) {
+				$folders = scandir($dir);
+
+				foreach ($folders as $folderName) {
+					$folderPath = $dir . '/' . $folderName;
+
+					if (is_dir($folderPath) && $folderName !== '.' && $folderName !== '..') {
+						$foldersArr[] = $folderPath;
+
+						if ($recursive) {
+							$foldersArr = array_merge($foldersArr, self::getAllFolders($folderPath, true));
+						}
+					}
+				}
+			}
+			return $foldersArr;
+		}
+
+		/**
 		 * Retrieve YouTube embed id from the video full link
 		 */
 		public static function getYoutubeId(?string $url): string {
@@ -618,16 +667,17 @@
 
 		/**
 		 * Get content from the given file path
+		 *
+		 * @throws NotEmptyParamException | FileNotFoundException
 		 */
 		public static function getContentFromFile(?string $filePath = null, ?array $replace = null): string {
-			if (self::isNullOrEmpty($filePath) || !file_exists($filePath)) {
-				return '';
+			if (self::isNullOrEmpty($filePath)) {
+				throw new NotEmptyParamException('filePath');
 			}
 
-			//TODO: Throw an exception if the file does not exist
-//			if (!file_exists($filePath)) {
-//				throw new FileNotFoundException('filePath');
-//			}
+			if (!file_exists($filePath)) {
+				throw new FileNotFoundException($filePath);
+			}
 
 			$content = file_get_contents($filePath);
 			if (!self::isNullOrEmpty($replace)) {
@@ -640,23 +690,67 @@
 			return $content;
 		}
 
+		/**
+		 * Get JSON content from the given file path
+		 */
+		public static function getJsonContentFromFileAsArray(
+			?string $filePath
+		): array {
+			return json_decode(self::getContentFromFile($filePath), true);
+		}
 
-//		/**
-//		 * Get JSON content from the given file path
-//		 */
-//		public static function GetJsonContentFromFileAsArray(
-//			?string $filePath
-//		): array {
-//			if (self::isNullOrEmpty($filePath)) {
-//				throw new NotEmptyParamException('filePath');
-//			}
-//			if (!file_exists($filePath)) {
-//				throw new FileNotFoundException('filePath');
-//			}
-//			return json_decode(file_get_contents($filePath), true);
-//		}
-//
-//
+		/**
+		 * Converts a multidimensional array to a single dimensional array
+		 */
+		public static function convertMultidimensionalArrayToSingleDimensional(array $arrayToConvert, string $preKey = ''): array {
+			$returnArray = [];
+
+			foreach ($arrayToConvert as $k => $v) {
+				if (is_array($v)) {
+					$returnArray = array_merge($returnArray,
+						self::convertMultidimensionalArrayToSingleDimensional($v, $preKey . $k . '.')
+					);
+				} else {
+					$returnArray[$preKey . $k] = $v;
+				}
+			}
+
+			return $returnArray;
+		}
+
+		/**
+		 * Converts a single dimensional array to a multidimensional array
+		 */
+		public static function convertSingleDimensionalArrayToMultidimensional(array $arrayToConvert, string $separator = '.'): array {
+			$returnArray = [];
+
+			foreach ($arrayToConvert as $k => $v) {
+				$keys = explode($separator, $k);
+				$lastKey = array_pop($keys);
+				$pointer = &$returnArray;
+
+				foreach ($keys as $key) {
+					if (!isset($pointer[$key])) {
+						$pointer[$key] = [];
+					}
+					$pointer = &$pointer[$key];
+				}
+
+				$pointer[$lastKey] = $v;
+			}
+
+			return $returnArray;
+		}
+
+		public static function addPrefixToArrayKeys(array $array, string $prefix): array {
+			$newArray = [];
+			foreach ($array as $key => $value) {
+				$newArray[$prefix . $key] = $value;
+			}
+			return $newArray;
+		}
+
+
 //		/**
 //		 * Adds the root folder to a url, and converts it to a safe, user friendly URL
 //		 */
@@ -802,29 +896,6 @@
 //				self::DeleteFileOrFolder($path);
 //			}
 //		}
-//
-//		/**
-//		 * Converts a multidimentional array to a single dimentional array
-//		 */
-//		public static function ConvertMultidimentionArrayToSingleDimention(
-//			array $arrayToConvert,
-//			string $preKey=""
-//		): array {
-//			$returnArray = [];
-//
-//			foreach ($arrayToConvert AS $k => $v) {
-//				if (is_array($v)) {
-//					$returnArray = array_merge($returnArray,
-//						self::ConvertMultidimentionArrayToSingleDimention($v, $preKey . $k . ".")
-//					);
-//				}
-//				else {
-//					$returnArray[$preKey . $k] = $v;
-//				}
-//			}
-//			return $returnArray;
-//		}
-//
 //
 //		/**
 //		 * Add scheme to the given string if not exists

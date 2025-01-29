@@ -1,0 +1,17 @@
+{
+	"unknown": {
+		"en": "An exception occurred for an unknown reason",
+		"fr": "Une exception s'est produite pour une raison inconnue",
+		"ar": "حدث استثناء لسبب غير معروف"
+	},
+	"notFound": {
+		"en": "The value you're looking for is not found",
+		"fr": "La valeur que vous recherchez est introuvable",
+		"ar": "القيمة التي تبحث عنها غير موجودة"
+	},
+	"classPropertyNotFound": {
+		"en": "Property \"::property::\" not found in class \"::class::\".",
+		"fr": "Propriété \"::property::\" non trouvée dans la classe \"::class::\".",
+		"ar": "لم يتم العثور على الخاصية \"::property::\" في الفئة \"::class::\"."
+	}
+}

@@ -3,6 +3,7 @@
 	namespace DigitalSplash\Tests\Exceptions\Base;
 
 	use DigitalSplash\Exceptions\Base\BaseException;
+	use DigitalSplash\Models\HttpCode;
 	use PHPUnit\Framework\TestCase;
 
 	final class BaseExceptionTest extends TestCase {
@@ -17,11 +18,12 @@
 			try {
 				throw new BaseException('::message::', [
 					'::message::' => 'This is a test Message',
-				], 100, 250);
+				], 100, 250, HttpCode::UNAUTHORIZED);
 			} catch (BaseException $e) {
 				$this->assertEquals('This is a test Message', $e->getMessage());
 				$this->assertEquals(100, $e->getCode());
 				$this->assertEquals(250, $e->getSubCode());
+				$this->assertEquals(HttpCode::UNAUTHORIZED, $e->getResponseCode());
 			}
 		}
 	}
