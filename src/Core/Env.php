@@ -10,6 +10,9 @@
 		const KEY_PROD = 'prod';
 		const KEY_TEST = 'test';
 		const KEY_LOCAL = 'local';
+		private static string $envFileName = 'env.json';
+		private static array $config = [];
+		private static bool $initialized = false;
 		public static string $envName;
 		public static string $superPass;
 		public static bool $enableNextGen;
@@ -32,13 +35,16 @@
 		public static bool $isLocal;
 		public static bool $isTest;
 		public static bool $isProd;
-		private static array $config = [];
 
-		public static function init(
-			string $envFileName = 'env.json'
-		): void {
-			self::getConfigFromFile($envFileName);
+		public static function init(bool $force = false): void {
+			if (self::$initialized && !$force) {
+				return;
+			}
+
+			self::getConfigFromFile();
 			self::setConfig();
+
+			self::$initialized = true;
 		}
 
 		public static function getByKey(string $key) {
@@ -56,14 +62,17 @@
 			return $config;
 		}
 
+		public static function setEnvFileName(string $envFileName): void {
+			self::$envFileName = $envFileName;
+		}
+
 		/**
 		 * @throws ConfigurationNotFoundException
 		 * @throws InvalidConfigurationException
 		 */
-		private static function getConfigFromFile(
-			string $envFileName = 'env.json'
-		): void {
+		private static function getConfigFromFile(): void {
 			$dir = __DIR__;
+			$envFileName = self::$envFileName;
 
 			while (!file_exists("{$dir}/{$envFileName}")) {
 				$prevDir = $dir;

@@ -26,10 +26,15 @@
 		/**
 		 * @param LanguageDto[] $languages
 		 */
-		public static function init(array $languagesDto = []): void {
+		public static function init(array $languagesDto = [], bool $force = false): void {
+			if ($force) {
+				self::clear();
+			}
+
 			if (self::$initialized) {
 				return;
 			}
+			self::$initialized = true;
 
 			self::$default = LanguageModel::EN;
 			self::$activeLanguages = [];
@@ -62,7 +67,6 @@
 			self::$activeCode = self::activeCode();
 
 			self::getLangSwitchUrl();
-			self::$initialized = true;
 		}
 
 		//TODO: Use Cooke once class is created
@@ -90,10 +94,7 @@
 		}
 
 		public static function activeCode(): string {
-			if (Helper::isNullOrEmpty(self::$active)) {
-				self::init([]);
-			}
-
+			self::init();
 			return self::$active->code;
 		}
 
@@ -110,7 +111,9 @@
 			$params = $_GET;
 			$params['lang'] = '{{lang}}';
 
-			self::$langSwitchUrl = Env::$urlNoParams . '?' . http_build_query($params);
+			$paramsStr = Helper::generateKeyValueStringFromArray($params, '', '=', '', '&');
+
+			self::$langSwitchUrl = Env::$urlNoParams . '?' . $paramsStr;
 		}
 
 		private static function getDefaultLanguages(): array {
@@ -123,5 +126,15 @@
 					true
 				),
 			];
+		}
+
+		private static function clear(): void {
+			self::$initialized = false;
+			self::$default = null;
+			self::$active = null;
+			self::$activeCode = null;
+			self::$langSwitchUrl = null;
+			self::$activeLanguages = [];
+			self::$activeCodes = [];
 		}
 	}

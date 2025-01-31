@@ -10,12 +10,14 @@
 	class EnvTest extends TestCase {
 		public function testGetConfigFromFileFileNotFoundThrows(): void {
 			$this->expectException(ConfigurationNotFoundException::class);
-			Env::init('test-env.json');
+			Env::setEnvFileName('test-env.json');
+			Env::init(true);
 		}
 
 		public function testGetConfigFromFileFileEmptyThrows(): void {
 			$this->expectException(InvalidConfigurationException::class);
-			Env::init('empty-env.json');
+			Env::setEnvFileName('empty-env.json');
+			Env::init(true);
 		}
 
 		public function testInitUrlNoParamsEmptySuccess(): void {
@@ -29,7 +31,8 @@
 			$_SERVER['SERVER_NAME'] = 'test.com';
 			$_SERVER['REQUEST_URI'] = '/test';
 
-			Env::init();
+			Env::setEnvFileName('env.json');
+			Env::init(true);
 
 			$this->assertEquals('https://test.com/test/', Env::$urlNoParams);
 		}
@@ -40,8 +43,6 @@
 		}
 
 		public function testGetByKey(): void {
-			Env::init();
-
 			$env = Env::getByKey('env');
 			$this->assertNotEmpty($env);
 		}

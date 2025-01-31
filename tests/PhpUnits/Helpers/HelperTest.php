@@ -462,6 +462,18 @@
 			);
 		}
 
+		public function testGenerateUrlParamsFromArray(): void {
+			$this->assertEquals(
+				'k1=page1&k2=page2&k3=page3&k4=page4',
+				Helper::generateUrlParamsFromArray([
+					'k1' => 'page1',
+					'k2' => 'page2',
+					'k3' => 'page3',
+					'k4' => 'page4',
+				])
+			);
+		}
+
 		public function testRemoveMultipleSlashes(): void {
 			$this->assertEquals('http://google.com/test', Helper::removeMultipleSlashes('http://google.com//test'));
 			$this->assertEquals('https://google.com/test', Helper::removeMultipleSlashes('https://google.com/////test'));

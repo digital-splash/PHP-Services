@@ -452,6 +452,10 @@
 			return self::implode($elemsJoin, $str);
 		}
 
+		public static function generateUrlParamsFromArray(array $params): string {
+			return self::generateKeyValueStringFromArray($params, '', '=', '', '&');
+		}
+
 		/**
 		 * Remove multiple slashed from the given string
 		 */

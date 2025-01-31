@@ -5,5 +5,8 @@
 	use DigitalSplash\Microservices\Language\Translate;
 
 	Env::init();
-	Language::init();
-	Translate::init();
+
+	if (!PHPUNIT_TEST_SUITE) {
+		Language::init();
+		Translate::init();
+	}
