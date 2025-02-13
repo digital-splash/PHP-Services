@@ -379,19 +379,35 @@
 		 */
 		public static function GenerateClassNameFromString(
 			string $str,
-			array $separators = ['-']
+			array $separators = ['-'],
+			string $format = ''
 		): string {
-			return str_replace(
-				" ",
-				"",
-				ucwords(
-					str_replace(
-						$separators,
-						" ",
-						$str
-					)
-				)
+			$splitedValue = str_replace(
+				$separators,
+				' ',
+				$str
 			);
+
+			switch ($format) {
+				case 'camelcase':
+					return str_replace(
+						' ',
+						'',
+						ucwords(
+							$splitedValue
+						)
+					);
+
+				case 'snakecase':
+				default:
+					return str_replace(
+						' ',
+						'_',
+						strtolower(
+							$splitedValue
+						)
+					);
+			}
 		}
 
 
