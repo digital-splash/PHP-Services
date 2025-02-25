@@ -1047,6 +1047,15 @@
 		// 	return $this->{$columnName};
 		// }
 
+		public function getLangValue(string $colName, array $row = []) {
+			if (empty($row)) {
+				$row = $this->row;
+			}
+			$langColName = $colName . '_' . strtolower(LANG);
+
+			return !empty($row[$langColName]) ? $row[$langColName] : $row[$colName];
+		}
+
 		public function unsetApiColumns(array $row): array {
 			foreach ($this->apiExcludedColumns as $col) {
 				unset($row[$col]);
